@@ -15,6 +15,7 @@
 		76B869AE2C67B3AA002866B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AC2C67B3AA002866B9 /* LaunchScreen.storyboard */; };
 		76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */; };
 		76B869BF2C67B93C002866B9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* LoginViewController.swift */; };
+		CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,9 @@
 		76B869AF2C67B3AA002866B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		76B869BE2C67B93C002866B9 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		7A27C3F833B9F95DF63F4D42 /* Pods-MoodScape.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.release.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.release.xcconfig"; sourceTree = "<group>"; };
+		934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoodScape.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC1BC4BC73FD92CE5543BE7E /* Pods-MoodScape.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.debug.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,17 +39,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B12F5DC2349B3EFB01D1828 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		76B869952C67B3A9002866B9 = {
 			isa = PBXGroup;
 			children = (
 				76B869A02C67B3A9002866B9 /* MoodScape */,
 				76B8699F2C67B3A9002866B9 /* Products */,
+				BC465058499E8DE89A17D7BE /* Pods */,
+				3B12F5DC2349B3EFB01D1828 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -121,6 +136,15 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		BC465058499E8DE89A17D7BE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CC1BC4BC73FD92CE5543BE7E /* Pods-MoodScape.debug.xcconfig */,
+				7A27C3F833B9F95DF63F4D42 /* Pods-MoodScape.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -128,9 +152,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 76B869B22C67B3AA002866B9 /* Build configuration list for PBXNativeTarget "MoodScape" */;
 			buildPhases = (
+				A9C0ACA3FAF5535871D3B7AA /* [CP] Check Pods Manifest.lock */,
 				76B8699A2C67B3A9002866B9 /* Sources */,
 				76B8699B2C67B3A9002866B9 /* Frameworks */,
 				76B8699C2C67B3A9002866B9 /* Resources */,
+				7B6082A80D57BE33B76B1E4D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -186,6 +212,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7B6082A80D57BE33B76B1E4D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MoodScape/Pods-MoodScape-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MoodScape/Pods-MoodScape-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MoodScape/Pods-MoodScape-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A9C0ACA3FAF5535871D3B7AA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MoodScape-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		76B8699A2C67B3A9002866B9 /* Sources */ = {
@@ -338,6 +406,7 @@
 		};
 		76B869B32C67B3AA002866B9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CC1BC4BC73FD92CE5543BE7E /* Pods-MoodScape.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -366,6 +435,7 @@
 		};
 		76B869B42C67B3AA002866B9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7A27C3F833B9F95DF63F4D42 /* Pods-MoodScape.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

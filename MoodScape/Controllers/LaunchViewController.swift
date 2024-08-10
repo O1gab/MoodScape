@@ -33,7 +33,7 @@ class LaunchViewController: UIViewController {
     }
 
     private func animateName() {
-        UIView.animate(withDuration: 2.0, animations: {
+        UIView.animate(withDuration: 3.0, animations: {
             self.name.alpha = 0.0
         }) { _ in
             self.transitionToLoginView()
