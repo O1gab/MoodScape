@@ -5,22 +5,41 @@
 //
 
 import UIKit
+import Gifu
 
 class LoginViewController: UIViewController {
 
     private let label = UILabel()
     private let registerButton = UIButton(type: .system)
     private let loginButton = UIButton(type: .system)
+    private let gifImageView = GIFImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .white
+        //view.backgroundColor = .white
+        setupGIFBackground()
         setupLabel()
         setupButtons()
         setupConstraints()
     }
 
+    private func setupGIFBackground() {
+        gifImageView.animate(withGIFNamed: "gradient_skyline_blinking_stars")
+        gifImageView.contentMode = .scaleAspectFill
+        gifImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(gifImageView)
+        view.sendSubviewToBack(gifImageView)
+
+        // Set constraints for the GIFImageView to cover the entire view
+        NSLayoutConstraint.activate([
+            gifImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            gifImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
     private func setupLabel() {
         label.text = "MoodScape"
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
