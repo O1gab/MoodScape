@@ -13,6 +13,8 @@
 		76B869A92C67B3A9002866B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B869A72C67B3A9002866B9 /* Main.storyboard */; };
 		76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AA2C67B3AA002866B9 /* Assets.xcassets */; };
 		76B869AE2C67B3AA002866B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AC2C67B3AA002866B9 /* LaunchScreen.storyboard */; };
+		76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */; };
+		76B869BF2C67B93C002866B9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		76B869AA2C67B3AA002866B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		76B869AD2C67B3AA002866B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		76B869AF2C67B3AA002866B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
+		76B869BE2C67B93C002866B9 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +60,12 @@
 		76B869A02C67B3A9002866B9 /* MoodScape */ = {
 			isa = PBXGroup;
 			children = (
-				76B869A12C67B3A9002866B9 /* AppDelegate.swift */,
-				76B869A32C67B3A9002866B9 /* SceneDelegate.swift */,
+				76B869B52C67B3B4002866B9 /* App */,
+				76B869B62C67B3D3002866B9 /* Controllers */,
+				76B869B72C67B3DB002866B9 /* Views */,
+				76B869B82C67B3F0002866B9 /* Models */,
+				76B869BB2C67B42B002866B9 /* Services */,
+				76B869B92C67B3FE002866B9 /* Tests */,
 				76B869A52C67B3A9002866B9 /* ViewController.swift */,
 				76B869A72C67B3A9002866B9 /* Main.storyboard */,
 				76B869AA2C67B3AA002866B9 /* Assets.xcassets */,
@@ -65,6 +73,52 @@
 				76B869AF2C67B3AA002866B9 /* Info.plist */,
 			);
 			path = MoodScape;
+			sourceTree = "<group>";
+		};
+		76B869B52C67B3B4002866B9 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				76B869A12C67B3A9002866B9 /* AppDelegate.swift */,
+				76B869A32C67B3A9002866B9 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		76B869B62C67B3D3002866B9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */,
+				76B869BE2C67B93C002866B9 /* LoginViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		76B869B72C67B3DB002866B9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		76B869B82C67B3F0002866B9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		76B869B92C67B3FE002866B9 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		76B869BB2C67B42B002866B9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,6 +195,8 @@
 				76B869A62C67B3A9002866B9 /* ViewController.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
 				76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */,
+				76B869BF2C67B93C002866B9 /* LoginViewController.swift in Sources */,
+				76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  MoodScape
 //
-//  Created by Olga Batiunia on 10.08.24.
+//  Created by Olga Batiunia
 //
 
 import UIKit
