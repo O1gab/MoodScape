@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		764FDE2B2C67D68E0060A428 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2A2C67D68E0060A428 /* LaunchView.swift */; };
-		764FDE2D2C67DBA40060A428 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2C2C67DBA40060A428 /* LoginView.swift */; };
 		764FDE2F2C695EA60060A428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2E2C695EA60060A428 /* User.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
@@ -23,8 +21,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		764FDE2A2C67D68E0060A428 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
-		764FDE2C2C67DBA40060A428 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		764FDE2E2C695EA60060A428 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,7 +81,6 @@
 			children = (
 				76B869B52C67B3B4002866B9 /* App */,
 				76B869B62C67B3D3002866B9 /* Controllers */,
-				76B869B72C67B3DB002866B9 /* Views */,
 				76B869B82C67B3F0002866B9 /* Models */,
 				76B869BB2C67B42B002866B9 /* Services */,
 				76B869B92C67B3FE002866B9 /* Tests */,
@@ -115,15 +110,6 @@
 				76B869BE2C67B93C002866B9 /* LoginViewController.swift */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		76B869B72C67B3DB002866B9 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				764FDE2A2C67D68E0060A428 /* LaunchView.swift */,
-				764FDE2C2C67DBA40060A428 /* LoginView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		76B869B82C67B3F0002866B9 /* Models */ = {
@@ -274,8 +260,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				76B869A62C67B3A9002866B9 /* ViewController.swift in Sources */,
-				764FDE2D2C67DBA40060A428 /* LoginView.swift in Sources */,
-				764FDE2B2C67D68E0060A428 /* LaunchView.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
 				76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */,
