@@ -94,7 +94,9 @@ class LoginViewController: UIViewController {
 
     @objc private func handleRegister() {
         // Handle register action
-        print("Register button tapped")
+        let registrationVC = RegistrationViewController()
+        registrationVC.modalPresentationStyle = .fullScreen
+        present(registrationVC, animated: true, completion: nil)
     }
 
     @objc private func handleLogin() {
