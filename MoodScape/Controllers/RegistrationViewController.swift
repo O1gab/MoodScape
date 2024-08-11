@@ -7,34 +7,19 @@
 import UIKit
 import Gifu
 
-class RegistrationViewController: UIViewController {
-    
-    private let label = UILabel()
-    
-    private let gifImageView = GIFImageView()
+class RegistrationViewController: BaseView {
     
     private let email = UITextField()
     private let username = UITextField()
     private let password = UITextField()
     private let registerButton = UIButton(type: .system)
+    private let backButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGIFBackground()
-        setupLabel()
         setupForm()
         setupConstraints()
     }
-    
-    private func setupLabel() {
-        label.text = "MoodScape"
-        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label)
-    }
-    
     private func setupForm() {
         email.placeholder = "Email"
         email.borderStyle = .none
@@ -65,12 +50,19 @@ class RegistrationViewController: UIViewController {
         view.addSubview(password)
             
         registerButton.setTitle("Register", for: .normal)
+        registerButton.setTitleColor(.white, for: .normal)
+        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         registerButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         registerButton.layer.cornerRadius = 18
-        
-        
         registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         view.addSubview(registerButton)
+        
+        backButton.setTitle("<-", for: .normal)
+        backButton.setTitleColor(.white, for: .normal)
+        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 24)
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
+        view.addSubview(backButton)
     }
     
     private func setupConstraints() {
@@ -78,10 +70,11 @@ class RegistrationViewController: UIViewController {
             username.translatesAutoresizingMaskIntoConstraints = false
             password.translatesAutoresizingMaskIntoConstraints = false
             registerButton.translatesAutoresizingMaskIntoConstraints = false
+            backButton.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
-                label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-                label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+                backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
                 
                 email.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40),
                 email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -105,22 +98,6 @@ class RegistrationViewController: UIViewController {
         ])
     }
     
-    private func setupGIFBackground() {
-        gifImageView.animate(withGIFNamed: "gradient_skyline_blinking_stars")
-        gifImageView.contentMode = .scaleAspectFill
-        gifImageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(gifImageView)
-        view.sendSubviewToBack(gifImageView)
-
-        // Set constraints for the GIFImageView to cover the entire view
-        NSLayoutConstraint.activate([
-            gifImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            gifImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            gifImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            gifImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-    
     @objc private func handleRegister() {
         guard let email = email.text, !email.isEmpty,
               let username = username.text, username.count >= 4,
@@ -130,6 +107,10 @@ class RegistrationViewController: UIViewController {
         }
         
         // Firebase integration needed
+    }
+    
+    @objc private func handleBack() {
+        dismiss(animated: true, completion: nil)
     }
     
     
