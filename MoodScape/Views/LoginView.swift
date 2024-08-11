@@ -8,24 +8,26 @@
 import SwiftUI
 import Gifu
 
+
 struct LoginView: View {
     @State private var isRegistering = false
     
     var loginViewController = LoginViewController()
+    
 
     var body: some View {
         ZStack {
             // Background GIF
-            BackgroundView()
-                .edgesIgnoringSafeArea(.all)
+            GIFBackgroundView(gifName: "gradient_skyline_blinking_stars")
+                            .edgesIgnoringSafeArea(.all)
 
             VStack {
-             
+                Spacer()
                 // Label
                 Text("MoodScape")
                     .font(.system(size: 32, weight: .bold))
                     .foregroundColor(Color(red: 30/255, green: 215/255, blue: 96/255))
-                    .padding()
+                   
 
                 Spacer()
 
@@ -61,21 +63,29 @@ struct LoginView: View {
 
     // Example actions for buttons
     private func handleRegister() {
-        // Handle register action
+        print("Sign up button tapped")
     }
 
     private func handleLogin() {
-        // Handle login action
+        print("Login button tapped")
     }
 }
 
 // Custom view for GIF background
-struct BackgroundView: View {
-    let gifImageView = GIFImageView()
+struct GIFBackgroundView: UIViewRepresentable {
     
-    var body: some View {
-        VStack {
-        }
+    let gifName: String
+    
+    func makeUIView(context: Context) -> GIFImageView {
+        let gifImageView = GIFImageView()
+        gifImageView.animate(withGIFNamed: gifName)
+        gifImageView.contentMode = .scaleAspectFill
+        gifImageView.translatesAutoresizingMaskIntoConstraints = false
+        gifImageView.clipsToBounds = true
+        return gifImageView
+    }
+    
+    func updateUIView(_ uiView: Gifu.GIFImageView, context: Context) {
         
     }
 }
