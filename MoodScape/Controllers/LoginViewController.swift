@@ -54,7 +54,7 @@ class LoginViewController: UIViewController {
         registerButton.setTitle("Sign up", for: .normal)
         registerButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         registerButton.setTitleColor(.white, for: .normal)
-        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20) // Set larger font size
+        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         
         registerButton.layer.cornerRadius = 25
         registerButton.translatesAutoresizingMaskIntoConstraints = false

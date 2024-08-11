@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		764FDE2B2C67D68E0060A428 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2A2C67D68E0060A428 /* LaunchView.swift */; };
+		764FDE2D2C67DBA40060A428 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2C2C67DBA40060A428 /* LoginView.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869A62C67B3A9002866B9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A52C67B3A9002866B9 /* ViewController.swift */; };
@@ -15,10 +17,13 @@
 		76B869AE2C67B3AA002866B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AC2C67B3AA002866B9 /* LaunchScreen.storyboard */; };
 		76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */; };
 		76B869BF2C67B93C002866B9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* LoginViewController.swift */; };
+		76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */; };
 		CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		764FDE2A2C67D68E0060A428 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
+		764FDE2C2C67DBA40060A428 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B869A32C67B3A9002866B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -29,6 +34,7 @@
 		76B869AF2C67B3AA002866B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		76B869BE2C67B93C002866B9 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gradient_skyline_blinking_stars.gif; sourceTree = "<group>"; };
 		7A27C3F833B9F95DF63F4D42 /* Pods-MoodScape.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.release.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.release.xcconfig"; sourceTree = "<group>"; };
 		934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoodScape.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC1BC4BC73FD92CE5543BE7E /* Pods-MoodScape.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.debug.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.debug.xcconfig"; sourceTree = "<group>"; };
@@ -84,6 +90,7 @@
 				76B869A52C67B3A9002866B9 /* ViewController.swift */,
 				76B869A72C67B3A9002866B9 /* Main.storyboard */,
 				76B869AA2C67B3AA002866B9 /* Assets.xcassets */,
+				76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */,
 				76B869AC2C67B3AA002866B9 /* LaunchScreen.storyboard */,
 				76B869AF2C67B3AA002866B9 /* Info.plist */,
 			);
@@ -111,6 +118,8 @@
 		76B869B72C67B3DB002866B9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				764FDE2A2C67D68E0060A428 /* LaunchView.swift */,
+				764FDE2C2C67DBA40060A428 /* LoginView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -205,6 +214,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */,
 				76B869AE2C67B3AA002866B9 /* LaunchScreen.storyboard in Resources */,
 				76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */,
 				76B869A92C67B3A9002866B9 /* Main.storyboard in Resources */,
@@ -261,6 +271,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				76B869A62C67B3A9002866B9 /* ViewController.swift in Sources */,
+				764FDE2D2C67DBA40060A428 /* LoginView.swift in Sources */,
+				764FDE2B2C67D68E0060A428 /* LaunchView.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
 				76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* LoginViewController.swift in Sources */,
