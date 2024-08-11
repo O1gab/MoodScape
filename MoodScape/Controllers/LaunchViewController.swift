@@ -36,14 +36,14 @@ class LaunchViewController: UIViewController {
         UIView.animate(withDuration: 3.0, animations: {
             self.name.alpha = 0.0
         }) { _ in
-            self.transitionToLoginView()
+            self.transitionToStartView()
         }
     }
 
-    private func transitionToLoginView() {
-        let loginViewController = LoginViewController()
-        loginViewController.modalTransitionStyle = .crossDissolve
-        loginViewController.modalPresentationStyle = .fullScreen
-        present(loginViewController, animated: true, completion: nil)
+    private func transitionToStartView() {
+        let startViewController = StartViewController()
+        startViewController.modalTransitionStyle = .crossDissolve
+        startViewController.modalPresentationStyle = .fullScreen
+        present(startViewController, animated: true, completion: nil)
     }
 }

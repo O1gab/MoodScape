@@ -10,6 +10,7 @@
 		764FDE2F2C695EA60060A428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2E2C695EA60060A428 /* User.swift */; };
 		764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE322C696E990060A428 /* RegistrationViewController.swift */; };
 		764FDE352C697C230060A428 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE342C697C230060A428 /* BaseView.swift */; };
+		764FDE382C6983040060A428 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE372C6983040060A428 /* LoginViewController.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869A62C67B3A9002866B9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A52C67B3A9002866B9 /* ViewController.swift */; };
@@ -17,7 +18,7 @@
 		76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AA2C67B3AA002866B9 /* Assets.xcassets */; };
 		76B869AE2C67B3AA002866B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AC2C67B3AA002866B9 /* LaunchScreen.storyboard */; };
 		76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */; };
-		76B869BF2C67B93C002866B9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* LoginViewController.swift */; };
+		76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* StartViewController.swift */; };
 		76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */; };
 		CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */; };
 /* End PBXBuildFile section */
@@ -26,6 +27,7 @@
 		764FDE2E2C695EA60060A428 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		764FDE322C696E990060A428 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		764FDE342C697C230060A428 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		764FDE372C6983040060A428 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B869A32C67B3A9002866B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,7 +37,7 @@
 		76B869AD2C67B3AA002866B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		76B869AF2C67B3AA002866B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
-		76B869BE2C67B93C002866B9 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		76B869BE2C67B93C002866B9 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gradient_skyline_blinking_stars.gif; sourceTree = "<group>"; };
 		7A27C3F833B9F95DF63F4D42 /* Pods-MoodScape.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.release.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.release.xcconfig"; sourceTree = "<group>"; };
 		934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoodScape.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,8 +113,9 @@
 			isa = PBXGroup;
 			children = (
 				76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */,
-				76B869BE2C67B93C002866B9 /* LoginViewController.swift */,
+				76B869BE2C67B93C002866B9 /* StartViewController.swift */,
 				764FDE322C696E990060A428 /* RegistrationViewController.swift */,
+				764FDE372C6983040060A428 /* LoginViewController.swift */,
 				764FDE342C697C230060A428 /* BaseView.swift */,
 			);
 			path = Controllers;
@@ -265,12 +268,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				764FDE382C6983040060A428 /* LoginViewController.swift in Sources */,
 				76B869A62C67B3A9002866B9 /* ViewController.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
 				76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */,
 				764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */,
-				76B869BF2C67B93C002866B9 /* LoginViewController.swift in Sources */,
+				76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */,
 				76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */,
 				764FDE352C697C230060A428 /* BaseView.swift in Sources */,
 			);
