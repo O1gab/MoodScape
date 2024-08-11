@@ -7,48 +7,17 @@
 import UIKit
 import Gifu
 
-class LoginViewController: UIViewController {
+class LoginViewController: BaseView {
 
-    private let label = UILabel()
     private let registerButton = UIButton(type: .system)
     private let loginButton = UIButton(type: .system)
-    private let gifImageView = GIFImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //view.backgroundColor = .white
-        setupGIFBackground()
-        setupLabel()
         setupButtons()
         setupConstraints()
     }
-
-    private func setupGIFBackground() {
-        gifImageView.animate(withGIFNamed: "gradient_skyline_blinking_stars")
-        gifImageView.contentMode = .scaleAspectFill
-        gifImageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(gifImageView)
-        view.sendSubviewToBack(gifImageView)
-
-        // Set constraints for the GIFImageView to cover the entire view
-        NSLayoutConstraint.activate([
-            gifImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            gifImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            gifImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            gifImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
     
-    private func setupLabel() {
-        label.text = "MoodScape"
-        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label)
-    }
-
     private func setupButtons() {
 
         registerButton.setTitle("Sign up", for: .normal)
@@ -74,17 +43,11 @@ class LoginViewController: UIViewController {
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            // Position the label at the top center
-            label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-
-            // Position the register button below the label
             loginButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 210),
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loginButton.widthAnchor.constraint(equalToConstant: 250),
             loginButton.heightAnchor.constraint(equalToConstant: 55),
 
-            // Position the login button below the register button
             registerButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20),
             registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             registerButton.widthAnchor.constraint(equalToConstant: 250),
@@ -95,8 +58,9 @@ class LoginViewController: UIViewController {
     @objc private func handleRegister() {
         // Handle register action
         let registrationVC = RegistrationViewController()
+  
         registrationVC.modalPresentationStyle = .fullScreen
-        present(registrationVC, animated: true, completion: nil)
+        present(registrationVC, animated: false, completion: nil)
     }
 
     @objc private func handleLogin() {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		764FDE2F2C695EA60060A428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2E2C695EA60060A428 /* User.swift */; };
 		764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE322C696E990060A428 /* RegistrationViewController.swift */; };
+		764FDE352C697C230060A428 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE342C697C230060A428 /* BaseView.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869A62C67B3A9002866B9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A52C67B3A9002866B9 /* ViewController.swift */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		764FDE2E2C695EA60060A428 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		764FDE322C696E990060A428 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		764FDE342C697C230060A428 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B869A32C67B3A9002866B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */,
 				76B869BE2C67B93C002866B9 /* LoginViewController.swift */,
 				764FDE322C696E990060A428 /* RegistrationViewController.swift */,
+				764FDE342C697C230060A428 /* BaseView.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* LoginViewController.swift in Sources */,
 				76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */,
+				764FDE352C697C230060A428 /* BaseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
