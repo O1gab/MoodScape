@@ -15,9 +15,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     private let password = UITextField()
     private let registerButton = UIButton(type: .system)
     private let backButton = UIButton(type: .custom)
-    
     private let errorMessageLabel = UILabel()
-    //private var databaseRef: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,9 +24,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     }
     
     // - MARK: SetupForm
-    
     private func setupForm() {
-        email.placeholder = "Email"
         email.borderStyle = .none
         email.backgroundColor = .black
         email.textColor = .white
@@ -38,7 +34,6 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         email.delegate = self
         view.addSubview(email)
         
-        username.placeholder = "Username"
         username.borderStyle = .none
         username.backgroundColor = .black
         username.textColor = .white
@@ -48,7 +43,6 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         username.delegate = self
         view.addSubview(username)
             
-        password.placeholder = "Password"
         password.isSecureTextEntry = true
         password.borderStyle = .none
         password.backgroundColor = .black
@@ -58,9 +52,9 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         password.layer.cornerRadius = 18
         view.addSubview(password)
         
-        setPlaceholder(textField: email, placeholder: "Enter your email", color: .white)
-        setPlaceholder(textField: username, placeholder: "Enter your username", color: .white)
-        setPlaceholder(textField: password, placeholder: "Enter your password", color: .white)
+        setPlaceholder(textField: email, placeholder: "Enter your email", color: .systemGray)
+        setPlaceholder(textField: username, placeholder: "Enter your username", color: .systemGray)
+        setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
             
         registerButton.setTitle("Register", for: .normal)
         registerButton.setTitleColor(.white, for: .normal)
@@ -92,7 +86,6 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             password.translatesAutoresizingMaskIntoConstraints = false
             registerButton.translatesAutoresizingMaskIntoConstraints = false
             backButton.translatesAutoresizingMaskIntoConstraints = false
-        
             errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
@@ -181,10 +174,10 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     }
     
     // Helper function to set placeholder with custom color
-        private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
-            textField.attributedPlaceholder = NSAttributedString(
-                string: placeholder,
-                attributes: [NSAttributedString.Key.foregroundColor: color]
+    private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [NSAttributedString.Key.foregroundColor: color]
         )
     }
     
