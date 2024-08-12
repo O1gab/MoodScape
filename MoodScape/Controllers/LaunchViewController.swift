@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import Firebase
 
 class LaunchViewController: UIViewController {
 
@@ -36,14 +37,21 @@ class LaunchViewController: UIViewController {
         UIView.animate(withDuration: 3.0, animations: {
             self.name.alpha = 0.0
         }) { _ in
-            self.transitionToStartView()
+            self.checkAuthentication()
         }
     }
-
-    private func transitionToStartView() {
-        let startViewController = StartViewController()
-        startViewController.modalTransitionStyle = .crossDissolve
-        startViewController.modalPresentationStyle = .fullScreen
-        present(startViewController, animated: true, completion: nil)
+    
+    private func checkAuthentication() {
+        if Auth.auth().currentUser == nil {
+            let startViewController = StartViewController()
+            startViewController.modalTransitionStyle = .crossDissolve
+            startViewController.modalPresentationStyle = .fullScreen
+            self.present(startViewController, animated: true, completion: nil)
+        } else {
+            let mainVC = MainViewController()
+            mainVC.modalTransitionStyle = .crossDissolve
+            mainVC.modalPresentationStyle = .fullScreen
+            self.present(mainVC, animated: true, completion: nil)
+        }
     }
 }
