@@ -25,6 +25,8 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         setupConstraints()
     }
     
+    // - MARK: SetupForm
+    
     private func setupForm() {
         email.placeholder = "Email"
         email.borderStyle = .none
