@@ -2,13 +2,12 @@
 //  BaseView.swift
 //  MoodScape
 //
-//  Created by Olga Batiunia on 12.08.24.
 //
 
 import UIKit
 import Gifu
 
-class BaseView: UIViewController {
+class StartBaseView: UIViewController {
     
     let label = UILabel()
     let gifImageView = GIFImageView()

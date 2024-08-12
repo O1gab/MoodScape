@@ -8,7 +8,13 @@
 import Foundation
 
 struct User {
-    let username: String
-    let password: String
-    let email: String
+    var profileImage: String // fix it with uiimage
+    var nickname: String
+    var firstName: String
+    var lastName: String
+    var region: String
+    var registrationDate: Date
+    var friends: [String]
+    var recommendedPlaylists: [String]
+    var musicPreferences: [String]
 }

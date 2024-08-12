@@ -5,9 +5,10 @@
 //
 
 import UIKit
-import Gifu
+import FirebaseAuth
+import FirebaseDatabase
 
-class RegistrationViewController: BaseView {
+class RegistrationViewController: StartBaseView {
     
     private let email = UITextField()
     private let username = UITextField()
@@ -20,6 +21,7 @@ class RegistrationViewController: BaseView {
         setupForm()
         setupConstraints()
     }
+    
     private func setupForm() {
         email.placeholder = "Email"
         email.borderStyle = .none
@@ -106,7 +108,35 @@ class RegistrationViewController: BaseView {
             return
         }
         
-        // Firebase integration needed
+        // Firebase integration
+        
+        // Check if username is taken
+        let ref = Database.database().reference()
+        ref.child("usernames").child(username).observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() {
+                // Username is taken
+                
+                return
+            } else {
+                // Create user in Firebase
+                Auth.auth().createUser(withEmail: email, password: password) {
+                    authResult, error in
+                    guard let user = authResult?.user, error == nil else {
+                        // Show error
+                        return
+                    }
+                    
+                    // Save the username
+                    ref.child("usernames").child(username).setValue(user.uid)
+                    
+                    // Save the user data
+                    let userData = ["email": email, "username": username]
+                    ref.child("users").child(user.uid).setValue(userData)
+                    
+                    // Successfully registered
+                }
+            }
+        }
     }
     
     @objc private func handleBack() {

@@ -7,7 +7,7 @@
 import UIKit
 import Gifu
 
-class StartViewController: BaseView {
+class StartViewController: StartBaseView {
 
     private let registerButton = UIButton(type: .system)
     private let loginButton = UIButton(type: .system)
@@ -19,7 +19,7 @@ class StartViewController: BaseView {
     }
     
     private func setupButtons() {
-        registerButton.setTitle("Sign up", for: .normal)
+        registerButton.setTitle("Sign Up", for: .normal)
         registerButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         registerButton.setTitleColor(.white, for: .normal)
         registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
@@ -29,7 +29,7 @@ class StartViewController: BaseView {
         registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         view.addSubview(registerButton)
 
-        loginButton.setTitle("Login", for: .normal)
+        loginButton.setTitle("Log In", for: .normal)
         loginButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 20) // Set larger font size
