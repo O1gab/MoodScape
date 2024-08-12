@@ -8,13 +8,16 @@ import UIKit
 import FirebaseAuth
 import FirebaseDatabase
 
-class RegistrationViewController: StartBaseView {
+class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     
     private let email = UITextField()
     private let username = UITextField()
     private let password = UITextField()
     private let registerButton = UIButton(type: .system)
     private let backButton = UIButton(type: .custom)
+    
+    private let errorMessageLabel = UILabel()
+    //private var databaseRef: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +33,9 @@ class RegistrationViewController: StartBaseView {
         email.layer.borderColor = UIColor.white.cgColor
         email.layer.borderWidth = 1
         email.layer.cornerRadius = 18
+        email.delegate = self
         view.addSubview(email)
-            
+        
         username.placeholder = "Username"
         username.borderStyle = .none
         username.backgroundColor = .black
@@ -39,6 +43,7 @@ class RegistrationViewController: StartBaseView {
         username.layer.borderColor = UIColor.white.cgColor
         username.layer.borderWidth = 1
         username.layer.cornerRadius = 18
+        username.delegate = self
         view.addSubview(username)
             
         password.placeholder = "Password"
@@ -50,6 +55,10 @@ class RegistrationViewController: StartBaseView {
         password.layer.borderWidth = 1
         password.layer.cornerRadius = 18
         view.addSubview(password)
+        
+        setPlaceholder(textField: email, placeholder: "Enter your email", color: .white)
+        setPlaceholder(textField: username, placeholder: "Enter your username", color: .white)
+        setPlaceholder(textField: password, placeholder: "Enter your password", color: .white)
             
         registerButton.setTitle("Register", for: .normal)
         registerButton.setTitleColor(.white, for: .normal)
@@ -65,6 +74,14 @@ class RegistrationViewController: StartBaseView {
         backButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
         view.addSubview(backButton)
+        
+        // Error labels
+        errorMessageLabel.textColor = .red
+        errorMessageLabel.font = UIFont.systemFont(ofSize: 14)
+        errorMessageLabel.numberOfLines = 0
+        errorMessageLabel.textAlignment = .center
+        errorMessageLabel.isHidden = true
+        view.addSubview(errorMessageLabel)
     }
     
     private func setupConstraints() {
@@ -73,6 +90,8 @@ class RegistrationViewController: StartBaseView {
             password.translatesAutoresizingMaskIntoConstraints = false
             registerButton.translatesAutoresizingMaskIntoConstraints = false
             backButton.translatesAutoresizingMaskIntoConstraints = false
+        
+            errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
                 backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -96,19 +115,30 @@ class RegistrationViewController: StartBaseView {
                 registerButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 20),
                 registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 registerButton.widthAnchor.constraint(equalToConstant: 160),
-                registerButton.heightAnchor.constraint(equalToConstant: 50)
+                registerButton.heightAnchor.constraint(equalToConstant: 50),
+                
+                errorMessageLabel.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 10),
+                errorMessageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+                errorMessageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
-    
+    /*
+    private func setupErrorLabel(_ label: UILabel) {
+           label.textColor = .red
+           label.font = UIFont.systemFont(ofSize: 12)
+           label.isHidden = true // !!!
+           view.addSubview(label)
+    }
+    */
     @objc private func handleRegister() {
         guard let email = email.text, !email.isEmpty,
               let username = username.text, username.count >= 4,
               let password = password.text, password.count >= 8 else {
-            // Show validation error
+            showErrorMessage("Please fill out all fields correctly.")
             return
         }
         
-        // Firebase integration
+        // - MARK: FIREBASE INTEGRATION
         
         // Check if username is taken
         let ref = Database.database().reference()
@@ -141,6 +171,19 @@ class RegistrationViewController: StartBaseView {
     
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    private func showErrorMessage(_ message: String) {
+        errorMessageLabel.text = message
+        errorMessageLabel.isHidden = false
+    }
+    
+    // Helper function to set placeholder with custom color
+        private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
+            textField.attributedPlaceholder = NSAttributedString(
+                string: placeholder,
+                attributes: [NSAttributedString.Key.foregroundColor: color]
+        )
     }
     
     
