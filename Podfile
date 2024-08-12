@@ -9,4 +9,7 @@ target 'MoodScape' do
   
   pod 'Gifu'
 
+  pod 'Firebase/Auth'
+  pod 'Firebase/Database'
+
 end

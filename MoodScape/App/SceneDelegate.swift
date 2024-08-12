@@ -5,16 +5,19 @@
 //
 
 import UIKit
+import Firebase
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+       
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = LaunchViewController() // Set LaunchViewController as the initial view controller
+        window?.rootViewController = LaunchViewController()
+        //window?.tintColor = .systemGreen
         window?.makeKeyAndVisible()
     }
 
