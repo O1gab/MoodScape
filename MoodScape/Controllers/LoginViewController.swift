@@ -29,6 +29,8 @@ class LoginViewController: StartBaseView {
         username.layer.borderColor = UIColor.white.cgColor
         username.layer.borderWidth = 1
         username.layer.cornerRadius = 18
+        username.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: username.frame.height))
+        username.leftViewMode = .always
         view.addSubview(username)
         setPlaceholder(textField: username, placeholder: " Enter your username or email", color: .systemGray)
         
@@ -39,6 +41,8 @@ class LoginViewController: StartBaseView {
         password.layer.borderColor = UIColor.white.cgColor
         password.layer.borderWidth = 1
         password.layer.cornerRadius = 18
+        password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: password.frame.height))
+        password.leftViewMode = .always
         view.addSubview(password)
         setPlaceholder(textField: password, placeholder: " Enter your password", color: .systemGray)
         

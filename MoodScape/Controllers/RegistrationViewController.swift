@@ -31,6 +31,8 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         email.layer.borderColor = UIColor.white.cgColor
         email.layer.borderWidth = 1
         email.layer.cornerRadius = 18
+        email.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: email.frame.height))
+        email.leftViewMode = .always
         email.delegate = self
         view.addSubview(email)
         
@@ -40,6 +42,8 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         username.layer.borderColor = UIColor.white.cgColor
         username.layer.borderWidth = 1
         username.layer.cornerRadius = 18
+        username.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: username.frame.height))
+        username.leftViewMode = .always
         username.delegate = self
         view.addSubview(username)
             
@@ -50,6 +54,8 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         password.layer.borderColor = UIColor.white.cgColor
         password.layer.borderWidth = 1
         password.layer.cornerRadius = 18
+        password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: password.frame.height))
+        password.leftViewMode = .always
         view.addSubview(password)
         
         setPlaceholder(textField: email, placeholder: " Enter your email", color: .systemGray)
