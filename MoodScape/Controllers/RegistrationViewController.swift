@@ -94,8 +94,8 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
                 
                 email.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40),
                 email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                email.widthAnchor.constraint(equalToConstant: 320), // width of "email" box
-                email.heightAnchor.constraint(equalToConstant: 40), // height of "email" box
+                email.widthAnchor.constraint(equalToConstant: 320),
+                email.heightAnchor.constraint(equalToConstant: 40),
                 
                 username.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 20),
                 username.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -117,56 +117,45 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
                 errorMessageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
-    /*
-    private func setupErrorLabel(_ label: UILabel) {
-           label.textColor = .red
-           label.font = UIFont.systemFont(ofSize: 12)
-           label.isHidden = true // !!!
-           view.addSubview(label)
-    }
-    */
+    
     @objc private func handleRegister() {
         guard let email = email.text, !email.isEmpty,
-              let username = username.text, username.count >= 4,
-              let password = password.text, password.count >= 8 else {
-            showErrorMessage("Please fill out all fields correctly.")
+              let username = username.text, !username.isEmpty,
+              let password = password.text, !password.isEmpty else {
+            showErrorMessage("Please fill in all fields")
             return
         }
+        emailCheck()
+        usernameCheck()
+        passwordCheck()
         
         // - MARK: FIREBASE INTEGRATION
-        
-        // Check if username is taken
-        let ref = Database.database().reference()
-        ref.child("usernames").child(username).observeSingleEvent(of: .value) { snapshot in
-            if snapshot.exists() {
-                // Username is taken
-                
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            guard let user = authResult?.user, error == nil else {
+                print("Username is already taken")
                 return
-            } else {
-                // Create user in Firebase
-                Auth.auth().createUser(withEmail: email, password: password) {
-                    authResult, error in
-                    guard let user = authResult?.user, error == nil else {
-                        // Show error
-                        return
-                    }
-                    
-                    // Save the username
-                    ref.child("usernames").child(username).setValue(user.uid)
-                    
-                    // Save the user data
-                    let userData = ["email": email, "username": username]
-                    ref.child("users").child(user.uid).setValue(userData)
-                    
-                    // Successfully registered
-                }
             }
+        print("\(user.email!) created")
         }
     }
+            
     
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
     }
+    
+    private func emailCheck() {
+        
+    }
+    
+    private func usernameCheck() {
+    
+    }
+    
+    private func passwordCheck() {
+        
+    }
+
     
     private func showErrorMessage(_ message: String) {
         errorMessageLabel.text = message

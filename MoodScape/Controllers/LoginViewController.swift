@@ -114,6 +114,11 @@ class LoginViewController: StartBaseView {
                 return
             }
         }
+        
+        let mainView = MainViewController()
+        mainView.modalTransitionStyle = .crossDissolve
+        mainView.modalPresentationStyle = .fullScreen
+        self.present(mainView, animated: true, completion: nil)
     }
     
     @objc private func handleBack() {
@@ -131,5 +136,4 @@ class LoginViewController: StartBaseView {
             attributes: [NSAttributedString.Key.foregroundColor: color]
         )
     }
-    
 }

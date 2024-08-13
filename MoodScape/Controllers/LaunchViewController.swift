@@ -42,16 +42,19 @@ class LaunchViewController: UIViewController {
     }
     
     private func checkAuthentication() {
-        if Auth.auth().currentUser == nil {
+        //if Auth.auth().currentUser == nil {
             let startViewController = StartViewController()
             startViewController.modalTransitionStyle = .crossDissolve
             startViewController.modalPresentationStyle = .fullScreen
             self.present(startViewController, animated: true, completion: nil)
-        } else {
+        /*
+         
+         } else {
             let mainVC = MainViewController()
             mainVC.modalTransitionStyle = .crossDissolve
             mainVC.modalPresentationStyle = .fullScreen
             self.present(mainVC, animated: true, completion: nil)
         }
+         */
     }
 }
