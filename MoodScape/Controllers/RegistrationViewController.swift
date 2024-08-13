@@ -52,9 +52,9 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         password.layer.cornerRadius = 18
         view.addSubview(password)
         
-        setPlaceholder(textField: email, placeholder: "Enter your email", color: .systemGray)
-        setPlaceholder(textField: username, placeholder: "Enter your username", color: .systemGray)
-        setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
+        setPlaceholder(textField: email, placeholder: " Enter your email", color: .systemGray)
+        setPlaceholder(textField: username, placeholder: " Enter your username", color: .systemGray)
+        setPlaceholder(textField: password, placeholder: " Enter your password", color: .systemGray)
             
         registerButton.setTitle("Register", for: .normal)
         registerButton.setTitleColor(.white, for: .normal)

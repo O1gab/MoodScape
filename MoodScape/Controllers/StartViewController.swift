@@ -57,13 +57,13 @@ class StartViewController: StartBaseView {
     @objc private func handleRegister() {
         let registrationVC = RegistrationViewController()
         registrationVC.modalPresentationStyle = .fullScreen
-        present(registrationVC, animated: false, completion: nil)
+        present(registrationVC, animated: true, completion: nil)
     }
 
     @objc private func handleLogin() {
         let loginVC = LoginViewController()
         loginVC.modalPresentationStyle = .fullScreen
-        present(loginVC, animated: false, completion: nil)
+        present(loginVC, animated: true, completion: nil)
     }
 }
 

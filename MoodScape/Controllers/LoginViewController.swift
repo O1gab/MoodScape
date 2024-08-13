@@ -30,7 +30,7 @@ class LoginViewController: StartBaseView {
         username.layer.borderWidth = 1
         username.layer.cornerRadius = 18
         view.addSubview(username)
-        setPlaceholder(textField: username, placeholder: "Enter your username or email", color: .systemGray)
+        setPlaceholder(textField: username, placeholder: " Enter your username or email", color: .systemGray)
         
         password.isSecureTextEntry = true
         password.borderStyle = .none
@@ -40,7 +40,7 @@ class LoginViewController: StartBaseView {
         password.layer.borderWidth = 1
         password.layer.cornerRadius = 18
         view.addSubview(password)
-        setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
+        setPlaceholder(textField: password, placeholder: " Enter your password", color: .systemGray)
         
         loginButton.setTitle("Log In", for: .normal)
         loginButton.setTitleColor(.white, for: .normal)
