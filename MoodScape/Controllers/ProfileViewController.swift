@@ -8,12 +8,10 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
-    var user: User?
+    private let backButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .systemPink
     }
-    
-    
 }

@@ -32,7 +32,7 @@ class StartViewController: StartBaseView {
         loginButton.setTitle("Log In", for: .normal)
         loginButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         loginButton.setTitleColor(.white, for: .normal)
-        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 20) // Set larger font size
+        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         
         loginButton.layer.cornerRadius = 25
         loginButton.translatesAutoresizingMaskIntoConstraints = false

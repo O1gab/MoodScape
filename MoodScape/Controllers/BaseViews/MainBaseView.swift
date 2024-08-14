@@ -2,7 +2,6 @@
 //  MainBaseView.swift
 //  MoodScape
 //
-//  Created by Olga Batiunia on 14.08.24.
 //
 
 import UIKit

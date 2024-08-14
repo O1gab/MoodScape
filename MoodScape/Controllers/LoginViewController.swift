@@ -61,7 +61,6 @@ class LoginViewController: StartBaseView {
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
         view.addSubview(backButton)
         
-        // Error labels
         notificationMessage.textColor = .red
         notificationMessage.font = UIFont.systemFont(ofSize: 14)
         notificationMessage.numberOfLines = 0
@@ -118,7 +117,7 @@ class LoginViewController: StartBaseView {
                 return
             }
             if user.isEmailVerified {
-                // Proceed to next screen or main app
+                
                 print("User logged in: \(user.email!)")
                 self.showSuccessMessage("Login successful")
                         

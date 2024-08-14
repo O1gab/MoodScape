@@ -20,7 +20,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
 
         self.viewControllers = [firstViewController, secondViewController, thirdViewController, fourthViewController]
 
-        // Set tab bar items
         firstViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "1.circle"), tag: 0)
         secondViewController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "2.circle"), tag: 1)
         thirdViewController.tabBarItem = UITabBarItem(title: "Stats", image: UIImage(systemName: "3.circle"), tag: 2)
