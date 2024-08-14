@@ -9,8 +9,8 @@ import Gifu
 
 class MainBaseView: UIViewController {
     
-    let gifImageView = GIFImageView()
-    let profileButton = UIButton(type: .custom)
+    private let gifImageView = GIFImageView()
+    private let profileButton = UIButton(type: .custom)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +49,8 @@ class MainBaseView: UIViewController {
     }
     
     @objc private func profileTapped() {
-        let profileView = MainViewController()
-        profileView.modalTransitionStyle = .crossDissolve
+        let profileView = ProfileViewController()
+        profileView.modalTransitionStyle = .flipHorizontal
         profileView.modalPresentationStyle = .fullScreen
         self.present(profileView, animated: true, completion: nil)
     }
