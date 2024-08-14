@@ -86,8 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				764FDE342C697C230060A428 /* StartBaseView.swift */,
-				7664855B2C6C447E00AA050A /* MainTabBarController.swift */,
 				766485652C6C490400AA050A /* MainBaseView.swift */,
+				7664855B2C6C447E00AA050A /* MainTabBarController.swift */,
 			);
 			path = BaseViews;
 			sourceTree = "<group>";
