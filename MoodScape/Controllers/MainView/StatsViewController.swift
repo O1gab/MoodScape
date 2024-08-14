@@ -6,9 +6,9 @@
 
 import UIKit
 
-class StatsViewController: UIViewController {
+class StatsViewController: MainBaseView {
     
     override func viewDidLoad() {
-        view.backgroundColor = .systemMint
+        super.viewDidLoad()
     }
 }

@@ -6,9 +6,9 @@
 
 import UIKit
 
-class SocialViewController: UIViewController {
+class SocialViewController: MainBaseView {
     
     override func viewDidLoad() {
-        view.backgroundColor = .systemPink
+        super.viewDidLoad()
     }
 }

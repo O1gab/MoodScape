@@ -6,9 +6,9 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: MainBaseView {
     
     override func viewDidLoad() {
-        view.backgroundColor = .systemBlue
+        super.viewDidLoad()
     }
 }

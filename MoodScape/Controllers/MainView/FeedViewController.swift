@@ -6,9 +6,9 @@
 
 import UIKit
 
-class FeedViewController: UIViewController {
+class FeedViewController: MainBaseView {
     
     override func viewDidLoad() {
-        view.backgroundColor = .systemTeal
+        super.viewDidLoad()
     }
 }
