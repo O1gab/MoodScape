@@ -16,6 +16,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     private let registerButton = UIButton(type: .system)
     private let backButton = UIButton(type: .custom)
     private let errorMessageLabel = UILabel()
+    private let successMessageLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +78,6 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
         view.addSubview(backButton)
         
-        // Error labels
         errorMessageLabel.textColor = .red
         errorMessageLabel.font = UIFont.systemFont(ofSize: 14)
         errorMessageLabel.numberOfLines = 0
@@ -124,6 +124,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         ])
     }
     
+    // - MARK: HANDLE REGISTER
     @objc private func handleRegister() {
         guard let email = email.text, !email.isEmpty,
               let username = username.text, !username.isEmpty,
@@ -136,13 +137,26 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         passwordCheck()
         
         // - MARK: FIREBASE INTEGRATION
-        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-            guard let user = authResult?.user, error == nil else {
-                print("Username is already taken")
-                return
-            }
-        print("\(user.email!) created")
-        }
+        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+                    guard let user = authResult?.user, error == nil else {
+                        self.showErrorMessage(error?.localizedDescription ?? "Failed to login")
+                        return
+                    }
+                    
+                    if user.isEmailVerified {
+                        // Proceed to next screen or main app
+                        print("User logged in: \(user.email!)")
+                        self.showSuccessMessage("Login successful")
+                    } else {
+                        // Email not verified
+                        self.showErrorMessage("Please verify your email before logging in.")
+                        do {
+                            try Auth.auth().signOut()
+                        } catch {
+                            print("Failed to sign out user: \(error.localizedDescription)")
+                        }
+                    }
+                }
     }
             
     
@@ -151,19 +165,25 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     }
     
     private func emailCheck() {
-        
+        // TODO: Email must be valid and existing, not taken
     }
     
     private func usernameCheck() {
-    
+        // TODO: Username must be valid (at least, 4 letters) and not taken
     }
     
     private func passwordCheck() {
-        
+        // TODO: Password must be valid (min. 8 chars, containing letters and numbers)
     }
 
     
     private func showErrorMessage(_ message: String) {
+        errorMessageLabel.text = message
+        errorMessageLabel.textColor = .green
+        errorMessageLabel.isHidden = false
+    }
+    
+    private func showSuccessMessage(_ message: String) {
         errorMessageLabel.text = message
         errorMessageLabel.isHidden = false
     }

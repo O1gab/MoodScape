@@ -17,6 +17,7 @@
 		766485482C6A13AD00AA050A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485472C6A13AD00AA050A /* ProfileViewController.swift */; };
 		7664854D2C6A1AAF00AA050A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7664854C2C6A1AAF00AA050A /* GoogleService-Info.plist */; };
 		7664854F2C6AD34000AA050A /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7664854E2C6AD34000AA050A /* View.xib */; };
+		766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485562C6B98CB00AA050A /* ValidationExtensions.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AA2C67B3AA002866B9 /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 		7664854C2C6A1AAF00AA050A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7664854E2C6AD34000AA050A /* View.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
 		766485502C6B898500AA050A /* FirebaseAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		766485562C6B98CB00AA050A /* ValidationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationExtensions.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B869A32C67B3A9002866B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -81,6 +83,22 @@
 			path = BaseViews;
 			sourceTree = "<group>";
 		};
+		766485542C6B989F00AA050A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				766485552C6B98A900AA050A /* AuthExtensions */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		766485552C6B98A900AA050A /* AuthExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				766485562C6B98CB00AA050A /* ValidationExtensions.swift */,
+			);
+			path = AuthExtensions;
+			sourceTree = "<group>";
+		};
 		76B869952C67B3A9002866B9 = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +120,7 @@
 		76B869A02C67B3A9002866B9 /* MoodScape */ = {
 			isa = PBXGroup;
 			children = (
+				766485542C6B989F00AA050A /* Extensions */,
 				76B869B52C67B3B4002866B9 /* App */,
 				76B869B62C67B3D3002866B9 /* Controllers */,
 				76B869B82C67B3F0002866B9 /* Models */,
@@ -296,6 +315,7 @@
 				764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */,
 				766485482C6A13AD00AA050A /* ProfileViewController.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */,
+				766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */,
 				76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */,
 				764FDE352C697C230060A428 /* StartBaseView.swift in Sources */,
 				764FDE3A2C69855E0060A428 /* MainViewController.swift in Sources */,
