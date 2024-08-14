@@ -15,8 +15,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     private let password = UITextField()
     private let registerButton = UIButton(type: .system)
     private let backButton = UIButton(type: .custom)
-    private let errorMessageLabel = UILabel()
-    private let successMessageLabel = UILabel()
+    private let notificationMessage = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,12 +77,12 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
         view.addSubview(backButton)
         
-        errorMessageLabel.textColor = .red
-        errorMessageLabel.font = UIFont.systemFont(ofSize: 14)
-        errorMessageLabel.numberOfLines = 0
-        errorMessageLabel.textAlignment = .center
-        errorMessageLabel.isHidden = true
-        view.addSubview(errorMessageLabel)
+        notificationMessage.textColor = .red
+        notificationMessage.font = UIFont.systemFont(ofSize: 14)
+        notificationMessage.numberOfLines = 0
+        notificationMessage.textAlignment = .center
+        notificationMessage.isHidden = true
+        view.addSubview(notificationMessage)
     }
     
     private func setupConstraints() {
@@ -92,7 +91,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             password.translatesAutoresizingMaskIntoConstraints = false
             registerButton.translatesAutoresizingMaskIntoConstraints = false
             backButton.translatesAutoresizingMaskIntoConstraints = false
-            errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
+            notificationMessage.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
                 backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -118,9 +117,9 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
                 registerButton.widthAnchor.constraint(equalToConstant: 160),
                 registerButton.heightAnchor.constraint(equalToConstant: 50),
                 
-                errorMessageLabel.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 10),
-                errorMessageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-                errorMessageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+                notificationMessage.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 10),
+                notificationMessage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+                notificationMessage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
     
@@ -137,26 +136,27 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         passwordCheck()
         
         // - MARK: FIREBASE INTEGRATION
-        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                    guard let user = authResult?.user, error == nil else {
-                        self.showErrorMessage(error?.localizedDescription ?? "Failed to login")
-                        return
-                    }
-                    
-                    if user.isEmailVerified {
-                        // Proceed to next screen or main app
-                        print("User logged in: \(user.email!)")
-                        self.showSuccessMessage("Login successful")
-                    } else {
-                        // Email not verified
-                        self.showErrorMessage("Please verify your email before logging in.")
-                        do {
-                            try Auth.auth().signOut()
-                        } catch {
-                            print("Failed to sign out user: \(error.localizedDescription)")
-                        }
-                    }
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            guard let user = authResult?.user, error == nil else {
+                self.showErrorMessage(error?.localizedDescription ?? "Failed to register")
+                return
+            }
+            // Send email verification
+            user.sendEmailVerification(completion: { (error) in
+                if let error = error {
+                    self.showErrorMessage("Failed to send verification email: \(error.localizedDescription)")
+                    return
                 }
+                
+                self.showSuccessMessage("Verification email sent. Please check your email.")
+            })
+            
+            // Save username to the database
+            let ref = Database.database().reference()
+            ref.child("users").child(user.uid).setValue(["username": username])
+            
+            print("\(user.email!) created")
+        }
     }
             
     
@@ -178,14 +178,14 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
 
     
     private func showErrorMessage(_ message: String) {
-        errorMessageLabel.text = message
-        errorMessageLabel.textColor = .green
-        errorMessageLabel.isHidden = false
+        notificationMessage.text = message
+        notificationMessage.isHidden = false
     }
     
     private func showSuccessMessage(_ message: String) {
-        errorMessageLabel.text = message
-        errorMessageLabel.isHidden = false
+        notificationMessage.text = message
+        notificationMessage.textColor = .green
+        notificationMessage.isHidden = false
     }
     
     // Helper function to set placeholder with custom color
@@ -195,6 +195,4 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             attributes: [NSAttributedString.Key.foregroundColor: color]
         )
     }
-    
-    
 }
