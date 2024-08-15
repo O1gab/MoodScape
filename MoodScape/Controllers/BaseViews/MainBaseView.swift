@@ -50,7 +50,7 @@ class MainBaseView: UIViewController {
     
     @objc private func profileTapped() {
         let profileView = ProfileViewController()
-        profileView.modalTransitionStyle = .flipHorizontal
+        profileView.modalTransitionStyle = .flipHorizontal // delete maybe
         profileView.modalPresentationStyle = .fullScreen
         self.present(profileView, animated: true, completion: nil)
     }
