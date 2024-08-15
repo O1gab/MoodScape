@@ -20,10 +20,11 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
 
         self.viewControllers = [firstViewController, secondViewController, thirdViewController, fourthViewController]
 
-        firstViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "1.circle"), tag: 0)
-        secondViewController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "2.circle"), tag: 1)
-        thirdViewController.tabBarItem = UITabBarItem(title: "Stats", image: UIImage(systemName: "3.circle"), tag: 2)
-        fourthViewController.tabBarItem = UITabBarItem(title: "Social", image: UIImage(systemName: "4.circle"), tag: 3)
+        firstViewController.tabBarItem = CircleItem(title: "Feed", tag: 0)
+        secondViewController.tabBarItem = CircleItem(title: "Home", tag: 1)
+        thirdViewController.tabBarItem = CircleItem(title: "Stats", tag: 2)
+        fourthViewController.tabBarItem = CircleItem(title: "Social", tag: 3)
+        UITabBar.appearance().tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         
         // - MARK: SWIPE GESTURES
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))

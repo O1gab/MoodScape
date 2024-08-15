@@ -25,6 +25,7 @@
 		766485682C6E4EFB00AA050A /* ProfileSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485672C6E4EFB00AA050A /* ProfileSetupViewController.swift */; };
 		7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485692C6E6E5600AA050A /* ButtonExtensions.swift */; };
 		7664856C2C6EB68500AA050A /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664856B2C6EB68500AA050A /* ViewExtensions.swift */; };
+		7664856F2C6EB8C000AA050A /* CircleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664856E2C6EB8C000AA050A /* CircleItem.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AA2C67B3AA002866B9 /* Assets.xcassets */; };
@@ -54,6 +55,7 @@
 		766485672C6E4EFB00AA050A /* ProfileSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupViewController.swift; sourceTree = "<group>"; };
 		766485692C6E6E5600AA050A /* ButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonExtensions.swift; sourceTree = "<group>"; };
 		7664856B2C6EB68500AA050A /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
+		7664856E2C6EB8C000AA050A /* CircleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleItem.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B869A32C67B3A9002866B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -127,6 +129,22 @@
 			path = MainView;
 			sourceTree = "<group>";
 		};
+		7664856D2C6EB8AF00AA050A /* Items */ = {
+			isa = PBXGroup;
+			children = (
+				766485702C6EB8C900AA050A /* TabBarItems */,
+			);
+			path = Items;
+			sourceTree = "<group>";
+		};
+		766485702C6EB8C900AA050A /* TabBarItems */ = {
+			isa = PBXGroup;
+			children = (
+				7664856E2C6EB8C000AA050A /* CircleItem.swift */,
+			);
+			path = TabBarItems;
+			sourceTree = "<group>";
+		};
 		76B869952C67B3A9002866B9 = {
 			isa = PBXGroup;
 			children = (
@@ -148,6 +166,7 @@
 		76B869A02C67B3A9002866B9 /* MoodScape */ = {
 			isa = PBXGroup;
 			children = (
+				7664856D2C6EB8AF00AA050A /* Items */,
 				766485542C6B989F00AA050A /* Extensions */,
 				76B869B52C67B3B4002866B9 /* App */,
 				76B869B62C67B3D3002866B9 /* Controllers */,
@@ -337,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				764FDE382C6983040060A428 /* LoginViewController.swift in Sources */,
+				7664856F2C6EB8C000AA050A /* CircleItem.swift in Sources */,
 				766485602C6C471D00AA050A /* MainViewController.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
