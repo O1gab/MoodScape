@@ -181,15 +181,54 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     }
     
     private func emailCheck() {
-        // TODO: Email must be valid and existing, not taken
+        // TODO: Email must be valid and existing in real time, not taken
+    
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        if !emailPredicate.evaluate(with: email) {
+            self.showErrorMessage("Invalid email format")
+            return
+        }
     }
     
     private func usernameCheck() {
         // TODO: Username must be valid (at least, 4 letters) and not taken
+        guard let username = username.text, !username.isEmpty else {
+            showErrorMessage("Username is empty")
+            return
+        }
+        
+        if username.count < 4 {
+            self.showErrorMessage("Username must be at least 4 characters")
+            return
+        }
+        let ref = Database.database().reference().child("users")
+        ref.queryOrdered(byChild: "username").queryEqual(toValue: username).observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() {
+                self.showErrorMessage("Username already taken")
+                }
+            }
     }
     
     private func passwordCheck() {
         // TODO: Password must be valid (min. 8 chars, containing letters and numbers)
+        guard let password = password.text, !password.isEmpty else {
+                showErrorMessage("Password is empty")
+                return
+            }
+        
+        if password.count < 8 {
+            showErrorMessage("Password must be at least 8 characters")
+            return
+        }
+        let letterCharacterSet = CharacterSet.letters
+        let numberCharacterSet = CharacterSet.decimalDigits
+        let passwordCharacterSet = CharacterSet(charactersIn: password)
+            
+        if !letterCharacterSet.isSuperset(of: passwordCharacterSet) || !numberCharacterSet.isSuperset(of: passwordCharacterSet) {
+            showErrorMessage("Password must contain both letters and numbers")
+            return
+        }
     }
 
     
