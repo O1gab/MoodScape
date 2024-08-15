@@ -77,6 +77,7 @@ class LoginViewController: StartBaseView {
         view.addSubview(notificationMessage)
     }
     
+    // - MARK: SetupConstraints
     private func setupConstraints() {
         email.translatesAutoresizingMaskIntoConstraints = false
         password.translatesAutoresizingMaskIntoConstraints = false
@@ -109,6 +110,7 @@ class LoginViewController: StartBaseView {
         ])
     }
     
+    // - MARK: HandleLogin
     @objc private func handleLogin() {
         guard let email = email.text, !email.isEmpty else {
             showErrorMessage("Email field is empty")
@@ -133,8 +135,8 @@ class LoginViewController: StartBaseView {
             if user.isEmailVerified {
                 self.checkFirstUsage(for: user)
                 self.showSuccessMessage("Login successful")
-            } else {
-                // Email not verified
+            }
+            else {
                 self.showErrorMessage("Please verify your email before logging in.")
                 do {
                     try Auth.auth().signOut()
@@ -167,6 +169,7 @@ class LoginViewController: StartBaseView {
         )
     }
     
+    // - MARK: CheckFirstUsage
     private func checkFirstUsage(for user: FirebaseAuth.User) {
         let ref = Database.database().reference().child("users").child(user.uid)
         ref.observeSingleEvent(of: .value) { snapshot in

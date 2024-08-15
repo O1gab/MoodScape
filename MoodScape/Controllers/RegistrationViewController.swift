@@ -195,6 +195,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         dismiss(animated: true, completion: nil)
     }
     
+    // - MARK: EmailCheck
     private func emailCheck(completion: @escaping (Bool, String?) -> Void) {
         guard let email = email.text, !email.isEmpty else {
             completion(false, "Email is empty")
@@ -212,6 +213,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         }
     }
     
+    // - MARK: UsernameCheck
     private func usernameCheck(completion: @escaping (Bool, String?) -> Void) {
         guard let username = username.text, !username.isEmpty else {
             completion(false, "Username is empty")
@@ -233,6 +235,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         }
     }
     
+    // - MARK: PasswordCheck
     private func passwordCheck(completion: @escaping (Bool, String?) -> Void) {
         // TODO: Password must be valid (min. 8 chars, containing letters and numbers)
         guard let password = password.text, !password.isEmpty else {
