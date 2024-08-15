@@ -43,6 +43,10 @@ class LoginViewController: StartBaseView {
         password.layer.cornerRadius = 18
         password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: password.frame.height))
         password.leftViewMode = .always
+        let rightViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        rightViewContainer.addSubview(password.eyeButton)
+        password.rightView = rightViewContainer
+        password.rightViewMode = .always
         view.addSubview(password)
         setPlaceholder(textField: password, placeholder: " Enter your password", color: .systemGray)
         
@@ -118,10 +122,11 @@ class LoginViewController: StartBaseView {
             }
             if user.isEmailVerified {
                 
+                
                 print("User logged in: \(user.email!)")
                 self.showSuccessMessage("Login successful")
                         
-                let mainView = MainViewController()
+                let mainView = MainTabBarController()
                 mainView.modalTransitionStyle = .crossDissolve
                 mainView.modalPresentationStyle = .fullScreen
                 self.present(mainView, animated: true, completion: nil)

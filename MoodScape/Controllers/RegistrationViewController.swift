@@ -56,6 +56,10 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         password.layer.cornerRadius = 18
         password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: password.frame.height))
         password.leftViewMode = .always
+        let rightViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        rightViewContainer.addSubview(password.eyeButton)
+        password.rightView = rightViewContainer
+        password.rightViewMode = .always
         view.addSubview(password)
         
         setPlaceholder(textField: email, placeholder: " Enter your email", color: .systemGray)
@@ -152,9 +156,13 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             })
             
             // Save username to the database
-            let ref = Database.database().reference()
-            ref.child("users").child(user.uid).setValue(["username": username])
-            
+            let ref = Database.database().reference().child("users").child(user.uid)
+            let userData: [String: Any] = [
+                            "email": email,
+                            "username": username,
+                            "profileSetupComplete": false // Field to track profile setup
+                        ]
+            ref.setValue(userData)
             print("\(user.email!) created")
         }
     }
