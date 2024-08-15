@@ -138,9 +138,24 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             showErrorMessage("Please fill in all fields")
             return
         }
-        emailCheck()
-        usernameCheck()
-        passwordCheck()
+        self.emailCheck { isValid, message in
+            if !isValid {
+                self.showErrorMessage(message ?? "Email check failed")
+                return
+            }
+        }
+        self.usernameCheck { isValid, message in
+            if !isValid {
+                self.showErrorMessage(message ?? "Username check failed")
+                return
+            }
+        }
+        self.passwordCheck { isValid, message in
+            if !isValid {
+                self.showErrorMessage(message ?? "Password check failed")
+                return
+            }
+        }
         
         // - MARK: FIREBASE INTEGRATION
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
@@ -180,37 +195,45 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         dismiss(animated: true, completion: nil)
     }
     
-    private func emailCheck() {
-        // TODO: Email must be valid and existing in real time, not taken
-    
+    private func emailCheck(completion: @escaping (Bool, String?) -> Void) {
+        guard let email = email.text, !email.isEmpty else {
+            completion(false, "Email is empty")
+            return
+        }
+        
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}"
         let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        if !emailPredicate.evaluate(with: email) {
-            self.showErrorMessage("Invalid email format")
+        
+        if emailPredicate.evaluate(with: email) {
+            completion(true, nil)
+        } else {
+            completion(false, "Invalid email format")
             return
         }
     }
     
-    private func usernameCheck() {
-        // TODO: Username must be valid (at least, 4 letters) and not taken
+    private func usernameCheck(completion: @escaping (Bool, String?) -> Void) {
         guard let username = username.text, !username.isEmpty else {
-            showErrorMessage("Username is empty")
+            completion(false, "Username is empty")
             return
         }
         
         if username.count < 4 {
-            self.showErrorMessage("Username must be at least 4 characters")
+            completion(false, "Username must be at least 4 characters")
             return
         }
+        
         let ref = Database.database().reference().child("users")
         ref.queryOrdered(byChild: "username").queryEqual(toValue: username).observeSingleEvent(of: .value) { snapshot in
             if snapshot.exists() {
-                self.showErrorMessage("Username already taken")
-                }
+                completion(false, "Username already taken")
+            } else {
+                completion(true, nil)
             }
+        }
     }
     
-    private func passwordCheck() {
+    private func passwordCheck(completion: @escaping (Bool, String?) -> Void) {
         // TODO: Password must be valid (min. 8 chars, containing letters and numbers)
         guard let password = password.text, !password.isEmpty else {
                 showErrorMessage("Password is empty")
@@ -231,7 +254,6 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         }
     }
 
-    
     private func showErrorMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.isHidden = false
