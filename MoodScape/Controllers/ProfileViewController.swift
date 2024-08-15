@@ -19,9 +19,9 @@ class ProfileViewController: UIViewController {
     
     // - MARK: SetupForm
     private func setupForm() {
-        backButton.setTitle("<-", for: .normal)
-        backButton.setTitleColor(.white, for: .normal)
-        backButton.titleLabel?.font = UIFont.systemFont(ofSize: 24)
+        backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
+        backButton.tintColor = .white
+        backButton.imageView?.contentMode = .scaleAspectFit
         backButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
         view.addSubview(backButton)
