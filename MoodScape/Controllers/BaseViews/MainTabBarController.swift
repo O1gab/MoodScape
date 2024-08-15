@@ -29,7 +29,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeLeft.direction = .left
         view.addGestureRecognizer(swipeLeft)
-
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeRight.direction = .right
         view.addGestureRecognizer(swipeRight)
@@ -48,4 +47,5 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
             }
         }
     }
+    
 }
