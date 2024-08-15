@@ -161,15 +161,20 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             // Save username to the database
             let ref = Database.database().reference().child("users").child(user.uid)
             let userData: [String: Any] = [
-                            "email": email,
-                            "username": username,
-                            "profileSetupComplete": false // Field to track profile setup
-                        ]
-            ref.setValue(userData)
-            print("\(user.email!) created")
+                    "email": email,
+                    "username": username,
+                    "firstUsage": true,
+                    "registrationDate": ServerValue.timestamp()
+                ]
+            ref.setValue(userData) { error, _ in
+                if let error = error {
+                    self.showErrorMessage("Failed to save user data: \(error.localizedDescription)")
+                } else {
+                    print("\(user.email!) created")
+                }
+            }
         }
     }
-            
     
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)

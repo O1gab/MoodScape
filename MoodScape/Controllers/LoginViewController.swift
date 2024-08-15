@@ -6,6 +6,8 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseDatabase
+import FirebaseFirestore
 
 class LoginViewController: StartBaseView {
     
@@ -118,20 +120,19 @@ class LoginViewController: StartBaseView {
         }
         
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            guard let user = authResult?.user, error == nil else {
-                self.showErrorMessage(error?.localizedDescription ?? "Failed to login")
+            if let error = error {
+                self.showErrorMessage("Login failed: \(error.localizedDescription)")
                 return
             }
+        
+            guard let user = authResult?.user else {
+                self.showErrorMessage("Failed to get user information.")
+                return
+            }
+            
             if user.isEmailVerified {
-                
-                
-                print("User logged in: \(user.email!)")
+                self.checkFirstUsage(for: user)
                 self.showSuccessMessage("Login successful")
-                        
-                let mainView = MainTabBarController()
-                mainView.modalTransitionStyle = .crossDissolve
-                mainView.modalPresentationStyle = .fullScreen
-                self.present(mainView, animated: true, completion: nil)
             } else {
                 // Email not verified
                 self.showErrorMessage("Please verify your email before logging in.")
@@ -164,5 +165,37 @@ class LoginViewController: StartBaseView {
             string: placeholder,
             attributes: [NSAttributedString.Key.foregroundColor: color]
         )
+    }
+    
+    private func checkFirstUsage(for user: FirebaseAuth.User) {
+        let ref = Database.database().reference().child("users").child(user.uid)
+        ref.observeSingleEvent(of: .value) { snapshot in
+            // Ensure we are on the main thread for UI updates
+            DispatchQueue.main.async {
+                guard let userData = snapshot.value as? [String: Any],
+                      let firstUsage = userData["firstUsage"] as? Bool else {
+                        self.showErrorMessage("Failed to retrieve user data or firstUsage field is missing")
+                        return
+                    }
+                
+                if firstUsage {
+                    
+                    let profileSetupVC = ProfileSetupViewController()
+                    profileSetupVC.modalTransitionStyle = .crossDissolve
+                    profileSetupVC.modalPresentationStyle = .fullScreen
+                    self.present(profileSetupVC, animated: true, completion: nil)
+                } else {
+                    
+                    let mainView = MainTabBarController()
+                    mainView.modalTransitionStyle = .crossDissolve
+                    mainView.modalPresentationStyle = .fullScreen
+                    self.present(mainView, animated: true, completion: nil)
+                }
+            }
+        } withCancel: { error in
+            DispatchQueue.main.async {
+                self.showErrorMessage("Failed to retrieve user data: \(error.localizedDescription)")
+            }
+        }
     }
 }
