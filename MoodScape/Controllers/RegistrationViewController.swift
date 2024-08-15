@@ -34,6 +34,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         email.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: email.frame.height))
         email.leftViewMode = .always
         email.delegate = self
+        email.autocapitalizationType = .none
         view.addSubview(email)
         
         username.borderStyle = .none
@@ -45,6 +46,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         username.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: username.frame.height))
         username.leftViewMode = .always
         username.delegate = self
+        username.autocapitalizationType = .none
         view.addSubview(username)
             
         password.isSecureTextEntry = true
@@ -60,6 +62,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         rightViewContainer.addSubview(password.eyeButton)
         password.rightView = rightViewContainer
         password.rightViewMode = .always
+        password.autocapitalizationType = .none
         view.addSubview(password)
         
         setPlaceholder(textField: email, placeholder: " Enter your email", color: .systemGray)

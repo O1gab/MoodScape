@@ -31,6 +31,7 @@ class LoginViewController: StartBaseView {
         email.layer.cornerRadius = 18
         email.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: email.frame.height))
         email.leftViewMode = .always
+        email.autocapitalizationType = .none
         view.addSubview(email)
         setPlaceholder(textField: email, placeholder: " Enter your email", color: .systemGray)
         
@@ -47,6 +48,7 @@ class LoginViewController: StartBaseView {
         rightViewContainer.addSubview(password.eyeButton)
         password.rightView = rightViewContainer
         password.rightViewMode = .always
+        password.autocapitalizationType = .none
         view.addSubview(password)
         setPlaceholder(textField: password, placeholder: " Enter your password", color: .systemGray)
         
