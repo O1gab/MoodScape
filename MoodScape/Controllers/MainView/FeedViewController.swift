@@ -10,12 +10,14 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     private let topLabel = UILabel()
     private var collectionView: UICollectionView!
+    private var albums: [Album] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupForm()
         setupCollectionView()
         setupConstraints()
+        fetchAlbums()
     }
     
     // - MARK: SetupForm
@@ -57,22 +59,49 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         ])
     }
     
+    private func fetchAlbums() {
+            SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
+                guard success else { return }
+                SpotifyAPIManager.shared.fetchRecentlyPublishedAlbums { albums in
+                    guard let albums = albums else { return }
+                    DispatchQueue.main.async {
+                        self?.albums = albums
+                        self?.collectionView.reloadData()
+                    }
+                }
+            }
+        }
+    
+    
     // - MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10 // ADJUST IT
+        return albums.count
     }
     
     // - MARK: CollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AlbumCell", for: indexPath) as! AlbumCollectionViewCell
             // Configure the cell with image (replace with actual image fetching)
-            cell.configure(with: UIImage(systemName: "photo")) // Placeholder image
-            return cell
+        let album = albums[indexPath.item]
+               
+               // Fetch image data
+               if let url = URL(string: album.imageUrl) {
+                   let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                       guard let data = data, error == nil, let image = UIImage(data: data) else { return }
+                       DispatchQueue.main.async {
+                           cell.configure(with: image)
+                       }
+                   }
+                   task.resume()
+               }
+               
+               return cell
     }
         
     // - MARK: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             return CGSize(width: 110, height: 190) // Adjust size as needed
+        
     }
     
 }
