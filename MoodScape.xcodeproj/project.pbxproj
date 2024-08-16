@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		761350292C70166A009A3F40 /* ProfileSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761350282C70166A009A3F40 /* ProfileSetup.swift */; };
 		764FDE2F2C695EA60060A428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2E2C695EA60060A428 /* User.swift */; };
 		764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE322C696E990060A428 /* RegistrationViewController.swift */; };
 		764FDE352C697C230060A428 /* StartBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE342C697C230060A428 /* StartBaseView.swift */; };
@@ -42,6 +43,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		761350282C70166A009A3F40 /* ProfileSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetup.swift; sourceTree = "<group>"; };
 		764FDE2E2C695EA60060A428 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		764FDE322C696E990060A428 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		764FDE342C697C230060A428 /* StartBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartBaseView.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			children = (
 				766485552C6B98A900AA050A /* AuthExtensions */,
 				7664856B2C6EB68500AA050A /* ViewExtensions.swift */,
+				761350282C70166A009A3F40 /* ProfileSetup.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 				7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */,
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
 				7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */,
+				761350292C70166A009A3F40 /* ProfileSetup.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
 				766485622C6C474F00AA050A /* StatsViewController.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
