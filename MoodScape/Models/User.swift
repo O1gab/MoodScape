@@ -7,7 +7,7 @@
 import Foundation
 
 struct User {
-    let uid: String
+    //let uid: String
     var email: String
     var username: String
     var firstName: String?
@@ -18,8 +18,8 @@ struct User {
     //var registrationDate: Date
     var friends: [String]?
     
-    init(uid: String, data: [String: Any]) {
-        self.uid = uid
+    init(data: [String: Any]) {
+        //self.uid = uid
         self.email = data["email"] as? String ?? ""
         self.username = data["username"] as? String ?? ""
         self.firstName = data["firstName"] as? String

@@ -133,8 +133,8 @@ class LoginViewController: StartBaseView {
             }
             
             if user.isEmailVerified {
-                self.checkFirstUsage(for: user)
                 self.showSuccessMessage("Login successful")
+                self.checkFirstUsage(for: user)
             }
             else {
                 self.showErrorMessage("Please verify your email before logging in.")
