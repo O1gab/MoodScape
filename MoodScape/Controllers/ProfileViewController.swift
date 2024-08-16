@@ -159,7 +159,10 @@ class ProfileViewController: UIViewController {
     
     // - MARK: HandleEdit
     @objc private func handleEdit() {
-        
+        let profileSetupView = ProfileSetupViewController()
+        profileSetupView.modalTransitionStyle = .crossDissolve
+        profileSetupView.modalPresentationStyle = .fullScreen
+        self.present(profileSetupView, animated: true, completion: nil)
     }
     
 }
