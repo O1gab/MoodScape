@@ -17,21 +17,18 @@ class PopUpViewController: UIViewController {
     }()
     
     let closeButton: UIButton = {
-        let closeButton = UIButton(type: .system)
-        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        closeButton.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.addTarget(PopUpViewController.self, action: #selector(closePopUp), for: .touchUpInside)
-        return closeButton
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         view.addSubview(contentView)
         contentView.addSubview(closeButton)
-        
         setupConstraints()
     }
     
@@ -41,6 +38,8 @@ class PopUpViewController: UIViewController {
         }
     
     func setupConstraints() {
+        closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
+        
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
