@@ -28,6 +28,7 @@ class LoginViewController: StartBaseView {
         email.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: email.frame.height))
         email.leftViewMode = .always
         email.autocapitalizationType = .none
+        email.translatesAutoresizingMaskIntoConstraints = false
         return email
     }()
     
@@ -47,6 +48,7 @@ class LoginViewController: StartBaseView {
         password.rightView = rightViewContainer
         password.rightViewMode = .always
         password.autocapitalizationType = .none
+        password.translatesAutoresizingMaskIntoConstraints = false
         return password
     }()
     
@@ -57,6 +59,7 @@ class LoginViewController: StartBaseView {
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         loginButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         loginButton.layer.cornerRadius = 18
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
         return loginButton
     }()
     
@@ -76,6 +79,7 @@ class LoginViewController: StartBaseView {
         notificationMessage.numberOfLines = 0
         notificationMessage.textAlignment = .center
         notificationMessage.isHidden = true
+        notificationMessage.translatesAutoresizingMaskIntoConstraints = false
         return notificationMessage
     }()
     
@@ -94,17 +98,11 @@ class LoginViewController: StartBaseView {
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
         view.addSubview(backButton)
         
-        
         view.addSubview(notificationMessage)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
-        email.translatesAutoresizingMaskIntoConstraints = false
-        password.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.translatesAutoresizingMaskIntoConstraints = false
-        notificationMessage.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
