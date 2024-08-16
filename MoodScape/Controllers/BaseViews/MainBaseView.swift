@@ -6,11 +6,13 @@
 
 import UIKit
 import Gifu
+import FirebaseAuth
 
 class MainBaseView: UIViewController {
     
     private let gifImageView = GIFImageView()
     private let profileButton = UIButton(type: .custom)
+    private let exitButton = UIButton(type: .system)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +36,11 @@ class MainBaseView: UIViewController {
         profileButton.backgroundColor = .blue
         profileButton.addTarget(self, action: #selector(profileTapped), for: .touchUpInside)
         view.addSubview(profileButton)
+        
+        exitButton.setImage(UIImage(systemName: "arrowshape.left.fill"), for: .normal)
+        exitButton.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        exitButton.addTarget(self, action: #selector(exitTapped), for: .touchUpInside)
+        view.addSubview(exitButton)
     }
     
     private func setupConstraints() {
@@ -45,7 +52,18 @@ class MainBaseView: UIViewController {
             
             profileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 210),
             profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            
+            exitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            exitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
         ])
+    }
+    
+    @objc private func exitTapped() {
+        do {
+                    try Auth.auth().signOut()
+                } catch let signOutError as NSError {
+                    print("Error signing out: %@", signOutError)
+                }
     }
     
     @objc private func profileTapped() {
