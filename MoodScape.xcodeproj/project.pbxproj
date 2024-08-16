@@ -30,6 +30,7 @@
 		766485762C6ED52D00AA050A /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485752C6ED52D00AA050A /* Album.swift */; };
 		766485792C6ED6E700AA050A /* SpotifyAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485782C6ED6E700AA050A /* SpotifyAuthenticationManager.swift */; };
 		7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */; };
+		7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AA2C67B3AA002866B9 /* Assets.xcassets */; };
@@ -64,6 +65,7 @@
 		766485752C6ED52D00AA050A /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		766485782C6ED6E700AA050A /* SpotifyAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthenticationManager.swift; sourceTree = "<group>"; };
 		7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
+		7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodSelectionView.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B869A32C67B3A9002866B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				7664855D2C6C46A700AA050A /* SocialViewController.swift */,
 				766485612C6C474F00AA050A /* StatsViewController.swift */,
 				766485732C6ED0BE00AA050A /* AlbumCollectionView.swift */,
+				7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -185,9 +188,9 @@
 			isa = PBXGroup;
 			children = (
 				766485772C6ED6C700AA050A /* SpotifyAPI */,
+				76B869B52C67B3B4002866B9 /* App */,
 				7664856D2C6EB8AF00AA050A /* Items */,
 				766485542C6B989F00AA050A /* Extensions */,
-				76B869B52C67B3B4002866B9 /* App */,
 				76B869B62C67B3D3002866B9 /* Controllers */,
 				76B869B82C67B3F0002866B9 /* Models */,
 				76B869BB2C67B42B002866B9 /* Services */,
@@ -379,6 +382,7 @@
 				7664856F2C6EB8C000AA050A /* CircleItem.swift in Sources */,
 				766485602C6C471D00AA050A /* MainViewController.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
+				7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */,
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
 				7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
