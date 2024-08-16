@@ -34,9 +34,59 @@ class ProfileViewController: UIViewController {
     let usernameLabel: UILabel = {
         let label = UILabel()
         label.text = "Username"
-        label.textColor = .white
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let firstNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "First Name:"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    let lastNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Last Name:"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    let locationLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Location:"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    let musicPreferencesLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Music Preferences:"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let registrationDate: UILabel = {
+        let label = UILabel()
+        label.text = "Registration Date:"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -84,6 +134,10 @@ class ProfileViewController: UIViewController {
         view.sendSubviewToBack(gifBackground)
         view.addSubview(profileImage)
         view.addSubview(usernameLabel)
+        view.addSubview(firstNameLabel)
+        view.addSubview(lastNameLabel)
+        view.addSubview(locationLabel)
+        view.addSubview(musicPreferencesLabel)
         view.addSubview(editButton)
         view.addSubview(backButton)
         view.addSubview(settingsButton)
@@ -100,22 +154,37 @@ class ProfileViewController: UIViewController {
             gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
             gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
+                    
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-            
+                    
             settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            settingsButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20),
-            
+            settingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+                    
             profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             profileImage.widthAnchor.constraint(equalToConstant: 150),
             profileImage.heightAnchor.constraint(equalToConstant: 150),
-            
+                    
             usernameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20),
             usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                        
-            editButton.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
+                    
+            firstNameLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
+            firstNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+                    
+            lastNameLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 20),
+            lastNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+                    
+            locationLabel.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 20),
+            locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+                    
+            musicPreferencesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20),
+            musicPreferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            
+            registrationDate.topAnchor.constraint(equalTo: musicPreferencesLabel.bottomAnchor, constant: 20),
+            registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+                    
+            editButton.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 20),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 160),
             editButton.heightAnchor.constraint(equalToConstant: 50)
@@ -125,18 +194,32 @@ class ProfileViewController: UIViewController {
     // - MARK: FetchUsername
     private func fetchUsername() {
         guard let userId = Auth.auth().currentUser?.uid else {
-                print("User not logged in")
-                return
-            }
-        
-        // FIX THE ERROR HERE !!!
+            print("User not logged in")
+            return
+        }
         
         let ref = Database.database().reference().child("users").child(userId)
         ref.observeSingleEvent(of: .value) { snapshot in
-            if let userData = snapshot.value as? [String: Any],
-            let username = userData["username"] as? String {
+            if let userData = snapshot.value as? [String: Any] {
                 DispatchQueue.main.async {
-                self.usernameLabel.text = username
+                    if let username = userData["username"] as? String {
+                        self.usernameLabel.text = username
+                    }
+                    if let firstName = userData["first_name"] as? String {
+                        self.firstNameLabel.text = "First Name: \(firstName)"
+                    }
+                    if let lastName = userData["last_name"] as? String {
+                        self.lastNameLabel.text = "Last Name: \(lastName)"
+                    }
+                    if let location = userData["location"] as? String {
+                        self.locationLabel.text = "Location: \(location)"
+                    }
+                    if let musicPreferences = userData["music_preferences"] as? String {
+                        self.musicPreferencesLabel.text = "Music Preferences: \(musicPreferences)"
+                    }
+                    if let registrationDate = userData["registrationDate"] as? Date {
+                        self.registrationDate.text = "Registration Date: \(registrationDate)"
+                    }
                 }
             } else {
                 print("Failed to fetch user data")
