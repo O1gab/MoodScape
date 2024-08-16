@@ -27,6 +27,7 @@
 		7664856C2C6EB68500AA050A /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664856B2C6EB68500AA050A /* ViewExtensions.swift */; };
 		7664856F2C6EB8C000AA050A /* CircleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664856E2C6EB8C000AA050A /* CircleItem.swift */; };
 		766485742C6ED0BE00AA050A /* AlbumCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485732C6ED0BE00AA050A /* AlbumCollectionView.swift */; };
+		766485762C6ED52D00AA050A /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485752C6ED52D00AA050A /* Album.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AA2C67B3AA002866B9 /* Assets.xcassets */; };
@@ -58,6 +59,7 @@
 		7664856B2C6EB68500AA050A /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		7664856E2C6EB8C000AA050A /* CircleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleItem.swift; sourceTree = "<group>"; };
 		766485732C6ED0BE00AA050A /* AlbumCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionView.swift; sourceTree = "<group>"; };
+		766485752C6ED52D00AA050A /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B869A32C67B3A9002866B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				764FDE2E2C695EA60060A428 /* User.swift */,
+				766485752C6ED52D00AA050A /* Album.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				7664855C2C6C447E00AA050A /* MainTabBarController.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */,
 				766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */,
+				766485762C6ED52D00AA050A /* Album.swift in Sources */,
 				76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */,
 				764FDE352C697C230060A428 /* StartBaseView.swift in Sources */,
 			);
