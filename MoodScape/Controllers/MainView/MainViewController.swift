@@ -26,7 +26,6 @@ class MainViewController: MainBaseView {
             button.setImage(image, for: .normal)
             button.tintColor = .white
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.addTarget(self, action: #selector(handleAddMood), for: .touchUpInside)
             return button
         }()
     
@@ -115,6 +114,7 @@ class MainViewController: MainBaseView {
         override func viewDidLoad() {
             super.viewDidLoad()
             view.backgroundColor = .black
+            addMoodButton.addTarget(self, action: #selector(handleAddMood), for: .touchUpInside)
             
             setupLayout()
         }
@@ -185,9 +185,9 @@ class MainViewController: MainBaseView {
     
     @objc private func handleAddMood() {
         let popUpViewController = PopUpViewController()
-                popUpViewController.modalPresentationStyle = .overCurrentContext
-                popUpViewController.modalTransitionStyle = .crossDissolve
-                present(popUpViewController, animated: true, completion: nil)
+        popUpViewController.modalPresentationStyle = .overCurrentContext
+        popUpViewController.modalTransitionStyle = .crossDissolve
+        present(popUpViewController, animated: true, completion: nil)
     }
     
 }
