@@ -33,9 +33,9 @@ class PopUpViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            animateShow()
-        }
+        super.viewWillAppear(animated)
+        animateShow()
+    }
     
     func setupConstraints() {
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
@@ -62,11 +62,11 @@ class PopUpViewController: UIViewController {
            })
        }
        
-       func animateHide() {
-           UIView.animate(withDuration: 0.3, animations: {
-               self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
-           }) { _ in
-               self.dismiss(animated: false, completion: nil)
-           }
-       }
+    func animateHide() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
+        }) { _ in
+            self.dismiss(animated: false, completion: nil)
+        }
+    }
 }
