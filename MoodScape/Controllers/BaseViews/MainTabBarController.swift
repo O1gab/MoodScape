@@ -20,7 +20,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
 
         self.viewControllers = [firstViewController, secondViewController, thirdViewController, fourthViewController]
         
-        firstViewController.tabBarItem = CircleItem(title: "Feed", tag: 0)
+        firstViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "newspaper"), tag: 0)
         secondViewController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "plus.circle.fill"), tag: 1)
         thirdViewController.tabBarItem = UITabBarItem(title: "Stats", image: UIImage(systemName: "chart.bar"), tag: 2)
         fourthViewController.tabBarItem = UITabBarItem(title: "Social", image: UIImage(systemName: "person.3"), tag: 3)
