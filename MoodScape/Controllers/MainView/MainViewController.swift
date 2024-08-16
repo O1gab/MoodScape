@@ -58,59 +58,6 @@ class MainViewController: MainBaseView {
             return label
         }()
         
-        private let dayStreakLabel: UILabel = {
-            let label = UILabel()
-            label.text = "0\nday streak"
-            label.numberOfLines = 2
-            label.textColor = .white
-            label.textAlignment = .center
-            label.font = UIFont.systemFont(ofSize: 14)
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
-        
-        private let bottomTabBar: UIView = {
-            let view = UIView()
-            view.translatesAutoresizingMaskIntoConstraints = false
-            return view
-        }()
-        
-        private let checkInButton: UIButton = {
-            let button = UIButton(type: .system)
-            button.setTitle("Check in", for: .normal)
-            button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
-            button.tintColor = .red
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
-        }()
-        
-        private let toolsButton: UIButton = {
-            let button = UIButton(type: .system)
-            button.setTitle("Tools", for: .normal)
-            button.setImage(UIImage(systemName: "hammer"), for: .normal)
-            button.tintColor = .white
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
-        }()
-        
-        private let friendsButton: UIButton = {
-            let button = UIButton(type: .system)
-            button.setTitle("Friends", for: .normal)
-            button.setImage(UIImage(systemName: "person.3"), for: .normal)
-            button.tintColor = .white
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
-        }()
-        
-        private let analyzeButton: UIButton = {
-            let button = UIButton(type: .system)
-            button.setTitle("Analyze", for: .normal)
-            button.setImage(UIImage(systemName: "chart.bar"), for: .normal)
-            button.tintColor = .white
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
-        }()
-        
         override func viewDidLoad() {
             super.viewDidLoad()
             view.backgroundColor = .black
@@ -125,22 +72,15 @@ class MainViewController: MainBaseView {
             view.addSubview(addMoodLabel)
             view.addSubview(bottomInfoView)
             bottomInfoView.addSubview(uniqueFeelingsLabel)
-            bottomInfoView.addSubview(dayStreakLabel)
-            view.addSubview(bottomTabBar)
-            
-            bottomTabBar.addSubview(checkInButton)
-            bottomTabBar.addSubview(toolsButton)
-            bottomTabBar.addSubview(friendsButton)
-            bottomTabBar.addSubview(analyzeButton)
             
             NSLayoutConstraint.activate([
                 // Top label constraints
-                topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35),
+                topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55),
                 topLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 
                 // "Add Mood" Button constraints
                 addMoodButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                addMoodButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50),
+                addMoodButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
                 addMoodButton.widthAnchor.constraint(equalToConstant: 70),
                 addMoodButton.heightAnchor.constraint(equalToConstant: 70),
                 
@@ -148,38 +88,14 @@ class MainViewController: MainBaseView {
                 addMoodLabel.topAnchor.constraint(equalTo: addMoodButton.bottomAnchor, constant: 3),
                 addMoodLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 
-                // Bottom info view constraints
-                bottomInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-                bottomInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-                bottomInfoView.bottomAnchor.constraint(equalTo: bottomTabBar.topAnchor, constant: -16),
-                bottomInfoView.heightAnchor.constraint(equalToConstant: 60),
                 
                 // Unique Feelings Label
                 uniqueFeelingsLabel.leadingAnchor.constraint(equalTo: bottomInfoView.leadingAnchor, constant: 16),
-                uniqueFeelingsLabel.centerYAnchor.constraint(equalTo: bottomInfoView.centerYAnchor),
+                uniqueFeelingsLabel.centerYAnchor.constraint(equalTo: bottomInfoView.centerYAnchor)
                 
-                // Day Streak Label
-                dayStreakLabel.trailingAnchor.constraint(equalTo: bottomInfoView.trailingAnchor, constant: -16),
-                dayStreakLabel.centerYAnchor.constraint(equalTo: bottomInfoView.centerYAnchor),
-                
-                // Bottom tab bar constraints
-                bottomTabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                bottomTabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                bottomTabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-                bottomTabBar.heightAnchor.constraint(equalToConstant: 60),
                 
                 // Bottom tab bar buttons constraints
-                checkInButton.leadingAnchor.constraint(equalTo: bottomTabBar.leadingAnchor, constant: 20),
-                checkInButton.centerYAnchor.constraint(equalTo: bottomTabBar.centerYAnchor),
                 
-                toolsButton.centerXAnchor.constraint(equalTo: bottomTabBar.centerXAnchor, constant: -50),
-                toolsButton.centerYAnchor.constraint(equalTo: bottomTabBar.centerYAnchor),
-                
-                friendsButton.centerXAnchor.constraint(equalTo: bottomTabBar.centerXAnchor, constant: 50),
-                friendsButton.centerYAnchor.constraint(equalTo: bottomTabBar.centerYAnchor),
-                
-                analyzeButton.trailingAnchor.constraint(equalTo: bottomTabBar.trailingAnchor, constant: -20),
-                analyzeButton.centerYAnchor.constraint(equalTo: bottomTabBar.centerYAnchor),
             ])
         }
     
