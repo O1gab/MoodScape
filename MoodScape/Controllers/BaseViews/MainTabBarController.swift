@@ -19,11 +19,11 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         self.delegate = self
 
         self.viewControllers = [firstViewController, secondViewController, thirdViewController, fourthViewController]
-
+        
         firstViewController.tabBarItem = CircleItem(title: "Feed", tag: 0)
-        secondViewController.tabBarItem = CircleItem(title: "Home", tag: 1)
-        thirdViewController.tabBarItem = CircleItem(title: "Stats", tag: 2)
-        fourthViewController.tabBarItem = CircleItem(title: "Social", tag: 3)
+        secondViewController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "plus.circle.fill"), tag: 1)
+        thirdViewController.tabBarItem = UITabBarItem(title: "Stats", image: UIImage(systemName: "chart.bar"), tag: 2)
+        fourthViewController.tabBarItem = UITabBarItem(title: "Social", image: UIImage(systemName: "person.3"), tag: 3)
         UITabBar.appearance().tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         
         // - MARK: SWIPE GESTURES
