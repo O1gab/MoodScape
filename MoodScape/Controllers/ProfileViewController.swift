@@ -6,6 +6,8 @@
 
 import UIKit
 import Gifu
+import FirebaseAuth
+import FirebaseDatabase
 
 class ProfileViewController: UIViewController {
     
@@ -71,9 +73,9 @@ class ProfileViewController: UIViewController {
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         setupForm()
         setupConstraints()
+        fetchUsername()
     }
     
     // - MARK: SetupForm
@@ -118,6 +120,28 @@ class ProfileViewController: UIViewController {
             editButton.widthAnchor.constraint(equalToConstant: 160),
             editButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    
+    // - MARK: FetchUsername
+    private func fetchUsername() {
+        guard let userId = Auth.auth().currentUser?.uid else {
+                print("User not logged in")
+                return
+            }
+        
+        // FIX THE ERROR HERE !!!
+        
+        let ref = Database.database().reference().child("users").child(userId)
+        ref.observeSingleEvent(of: .value) { snapshot in
+            if let userData = snapshot.value as? [String: Any],
+            let username = userData["username"] as? String {
+                DispatchQueue.main.async {
+                self.usernameLabel.text = username
+                }
+            } else {
+                print("Failed to fetch user data")
+            }
+        }
     }
     
     // - MARK: HandleBack
