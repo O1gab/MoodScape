@@ -5,8 +5,17 @@
 //
 
 import UIKit
+import Gifu
 
 class ProfileViewController: UIViewController {
+    
+    let gifBackground: GIFImageView = {
+        let gifImageView = GIFImageView()
+        gifImageView.animate(withGIFNamed: "gradient_skyline_blinking_stars")
+        gifImageView.contentMode = .scaleAspectFill
+        gifImageView.translatesAutoresizingMaskIntoConstraints = false
+        return gifImageView
+    }()
     
     let profileImage: UIImageView = {
         let imageView = UIImageView()
@@ -18,6 +27,16 @@ class ProfileViewController: UIViewController {
         imageView.layer.cornerRadius = 75
         imageView.backgroundColor = .black
         return imageView
+    }()
+    
+    let usernameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Username"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     let editButton: UIButton = {
@@ -59,10 +78,13 @@ class ProfileViewController: UIViewController {
     
     // - MARK: SetupForm
     private func setupForm() {
+        view.addSubview(gifBackground)
+        view.sendSubviewToBack(gifBackground)
+        view.addSubview(profileImage)
+        view.addSubview(usernameLabel)
+        view.addSubview(editButton)
         view.addSubview(backButton)
         view.addSubview(settingsButton)
-        view.addSubview(profileImage)
-        view.addSubview(editButton)
     }
     
     // - MARK: SetupConstraints
@@ -72,6 +94,11 @@ class ProfileViewController: UIViewController {
         editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
+            gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
+            gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
@@ -83,7 +110,10 @@ class ProfileViewController: UIViewController {
             profileImage.widthAnchor.constraint(equalToConstant: 150),
             profileImage.heightAnchor.constraint(equalToConstant: 150),
             
-            editButton.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20),
+            usernameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20),
+            usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                        
+            editButton.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 160),
             editButton.heightAnchor.constraint(equalToConstant: 50)
