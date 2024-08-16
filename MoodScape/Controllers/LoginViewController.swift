@@ -11,20 +11,14 @@ import FirebaseFirestore
 
 class LoginViewController: StartBaseView {
     
-    private let email = UITextField()
-    private let password = UITextField()
-    private let loginButton = UIButton(type: .system)
-    private let backButton = UIButton(type: .custom)
-    private let notificationMessage = UILabel()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupForm()
         setupConstraints()
     }
     
-    // - MARK: SetupForm
-    private func setupForm() {
+    let email: UITextField = {
+        let email = UITextField()
         email.borderStyle = .none
         email.backgroundColor = .black
         email.textColor = .white
@@ -34,9 +28,11 @@ class LoginViewController: StartBaseView {
         email.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: email.frame.height))
         email.leftViewMode = .always
         email.autocapitalizationType = .none
-        view.addSubview(email)
-        setPlaceholder(textField: email, placeholder: " Enter your email", color: .systemGray)
-        
+        return email
+    }()
+    
+    let password: UITextField = {
+        let password = UITextField()
         password.isSecureTextEntry = true
         password.borderStyle = .none
         password.backgroundColor = .black
@@ -51,29 +47,54 @@ class LoginViewController: StartBaseView {
         password.rightView = rightViewContainer
         password.rightViewMode = .always
         password.autocapitalizationType = .none
-        view.addSubview(password)
-        setPlaceholder(textField: password, placeholder: " Enter your password", color: .systemGray)
-        
+        return password
+    }()
+    
+    let loginButton: UIButton = {
+        let loginButton = UIButton(type: .system)
         loginButton.setTitle("Log In", for: .normal)
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         loginButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         loginButton.layer.cornerRadius = 18
-        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
-        view.addSubview(loginButton)
-        
+        return loginButton
+    }()
+    
+    let backButton: UIButton = {
+        let backButton = UIButton(type: .custom)
         backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         backButton.tintColor = .white
         backButton.imageView?.contentMode = .scaleAspectFit
         backButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
-        view.addSubview(backButton)
-        
+        return backButton
+    }()
+    
+    let notificationMessage: UILabel = {
+        let notificationMessage = UILabel()
         notificationMessage.textColor = .red
         notificationMessage.font = UIFont.systemFont(ofSize: 14)
         notificationMessage.numberOfLines = 0
         notificationMessage.textAlignment = .center
         notificationMessage.isHidden = true
+        return notificationMessage
+    }()
+    
+    // - MARK: SetupForm
+    private func setupForm() {
+        setPlaceholder(textField: email, placeholder: " Enter your email", color: .systemGray)
+        view.addSubview(email)
+        
+        setPlaceholder(textField: password, placeholder: " Enter your password", color: .systemGray)
+        view.addSubview(password)
+        
+        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        view.addSubview(loginButton)
+        
+        
+        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
+        view.addSubview(backButton)
+        
+        
         view.addSubview(notificationMessage)
     }
     
