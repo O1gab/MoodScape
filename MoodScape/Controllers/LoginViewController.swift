@@ -11,12 +11,6 @@ import FirebaseFirestore
 
 class LoginViewController: StartBaseView {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupForm()
-        setupConstraints()
-    }
-    
     let email: UITextField = {
         let email = UITextField()
         email.borderStyle = .none
@@ -82,6 +76,13 @@ class LoginViewController: StartBaseView {
         notificationMessage.translatesAutoresizingMaskIntoConstraints = false
         return notificationMessage
     }()
+    
+    // - MARK: ViewDidLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupForm()
+        setupConstraints()
+    }
     
     // - MARK: SetupForm
     private func setupForm() {

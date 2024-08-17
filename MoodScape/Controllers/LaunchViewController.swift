@@ -9,22 +9,25 @@ import Firebase
 
 class LaunchViewController: UIViewController {
 
-    private let name = UILabel()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupName()
+        setupConstraints()
         animateName()
     }
 
-    private func setupName() {
+    let name: UILabel = {
+        let name = UILabel()
         name.text = "MoodScape"
         name.font = UIFont.systemFont(ofSize: 37, weight: .bold)
         name.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         name.textAlignment = .center
         name.translatesAutoresizingMaskIntoConstraints = false
-
+        return name
+    }()
+    
+    // - MARK: SetupConstraints
+    private func setupConstraints() {
         view.addSubview(name)
 
         NSLayoutConstraint.activate([
@@ -33,6 +36,7 @@ class LaunchViewController: UIViewController {
         ])
     }
 
+    // - MARK: AnimateName
     private func animateName() {
         UIView.animate(withDuration: 3.0, animations: {
             self.name.alpha = 0.0
@@ -41,6 +45,7 @@ class LaunchViewController: UIViewController {
         }
     }
     
+    // - MARK: CheckAuthentication
     private func checkAuthentication() {
         if Auth.auth().currentUser == nil {
             let startViewController = StartViewController()

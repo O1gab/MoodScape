@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/olgabatiunia/Documents/Swift/MoodScape/MoodScape/GoogleService-Info.plist">
+      location = "group:GoogleService-Info.plist">
    </FileRef>
    <FileRef
       location = "group:MoodScape.xcodeproj">
