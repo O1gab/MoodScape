@@ -32,6 +32,7 @@
 		766485792C6ED6E700AA050A /* SpotifyAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485782C6ED6E700AA050A /* SpotifyAuthenticationManager.swift */; };
 		7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */; };
 		7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */; };
+		76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AA2C67B3AA002866B9 /* Assets.xcassets */; };
@@ -69,6 +70,7 @@
 		766485782C6ED6E700AA050A /* SpotifyAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthenticationManager.swift; sourceTree = "<group>"; };
 		7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
 		7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodSelectionView.swift; sourceTree = "<group>"; };
+		76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBaseView.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B869A32C67B3A9002866B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				764FDE342C697C230060A428 /* StartBaseView.swift */,
 				766485652C6C490400AA050A /* MainBaseView.swift */,
 				7664855B2C6C447E00AA050A /* MainTabBarController.swift */,
+				76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */,
 			);
 			path = BaseViews;
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 				764FDE382C6983040060A428 /* LoginViewController.swift in Sources */,
 				7664856F2C6EB8C000AA050A /* CircleItem.swift in Sources */,
 				766485602C6C471D00AA050A /* MainViewController.swift in Sources */,
+				76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
 				7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */,
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
