@@ -9,19 +9,11 @@ import Gifu
 import FirebaseAuth
 import FirebaseDatabase
 
-class ProfileViewController: UIViewController {
-    
-    let gifBackground: GIFImageView = {
-        let gifImageView = GIFImageView()
-        gifImageView.animate(withGIFNamed: "gradient_skyline_blinking_stars")
-        gifImageView.contentMode = .scaleAspectFill
-        gifImageView.translatesAutoresizingMaskIntoConstraints = false
-        return gifImageView
-    }()
+class ProfileViewController: ProfileBaseView {
     
     let profileImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "defaultProfileImage") // Placeholder image
+        imageView.image = UIImage(named: "defaultProfileImage")
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -102,15 +94,6 @@ class ProfileViewController: UIViewController {
         return button
     }()
     
-    let backButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "arrow.left"), for: .normal)
-        button.tintColor = .white
-        button.imageView?.contentMode = .scaleAspectFit
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     let settingsButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "gear"), for: .normal)
@@ -130,8 +113,6 @@ class ProfileViewController: UIViewController {
     
     // - MARK: SetupForm
     private func setupForm() {
-        view.addSubview(gifBackground)
-        view.sendSubviewToBack(gifBackground)
         view.addSubview(profileImage)
         view.addSubview(usernameLabel)
         view.addSubview(firstNameLabel)
@@ -139,25 +120,16 @@ class ProfileViewController: UIViewController {
         view.addSubview(locationLabel)
         view.addSubview(musicPreferencesLabel)
         view.addSubview(editButton)
-        view.addSubview(backButton)
         view.addSubview(settingsButton)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
-        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
         settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
-            gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                    
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-                    
+            
             settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             settingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
                     
@@ -227,11 +199,6 @@ class ProfileViewController: UIViewController {
                 print("Failed to fetch user data")
             }
         }
-    }
-    
-    // - MARK: HandleBack
-    @objc private func handleBack() {
-        dismiss(animated: true, completion: nil)
     }
     
     // - MARK: HandleSettings

@@ -6,39 +6,32 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: ProfileBaseView {
     
-    let backButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.setImage(UIImage(systemName: "arrow.left"), for: .normal)
-        button.tintColor = .white
-        button.imageView?.contentMode = .scaleAspectFit
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    let settingsLabel: UILabel = {
+        let settingsLabel = UILabel()
+        settingsLabel.text = "Settings"
+        settingsLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        settingsLabel.textAlignment = .center
+        settingsLabel.translatesAutoresizingMaskIntoConstraints = false
+        return settingsLabel
     }()
-    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
         setupForm()
         setupConstraints()
     }
     
     private func setupForm() {
-        view.addSubview(backButton)
+        view.addSubview(settingsLabel)
     }
     
     private func setupConstraints() {
-        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
-        
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
+            settingsLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            settingsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
-    
-    @objc private func handleBack() {
-        dismiss(animated: true, completion: nil)
-    }
-    
+
 }
