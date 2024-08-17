@@ -181,10 +181,12 @@ class ProfileViewController: UIViewController {
             musicPreferencesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20),
             musicPreferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
+            /*
             registrationDate.topAnchor.constraint(equalTo: musicPreferencesLabel.bottomAnchor, constant: 20),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+             */
                     
-            editButton.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 20),
+            editButton.topAnchor.constraint(equalTo: musicPreferencesLabel.bottomAnchor, constant: 20),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 160),
             editButton.heightAnchor.constraint(equalToConstant: 50)
