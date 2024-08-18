@@ -40,9 +40,11 @@ class CirclesBackgroundView: UIView {
             let circle = UIView()
             circle.backgroundColor = circleColors[i % circleColors.count]
             circle.layer.cornerRadius = circleSizes[i] / 2
+            circle.translatesAutoresizingMaskIntoConstraints = false
             addSubview(circle)
             circles.append(circle)
         }
+        layoutSubviews()
     }
     
     // - MARK: LayoutSubviews
