@@ -20,7 +20,7 @@ class MainBaseView: UIViewController {
     
     let profileButton: UIButton = {
         let profileButton = UIButton(type: .custom)
-        profileButton.layer.cornerRadius = 20
+        profileButton.layer.cornerRadius = 25
         profileButton.clipsToBounds = true
         profileButton.backgroundColor = .blue
         return profileButton
@@ -44,7 +44,7 @@ class MainBaseView: UIViewController {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
         
-        profileButton.frame = CGRect(x: view.frame.width - 60, y: 40, width: 40, height: 40)
+        profileButton.frame = CGRect(x: view.frame.width - 60, y: 50, width: 50, height: 50)
         profileButton.addTarget(self, action: #selector(profileTapped), for: .touchUpInside)
         view.addSubview(profileButton)
         
@@ -80,7 +80,7 @@ class MainBaseView: UIViewController {
     // - MARK: ProfileTapped
     @objc private func profileTapped() {
         let profileView = ProfileViewController()
-        profileView.modalTransitionStyle = .flipHorizontal // delete maybe
+        profileView.modalTransitionStyle = .flipHorizontal
         profileView.modalPresentationStyle = .fullScreen
         self.present(profileView, animated: true, completion: nil)
     }
