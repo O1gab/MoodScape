@@ -37,10 +37,25 @@ class AlbumDetailsViewController: UIViewController {
         return imageView
     }()
     
+    private let artistLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.lineBreakMode = .byTruncatingTail
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let albumName: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         label.textColor = .systemGreen
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.lineBreakMode = .byTruncatingTail
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -53,13 +68,15 @@ class AlbumDetailsViewController: UIViewController {
         return label
     }()
         
-    private let artistLabel: UILabel = {
+    private let topSongsLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textColor = .darkGray
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-        
+    
     private let spotifyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Open in Spotify", for: .normal)
@@ -94,6 +111,7 @@ class AlbumDetailsViewController: UIViewController {
         contentView.addSubview(albumImageView)
         contentView.addSubview(releaseDateLabel)
         contentView.addSubview(artistLabel)
+        contentView.addSubview(albumName)
         contentView.addSubview(spotifyButton)
     }
     
@@ -116,15 +134,23 @@ class AlbumDetailsViewController: UIViewController {
             albumImageView.widthAnchor.constraint(equalToConstant: 300),
             albumImageView.heightAnchor.constraint(equalToConstant: 300),
             
-            //albumName.topAnchor.constraint(equalTo: albumImageView.bottomAnchor, constant: 20),
-            //albumName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            artistLabel.topAnchor.constraint(equalTo: albumImageView.bottomAnchor, constant: 10),
+            artistLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            albumName.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 10),
+            albumName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
                         
-            releaseDateLabel.topAnchor.constraint(equalTo: albumImageView.bottomAnchor, constant: 20),
+            releaseDateLabel.topAnchor.constraint(equalTo: albumName.bottomAnchor, constant: 10),
             releaseDateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
                         
-            artistLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 10),
-            artistLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                        
+            
+            
+            // topSongsLabel constraints
+            /*
+            topSongsLabel.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 20),
+            topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            topSongsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+                        */
             spotifyButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
             spotifyButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             spotifyButton.widthAnchor.constraint(equalToConstant: 160),
@@ -171,6 +197,8 @@ class AlbumDetailsViewController: UIViewController {
                     self.albumImageView.image = image
                     if let color = image.dominantColor() {
                         self.contentView.backgroundColor = color
+                        self.artistLabel.textColor = color.contrastingColor()
+                        self.albumName.textColor = color.contrastingComplementaryColor()
                     }
                 }
             }
