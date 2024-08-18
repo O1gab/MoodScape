@@ -7,15 +7,18 @@
 import UIKit
 
 class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     private var collectionView: UICollectionView!
     private var albums: [Album] = []
+    private let loadingIndicator = UIActivityIndicatorView(style: .large)
     
-    let topLabel: UILabel = {
+    private let topLabel: UILabel = {
         let topLabel = UILabel()
         topLabel.text = "Recently"
         topLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         topLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         topLabel.textAlignment = .left
+        topLabel.translatesAutoresizingMaskIntoConstraints = false
         return topLabel
     }()
     
@@ -31,13 +34,15 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     // - MARK: SetupForm
     private func setupForm() {
         view.addSubview(topLabel)
+        view.addSubview(loadingIndicator)
+        loadingIndicator.center = view.center
     }
     
     // - MARK: SetupCollectionView
     private func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 10 // probably we dont need it
+        layout.minimumLineSpacing = 10
             
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -51,8 +56,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
-        topLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             topLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -66,17 +69,35 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // - MARK: FetchAlbums
     private func fetchAlbums() {
-            SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
-                guard success else { return }
-                SpotifyAPIManager.shared.fetchRecentlyPublishedAlbums { albums in
-                    guard let albums = albums else { return }
-                    DispatchQueue.main.async {
+        loadingIndicator.startAnimating()
+        SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
+            guard success else {
+                DispatchQueue.main.async {
+                    self?.loadingIndicator.stopAnimating()
+                    self?.showError("Authentication failed")
+                }
+                return
+            }
+            SpotifyAPIManager.shared.fetchRecentlyPublishedAlbums { albums in
+                DispatchQueue.main.async {
+                    self?.loadingIndicator.stopAnimating()
+                    if let albums = albums {
                         self?.albums = albums
                         self?.collectionView.reloadData()
+                    } else {
+                        self?.showError("Failed to fetch albums")
                     }
                 }
             }
         }
+    }
+
+    // - MARK: ShowError
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
     
     // - MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -89,7 +110,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         
         let album = albums[indexPath.item]
                
-        // Fetch image data
         if let url = URL(string: album.imageUrl) {
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
                 guard let data = data, error == nil, let image = UIImage(data: data) else { return }
