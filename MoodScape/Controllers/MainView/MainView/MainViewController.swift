@@ -93,10 +93,9 @@ class MainViewController: MainBaseView {
     }
     // - MARK: HandleAddMood
     @objc private func handleAddMood() {
-        let popUpViewController = PopUpViewController()
-        popUpViewController.modalPresentationStyle = .overCurrentContext
-        popUpViewController.modalTransitionStyle = .crossDissolve
-        present(popUpViewController, animated: true, completion: nil)
+        let moodSelectionView = MoodSelectionView()
+        moodSelectionView.modalPresentationStyle = .overCurrentContext
+        moodSelectionView.modalTransitionStyle = .crossDissolve
+        present(moodSelectionView, animated: true, completion: nil)
     }
-    
 }

@@ -6,7 +6,7 @@
 
 import UIKit
 
-class PopUpViewController: UIViewController {
+class MoodSelectionView: UIViewController {
     
     let contentView: UIView = {
         let view = UIView()
@@ -24,6 +24,7 @@ class PopUpViewController: UIViewController {
         return button
     }()
     
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -32,11 +33,13 @@ class PopUpViewController: UIViewController {
         setupConstraints()
     }
     
+    // - MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animateShow()
     }
     
+    // - MARK: SetupConstraints
     func setupConstraints() {
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         
@@ -51,17 +54,20 @@ class PopUpViewController: UIViewController {
         ])
     }
     
+    // - MARK: ClosePopUp
     @objc func closePopUp() {
             animateHide()
         }
     
+    // - MARK: AnimateShow
     func animateShow() {
            contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
            UIView.animate(withDuration: 0.3, animations: {
                self.contentView.transform = .identity
            })
        }
-       
+    
+    // - MARK: AnimateHide
     func animateHide() {
         UIView.animate(withDuration: 0.3, animations: {
             self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
