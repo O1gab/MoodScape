@@ -14,7 +14,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         let topLabel = UILabel()
         topLabel.text = "Recently"
         topLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        topLabel.font = UIFont.systemFont(ofSize: 37, weight: .bold)
+        topLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         topLabel.textAlignment = .left
         return topLabel
     }()
@@ -54,8 +54,8 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         topLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            topLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            topLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

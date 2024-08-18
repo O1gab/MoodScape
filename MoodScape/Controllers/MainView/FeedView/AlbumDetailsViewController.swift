@@ -116,7 +116,6 @@ class AlbumDetailsViewController: UIViewController {
         contentView.addSubview(albumName)
         contentView.addSubview(spotifyButton)
         
-        
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
         
