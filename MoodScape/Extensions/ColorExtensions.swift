@@ -20,4 +20,18 @@ extension UIColor {
         
         return luminance > 0.5 ? UIColor.black : UIColor.white
     }
+    
+    // Function to find the complementary color
+    func complementaryColor() -> UIColor {
+        var hue: CGFloat = 0.0
+        var saturation: CGFloat = 0.0
+        var brightness: CGFloat = 0.0
+        var alpha: CGFloat = 0.0
+            
+        getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+            
+        let complementaryHue = (hue + 0.5).truncatingRemainder(dividingBy: 1.0)
+            
+        return UIColor(hue: complementaryHue, saturation: saturation, brightness: brightness, alpha: alpha)
+    }
 }
