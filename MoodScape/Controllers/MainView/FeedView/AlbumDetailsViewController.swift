@@ -12,7 +12,7 @@ import CoreImage
 class AlbumDetailsViewController: UIViewController {
     private var album: Album
     
-    let contentView: UIView = {
+    private let contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 37
@@ -20,7 +20,7 @@ class AlbumDetailsViewController: UIViewController {
         return view
     }()
     
-    let closeButton: UIButton = {
+    private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
@@ -90,6 +90,22 @@ class AlbumDetailsViewController: UIViewController {
         return button
     }()
     
+    private let favoriteButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.tintColor = .yellow
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     init(album: Album) {
         self.album = album
         super.init(nibName: nil, bundle: nil)
@@ -115,9 +131,13 @@ class AlbumDetailsViewController: UIViewController {
         contentView.addSubview(artistLabel)
         contentView.addSubview(albumName)
         contentView.addSubview(spotifyButton)
+        contentView.addSubview(favoriteButton)
+        contentView.addSubview(shareButton)
         
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
+        favoriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(shareAlbum), for: .touchUpInside)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInSpotify))
         albumImageView.addGestureRecognizer(tapGesture)
@@ -148,6 +168,16 @@ class AlbumDetailsViewController: UIViewController {
                         
             releaseDateLabel.topAnchor.constraint(equalTo: albumName.bottomAnchor, constant: 10),
             releaseDateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            favoriteButton.centerYAnchor.constraint(equalTo: albumName.centerYAnchor),
+            favoriteButton.leadingAnchor.constraint(equalTo: albumName.trailingAnchor, constant: 10),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 50),
+            favoriteButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            shareButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
+            shareButton.leadingAnchor.constraint(equalTo: spotifyButton.trailingAnchor, constant: 10),
+            shareButton.widthAnchor.constraint(equalToConstant: 60),
+            shareButton.heightAnchor.constraint(equalToConstant: 60),
                         
             
             
@@ -205,6 +235,7 @@ class AlbumDetailsViewController: UIViewController {
                         self.contentView.backgroundColor = color
                         self.artistLabel.textColor = color.contrastingColor()
                         self.albumName.textColor = color.contrastingComplementaryColor()
+                        self.shareButton.tintColor = color.contrastingColor()
                     }
                 }
             }
@@ -213,5 +244,16 @@ class AlbumDetailsViewController: UIViewController {
         releaseDateLabel.text = "Release Date: \(album.releaseDate)"
         artistLabel.text = "\(album.artist)"
         albumName.text = "\(album.name)"
+    }
+    
+    // - MARK: ToggleFavorite
+    @objc private func toggleFavorite() {
+        // Implement favorite functionality
+    }
+    
+    // - MARK: ShareAlbum
+    @objc private func shareAlbum() {
+        let activityViewController = UIActivityViewController(activityItems: [album.spotifyUrl], applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
     }
 }
