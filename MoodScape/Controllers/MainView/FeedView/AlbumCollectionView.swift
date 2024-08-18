@@ -2,14 +2,20 @@
 //  AlbumCollectionView.swift
 //  MoodScape
 //
-//  Created by Olga Batiunia on 16.08.24.
 //
 
 import UIKit
 
 class AlbumCollectionViewCell: UICollectionViewCell {
     
-    private let imageView = UIImageView()
+    let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 10
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,13 +27,9 @@ class AlbumCollectionViewCell: UICollectionViewCell {
         setupView()
     }
     
+    // - MARK: SetupView
     private func setupView() {
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 10
-        imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(imageView)
-        
         contentView.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
         contentView.layer.borderWidth = 2
         contentView.layer.cornerRadius = 10
