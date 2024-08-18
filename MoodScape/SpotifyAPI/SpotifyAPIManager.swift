@@ -37,12 +37,14 @@ class SpotifyAPIManager {
                       let artistName = artists.first?["name"] as? String,
                       let images = item["images"] as? [[String: Any]],
                       let imageUrl = images.first?["url"] as? String,
-                      let spotifyUrl = item["external_urls"] as? [String: String] else {
+                      let spotifyUrl = item["external_urls"] as? [String: String],
+                      let releaseDate = item["release_date"] as? String
+                else {
                     // let externalUrls = item["external_urls"] as? [String: String],
                     // let spotifyUrl = externalUrls["spotify"] else {
                     return nil
                 }
-                return Album(name: name, artist: artistName, imageUrl: imageUrl, spotifyUrl: spotifyUrl["spotify"]!)
+                return Album(name: name, artist: artistName, imageUrl: imageUrl, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: releaseDate)
             }
             
             completion(albums)

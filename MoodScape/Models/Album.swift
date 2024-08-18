@@ -11,4 +11,5 @@ struct Album {
     let artist: String
     let imageUrl: String
     let spotifyUrl: String
+    let releaseDate: String
 }

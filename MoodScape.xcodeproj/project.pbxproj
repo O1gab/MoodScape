@@ -33,6 +33,9 @@
 		7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */; };
 		7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */; };
 		76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */; };
+		76AAD3252C721C0300CBE3D8 /* AlbumDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */; };
+		76AAD3272C72241A00CBE3D8 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */; };
+		76AAD3292C72263500CBE3D8 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3282C72263500CBE3D8 /* ColorExtensions.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AA2C67B3AA002866B9 /* Assets.xcassets */; };
@@ -71,6 +74,9 @@
 		7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
 		7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodSelectionView.swift; sourceTree = "<group>"; };
 		76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBaseView.swift; sourceTree = "<group>"; };
+		76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetailsViewController.swift; sourceTree = "<group>"; };
+		76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
+		76AAD3282C72263500CBE3D8 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76B869A32C67B3A9002866B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +129,8 @@
 				766485552C6B98A900AA050A /* AuthExtensions */,
 				7664856B2C6EB68500AA050A /* ViewExtensions.swift */,
 				761350282C70166A009A3F40 /* ProfileSetup.swift */,
+				76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */,
+				76AAD3282C72263500CBE3D8 /* ColorExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -139,11 +147,10 @@
 		7664855A2C6C446300AA050A /* MainView */ = {
 			isa = PBXGroup;
 			children = (
-				766485632C6C479800AA050A /* FeedViewController.swift */,
+				76AAD3232C721A0C00CBE3D8 /* FeedView */,
 				7664855F2C6C471D00AA050A /* MainViewController.swift */,
 				7664855D2C6C46A700AA050A /* SocialViewController.swift */,
 				766485612C6C474F00AA050A /* StatsViewController.swift */,
-				766485732C6ED0BE00AA050A /* AlbumCollectionView.swift */,
 				7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */,
 			);
 			path = MainView;
@@ -189,6 +196,16 @@
 				76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */,
 			);
 			path = SettingsView;
+			sourceTree = "<group>";
+		};
+		76AAD3232C721A0C00CBE3D8 /* FeedView */ = {
+			isa = PBXGroup;
+			children = (
+				766485632C6C479800AA050A /* FeedViewController.swift */,
+				766485732C6ED0BE00AA050A /* AlbumCollectionView.swift */,
+				76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */,
+			);
+			path = FeedView;
 			sourceTree = "<group>";
 		};
 		76B869952C67B3A9002866B9 = {
@@ -408,6 +425,7 @@
 				766485602C6C471D00AA050A /* MainViewController.swift in Sources */,
 				76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
+				76AAD3292C72263500CBE3D8 /* ColorExtensions.swift in Sources */,
 				7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */,
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
 				7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */,
@@ -418,6 +436,7 @@
 				766485682C6E4EFB00AA050A /* ProfileSetupViewController.swift in Sources */,
 				76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */,
 				766485642C6C479800AA050A /* FeedViewController.swift in Sources */,
+				76AAD3272C72241A00CBE3D8 /* ImageExtensions.swift in Sources */,
 				766485662C6C490400AA050A /* MainBaseView.swift in Sources */,
 				766485742C6ED0BE00AA050A /* AlbumCollectionView.swift in Sources */,
 				7664856C2C6EB68500AA050A /* ViewExtensions.swift in Sources */,
@@ -429,6 +448,7 @@
 				766485762C6ED52D00AA050A /* Album.swift in Sources */,
 				766485792C6ED6E700AA050A /* SpotifyAuthenticationManager.swift in Sources */,
 				76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */,
+				76AAD3252C721C0300CBE3D8 /* AlbumDetailsViewController.swift in Sources */,
 				76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */,
 				764FDE352C697C230060A428 /* StartBaseView.swift in Sources */,
 			);
