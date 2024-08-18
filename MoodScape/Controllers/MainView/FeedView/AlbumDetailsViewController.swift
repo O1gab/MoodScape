@@ -41,9 +41,10 @@ class AlbumDetailsViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
         label.textAlignment = .center
-        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 0
         label.minimumScaleFactor = 0.5
-        label.lineBreakMode = .byTruncatingTail
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -53,9 +54,10 @@ class AlbumDetailsViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         label.textColor = .systemGreen
         label.textAlignment = .center
-        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 0
         label.minimumScaleFactor = 0.5
-        label.lineBreakMode = .byTruncatingTail
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -113,13 +115,18 @@ class AlbumDetailsViewController: UIViewController {
         contentView.addSubview(artistLabel)
         contentView.addSubview(albumName)
         contentView.addSubview(spotifyButton)
+        
+        
+        closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
+        spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInSpotify))
+        albumImageView.addGestureRecognizer(tapGesture)
+        albumImageView.isUserInteractionEnabled = true
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
-        closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
-        spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
-        
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
