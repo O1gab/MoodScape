@@ -174,6 +174,23 @@
 			path = SpotifyAPI;
 			sourceTree = "<group>";
 		};
+		76AAD3212C72068800CBE3D8 /* ProfileView */ = {
+			isa = PBXGroup;
+			children = (
+				766485472C6A13AD00AA050A /* ProfileViewController.swift */,
+				766485672C6E4EFB00AA050A /* ProfileSetupViewController.swift */,
+			);
+			path = ProfileView;
+			sourceTree = "<group>";
+		};
+		76AAD3222C7206A500CBE3D8 /* SettingsView */ = {
+			isa = PBXGroup;
+			children = (
+				76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */,
+			);
+			path = SettingsView;
+			sourceTree = "<group>";
+		};
 		76B869952C67B3A9002866B9 = {
 			isa = PBXGroup;
 			children = (
@@ -224,16 +241,15 @@
 		76B869B62C67B3D3002866B9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				76AAD3222C7206A500CBE3D8 /* SettingsView */,
+				76AAD3212C72068800CBE3D8 /* ProfileView */,
 				7664855A2C6C446300AA050A /* MainView */,
 				766485462C6A127A00AA050A /* BaseViews */,
-				766485472C6A13AD00AA050A /* ProfileViewController.swift */,
-				766485672C6E4EFB00AA050A /* ProfileSetupViewController.swift */,
 				764FDE372C6983040060A428 /* LoginViewController.swift */,
 				764FDE322C696E990060A428 /* RegistrationViewController.swift */,
 				76B869BE2C67B93C002866B9 /* StartViewController.swift */,
 				76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */,
 				7664854E2C6AD34000AA050A /* View.xib */,
-				76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
