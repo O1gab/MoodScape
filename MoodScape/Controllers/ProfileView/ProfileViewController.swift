@@ -141,16 +141,16 @@ class ProfileViewController: ProfileBaseView {
             usernameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20),
             usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                     
-            firstNameLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
+            firstNameLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 15),
             firstNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
                     
-            lastNameLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 20),
+            lastNameLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 15),
             lastNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
                     
-            locationLabel.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 20),
+            locationLabel.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 15),
             locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
                     
-            musicPreferencesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20),
+            musicPreferencesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 15),
             musicPreferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
             /*
@@ -158,7 +158,7 @@ class ProfileViewController: ProfileBaseView {
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
              */
                     
-            editButton.topAnchor.constraint(equalTo: musicPreferencesLabel.bottomAnchor, constant: 20),
+            editButton.topAnchor.constraint(equalTo: musicPreferencesLabel.bottomAnchor, constant: 40),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 160),
             editButton.heightAnchor.constraint(equalToConstant: 50)

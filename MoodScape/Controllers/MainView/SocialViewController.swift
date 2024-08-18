@@ -55,7 +55,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 28
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -101,8 +101,8 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
                     
             addFriendsButton.topAnchor.constraint(equalTo: noFriendsLabel.bottomAnchor, constant: 20),
             addFriendsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            addFriendsButton.widthAnchor.constraint(equalToConstant: 140),
-            addFriendsButton.heightAnchor.constraint(equalToConstant: 50)
+            addFriendsButton.widthAnchor.constraint(equalToConstant: 160),
+            addFriendsButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     

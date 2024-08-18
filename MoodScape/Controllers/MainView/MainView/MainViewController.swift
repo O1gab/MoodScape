@@ -14,8 +14,9 @@ class MainViewController: MainBaseView {
         let label = UILabel()
         label.text = "How are you feeling now?"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textAlignment = .left
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -76,9 +77,10 @@ class MainViewController: MainBaseView {
             circlesBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor),
                         
             // Top label constraints
-            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55),
-            topLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                
+            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            topLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            
             // "Add Mood" Button constraints
             addMoodButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             addMoodButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
