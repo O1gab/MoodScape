@@ -46,21 +46,35 @@ class MainViewController: MainBaseView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-        
+    
+    private let circlesBackgroundView: CirclesBackgroundView = {
+        let view = CirclesBackgroundView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         addMoodButton.addTarget(self, action: #selector(handleAddMood), for: .touchUpInside)
-        setupLayout()
+        setupView()
     }
     
     // - MARK: SetupLayout
-    private func setupLayout() {
+    private func setupView() {
+        view.addSubview(circlesBackgroundView)
         view.addSubview(topLabel)
         view.addSubview(addMoodButton)
         view.addSubview(addMoodLabel)
         view.addSubview(bottomInfoView)
             
         NSLayoutConstraint.activate([
+            // Circles background view constraints
+            circlesBackgroundView.centerXAnchor.constraint(equalTo: addMoodButton.centerXAnchor),
+            circlesBackgroundView.centerYAnchor.constraint(equalTo: addMoodButton.centerYAnchor),
+            circlesBackgroundView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            circlesBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor),
+                        
             // Top label constraints
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55),
             topLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
