@@ -9,39 +9,42 @@ import Gifu
 
 class StartBaseView: UIViewController {
     
-    let label = UILabel()
-    let gifImageView = GIFImageView()
+    let gifBackground: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "gradient_skyline_blinking_stars")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupGIFBackground()
-        setupLabel()
-        setupConstraints()
-    }
-    
-    private func setupGIFBackground() {
-        gifImageView.animate(withGIFNamed: "gradient_skyline_blinking_stars")
-        gifImageView.contentMode = .scaleAspectFill
-        gifImageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(gifImageView)
-        view.sendSubviewToBack(gifImageView)
-    }
-
-    private func setupLabel() {
+    let label: UILabel = {
+        let label = UILabel()
         label.text = "MoodScape"
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupForm()
+        setupConstraints()
+    }
+    
+    private func setupForm() {
+        view.addSubview(gifBackground)
+        view.sendSubviewToBack(gifBackground)
         view.addSubview(label)
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            gifImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            gifImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            gifImageView.topAnchor.constraint(equalTo: view.topAnchor),
-            gifImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
+            gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
