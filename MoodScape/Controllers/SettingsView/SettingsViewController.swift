@@ -22,6 +22,7 @@ class SettingsViewController: ProfileBaseView {
         let exitButton = UIButton(type: .system)
         exitButton.setImage(UIImage(systemName: "arrowshape.left.fill"), for: .normal)
         exitButton.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        exitButton.translatesAutoresizingMaskIntoConstraints = false
         return exitButton
     }()
     
@@ -43,8 +44,8 @@ class SettingsViewController: ProfileBaseView {
             settingsLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             settingsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            exitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            exitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            exitButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            exitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
