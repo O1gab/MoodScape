@@ -12,4 +12,11 @@ struct Album {
     let imageUrl: String
     let spotifyUrl: String
     let releaseDate: String
+    let topSongs: [Song]
+}
+
+struct Song {
+    let name: String
+    let duration: String
+    let spotifyUrl: String
 }
