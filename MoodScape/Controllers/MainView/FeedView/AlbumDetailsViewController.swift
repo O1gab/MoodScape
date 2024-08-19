@@ -9,6 +9,9 @@ import UIKit
 import SafariServices
 import CoreImage
 
+/*
+ TODO: Solve the problem with top 3 songs table view (it's not seen)
+ */
 class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     private var album: Album
@@ -73,18 +76,20 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         
     private let topSongsLabel: UILabel = {
         let label = UILabel()
+        label.text = "The Best 3 Songs from this Album:"
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textColor = .darkGray
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let topSongsTableView: UITableView = {
         let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "SongCell")
+        tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
@@ -144,11 +149,11 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         contentView.addSubview(releaseDateLabel)
         contentView.addSubview(artistLabel)
         contentView.addSubview(albumName)
-        contentView.addSubview(topSongsLabel)
-        contentView.addSubview(topSongsTableView)
         contentView.addSubview(spotifyButton)
         contentView.addSubview(favoriteButton)
         contentView.addSubview(shareButton)
+        contentView.addSubview(topSongsLabel)
+        contentView.addSubview(topSongsTableView)
         
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
@@ -195,7 +200,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             shareButton.widthAnchor.constraint(equalToConstant: 60),
             shareButton.heightAnchor.constraint(equalToConstant: 60),
             
-            topSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 20),
+            topSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 15),
             topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             topSongsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
                         
@@ -251,27 +256,20 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
                     self.albumImageView.image = image
                     if let color = image.dominantColor() {
                         self.contentView.backgroundColor = color
+                        self.topSongsTableView.backgroundColor = color
                         self.artistLabel.textColor = color.contrastingColor()
                         self.albumName.textColor = color.contrastingComplementaryColor()
                         self.shareButton.tintColor = color.contrastingColor()
+                        self.topSongsLabel.textColor = color.contrastingComplementaryColor()
                     }
                 }
             }
             task.resume()
         }
-        DispatchQueue.main.async {
-            self.releaseDateLabel.text = "Release Date: \(self.album.releaseDate)"
-            self.artistLabel.text = "\(self.album.artist)"
-            self.albumName.text = "\(self.album.name)"
-            self.topSongsLabel.text = "Top Songs from the album"
-            self.topSongsTableView.reloadData()
-        }
-        SpotifyAPIManager.shared.fetchTopSongsForAlbum(albumId: album.id) { [weak self] topSongs in
-            DispatchQueue.main.async {
-                self?.album.topSongs = topSongs
-                self?.topSongsTableView.reloadData()
-            }
-        }
+        releaseDateLabel.text = "Release Date: \(album.releaseDate)"
+        artistLabel.text = "\(album.artist)"
+        albumName.text = "\(album.name)"
+        topSongsTableView.reloadData()
     }
     
     // - MARK: ToggleFavorite
@@ -299,10 +297,6 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
        
     // - MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let song = album.topSongs[indexPath.row]
-        if let url = URL(string: song.spotifyUrl) {
-            let safariVC = SFSafariViewController(url: url)
-            present(safariVC, animated: true, completion: nil)
-        }
+     
     }
 }

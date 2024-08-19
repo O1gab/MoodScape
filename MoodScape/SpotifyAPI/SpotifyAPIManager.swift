@@ -55,7 +55,6 @@ class SpotifyAPIManager {
                     dispatchGroup.leave()
                 }
             }
-                
             dispatchGroup.notify(queue: .main) {
                 completion(albums)
             }
