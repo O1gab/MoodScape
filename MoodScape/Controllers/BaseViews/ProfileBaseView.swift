@@ -29,12 +29,12 @@ class ProfileBaseView: UIViewController {
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupForm()
+        setupView()
         setupConstraints()
     }
     
-    // - MARK: SetupForm
-    private func setupForm() {
+    // - MARK: SetupView
+    private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
         view.addSubview(backButton)
@@ -59,5 +59,4 @@ class ProfileBaseView: UIViewController {
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
     }
-    
 }

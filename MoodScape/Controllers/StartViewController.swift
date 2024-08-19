@@ -9,37 +9,45 @@ import Gifu
 
 class StartViewController: StartBaseView {
 
-    private let registerButton = UIButton(type: .system)
-    private let loginButton = UIButton(type: .system)
+    private let registerButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Sign Up", for: .normal)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.layer.cornerRadius = 25
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
+    private let loginButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Log In", for: .normal)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.layer.cornerRadius = 25
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupButtons()
+        setupView()
         setupConstraints()
     }
     
-    private func setupButtons() {
-        registerButton.setTitle("Sign Up", for: .normal)
-        registerButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        registerButton.setTitleColor(.white, for: .normal)
-        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        
-        registerButton.layer.cornerRadius = 25
-        registerButton.translatesAutoresizingMaskIntoConstraints = false
+    // - MARK: SetupView
+    private func setupView() {
         registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         view.addSubview(registerButton)
 
-        loginButton.setTitle("Log In", for: .normal)
-        loginButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        loginButton.setTitleColor(.white, for: .normal)
-        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        
-        loginButton.layer.cornerRadius = 25
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         view.addSubview(loginButton)
     }
 
+    // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             loginButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 210),
@@ -54,12 +62,14 @@ class StartViewController: StartBaseView {
         ])
     }
 
+    // - MARK: HandleRegister
     @objc private func handleRegister() {
         let registrationVC = RegistrationViewController()
         registrationVC.modalPresentationStyle = .fullScreen
         present(registrationVC, animated: true, completion: nil)
     }
 
+    // - MARK: HandleLogin
     @objc private func handleLogin() {
         let loginVC = LoginViewController()
         loginVC.modalPresentationStyle = .fullScreen

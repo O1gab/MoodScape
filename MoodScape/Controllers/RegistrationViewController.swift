@@ -92,6 +92,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         view.addSubview(notificationMessage)
     }
     
+    // - MARK: SetupConstraints
     private func setupConstraints() {
             email.translatesAutoresizingMaskIntoConstraints = false
             username.translatesAutoresizingMaskIntoConstraints = false
@@ -191,6 +192,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         }
     }
     
+    // - MARK: HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
     }

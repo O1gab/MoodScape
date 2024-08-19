@@ -86,10 +86,10 @@ class LoginViewController: StartBaseView {
     
     // - MARK: SetupForm
     private func setupForm() {
-        setPlaceholder(textField: email, placeholder: " Enter your email", color: .systemGray)
+        setPlaceholder(textField: email, placeholder: "Enter your email", color: .systemGray)
         view.addSubview(email)
         
-        setPlaceholder(textField: password, placeholder: " Enter your password", color: .systemGray)
+        setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
         view.addSubview(password)
         
         loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
