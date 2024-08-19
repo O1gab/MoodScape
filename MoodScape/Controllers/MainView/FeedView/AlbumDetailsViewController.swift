@@ -7,14 +7,16 @@
 
 import UIKit
 import SafariServices
-import CoreImage
 
-/*
- TODO: Solve the problem with top 3 songs table view (it's not seen)
- */
 class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     private var album: Album
+    
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
     
     private let contentView: UIView = {
         let view = UIView()
@@ -65,32 +67,13 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-        
+    
     private let releaseDateLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textColor = .darkGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
-        
-    private let topSongsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "The Best 3 Songs from this Album:"
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textColor = .darkGray
-        label.numberOfLines = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let topSongsTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "SongCell")
-        tableView.backgroundColor = .clear
-        tableView.isScrollEnabled = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
     }()
     
     private let spotifyButton: UIButton = {
@@ -120,6 +103,25 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         return button
     }()
     
+    private let topSongsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "The Best 3 Songs from this Album:"
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.textColor = .darkGray
+        label.numberOfLines = 0
+        label.numberOfLines = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let topSongsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(SongTableViewCell.self, forCellReuseIdentifier: "SongCell")
+        tableView.isScrollEnabled = true
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    
     init(album: Album) {
         self.album = album
         super.init(nibName: nil, bundle: nil)
@@ -129,21 +131,20 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         fatalError("init(coder:) has not been implemented")
     }
     
-    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-    
+        configureWithAlbum()
+        
         topSongsTableView.dataSource = self
         topSongsTableView.delegate = self
-        
-        configureWithAlbum()
     }
     
     // - MARK: SetupView
     private func setupView() {
-        view.addSubview(contentView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
         contentView.addSubview(closeButton)
         contentView.addSubview(albumImageView)
         contentView.addSubview(releaseDateLabel)
@@ -152,8 +153,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         contentView.addSubview(spotifyButton)
         contentView.addSubview(favoriteButton)
         contentView.addSubview(shareButton)
-        contentView.addSubview(topSongsLabel)
         contentView.addSubview(topSongsTableView)
+        contentView.addSubview(topSongsLabel)
         
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
@@ -168,9 +169,16 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             contentView.heightAnchor.constraint(equalToConstant: 780),
             
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
@@ -186,7 +194,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             
             albumName.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 10),
             albumName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                        
+            
             releaseDateLabel.topAnchor.constraint(equalTo: albumName.bottomAnchor, constant: 10),
             releaseDateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
@@ -195,40 +203,40 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             favoriteButton.widthAnchor.constraint(equalToConstant: 50),
             favoriteButton.heightAnchor.constraint(equalToConstant: 50),
             
-            shareButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
-            shareButton.leadingAnchor.constraint(equalTo: spotifyButton.trailingAnchor, constant: 10),
-            shareButton.widthAnchor.constraint(equalToConstant: 60),
-            shareButton.heightAnchor.constraint(equalToConstant: 60),
-            
+            topSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 20),
             topSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 15),
             topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             topSongsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-                        
-            // Constraints for topSongsTableView
-            topSongsTableView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 10),
-            topSongsTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            topSongsTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            topSongsTableView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 15),
+            topSongsTableView.leadingAnchor.constraint(equalTo: topSongsLabel.leadingAnchor, constant: 20),
+            topSongsTableView.trailingAnchor.constraint(equalTo: topSongsLabel.trailingAnchor, constant: -20),
             topSongsTableView.bottomAnchor.constraint(equalTo: spotifyButton.topAnchor, constant: -20),
             
             spotifyButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
             spotifyButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             spotifyButton.widthAnchor.constraint(equalToConstant: 160),
-            spotifyButton.heightAnchor.constraint(equalToConstant: 60)
+            spotifyButton.heightAnchor.constraint(equalToConstant: 60),
+            
+            shareButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
+            shareButton.leadingAnchor.constraint(equalTo: spotifyButton.trailingAnchor, constant: 10),
+            shareButton.widthAnchor.constraint(equalToConstant: 60),
+            shareButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     // - MARK: ClosePopUp
     @objc func closePopUp() {
-            animateHide()
-        }
+        animateHide()
+    }
     
     // - MARK: AnimateShow
     func animateShow() {
-           contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
-           UIView.animate(withDuration: 0.3, animations: {
-               self.contentView.transform = .identity
-           })
-       }
+        contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
+        UIView.animate(withDuration: 0.3, animations: {
+            self.contentView.transform = .identity
+        })
+    }
     
     // - MARK: AnimateHide
     func animateHide() {
@@ -287,16 +295,23 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return album.topSongs.count
     }
-        
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60 
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as? SongTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.backgroundColor = .clear
         let song = album.topSongs[indexPath.row]
-        cell.textLabel?.text = "\(song.name) - \(song.duration)"
+        cell.configure(with: song)
         return cell
     }
-       
+    
     // - MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-     
+        // Implement action on selecting a song if needed
     }
 }

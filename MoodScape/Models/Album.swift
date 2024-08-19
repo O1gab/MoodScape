@@ -7,7 +7,6 @@
 import Foundation
 
 struct Album {
-    let id: String
     let name: String
     let artist: String
     let imageUrl: String
@@ -19,5 +18,4 @@ struct Album {
 struct Song {
     let name: String
     let duration: String
-    let spotifyUrl: String
 }
