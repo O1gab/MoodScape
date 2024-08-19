@@ -203,7 +203,7 @@ class ProfileSetupViewController: UIViewController {
     }
     
     // - MARK: ClosePopUp
-    @objc func closePopUp() {
+    @objc private func closePopUp() {
         animateHide()
     }
     

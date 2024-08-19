@@ -10,6 +10,7 @@ import SafariServices
 import CoreImage
 
 class AlbumDetailsViewController: UIViewController {
+    
     private var album: Album
     
     private let contentView: UIView = {

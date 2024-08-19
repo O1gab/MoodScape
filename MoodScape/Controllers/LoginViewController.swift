@@ -11,7 +11,7 @@ import FirebaseFirestore
 
 class LoginViewController: StartBaseView {
     
-    let email: UITextField = {
+    private let email: UITextField = {
         let email = UITextField()
         email.borderStyle = .none
         email.backgroundColor = .black
@@ -26,7 +26,7 @@ class LoginViewController: StartBaseView {
         return email
     }()
     
-    let password: UITextField = {
+    private let password: UITextField = {
         let password = UITextField()
         password.isSecureTextEntry = true
         password.borderStyle = .none
@@ -46,7 +46,7 @@ class LoginViewController: StartBaseView {
         return password
     }()
     
-    let loginButton: UIButton = {
+    private let loginButton: UIButton = {
         let loginButton = UIButton(type: .system)
         loginButton.setTitle("Log In", for: .normal)
         loginButton.setTitleColor(.white, for: .normal)
@@ -57,7 +57,7 @@ class LoginViewController: StartBaseView {
         return loginButton
     }()
     
-    let backButton: UIButton = {
+    private let backButton: UIButton = {
         let backButton = UIButton(type: .custom)
         backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         backButton.tintColor = .white
@@ -66,7 +66,7 @@ class LoginViewController: StartBaseView {
         return backButton
     }()
     
-    let notificationMessage: UILabel = {
+    private let notificationMessage: UILabel = {
         let notificationMessage = UILabel()
         notificationMessage.textColor = .red
         notificationMessage.font = UIFont.systemFont(ofSize: 14)
@@ -167,21 +167,25 @@ class LoginViewController: StartBaseView {
         }
     }
     
+    // - MARK: HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
     }
     
+    // - MARK: ShowErrorMessage
     private func showErrorMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.isHidden = false
     }
     
+    // - MARK: ShowSuccessMessage
     private func showSuccessMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.textColor = .green
         notificationMessage.isHidden = false
     }
     
+    // - MARK: SetPlaceholder
     private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
         textField.attributedPlaceholder = NSAttributedString(
             string: placeholder,

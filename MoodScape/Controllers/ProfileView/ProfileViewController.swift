@@ -11,7 +11,7 @@ import FirebaseDatabase
 
 class ProfileViewController: ProfileBaseView {
     
-    let profileImage: UIImageView = {
+    private let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "defaultProfileImage")
         imageView.contentMode = .scaleAspectFill
@@ -23,7 +23,7 @@ class ProfileViewController: ProfileBaseView {
         return imageView
     }()
     
-    let usernameLabel: UILabel = {
+    private let usernameLabel: UILabel = {
         let label = UILabel()
         label.text = "Username"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
@@ -33,7 +33,7 @@ class ProfileViewController: ProfileBaseView {
         return label
     }()
     
-    let firstNameLabel: UILabel = {
+    private let firstNameLabel: UILabel = {
         let label = UILabel()
         label.text = "First Name:"
         label.textColor = .white
@@ -43,7 +43,7 @@ class ProfileViewController: ProfileBaseView {
         return label
     }()
 
-    let lastNameLabel: UILabel = {
+    private let lastNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Last Name:"
         label.textColor = .white
@@ -53,7 +53,7 @@ class ProfileViewController: ProfileBaseView {
         return label
     }()
 
-    let locationLabel: UILabel = {
+    private let locationLabel: UILabel = {
         let label = UILabel()
         label.text = "Location:"
         label.textColor = .white
@@ -63,7 +63,7 @@ class ProfileViewController: ProfileBaseView {
         return label
     }()
 
-    let musicPreferencesLabel: UILabel = {
+    private let musicPreferencesLabel: UILabel = {
         let label = UILabel()
         label.text = "Music Preferences:"
         label.textColor = .white
@@ -73,7 +73,7 @@ class ProfileViewController: ProfileBaseView {
         return label
     }()
     
-    let registrationDate: UILabel = {
+    private let registrationDate: UILabel = {
         let label = UILabel()
         label.text = "Registration Date:"
         label.textColor = .white
@@ -83,7 +83,7 @@ class ProfileViewController: ProfileBaseView {
         return label
     }()
     
-    let editButton: UIButton = {
+    private let editButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Edit profile", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -94,7 +94,7 @@ class ProfileViewController: ProfileBaseView {
         return button
     }()
     
-    let settingsButton: UIButton = {
+    private let settingsButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "gear"), for: .normal)
         button.tintColor = .white
@@ -106,13 +106,13 @@ class ProfileViewController: ProfileBaseView {
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupForm()
+        setupView()
         setupConstraints()
         fetchUsername()
     }
     
-    // - MARK: SetupForm
-    private func setupForm() {
+    // - MARK: SetupView
+    private func setupView() {
         view.addSubview(profileImage)
         view.addSubview(usernameLabel)
         view.addSubview(firstNameLabel)
@@ -215,5 +215,4 @@ class ProfileViewController: ProfileBaseView {
         profileSetupView.modalPresentationStyle = .fullScreen
         self.present(profileSetupView, animated: true, completion: nil)
     }
-    
 }

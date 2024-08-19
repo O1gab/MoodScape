@@ -27,7 +27,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search friends"
         searchBar.backgroundImage = UIImage()
-        searchBar.tintColor = .white
+        searchBar.barTintColor = .white
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()

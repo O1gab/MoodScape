@@ -7,18 +7,21 @@
 import UIKit
 
 class StatsViewController: MainBaseView {
+    // TODO: View with statisitics of previous moods and results of last searches
     
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupForm()
+        setupView()
         setupConstraints()
     }
     
-    // - MARK: SetupForm
-    private func setupForm() {
+    // - MARK: SetupView
+    private func setupView() {
         
     }
     
+    // - MARK: SetupConstraints
     private func setupConstraints() {
         
     }

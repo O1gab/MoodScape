@@ -10,7 +10,7 @@ import FirebaseAuth
 
 class MainBaseView: UIViewController {
     
-    let gifBackground: GIFImageView = {
+    private let gifBackground: GIFImageView = {
         let gifBackground = GIFImageView()
         gifBackground.animate(withGIFNamed: "gradient_skyline_blinking_stars")
         gifBackground.contentMode = .scaleAspectFill
@@ -18,7 +18,7 @@ class MainBaseView: UIViewController {
         return gifBackground
     }()
     
-    let profileButton: UIButton = {
+    private let profileButton: UIButton = {
         let profileButton = UIButton(type: .custom)
         profileButton.layer.cornerRadius = 25
         profileButton.clipsToBounds = true
@@ -26,21 +26,22 @@ class MainBaseView: UIViewController {
         return profileButton
     }()
     
-    let exitButton: UIButton = {
+    private let exitButton: UIButton = {
         let exitButton = UIButton(type: .system)
         exitButton.setImage(UIImage(systemName: "arrowshape.left.fill"), for: .normal)
         exitButton.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         return exitButton
     }()
     
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupForm()
+        setupView()
         setupConstraints()
     }
     
-    // - MARK: SetupForm
-    private func setupForm() {
+    // - MARK: SetupView
+    private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
         

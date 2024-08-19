@@ -19,15 +19,18 @@ class CirclesBackgroundView: UIView {
         UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.4),
         UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.3)
     ]
+    
     private let motionManager = CMMotionManager()
     private let movementFactor: CGFloat = 50
-        
+    
+    // - MARK: Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCircles()
         startAccelerometerUpdates()
     }
         
+    // - MARK: Initializer
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupCircles()

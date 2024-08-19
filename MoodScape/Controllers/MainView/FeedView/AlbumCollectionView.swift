@@ -8,7 +8,7 @@ import UIKit
 
 class AlbumCollectionViewCell: UICollectionViewCell {
     
-    let imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 10
@@ -17,11 +17,13 @@ class AlbumCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    // - MARK: Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
     
+    // - MARK: Initializer
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
@@ -42,6 +44,7 @@ class AlbumCollectionViewCell: UICollectionViewCell {
         ])
     }
     
+    // - MARK: Configure
     func configure(with image: UIImage?) {
         imageView.image = image
     }

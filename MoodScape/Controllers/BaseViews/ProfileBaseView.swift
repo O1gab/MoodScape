@@ -9,7 +9,7 @@ import Gifu
 
 class ProfileBaseView: UIViewController {
     
-    let gifBackground: GIFImageView = {
+    private let gifBackground: GIFImageView = {
         let gifImageView = GIFImageView()
         gifImageView.animate(withGIFNamed: "gradient_skyline_blinking_stars")
         gifImageView.contentMode = .scaleAspectFill
@@ -17,7 +17,7 @@ class ProfileBaseView: UIViewController {
         return gifImageView
     }()
     
-    let backButton: UIButton = {
+    private let backButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         button.tintColor = .white

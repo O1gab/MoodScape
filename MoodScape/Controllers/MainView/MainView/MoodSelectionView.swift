@@ -28,8 +28,8 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(EmotionCell.self, forCellWithReuseIdentifier: "EmotionCell")
-        collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .clear
         return collectionView
     }()
         
@@ -144,14 +144,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         cell.layer.cornerRadius = 30
         return cell
     }
-    
-    // - MARK: UICollectionViewDelegateFlowLayout
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let padding: CGFloat = 20
-            let availableWidth = collectionView.frame.width - (padding * 2)
-            let itemWidth = (availableWidth / 3) - 10 // Adjust number of items per row as needed
-            return CGSize(width: itemWidth, height: itemWidth)
-        }
         
     // - MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
