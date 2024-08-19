@@ -7,12 +7,13 @@
 import Foundation
 
 struct Album {
+    let id: String
     let name: String
     let artist: String
     let imageUrl: String
     let spotifyUrl: String
     let releaseDate: String
-    let topSongs: [Song]
+    var topSongs: [Song]
 }
 
 struct Song {

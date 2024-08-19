@@ -22,19 +22,31 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return topLabel
     }()
     
+    private let topSongs: UILabel = {
+        let label = UILabel()
+        label.text = "Top songs this week"
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupForm()
+        setupView()
         setupCollectionView()
         setupConstraints()
         fetchAlbums()
     }
     
-    // - MARK: SetupForm
-    private func setupForm() {
+    // - MARK: SetupView
+    private func setupView() {
         view.addSubview(topLabel)
+        view.addSubview(topSongs)
         view.addSubview(loadingIndicator)
+        
         loadingIndicator.center = view.center
     }
     
@@ -63,7 +75,10 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 5),
-            collectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3)
+            collectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3),
+            
+            topSongs.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            topSongs.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
         ])
     }
     

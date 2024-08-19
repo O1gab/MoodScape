@@ -9,7 +9,7 @@ import UIKit
 import SafariServices
 import CoreImage
 
-class AlbumDetailsViewController: UIViewController {
+class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     private var album: Album
     
@@ -73,11 +73,19 @@ class AlbumDetailsViewController: UIViewController {
         
     private let topSongsLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textColor = .darkGray
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    private let topSongsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "SongCell")
+        tableView.isScrollEnabled = false
+        return tableView
     }()
     
     private let spotifyButton: UIButton = {
@@ -116,10 +124,15 @@ class AlbumDetailsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+    
+        topSongsTableView.dataSource = self
+        topSongsTableView.delegate = self
+        
         configureWithAlbum()
     }
     
@@ -131,6 +144,8 @@ class AlbumDetailsViewController: UIViewController {
         contentView.addSubview(releaseDateLabel)
         contentView.addSubview(artistLabel)
         contentView.addSubview(albumName)
+        contentView.addSubview(topSongsLabel)
+        contentView.addSubview(topSongsTableView)
         contentView.addSubview(spotifyButton)
         contentView.addSubview(favoriteButton)
         contentView.addSubview(shareButton)
@@ -179,15 +194,17 @@ class AlbumDetailsViewController: UIViewController {
             shareButton.leadingAnchor.constraint(equalTo: spotifyButton.trailingAnchor, constant: 10),
             shareButton.widthAnchor.constraint(equalToConstant: 60),
             shareButton.heightAnchor.constraint(equalToConstant: 60),
-                        
             
-            
-            // topSongsLabel constraints
-            /*
-            topSongsLabel.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 20),
+            topSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 20),
             topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             topSongsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-                        */
+                        
+            // Constraints for topSongsTableView
+            topSongsTableView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 10),
+            topSongsTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            topSongsTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            topSongsTableView.bottomAnchor.constraint(equalTo: spotifyButton.topAnchor, constant: -20),
+            
             spotifyButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
             spotifyButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             spotifyButton.widthAnchor.constraint(equalToConstant: 160),
@@ -242,9 +259,19 @@ class AlbumDetailsViewController: UIViewController {
             }
             task.resume()
         }
-        releaseDateLabel.text = "Release Date: \(album.releaseDate)"
-        artistLabel.text = "\(album.artist)"
-        albumName.text = "\(album.name)"
+        DispatchQueue.main.async {
+            self.releaseDateLabel.text = "Release Date: \(self.album.releaseDate)"
+            self.artistLabel.text = "\(self.album.artist)"
+            self.albumName.text = "\(self.album.name)"
+            self.topSongsLabel.text = "Top Songs from the album"
+            self.topSongsTableView.reloadData()
+        }
+        SpotifyAPIManager.shared.fetchTopSongsForAlbum(albumId: album.id) { [weak self] topSongs in
+            DispatchQueue.main.async {
+                self?.album.topSongs = topSongs
+                self?.topSongsTableView.reloadData()
+            }
+        }
     }
     
     // - MARK: ToggleFavorite
@@ -256,5 +283,26 @@ class AlbumDetailsViewController: UIViewController {
     @objc private func shareAlbum() {
         let activityViewController = UIActivityViewController(activityItems: [album.spotifyUrl], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
+    }
+    
+    // - MARK: UITableViewDataSource
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return album.topSongs.count
+    }
+        
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath)
+        let song = album.topSongs[indexPath.row]
+        cell.textLabel?.text = "\(song.name) - \(song.duration)"
+        return cell
+    }
+       
+    // - MARK: UITableViewDelegate
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let song = album.topSongs[indexPath.row]
+        if let url = URL(string: song.spotifyUrl) {
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true, completion: nil)
+        }
     }
 }

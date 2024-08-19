@@ -50,7 +50,7 @@ class SpotifyAPIManager {
                 }
                     
                 self.fetchTopSongsForAlbum(albumId: albumId) { songs in
-                    let album = Album(name: name, artist: artistName, imageUrl: imageUrl, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: releaseDate, topSongs: songs)
+                    let album = Album(id: albumId, name: name, artist: artistName, imageUrl: imageUrl, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: releaseDate, topSongs: songs)
                     albums.append(album)
                     dispatchGroup.leave()
                 }
@@ -64,7 +64,7 @@ class SpotifyAPIManager {
         task.resume()
     }
     
-    private func fetchTopSongsForAlbum(albumId: String, completion: @escaping ([Song]) -> Void) {
+    func fetchTopSongsForAlbum(albumId: String, completion: @escaping ([Song]) -> Void) {
         guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion([])
             return
