@@ -119,6 +119,7 @@ class ProfileViewController: ProfileBaseView {
         view.addSubview(lastNameLabel)
         view.addSubview(locationLabel)
         view.addSubview(musicPreferencesLabel)
+        view.addSubview(registrationDate)
         view.addSubview(editButton)
         view.addSubview(settingsButton)
     }
@@ -153,12 +154,10 @@ class ProfileViewController: ProfileBaseView {
             musicPreferencesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 15),
             musicPreferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
-            /*
-            registrationDate.topAnchor.constraint(equalTo: musicPreferencesLabel.bottomAnchor, constant: 20),
+            registrationDate.topAnchor.constraint(equalTo: musicPreferencesLabel.bottomAnchor, constant: 15),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-             */
-                    
-            editButton.topAnchor.constraint(equalTo: musicPreferencesLabel.bottomAnchor, constant: 40),
+             
+            editButton.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 40),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 160),
             editButton.heightAnchor.constraint(equalToConstant: 50)

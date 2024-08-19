@@ -13,7 +13,7 @@ class ProfileSetupViewController: UIViewController {
     
     let contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 1.0)
         view.layer.cornerRadius = 37
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -22,10 +22,12 @@ class ProfileSetupViewController: UIViewController {
     let firstName: UITextField = {
         let name = UITextField()
         name.backgroundColor = .none
-        name.textColor = .black
+        name.textColor = .white
         name.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
         name.layer.borderWidth = 2
         name.layer.cornerRadius = 18
+        name.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: name.frame.height))
+        name.leftViewMode = .always
         name.translatesAutoresizingMaskIntoConstraints = false
         return name
     }()
@@ -33,10 +35,12 @@ class ProfileSetupViewController: UIViewController {
     let lastName: UITextField = {
         let name = UITextField()
         name.backgroundColor = .none
-        name.textColor = .black
+        name.textColor = .white
         name.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
         name.layer.borderWidth = 2
         name.layer.cornerRadius = 18
+        name.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: name.frame.height))
+        name.leftViewMode = .always
         name.translatesAutoresizingMaskIntoConstraints = false
         return name
     }()
@@ -45,24 +49,14 @@ class ProfileSetupViewController: UIViewController {
     let location: UITextField = {
         let location = UITextField()
         location.backgroundColor = .none
-        location.textColor = .black
+        location.textColor = .white
         location.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
         location.layer.borderWidth = 2
         location.layer.cornerRadius = 18
+        location.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: location.frame.height))
+        location.leftViewMode = .always
         location.translatesAutoresizingMaskIntoConstraints = false
         return location
-    }()
-    
-    // multiple choice
-    let musicPreferences: UITextField = {
-        let music = UITextField()
-        music.backgroundColor = .none
-        music.textColor = .black
-        music.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
-        music.layer.borderWidth = 2
-        music.layer.cornerRadius = 18
-        music.translatesAutoresizingMaskIntoConstraints = false
-        return music
     }()
     
     let profileImageView: UIImageView = {
@@ -87,10 +81,10 @@ class ProfileSetupViewController: UIViewController {
     let saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Save", for: .normal)
-        button.tintColor = .white
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 28
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -103,29 +97,28 @@ class ProfileSetupViewController: UIViewController {
         return button
     }()
     
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        setupForm()
+        setupView()
         setupConstraints()
     }
     
-    // - MARK: SetupForm
-    private func setupForm() {
+    // - MARK: SetupView
+    private func setupView() {
         view.addSubview(contentView)
         contentView.addSubview(firstName)
         contentView.addSubview(lastName)
         contentView.addSubview(location)
-        contentView.addSubview(musicPreferences)
         contentView.addSubview(profileImageView)
         contentView.addSubview(addProfileImageButton)
         contentView.addSubview(saveButton)
         contentView.addSubview(closeButton)
         
-        setPlaceholder(textField: firstName, placeholder: " Enter your first name", color: .systemGray)
-        setPlaceholder(textField: lastName, placeholder: " Enter your last name", color: .systemGray)
-        setPlaceholder(textField: location, placeholder: " Enter your location", color: .systemGray)
-        setPlaceholder(textField: musicPreferences, placeholder: " Enter your music preferences", color: .systemGray)
+        setPlaceholder(textField: firstName, placeholder: "Enter your first name", color: .systemGray)
+        setPlaceholder(textField: lastName, placeholder: "Enter your last name", color: .systemGray)
+        setPlaceholder(textField: location, placeholder: "Enter your location", color: .systemGray)
                 
         addProfileImageButton.addTarget(self, action: #selector(handleAddProfileImage), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(handleSave), for: .touchUpInside)
@@ -163,28 +156,25 @@ class ProfileSetupViewController: UIViewController {
             location.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             location.heightAnchor.constraint(equalToConstant: 40),
                 
-            musicPreferences.topAnchor.constraint(equalTo: location.bottomAnchor, constant: 10),
-            musicPreferences.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            musicPreferences.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            musicPreferences.heightAnchor.constraint(equalToConstant: 40),
-                
             saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            saveButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            saveButton.heightAnchor.constraint(equalToConstant: 50),
+            saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            saveButton.widthAnchor.constraint(equalToConstant: 160),
+            saveButton.heightAnchor.constraint(equalToConstant: 60),
                 
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             closeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         ])
     }
     
+    // - MARK: HandleAddProfileImage
     @objc private func handleAddProfileImage() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true, completion: nil)
     }
-       
+    
+    // - MARK: HandleSave
     @objc private func handleSave() {
         guard let user = Auth.auth().currentUser else { return }
            
@@ -192,8 +182,7 @@ class ProfileSetupViewController: UIViewController {
         let values = [
             "first_name": firstName.text ?? "",
             "last_name": lastName.text ?? "",
-            "location": location.text ?? "",
-            "music_preferences": musicPreferences.text ?? ""
+            "location": location.text ?? ""
         ]
            
         ref.updateChildValues(values) { (error, ref) in
@@ -207,23 +196,27 @@ class ProfileSetupViewController: UIViewController {
         }
     }
     
+    // - MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animateShow()
     }
     
+    // - MARK: ClosePopUp
     @objc func closePopUp() {
         animateHide()
     }
     
-    func animateShow() {
+    // - MARK: AnimateShow
+    private func animateShow() {
         contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
         UIView.animate(withDuration: 0.3, animations: {
             self.contentView.transform = .identity
         })
     }
-       
-    func animateHide() {
+    
+    // - MARK: AnimateHide
+    private func animateHide() {
         UIView.animate(withDuration: 0.3, animations: {
             self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
         }) { _ in
@@ -231,14 +224,11 @@ class ProfileSetupViewController: UIViewController {
         }
     }
     
+    // - MARK: SetPlaceholder
     private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
         textField.attributedPlaceholder = NSAttributedString(
             string: placeholder,
             attributes: [NSAttributedString.Key.foregroundColor: color]
         )
     }
-            
 }
-
-
-
