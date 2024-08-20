@@ -70,7 +70,7 @@ class SongCardCollectionViewCell: UICollectionViewCell {
     // Configure the cell with a song
     func configure(with song: Song) {
         titleLabel.text = song.name
-        //artistLabel.text = song.artist
+        artistLabel.text = song.artist
         playButton.addAction(UIAction { _ in
             if let url = URL(string: song.spotifyUrl) {
                 UIApplication.shared.open(url)

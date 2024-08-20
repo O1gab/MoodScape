@@ -84,12 +84,14 @@ class SpotifyAPIManager {
                     
             let songs: [Song] = items.prefix(3).compactMap { item in
                 guard let name = item["name"] as? String,
+                    let artistsArray = item["artists"] as? [[String: Any]],
+                    let artist = artistsArray.first?["name"] as? String,
                     let durationMs = item["duration_ms"] as? Int,
                     let spotifyUrl = item["external_urls"] as? [String: String] else {
                         return nil
                     }
                 let duration = self.formatDuration(durationMs: durationMs)
-                return Song(name: name, duration: duration, spotifyUrl: spotifyUrl["spotify"]!)
+                return Song(name: name, artist: artist, duration: duration, spotifyUrl: spotifyUrl["spotify"]!)
                 }
             completion(songs)
             }
@@ -103,7 +105,7 @@ class SpotifyAPIManager {
             return
         }
         
-        guard let url = URL(string: "https://api.spotify.com/v1/playlists/3cEYpjA9oz9GiPac4AsH4n/tracks") else {
+        guard let url = URL(string: "https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M/tracks") else {
             completion(nil)
             return
         }
@@ -126,8 +128,10 @@ class SpotifyAPIManager {
                 
                 let songs = response.items.compactMap { item -> Song? in
                     guard let track = item.track else { return nil }
+                    let artistName = track.artists.first?.name ?? "Unknown Artist"
                         return Song(
                             name: track.name,
+                            artist: artistName,
                             duration: "0",
                             spotifyUrl: track.external_urls["spotify"] ?? ""
                         )

@@ -17,6 +17,7 @@ struct Album {
 
 struct Song {
     let name: String
+    let artist: String
     let duration: String
     let spotifyUrl: String
 }
