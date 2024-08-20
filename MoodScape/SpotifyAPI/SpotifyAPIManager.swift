@@ -82,17 +82,42 @@ class SpotifyAPIManager {
                     
             let songs: [Song] = items.prefix(3).compactMap { item in
                 guard let name = item["name"] as? String,
-                    let durationMs = item["duration_ms"] as? Int else {
+                    let durationMs = item["duration_ms"] as? Int,
+                    let spotifyUrl = item["external_urls"] as? [String: String] else {
                         return nil
                     }
                 let duration = self.formatDuration(durationMs: durationMs)
-                return Song(name: name, duration: duration)
+                return Song(name: name, duration: duration, spotifyUrl: spotifyUrl["spotify"]!)
                 }
             completion(songs)
             }
         task.resume()
     }
+    
+    func fetchWeeklyTopSongs(completion: @escaping ([Song]?) -> Void) {
+        guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
+            completion(nil)
+            return
+        }
         
+        guard let url = URL(string: "https://api.spotify.com/v1/playlist/37i9dQZEVXbNG2KDcFcKOF/tracks") else {
+            completion(nil)
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(nil)
+                return
+            }
+            
+        }
+    }
+    
+    
     private func formatDuration(durationMs: Int) -> String {
         let minutes = durationMs / 60000
         let seconds = (durationMs % 60000) / 1000
