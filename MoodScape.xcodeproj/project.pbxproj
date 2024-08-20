@@ -33,6 +33,7 @@
 		7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */; };
 		7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */; };
 		76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76976C942C7401AE00D44DD3 /* SongCell.swift */; };
+		76976C9B2C74238A00D44DD3 /* SongCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76976C9A2C74238A00D44DD3 /* SongCollectionView.swift */; };
 		76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */; };
 		76AAD3252C721C0300CBE3D8 /* AlbumDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */; };
 		76AAD3272C72241A00CBE3D8 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */; };
@@ -77,6 +78,7 @@
 		7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
 		7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodSelectionView.swift; sourceTree = "<group>"; };
 		76976C942C7401AE00D44DD3 /* SongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCell.swift; sourceTree = "<group>"; };
+		76976C9A2C74238A00D44DD3 /* SongCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCollectionView.swift; sourceTree = "<group>"; };
 		76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBaseView.swift; sourceTree = "<group>"; };
 		76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetailsViewController.swift; sourceTree = "<group>"; };
 		76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				766485632C6C479800AA050A /* FeedViewController.swift */,
 				766485732C6ED0BE00AA050A /* AlbumCollectionView.swift */,
 				76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */,
+				76976C9A2C74238A00D44DD3 /* SongCollectionView.swift */,
 			);
 			path = FeedView;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				764FDE382C6983040060A428 /* LoginViewController.swift in Sources */,
+				76976C9B2C74238A00D44DD3 /* SongCollectionView.swift in Sources */,
 				7664856F2C6EB8C000AA050A /* CircleItem.swift in Sources */,
 				766485602C6C471D00AA050A /* MainViewController.swift in Sources */,
 				76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */,
