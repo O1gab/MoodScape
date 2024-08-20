@@ -12,6 +12,7 @@ class SpotifyAPIManager {
     
     private init() {}
     
+    // - MARK: FetchRecentlyPublishedAlbums
     func fetchRecentlyPublishedAlbums(completion: @escaping ([Album]?) -> Void) {
         guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion(nil)
@@ -62,6 +63,7 @@ class SpotifyAPIManager {
         task.resume()
     }
     
+    // - MARK: FetchTopSongsForAlbum
     func fetchTopSongsForAlbum(albumId: String, completion: @escaping ([Song]) -> Void) {
         guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion([])
@@ -94,33 +96,73 @@ class SpotifyAPIManager {
         task.resume()
     }
     
+    // - MARK: FetchWeeklyTopSongs
     func fetchWeeklyTopSongs(completion: @escaping ([Song]?) -> Void) {
         guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
-            completion(nil)
+            completion([])
             return
         }
         
-        guard let url = URL(string: "https://api.spotify.com/v1/playlist/37i9dQZEVXbNG2KDcFcKOF/tracks") else {
+        guard let url = URL(string: "https://api.spotify.com/v1/playlists/3cEYpjA9oz9GiPac4AsH4n/tracks") else {
             completion(nil)
             return
         }
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            
         
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
+                print("Failed to fetch songs: \(error?.localizedDescription ?? "Unknown error")")
                 completion(nil)
                 return
             }
-            
-        }
+
+            do {
+                let jsonDecoder = JSONDecoder()
+                let response = try jsonDecoder.decode(SpotifyPlaylistResponse.self, from: data)
+                
+                let songs = response.items.compactMap { item -> Song? in
+                    guard let track = item.track else { return nil }
+                        return Song(
+                            name: track.name,
+                            duration: "0",
+                            spotifyUrl: track.external_urls["spotify"] ?? ""
+                        )
+                    }
+                    completion(songs)
+                } catch {
+                    print("Failed to parse JSON: \(error.localizedDescription)")
+                    completion(nil)
+                }
+            }
+        task.resume()
     }
     
-    
+    // - MARK: FormatDuration
     private func formatDuration(durationMs: Int) -> String {
         let minutes = durationMs / 60000
         let seconds = (durationMs % 60000) / 1000
         return String(format: "%d:%02d", minutes, seconds)
     }
+}
+
+struct SpotifyPlaylistResponse: Codable {
+    let items: [SpotifyTrackItem]
+}
+
+struct SpotifyTrackItem: Codable {
+    let track: SpotifyTrack?
+}
+
+struct SpotifyTrack: Codable {
+    let name: String
+    let artists: [SpotifyArtist]
+    let external_urls: [String: String]
+}
+
+struct SpotifyArtist: Codable {
+    let name: String
 }
