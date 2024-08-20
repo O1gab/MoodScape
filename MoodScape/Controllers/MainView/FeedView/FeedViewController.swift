@@ -5,11 +5,18 @@
 //
 
 import UIKit
+import SafariServices
 
 class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var collectionView: UICollectionView!
+    /*
+     TODO: Add previous searches history of the current user + maybe stats???
+     */
+    
+    private var albumCollectionView: UICollectionView!
     private var albums: [Album] = []
+    private var topSongsTableView: UITableView!
+    private var topWeeklySongs: [Song] = []
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
     
     private let topLabel: UILabel = {
@@ -22,11 +29,11 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return topLabel
     }()
     
-    private let topSongs: UILabel = {
+    private let topSongsLabel: UILabel = {
         let label = UILabel()
         label.text = "Top songs this week"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -36,34 +43,36 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupCollectionView()
+        setupAlbumCollectionView()
         setupConstraints()
+        
         fetchAlbums()
+        fetchTopSongs()
     }
     
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(topLabel)
-        view.addSubview(topSongs)
+        view.addSubview(topSongsLabel)
         view.addSubview(loadingIndicator)
         
         loadingIndicator.center = view.center
     }
     
-    // - MARK: SetupCollectionView
-    private func setupCollectionView() {
+    // - MARK: SetupAlbumCollectionView
+    private func setupAlbumCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 10
             
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(AlbumCollectionViewCell.self, forCellWithReuseIdentifier: "AlbumCell")
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        view.addSubview(collectionView)
+        albumCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        albumCollectionView.backgroundColor = .clear
+        albumCollectionView.showsHorizontalScrollIndicator = false
+        albumCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        albumCollectionView.register(AlbumCollectionViewCell.self, forCellWithReuseIdentifier: "AlbumCell")
+        albumCollectionView.dataSource = self
+        albumCollectionView.delegate = self
+        view.addSubview(albumCollectionView)
     }
     
     // - MARK: SetupConstraints
@@ -72,13 +81,13 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             topLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 5),
-            collectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3),
+            albumCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            albumCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 5),
+            albumCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3),
             
-            topSongs.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
-            topSongs.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
+            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor),
+            topSongsLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20)
         ])
     }
     
@@ -98,7 +107,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                     self?.loadingIndicator.stopAnimating()
                     if let albums = albums {
                         self?.albums = albums
-                        self?.collectionView.reloadData()
+                        self?.albumCollectionView.reloadData()
                     } else {
                         self?.showError("Failed to fetch albums")
                     }
@@ -106,6 +115,31 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             }
         }
     }
+    
+    private func fetchTopSongs() {
+            loadingIndicator.startAnimating()
+            SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
+                guard success else {
+                    DispatchQueue.main.async {
+                        self?.loadingIndicator.stopAnimating()
+                        self?.showError("Authentication failed")
+                    }
+                    return
+                }
+                SpotifyAPIManager.shared.fetchWeeklyTopSongs { songs in
+                    DispatchQueue.main.async {
+                        self?.loadingIndicator.stopAnimating()
+                        if let songs = songs {
+                            self?.topWeeklySongs = songs
+                            print("Fetched Top Songs: \(songs.count)") // Debug Print
+                            self?.topSongsTableView.reloadData()
+                        } else {
+                            self?.showError("Failed to fetch top songs")
+                        }
+                    }
+                }
+            }
+        }
 
     // - MARK: ShowError
     private func showError(_ message: String) {
@@ -122,19 +156,17 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     // - MARK: CollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AlbumCell", for: indexPath) as! AlbumCollectionViewCell
-        
-        let album = albums[indexPath.item]
-               
-        if let url = URL(string: album.imageUrl) {
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                guard let data = data, error == nil, let image = UIImage(data: data) else { return }
-                    DispatchQueue.main.async {
-                        cell.configure(with: image)
+                let album = albums[indexPath.item]
+                if let url = URL(string: album.imageUrl) {
+                    let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                        guard let data = data, error == nil, let image = UIImage(data: data) else { return }
+                        DispatchQueue.main.async {
+                            cell.configure(with: image)
+                        }
                     }
+                    task.resume()
                 }
-                task.resume()
-            }
-        return cell
+                return cell
     }
         
     // - MARK: UICollectionViewDelegateFlowLayout
@@ -148,5 +180,4 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         let detailVC = AlbumDetailsViewController(album: selectedAlbum)
         present(detailVC, animated: true, completion: nil)
     }
-    
 }
