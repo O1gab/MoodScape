@@ -31,7 +31,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         email.layer.borderColor = UIColor.white.cgColor
         email.layer.borderWidth = 1
         email.layer.cornerRadius = 18
-        email.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: email.frame.height))
+        email.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
         email.leftViewMode = .always
         email.delegate = self
         email.autocapitalizationType = .none
@@ -43,7 +43,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         username.layer.borderColor = UIColor.white.cgColor
         username.layer.borderWidth = 1
         username.layer.cornerRadius = 18
-        username.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: username.frame.height))
+        username.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
         username.leftViewMode = .always
         username.delegate = self
         username.autocapitalizationType = .none
@@ -56,18 +56,17 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         password.layer.borderColor = UIColor.white.cgColor
         password.layer.borderWidth = 1
         password.layer.cornerRadius = 18
-        password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: password.frame.height))
+        password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
         password.leftViewMode = .always
         let rightViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        rightViewContainer.addSubview(password.eyeButton)
         password.rightView = rightViewContainer
         password.rightViewMode = .always
         password.autocapitalizationType = .none
         view.addSubview(password)
         
-        setPlaceholder(textField: email, placeholder: " Enter your email", color: .systemGray)
-        setPlaceholder(textField: username, placeholder: " Enter your username", color: .systemGray)
-        setPlaceholder(textField: password, placeholder: " Enter your password", color: .systemGray)
+        setPlaceholder(textField: email, placeholder: "Enter your email", color: .systemGray)
+        setPlaceholder(textField: username, placeholder: "Enter your username", color: .systemGray)
+        setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
             
         registerButton.setTitle("Register", for: .normal)
         registerButton.setTitleColor(.white, for: .normal)
@@ -105,7 +104,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
-            email.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40),
+            email.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100), // Adjusted for safe area
             email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             email.widthAnchor.constraint(equalToConstant: 320),
             email.heightAnchor.constraint(equalToConstant: 40),
@@ -140,34 +139,41 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             return
         }
         
-        if !emailCheck() || !passwordCheck() || !usernameCheck() {
+        if !emailCheck() || !passwordCheck() {
             return
         }
         
-        // - MARK: FIREBASE INTEGRATION
+        // Check username asynchronously
+        usernameCheck { valid in
+            if valid {
+                self.registerUser(email: email, password: password, username: username)
+            }
+        }
+    }
+    
+    private func registerUser(email: String, password: String, username: String) {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             guard let user = authResult?.user, error == nil else {
                 self.showErrorMessage(error?.localizedDescription ?? "Failed to register")
                 return
             }
             // Send email verification
-            user.sendEmailVerification(completion: { (error) in
+            user.sendEmailVerification { error in
                 if let error = error {
                     self.showErrorMessage("Failed to send verification email: \(error.localizedDescription)")
                     return
                 }
-                
                 self.showSuccessMessage("Verification email sent. Please check your email.")
-            })
+            }
             
             // Save username to the database
             let ref = Database.database().reference().child("users").child(user.uid)
             let userData: [String: Any] = [
-                    "email": email,
-                    "username": username,
-                    "firstUsage": true,
-                    "registrationDate": ServerValue.timestamp()
-                ]
+                "email": email,
+                "username": username,
+                "firstUsage": true,
+                "registrationDate": ServerValue.timestamp()
+            ]
             ref.setValue(userData) { error, _ in
                 if let error = error {
                     self.showErrorMessage("Failed to save user data: \(error.localizedDescription)")
@@ -201,65 +207,66 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     }
     
     // - MARK: UsernameCheck
-    private func usernameCheck() -> Bool {
+    private func usernameCheck(completion: @escaping (Bool) -> Void) {
         guard let username = username.text, !username.isEmpty else {
             showErrorMessage("Username field is empty!")
-            return false
+            completion(false)
+            return
         }
         
         if username.count < 4 {
             showErrorMessage("Username must be at least 4 characters long")
-            return false
+            completion(false)
+            return
         }
         
-        let ref = Database.database().reference().child("users")
-        ref.queryOrdered(byChild: "username").queryEqual(toValue: username).observeSingleEvent(of: .value) { snapshot in
-            if snapshot.exists() {
-                self.showErrorMessage("Username is already taken!")
-                return
+        let ref = Database.database().reference().child("usernames")
+        ref.observeSingleEvent(of: .value) { snapshot in
+            if snapshot.hasChild(username) {
+                self.showErrorMessage("Username already taken!")
+                completion(false)
+            } else {
+                completion(true)
             }
         }
-        return true
     }
     
     // - MARK: PasswordCheck
     private func passwordCheck() -> Bool {
         guard let password = password.text, !password.isEmpty else {
-            showErrorMessage("Password is empty")
+            showErrorMessage("Password field is empty!")
             return false
         }
         
-        if password.count < 8 {
-            showErrorMessage("Password must be at least 8 characters")
-            return false
-        }
-        let letterCharacterSet = CharacterSet.letters
-        let numberCharacterSet = CharacterSet.decimalDigits
-        let passwordCharacterSet = CharacterSet(charactersIn: password)
-            
-        if !letterCharacterSet.isSuperset(of: passwordCharacterSet) || !numberCharacterSet.isSuperset(of: passwordCharacterSet) {
-            showErrorMessage("Password must contain both letters and numbers")
+        if password.count < 6 {
+            showErrorMessage("Password must be at least 6 characters long")
             return false
         }
         return true
     }
-
+    
+    // - MARK: Error Handling
     private func showErrorMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.notificationMessage.isHidden = true
+        }
     }
     
     private func showSuccessMessage(_ message: String) {
-        notificationMessage.text = message
         notificationMessage.textColor = .green
+        notificationMessage.text = message
         notificationMessage.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.notificationMessage.isHidden = true
+        }
     }
     
-    // Helper function to set placeholder with custom color
     private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
-        textField.attributedPlaceholder = NSAttributedString(
-            string: placeholder,
-            attributes: [NSAttributedString.Key.foregroundColor: color]
-        )
+        let placeholderAttributes = [
+            NSAttributedString.Key.foregroundColor: color
+        ]
+        textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: placeholderAttributes)
     }
 }
