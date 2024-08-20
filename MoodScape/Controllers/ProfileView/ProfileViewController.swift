@@ -52,6 +52,16 @@ class ProfileViewController: ProfileBaseView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    private let emailLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Email"
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
     private let locationLabel: UILabel = {
         let label = UILabel()
@@ -117,6 +127,7 @@ class ProfileViewController: ProfileBaseView {
         view.addSubview(usernameLabel)
         view.addSubview(firstNameLabel)
         view.addSubview(lastNameLabel)
+        view.addSubview(emailLabel)
         view.addSubview(locationLabel)
         view.addSubview(musicPreferencesLabel)
         view.addSubview(registrationDate)
@@ -147,7 +158,10 @@ class ProfileViewController: ProfileBaseView {
             lastNameLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 15),
             lastNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
                     
-            locationLabel.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 15),
+            emailLabel.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 15),
+            emailLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            
+            locationLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 15),
             locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
                     
             musicPreferencesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 15),
