@@ -11,7 +11,7 @@ import FirebaseDatabase
 
 class ProfileSetupViewController: UIViewController {
     
-    let contentView: UIView = {
+    private let contentView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 1.0)
         view.layer.cornerRadius = 37
@@ -19,7 +19,7 @@ class ProfileSetupViewController: UIViewController {
         return view
     }()
     
-    let firstName: UITextField = {
+    private let firstName: UITextField = {
         let name = UITextField()
         name.backgroundColor = .none
         name.textColor = .white
@@ -32,7 +32,7 @@ class ProfileSetupViewController: UIViewController {
         return name
     }()
     
-    let lastName: UITextField = {
+    private let lastName: UITextField = {
         let name = UITextField()
         name.backgroundColor = .none
         name.textColor = .white
@@ -46,7 +46,7 @@ class ProfileSetupViewController: UIViewController {
     }()
         
     // fix it as geopoint
-    let location: UITextField = {
+    private let location: UITextField = {
         let location = UITextField()
         location.backgroundColor = .none
         location.textColor = .white
@@ -70,7 +70,7 @@ class ProfileSetupViewController: UIViewController {
         return imageView
     }()
         
-    let addProfileImageButton: UIButton = {
+    private let addProfileImageButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Add Photo", for: .normal)
         button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
@@ -78,7 +78,7 @@ class ProfileSetupViewController: UIViewController {
         return button
     }()
     
-    let saveButton: UIButton = {
+    private let saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Save", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -89,9 +89,10 @@ class ProfileSetupViewController: UIViewController {
         return button
     }()
     
-    let closeButton: UIButton = {
+    private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("I'll do it later", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -131,7 +132,7 @@ class ProfileSetupViewController: UIViewController {
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.67),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
                 
             profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             profileImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -156,7 +157,7 @@ class ProfileSetupViewController: UIViewController {
             location.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             location.heightAnchor.constraint(equalToConstant: 40),
                 
-            saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -35),
             saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             saveButton.widthAnchor.constraint(equalToConstant: 160),
             saveButton.heightAnchor.constraint(equalToConstant: 60),

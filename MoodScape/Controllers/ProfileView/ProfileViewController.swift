@@ -122,15 +122,14 @@ class ProfileViewController: ProfileBaseView {
         view.addSubview(registrationDate)
         view.addSubview(editButton)
         view.addSubview(settingsButton)
+        
+        settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
-        settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
-        editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
-        
         NSLayoutConstraint.activate([
-            
             settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             settingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
                     
@@ -211,8 +210,8 @@ class ProfileViewController: ProfileBaseView {
     // - MARK: HandleEdit
     @objc private func handleEdit() {
         let profileSetupView = ProfileSetupViewController()
+        profileSetupView.modalPresentationStyle = .overCurrentContext
         profileSetupView.modalTransitionStyle = .crossDissolve
-        profileSetupView.modalPresentationStyle = .fullScreen
         self.present(profileSetupView, animated: true, completion: nil)
     }
 }
