@@ -2,7 +2,6 @@
 //  AlbumDetailsViewController.swift
 //  MoodScape
 //
-//  Created by Olga Batiunia on 18.08.24.
 //
 
 import UIKit
@@ -270,6 +269,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
                         self.albumName.textColor = color.contrastingComplementaryColor()
                         self.shareButton.tintColor = color.contrastingColor()
                         self.topSongsLabel.textColor = color.contrastingComplementaryColor()
+                        self.releaseDateLabel.textColor = color.contrastingColor()
                     }
                 }
             }
@@ -284,6 +284,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     // - MARK: ToggleFavorite
     @objc private func toggleFavorite() {
         // TODO: Add an album or a song to your favorites
+        favoriteButton.backgroundColor = .yellow
+        
     }
     
     // - MARK: ShareAlbum
