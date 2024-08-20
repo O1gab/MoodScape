@@ -154,7 +154,9 @@ class LoginViewController: StartBaseView {
             
             if user.isEmailVerified {
                 self.showSuccessMessage("Login successful")
-                self.checkFirstUsage(for: user)
+                let mainView = MainTabBarController()
+                mainView.modalPresentationStyle = .fullScreen
+                self.present(mainView, animated: true, completion: nil)
             }
             else {
                 self.showErrorMessage("Please verify your email before logging in.")
@@ -193,7 +195,7 @@ class LoginViewController: StartBaseView {
         )
     }
     
-    // - MARK: CheckFirstUsage
+    // - MARK: CheckFirstUsage (fix it)
     private func checkFirstUsage(for user: FirebaseAuth.User) {
         let ref = Database.database().reference().child("users").child(user.uid)
         ref.observeSingleEvent(of: .value) { snapshot in

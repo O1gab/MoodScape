@@ -94,40 +94,40 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
-            email.translatesAutoresizingMaskIntoConstraints = false
-            username.translatesAutoresizingMaskIntoConstraints = false
-            password.translatesAutoresizingMaskIntoConstraints = false
-            registerButton.translatesAutoresizingMaskIntoConstraints = false
-            backButton.translatesAutoresizingMaskIntoConstraints = false
-            notificationMessage.translatesAutoresizingMaskIntoConstraints = false
+        email.translatesAutoresizingMaskIntoConstraints = false
+        username.translatesAutoresizingMaskIntoConstraints = false
+        password.translatesAutoresizingMaskIntoConstraints = false
+        registerButton.translatesAutoresizingMaskIntoConstraints = false
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        notificationMessage.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
-            NSLayoutConstraint.activate([
-                backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-                backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            email.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40),
+            email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            email.widthAnchor.constraint(equalToConstant: 320),
+            email.heightAnchor.constraint(equalToConstant: 40),
+            
+            username.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 20),
+            username.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            username.widthAnchor.constraint(equalToConstant: 320),
+            username.heightAnchor.constraint(equalToConstant: 40),
                 
-                email.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40),
-                email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                email.widthAnchor.constraint(equalToConstant: 320),
-                email.heightAnchor.constraint(equalToConstant: 40),
+            password.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
+            password.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            password.widthAnchor.constraint(equalToConstant: 320),
+            password.heightAnchor.constraint(equalToConstant: 40),
                 
-                username.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 20),
-                username.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                username.widthAnchor.constraint(equalToConstant: 320),
-                username.heightAnchor.constraint(equalToConstant: 40),
+            registerButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 20),
+            registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            registerButton.widthAnchor.constraint(equalToConstant: 160),
+            registerButton.heightAnchor.constraint(equalToConstant: 50),
                 
-                password.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
-                password.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                password.widthAnchor.constraint(equalToConstant: 320),
-                password.heightAnchor.constraint(equalToConstant: 40),
-                
-                registerButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 20),
-                registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                registerButton.widthAnchor.constraint(equalToConstant: 160),
-                registerButton.heightAnchor.constraint(equalToConstant: 50),
-                
-                notificationMessage.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 10),
-                notificationMessage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-                notificationMessage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            notificationMessage.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 10),
+            notificationMessage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            notificationMessage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
     
@@ -139,23 +139,9 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             showErrorMessage("Please fill in all fields")
             return
         }
-        self.emailCheck { isValid, message in
-            if !isValid {
-                self.showErrorMessage(message ?? "Email check failed")
-                return
-            }
-        }
-        self.usernameCheck { isValid, message in
-            if !isValid {
-                self.showErrorMessage(message ?? "Username check failed")
-                return
-            }
-        }
-        self.passwordCheck { isValid, message in
-            if !isValid {
-                self.showErrorMessage(message ?? "Password check failed")
-                return
-            }
+        
+        if !emailCheck() || !passwordCheck() || !usernameCheck() {
+            return
         }
         
         // - MARK: FIREBASE INTEGRATION
@@ -198,56 +184,54 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     }
     
     // - MARK: EmailCheck
-    private func emailCheck(completion: @escaping (Bool, String?) -> Void) {
+    private func emailCheck() -> Bool {
         guard let email = email.text, !email.isEmpty else {
-            completion(false, "Email is empty")
-            return
+            showErrorMessage("Email field is empty!")
+            return false
         }
         
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}"
         let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
         
-        if emailPredicate.evaluate(with: email) {
-            completion(true, nil)
-        } else {
-            completion(false, "Invalid email format")
-            return
+        if !emailPredicate.evaluate(with: email) {
+            showErrorMessage("The email address is badly formatted!")
+            return false
         }
+        return true
     }
     
     // - MARK: UsernameCheck
-    private func usernameCheck(completion: @escaping (Bool, String?) -> Void) {
+    private func usernameCheck() -> Bool {
         guard let username = username.text, !username.isEmpty else {
-            completion(false, "Username is empty")
-            return
+            showErrorMessage("Username field is empty!")
+            return false
         }
         
         if username.count < 4 {
-            completion(false, "Username must be at least 4 characters")
-            return
+            showErrorMessage("Username must be at least 4 characters long")
+            return false
         }
         
         let ref = Database.database().reference().child("users")
         ref.queryOrdered(byChild: "username").queryEqual(toValue: username).observeSingleEvent(of: .value) { snapshot in
             if snapshot.exists() {
-                completion(false, "Username already taken")
-            } else {
-                completion(true, nil)
+                self.showErrorMessage("Username is already taken!")
+                return
             }
         }
+        return true
     }
     
     // - MARK: PasswordCheck
-    private func passwordCheck(completion: @escaping (Bool, String?) -> Void) {
-        // TODO: Password must be valid (min. 8 chars, containing letters and numbers)
+    private func passwordCheck() -> Bool {
         guard let password = password.text, !password.isEmpty else {
-                showErrorMessage("Password is empty")
-                return
-            }
+            showErrorMessage("Password is empty")
+            return false
+        }
         
         if password.count < 8 {
             showErrorMessage("Password must be at least 8 characters")
-            return
+            return false
         }
         let letterCharacterSet = CharacterSet.letters
         let numberCharacterSet = CharacterSet.decimalDigits
@@ -255,8 +239,9 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             
         if !letterCharacterSet.isSuperset(of: passwordCharacterSet) || !numberCharacterSet.isSuperset(of: passwordCharacterSet) {
             showErrorMessage("Password must contain both letters and numbers")
-            return
+            return false
         }
+        return true
     }
 
     private func showErrorMessage(_ message: String) {
