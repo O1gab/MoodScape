@@ -9,22 +9,8 @@ import FirebaseAuth
 import FirebaseDatabase
 
 class RegistrationViewController: StartBaseView, UITextFieldDelegate {
-    
-    private let email = UITextField()
-    private let username = UITextField()
-    private let password = UITextField()
-    private let registerButton = UIButton(type: .system)
-    private let backButton = UIButton(type: .custom)
-    private let notificationMessage = UILabel()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupForm()
-        setupConstraints()
-    }
-    
-    // - MARK: SetupForm
-    private func setupForm() {
+    private let email: UITextField = {
+        let email = UITextField()
         email.borderStyle = .none
         email.backgroundColor = .black
         email.textColor = .white
@@ -33,10 +19,13 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         email.layer.cornerRadius = 18
         email.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
         email.leftViewMode = .always
-        email.delegate = self
         email.autocapitalizationType = .none
-        view.addSubview(email)
-        
+        email.translatesAutoresizingMaskIntoConstraints = false
+        return email
+    }()
+    
+    private let username: UITextField = {
+        let username = UITextField()
         username.borderStyle = .none
         username.backgroundColor = .black
         username.textColor = .white
@@ -45,10 +34,13 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         username.layer.cornerRadius = 18
         username.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
         username.leftViewMode = .always
-        username.delegate = self
         username.autocapitalizationType = .none
-        view.addSubview(username)
-            
+        username.translatesAutoresizingMaskIntoConstraints = false
+        return username
+    }()
+    
+    private let password: UITextField = {
+        let password = UITextField()
         password.isSecureTextEntry = true
         password.borderStyle = .none
         password.backgroundColor = .black
@@ -62,44 +54,73 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         password.rightView = rightViewContainer
         password.rightViewMode = .always
         password.autocapitalizationType = .none
+        password.translatesAutoresizingMaskIntoConstraints = false
+        return password
+    }()
+    
+    private let registerButton: UIButton = {
+        let registerButton = UIButton(type: .system)
+        registerButton.setTitle("Register", for: .normal)
+        registerButton.setTitleColor(.white, for: .normal)
+        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        registerButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        registerButton.layer.cornerRadius = 18
+        registerButton.translatesAutoresizingMaskIntoConstraints = false
+        return registerButton
+    }()
+    
+    private let backButton: UIButton = {
+        let backButton = UIButton(type: .custom)
+        backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
+        backButton.tintColor = .white
+        backButton.imageView?.contentMode = .scaleAspectFit
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        return backButton
+    }()
+    
+    private let notificationMessage: UILabel = {
+        let notificationMessage = UILabel()
+        notificationMessage.textColor = .red
+        notificationMessage.font = UIFont.systemFont(ofSize: 14)
+        notificationMessage.numberOfLines = 0
+        notificationMessage.textAlignment = .center
+        notificationMessage.isHidden = true
+        notificationMessage.translatesAutoresizingMaskIntoConstraints = false
+        return notificationMessage
+    }()
+    
+    // - MARK: ViewDidLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupForm()
+        setupConstraints()
+    }
+    
+    // - MARK: SetupForm
+    private func setupForm() {
+        view.addSubview(email)
+        email.delegate = self
+        
+        view.addSubview(username)
+        username.delegate = self
+            
         view.addSubview(password)
         
         setPlaceholder(textField: email, placeholder: "Enter your email", color: .systemGray)
         setPlaceholder(textField: username, placeholder: "Enter your username", color: .systemGray)
         setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
             
-        registerButton.setTitle("Register", for: .normal)
-        registerButton.setTitleColor(.white, for: .normal)
-        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        registerButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        registerButton.layer.cornerRadius = 18
-        registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         view.addSubview(registerButton)
+        registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         
-        backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
-        backButton.tintColor = .white
-        backButton.imageView?.contentMode = .scaleAspectFit
-        backButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
         view.addSubview(backButton)
         
-        notificationMessage.textColor = .red
-        notificationMessage.font = UIFont.systemFont(ofSize: 14)
-        notificationMessage.numberOfLines = 0
-        notificationMessage.textAlignment = .center
-        notificationMessage.isHidden = true
         view.addSubview(notificationMessage)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
-        email.translatesAutoresizingMaskIntoConstraints = false
-        username.translatesAutoresizingMaskIntoConstraints = false
-        password.translatesAutoresizingMaskIntoConstraints = false
-        registerButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.translatesAutoresizingMaskIntoConstraints = false
-        notificationMessage.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
