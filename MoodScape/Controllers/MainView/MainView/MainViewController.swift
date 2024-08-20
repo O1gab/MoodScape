@@ -73,13 +73,12 @@ class MainViewController: MainBaseView {
             // Circles background view constraints
             circlesBackgroundView.centerXAnchor.constraint(equalTo: addMoodButton.centerXAnchor),
             circlesBackgroundView.centerYAnchor.constraint(equalTo: addMoodButton.centerYAnchor),
-            circlesBackgroundView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            circlesBackgroundView.heightAnchor.constraint(equalTo: view.heightAnchor),
                         
             // Top label constraints
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             topLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            topLabel.widthAnchor.constraint(equalToConstant: 200),
             
             // "Add Mood" Button constraints
             addMoodButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -89,8 +88,7 @@ class MainViewController: MainBaseView {
                 
             // "Add Mood" Label constraints (below the button)
             addMoodLabel.topAnchor.constraint(equalTo: addMoodButton.bottomAnchor, constant: 3),
-            addMoodLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
+            addMoodLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     // - MARK: HandleAddMood

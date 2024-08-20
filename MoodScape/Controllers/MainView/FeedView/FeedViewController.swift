@@ -13,6 +13,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
      TODO: Add previous searches history of the current user + maybe stats???
      */
     
+    private var scrollView: UIScrollView!
+    private var contentView: UIView!
+    
     private var albumCollectionView: UICollectionView!
     private var albums: [Album] = []
     private var songCollectionView: UICollectionView!
@@ -43,10 +46,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupAlbumCollectionView()
-        setupSongCollectionView()
         setupConstraints()
-        
         fetchAlbums()
         fetchTopSongs()
     }
@@ -56,8 +56,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         view.addSubview(topLabel)
         view.addSubview(topSongsLabel)
         view.addSubview(loadingIndicator)
-        
         loadingIndicator.center = view.center
+        setupAlbumCollectionView()
+        setupSongCollectionView()
     }
     
     // - MARK: SetupAlbumCollectionView

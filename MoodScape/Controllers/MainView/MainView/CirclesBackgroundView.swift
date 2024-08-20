@@ -21,7 +21,7 @@ class CirclesBackgroundView: UIView {
     ]
     
     private let motionManager = CMMotionManager()
-    private let movementFactor: CGFloat = 50
+    private let movementFactor: CGFloat = 5
     
     // - MARK: Initializer
     override init(frame: CGRect) {

@@ -20,4 +20,5 @@ struct Song {
     let artist: String
     let duration: String
     let spotifyUrl: String
+    //let albumImageUrl: String
 }
