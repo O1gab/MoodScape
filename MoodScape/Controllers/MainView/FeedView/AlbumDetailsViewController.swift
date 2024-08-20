@@ -10,6 +10,10 @@ import SafariServices
 
 class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    /*
+     TODO: Add the following functionality: open link after clicking on a song in the table (top 3 songs)
+     */
+    
     private var album: Album
     
     private let scrollView: UIScrollView = {
@@ -131,6 +135,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         fatalError("init(coder:) has not been implemented")
     }
     
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()

@@ -26,9 +26,10 @@ class SongTableViewCell: UITableViewCell {
         return label
     }()
     
+    // - MARK: Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .clear
+        self.selectionStyle = .none
         contentView.addSubview(containerView)
         containerView.addSubview(songLabel)
         
@@ -44,10 +45,12 @@ class SongTableViewCell: UITableViewCell {
         ])
     }
     
+    // - MARK: Init
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // - MARK: Configure
     func configure(with song: Song) {
         songLabel.text = "\(song.name) - \(song.duration)"
     }
