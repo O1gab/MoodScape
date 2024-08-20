@@ -203,8 +203,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             releaseDateLabel.topAnchor.constraint(equalTo: albumName.bottomAnchor, constant: 10),
             releaseDateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            favoriteButton.centerYAnchor.constraint(equalTo: albumName.centerYAnchor),
-            favoriteButton.leadingAnchor.constraint(equalTo: albumName.trailingAnchor, constant: 10),
+            favoriteButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
+            favoriteButton.trailingAnchor.constraint(equalTo: spotifyButton.leadingAnchor, constant: -20),
             favoriteButton.widthAnchor.constraint(equalToConstant: 50),
             favoriteButton.heightAnchor.constraint(equalToConstant: 50),
             
@@ -224,7 +224,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             spotifyButton.heightAnchor.constraint(equalToConstant: 60),
             
             shareButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
-            shareButton.leadingAnchor.constraint(equalTo: spotifyButton.trailingAnchor, constant: 10),
+            shareButton.leadingAnchor.constraint(equalTo: spotifyButton.trailingAnchor, constant: 20),
             shareButton.widthAnchor.constraint(equalToConstant: 60),
             shareButton.heightAnchor.constraint(equalToConstant: 60)
         ])
