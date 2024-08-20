@@ -10,10 +10,6 @@ import SafariServices
 
 class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    /*
-     TODO: Add the following functionality: open link after clicking on a song in the table (top 3 songs)
-     */
-    
     private var album: Album
     
     private let scrollView: UIScrollView = {
@@ -287,7 +283,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     // - MARK: ToggleFavorite
     @objc private func toggleFavorite() {
-        // Implement favorite functionality
+        // TODO: Add an album or a song to your favorites
     }
     
     // - MARK: ShareAlbum
@@ -317,6 +313,11 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     // - MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Implement action on selecting a song if needed
+        let song = album.topSongs[indexPath.row]
+        
+        if let url = URL(string: song.spotifyUrl) {
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true, completion: nil)
+        }
     }
 }
