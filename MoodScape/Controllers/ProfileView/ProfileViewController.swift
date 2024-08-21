@@ -6,8 +6,9 @@
 
 import UIKit
 import Gifu
+import Firebase
 import FirebaseAuth
-import FirebaseDatabase
+import FirebaseFirestore
 
 class ProfileViewController: ProfileBaseView {
     
@@ -58,7 +59,7 @@ class ProfileViewController: ProfileBaseView {
         label.text = "Email"
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -118,7 +119,7 @@ class ProfileViewController: ProfileBaseView {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        fetchUsername()
+        fetchData()
     }
     
     // - MARK: SetupView
@@ -177,38 +178,54 @@ class ProfileViewController: ProfileBaseView {
         ])
     }
     
-    // - MARK: FetchUsername
-    private func fetchUsername() {
+    // - MARK: FetchData
+    private func fetchData() {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("User not logged in")
             return
         }
         
-        let ref = Database.database().reference().child("users").child(userId)
-        ref.observeSingleEvent(of: .value) { snapshot in
-            if let userData = snapshot.value as? [String: Any] {
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(userId)
+
+        userRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+                
+            if let document = document, document.exists {
+                let data = document.data()
                 DispatchQueue.main.async {
-                    if let username = userData["username"] as? String {
+                    if let username = data?["username"] as? String {
                         self.usernameLabel.text = username
                     }
-                    if let firstName = userData["first_name"] as? String {
+                    if let email = data?["email"] as? String {
+                        self.emailLabel.text = email
+                    }
+                    if let firstName = data?["first_name"] as? String {
                         self.firstNameLabel.text = "First Name: \(firstName)"
                     }
-                    if let lastName = userData["last_name"] as? String {
+                    if let lastName = data?["last_name"] as? String {
                         self.lastNameLabel.text = "Last Name: \(lastName)"
                     }
-                    if let location = userData["location"] as? String {
+                    if let location = data?["location"] as? String {
                         self.locationLabel.text = "Location: \(location)"
                     }
-                    if let musicPreferences = userData["music_preferences"] as? String {
+                    if let musicPreferences = data?["music_preferences"] as? String {
                         self.musicPreferencesLabel.text = "Music Preferences: \(musicPreferences)"
                     }
-                    if let registrationDate = userData["registrationDate"] as? Date {
-                        self.registrationDate.text = "Registration Date: \(registrationDate)"
+                    if let registrationDate = data?["registrationDate"] as? Timestamp {
+                        let date = registrationDate.dateValue()
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateStyle = .medium
+                        self.registrationDate.text = "Registration Date: \(dateFormatter.string(from: date))"
+                    } else {
+                        print("Registration date not available")
                     }
                 }
             } else {
-                print("Failed to fetch user data")
+                print("Document does not exist")
             }
         }
     }
