@@ -44,11 +44,6 @@ class EmotionCell: UICollectionViewCell {
         }
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        updateAppearance()
-    }
-    
     func configure(with emotion: String) {
            emotionLabel.text = emotion
            updateAppearance()
@@ -57,10 +52,12 @@ class EmotionCell: UICollectionViewCell {
     private func updateAppearance() {
         if isSelected {
             contentView.backgroundColor = UIColor.gray
+            emotionLabel.textColor = UIColor.white
             contentView.layer.borderColor = UIColor.green.cgColor
         } else {
             contentView.backgroundColor = UIColor.clear
-            contentView.layer.borderColor = UIColor.clear.cgColor
+            emotionLabel.textColor = UIColor.gray
+            contentView.layer.borderColor = UIColor.gray.cgColor
         }
     }
 }

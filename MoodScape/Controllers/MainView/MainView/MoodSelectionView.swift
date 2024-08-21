@@ -28,7 +28,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         
     private let emotionsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 7
         layout.minimumLineSpacing = 3
         layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -114,6 +114,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     
     @objc private func saveEmotions() {
         // TODO: Save selected emotions and generate a playlist based on the selection
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -162,9 +163,9 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         let font = UIFont.systemFont(ofSize: 16)
         let textWidth = emotion.size(withAttributes: [NSAttributedString.Key.font: font]).width
         
-        let padding: CGFloat = 20 // Adjust padding as needed
+        let padding: CGFloat = 20
         let itemWidth = textWidth + padding
-        let itemHeight: CGFloat = 40 // Adjust item height as needed
+        let itemHeight: CGFloat = 40
         
         return CGSize(width: itemWidth, height: itemHeight)
     }
