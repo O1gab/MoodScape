@@ -6,7 +6,7 @@
 
 import UIKit
 
-class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private let contentView: UIView = {
         let view = UIView()
@@ -17,15 +17,20 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     }()
     
     private let emotions = [
-        "😀", "😢", "😠", "😱", "😴", "😎", "🤔", "😜", "🤯", "😇",
-        "🥳", "🤢", "😭", "😡", "🤬", "🥵", "🥶", "😐", "🙄", "🤤"
+        "annoyed", "offended", "shocked", "disgusted", "guilty",
+        "happy", "surprised", "pressured", "upset", "sad",
+        "worried", "nervous", "embarrassed", "angry", "lonely",
+        "nostalgic", "insecure", "disappointed", "powerless", "tired",
+        "agressive", "scared", "energized", "confused", "doubtful"
     ]
+    
+    private var selectedEmotions: [IndexPath] = []
         
     private let emotionsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 10
+        layout.minimumInteritemSpacing = 3
         layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(EmotionCell.self, forCellWithReuseIdentifier: "EmotionCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -43,8 +48,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-        
-    private var selectedEmotions: [String] = []
     
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
@@ -138,21 +141,31 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmotionCell", for: indexPath) as! EmotionCell
-        cell.emotionLabel.text = emotions[indexPath.item]
-        cell.layer.borderColor = UIColor.white.cgColor
-        cell.layer.borderWidth = 1
-        cell.layer.cornerRadius = 30
+        cell.configure(with: emotions[indexPath.item])
+        cell.isSelected = selectedEmotions.contains(indexPath)
         return cell
     }
         
     // - MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let index = selectedEmotions.firstIndex(of: indexPath) {
+                    selectedEmotions.remove(at: index)
+                } else {
+                    selectedEmotions.append(indexPath)
+                }
+                collectionView.reloadItems(at: [indexPath])
+    }
+
+    // MARK: UICollectionViewDelegateFlowLayout
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let emotion = emotions[indexPath.item]
-        if selectedEmotions.contains(emotion) {
-            selectedEmotions.removeAll { $0 == emotion }
-        } else {
-            selectedEmotions.append(emotion)
-        }
-        collectionView.reloadItems(at: [indexPath])
+        let font = UIFont.systemFont(ofSize: 16) // Adjust font size as needed
+        let textWidth = emotion.size(withAttributes: [NSAttributedString.Key.font: font]).width
+        
+        let padding: CGFloat = 20 // Adjust padding as needed
+        let itemWidth = textWidth + padding
+        let itemHeight: CGFloat = 40 // Adjust item height as needed
+        
+        return CGSize(width: itemWidth, height: itemHeight)
     }
 }
