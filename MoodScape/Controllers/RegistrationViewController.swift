@@ -246,21 +246,10 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             completion(false)
             return
         }
-        
-        let db = Firestore.firestore()
-        let usernamesCollection = db.collection("usernames")
-            
-        usernamesCollection.document(username).getDocument { document, error in
-            if let document = document, document.exists {
-                self.showErrorMessage("Username already taken!")
-                completion(false)
-            } else if let error = error {
-                self.showErrorMessage("Error checking username: \(error.localizedDescription)")
-                completion(false)
-            } else {
-                completion(true)
-            }
-        }
+        /*
+         TODO: add function to check if the username is already taken
+         */
+        completion(true)
     }
     
     // - MARK: PasswordCheck
