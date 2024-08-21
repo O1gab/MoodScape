@@ -28,8 +28,8 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         
     private let emotionsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 3
-        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 3
         layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(EmotionCell.self, forCellWithReuseIdentifier: "EmotionCell")
@@ -159,7 +159,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     // MARK: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let emotion = emotions[indexPath.item]
-        let font = UIFont.systemFont(ofSize: 16) // Adjust font size as needed
+        let font = UIFont.systemFont(ofSize: 16)
         let textWidth = emotion.size(withAttributes: [NSAttributedString.Key.font: font]).width
         
         let padding: CGFloat = 20 // Adjust padding as needed

@@ -11,6 +11,7 @@ class EmotionCell: UICollectionViewCell {
     
     let emotionLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .white
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +44,11 @@ class EmotionCell: UICollectionViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        updateAppearance()
+    }
+    
     func configure(with emotion: String) {
            emotionLabel.text = emotion
            updateAppearance()
@@ -50,13 +56,11 @@ class EmotionCell: UICollectionViewCell {
        
     private func updateAppearance() {
         if isSelected {
-            contentView.backgroundColor = UIColor.green
-            emotionLabel.textColor = UIColor.white
+            contentView.backgroundColor = UIColor.gray
             contentView.layer.borderColor = UIColor.green.cgColor
         } else {
             contentView.backgroundColor = UIColor.clear
-            emotionLabel.textColor = UIColor.gray
-            contentView.layer.borderColor = UIColor.gray.cgColor
+            contentView.layer.borderColor = UIColor.clear.cgColor
         }
     }
 }
