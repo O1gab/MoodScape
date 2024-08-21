@@ -201,7 +201,7 @@ class ProfileViewController: ProfileBaseView {
                         self.usernameLabel.text = username
                     }
                     if let email = data?["email"] as? String {
-                        self.emailLabel.text = email
+                        self.emailLabel.text = "Email: \(email)"
                     }
                     if let firstName = data?["first_name"] as? String {
                         self.firstNameLabel.text = "First Name: \(firstName)"

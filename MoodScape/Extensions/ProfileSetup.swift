@@ -7,6 +7,7 @@
 import UIKit
 
 extension ProfileSetupViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    // - MARK: ImagePickerController
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             profileImageView.image = selectedImage
