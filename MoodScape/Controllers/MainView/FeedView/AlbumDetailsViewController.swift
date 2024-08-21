@@ -75,6 +75,12 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         return label
     }()
     
+    private let divider: CALayer = {
+        let divider = CALayer()
+        divider.backgroundColor = UIColor.lightGray.cgColor
+        return divider
+    }()
+    
     private let spotifyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Open in Spotify", for: .normal)
@@ -89,6 +95,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     private let favoriteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.setImage(UIImage(systemName: "star.fill"), for: .selected)
         button.tintColor = .yellow
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -141,6 +148,20 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         topSongsTableView.delegate = self
     }
     
+    // - MARK: ViewDidLayoutSubviews
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // Updating the frame of divider
+        guard let releaseDateLabelFrame = releaseDateLabel.superview?.convert(releaseDateLabel.frame, to: contentView) else { return }
+        divider.frame = CGRect(
+            x: 10,
+            y: releaseDateLabelFrame.maxY + 10,
+            width: contentView.frame.width - 20,
+            height: 2
+        )
+    }
+    
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(scrollView)
@@ -155,6 +176,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         contentView.addSubview(shareButton)
         contentView.addSubview(topSongsTableView)
         contentView.addSubview(topSongsLabel)
+        
+        contentView.layer.addSublayer(divider)
         
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
@@ -284,8 +307,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     // - MARK: ToggleFavorite
     @objc private func toggleFavorite() {
         // TODO: Add an album or a song to your favorites
-        favoriteButton.backgroundColor = .yellow
-        
+        favoriteButton.isSelected.toggle()
     }
     
     // - MARK: ShareAlbum
