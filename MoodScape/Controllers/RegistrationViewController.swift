@@ -81,7 +81,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     private let notificationMessage: UILabel = {
         let notificationMessage = UILabel()
         notificationMessage.textColor = .red
-        notificationMessage.font = UIFont.systemFont(ofSize: 14)
+        notificationMessage.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         notificationMessage.numberOfLines = 0
         notificationMessage.textAlignment = .center
         notificationMessage.isHidden = true
@@ -125,7 +125,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
-            email.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100), // Adjusted for safe area
+            email.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
             email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             email.widthAnchor.constraint(equalToConstant: 320),
             email.heightAnchor.constraint(equalToConstant: 40),
@@ -154,27 +154,28 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     // - MARK: HANDLE REGISTER
     @objc private func handleRegister() {
         guard let email = email.text, !email.isEmpty,
-              let username = username.text, !username.isEmpty,
-              let password = password.text, !password.isEmpty else {
-            showErrorMessage("Please fill in all fields")
-            return
-        }
-        
+            let username = username.text, !username.isEmpty,
+            let password = password.text, !password.isEmpty else {
+                showErrorMessage("Please fill in all fields")
+                return
+            }
         if !emailCheck() || !passwordCheck() {
             return
         }
-        
-        // Check username asynchronously
         usernameCheck { valid in
-                if valid {
-                    self.registerUser(email: email, username: username, password: password) { error in
-                        if let error = error {
-                            // Handle registration error if needed
-                            print("Error during registration: \(error.localizedDescription)")
-                        }
+            if valid {
+                self.registerUser(email: email, username: username, password: password) { error in
+                    if let error = error {
+                        // Handle registration error if needed
+                        print("Error during registration: \(error.localizedDescription)")
+                    }
+                    DispatchQueue.main.async {
+                        let startView = StartViewController()
+                        self.present(startView, animated: true, completion: nil)
                     }
                 }
             }
+        }
     }
     
     func registerUser(email: String, username: String, password: String, completion: @escaping (Error?) -> Void) {
@@ -213,7 +214,8 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         let userData: [String: Any] = [
             "email": email,
             "username": username,
-            "registrationDate": Timestamp(date: Date()) // Store the current date and time
+            "registrationDate": Timestamp(date: Date()),
+            "firstUsage": true
         ]
         
         db.collection("users").document(userId).setData(userData) { error in
@@ -260,10 +262,25 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             completion(false)
             return
         }
-        /*
-         TODO: add function to check if the username is already taken
-         */
         completion(true)
+        
+        /*
+        // Check if the username is already taken
+        let db = Firestore.firestore()
+        db.collection("users").whereField("username", isEqualTo: username).getDocuments { snapshot, error in
+            if let error = error {
+                self.showErrorMessage("Error checking username: \(error.localizedDescription)")
+                completion(false)
+                    
+            } else if let snapshot = snapshot, !snapshot.isEmpty {
+                self.showErrorMessage("Username is already taken")
+                completion(false)
+            } else {
+                // Username is available and valid
+                completion(true)
+            }
+        }
+        */
     }
     
     // - MARK: PasswordCheck
@@ -284,16 +301,17 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     private func showErrorMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.isHidden = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
             self.notificationMessage.isHidden = true
         }
     }
     
     private func showSuccessMessage(_ message: String) {
-        notificationMessage.textColor = .green
         notificationMessage.text = message
+        notificationMessage.textColor = .green
+        notificationMessage.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         notificationMessage.isHidden = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
             self.notificationMessage.isHidden = true
         }
     }
