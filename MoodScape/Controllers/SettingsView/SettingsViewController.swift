@@ -28,7 +28,9 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
         return tableView
     }()
     
-    private let settingsOptions = ["Change Password", "Log out", "Notification Preferences", "Help & Support", "Contact us"]
+    private let settingsOptions = ["Change Password", "Notification Preferences", "Help & Support", "Contact us", "Log Out"]
+    
+    private let loadingIndicator = UIActivityIndicatorView(style: .large)
    
     private let exitButton: UIButton = {
         let exitButton = UIButton(type: .system)
@@ -65,8 +67,6 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
         view.addSubview(settingsTableView)
         
         settingsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "SettingsCell")
-        
-        exitButton.addTarget(self, action: #selector(exitTapped), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
@@ -80,24 +80,9 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
             settingsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             settingsTableView.bottomAnchor.constraint(equalTo: exitButton.topAnchor, constant: -20),
             
-            exitButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            exitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
             label.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             label.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
-    }
-    
-    // - MARK: ExitTapped
-    @objc private func exitTapped() {
-        do {
-            try Auth.auth().signOut()
-            let startView = StartViewController()
-            startView.modalPresentationStyle = .fullScreen
-            self.present(startView, animated: true, completion: nil)
-        } catch let signOutError as NSError {
-            print("Error signing out: %@", signOutError)
-        }
     }
     
     // MARK: UITableViewDataSource
@@ -122,9 +107,6 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
         switch selectedOption {
             case "Change Password":
                 print("TODO")
-            
-            case "Log Out":
-                print("TODO")
 
             case "Privacy Settings":
                 print("TODO")
@@ -134,6 +116,20 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
             
             case "Help & Support":
                 print("TODO")
+            
+            case "Log Out":
+                loadingIndicator.startAnimating()
+                do {
+                    try Auth.auth().signOut()
+                    let startView = StartViewController()
+                    startView.modalPresentationStyle = .fullScreen
+                    self.present(startView, animated: false) {
+                        self.loadingIndicator.stopAnimating()
+                    }
+                } catch let signOutError as NSError {
+                    print("Error signing out: %@", signOutError)
+                    loadingIndicator.stopAnimating()
+                }
             
             default:
                 break
