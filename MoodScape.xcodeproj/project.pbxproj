@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		761350292C70166A009A3F40 /* ProfileSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761350282C70166A009A3F40 /* ProfileSetup.swift */; };
+		76401AD52C76B4530035C7FA /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76401AD42C76B4530035C7FA /* ContactView.swift */; };
 		764FDE2F2C695EA60060A428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2E2C695EA60060A428 /* User.swift */; };
 		764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE322C696E990060A428 /* RegistrationViewController.swift */; };
 		764FDE352C697C230060A428 /* StartBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE342C697C230060A428 /* StartBaseView.swift */; };
@@ -52,6 +53,7 @@
 
 /* Begin PBXFileReference section */
 		761350282C70166A009A3F40 /* ProfileSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetup.swift; sourceTree = "<group>"; };
+		76401AD42C76B4530035C7FA /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
 		764FDE2E2C695EA60060A428 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		764FDE322C696E990060A428 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		764FDE342C697C230060A428 /* StartBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartBaseView.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */,
+				76401AD42C76B4530035C7FA /* ContactView.swift */,
 			);
 			path = SettingsView;
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 				766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */,
 				766485762C6ED52D00AA050A /* Album.swift in Sources */,
 				766485792C6ED6E700AA050A /* SpotifyAuthenticationManager.swift in Sources */,
+				76401AD52C76B4530035C7FA /* ContactView.swift in Sources */,
 				76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */,
 				76AAD3252C721C0300CBE3D8 /* AlbumDetailsViewController.swift in Sources */,
 				76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */,

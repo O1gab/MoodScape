@@ -31,14 +31,6 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
     private let settingsOptions = ["Change Password", "Notification Preferences", "Help & Support", "Contact us", "Log Out"]
     
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
-   
-    private let exitButton: UIButton = {
-        let exitButton = UIButton(type: .system)
-        exitButton.setImage(UIImage(systemName: "arrowshape.left.fill"), for: .normal)
-        exitButton.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        exitButton.translatesAutoresizingMaskIntoConstraints = false
-        return exitButton
-    }()
     
     private let label: UILabel = {
         let settingsLabel = UILabel()
@@ -62,7 +54,6 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(settingsLabel)
-        view.addSubview(exitButton)
         view.addSubview(label)
         view.addSubview(settingsTableView)
         
@@ -78,7 +69,7 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
             settingsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55),
             settingsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             settingsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            settingsTableView.bottomAnchor.constraint(equalTo: exitButton.topAnchor, constant: -20),
+            settingsTableView.bottomAnchor.constraint(equalTo: label.topAnchor, constant: -20),
             
             label.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             label.centerXAnchor.constraint(equalTo: view.centerXAnchor)
@@ -108,21 +99,23 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
             case "Change Password":
                 print("TODO")
 
-            case "Privacy Settings":
-                print("TODO")
-            
             case "Notification Preferences":
                 print("TODO")
             
             case "Help & Support":
                 print("TODO")
             
+            case "Contact us":
+                let contactView = ContactViewController()
+                contactView.modalPresentationStyle = .automatic
+                self.present(contactView, animated: true, completion: nil)
+            
             case "Log Out":
                 loadingIndicator.startAnimating()
                 do {
                     try Auth.auth().signOut()
                     let startView = StartViewController()
-                    startView.modalPresentationStyle = .fullScreen
+                    startView.modalPresentationStyle = .overCurrentContext
                     self.present(startView, animated: false) {
                         self.loadingIndicator.stopAnimating()
                     }
