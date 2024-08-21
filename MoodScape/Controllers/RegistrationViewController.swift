@@ -6,7 +6,7 @@
 
 import UIKit
 import FirebaseAuth
-import FirebaseDatabase
+import FirebaseFirestore
 
 class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     private let email: UITextField = {
@@ -186,21 +186,27 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
                 }
                 self.showSuccessMessage("Verification email sent. Please check your email.")
             }
-            
-            // Save username to the database
-            let ref = Database.database().reference().child("users").child(user.uid)
-            let userData: [String: Any] = [
-                "email": email,
-                "username": username,
-                "firstUsage": true,
-                "registrationDate": ServerValue.timestamp()
-            ]
-            ref.setValue(userData) { error, _ in
-                if let error = error {
-                    self.showErrorMessage("Failed to save user data: \(error.localizedDescription)")
-                } else {
-                    print("\(user.email!) created")
-                }
+        }
+        saveUserData(username: username, email: email)
+    }
+    
+    func saveUserData(username: String, email: String) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(userId)
+        
+        let userData: [String: Any] = [
+            "username": username,
+            "email": email,
+            "registrationDate": Date()
+        ]
+        
+        userRef.setData(userData) { error in
+            if let error = error {
+                print("Error saving user data: \(error.localizedDescription)")
+            } else {
+                print("User data saved successfully")
             }
         }
     }
@@ -241,10 +247,15 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             return
         }
         
-        let ref = Database.database().reference().child("usernames")
-        ref.observeSingleEvent(of: .value) { snapshot in
-            if snapshot.hasChild(username) {
+        let db = Firestore.firestore()
+        let usernamesCollection = db.collection("usernames")
+            
+        usernamesCollection.document(username).getDocument { document, error in
+            if let document = document, document.exists {
                 self.showErrorMessage("Username already taken!")
+                completion(false)
+            } else if let error = error {
+                self.showErrorMessage("Error checking username: \(error.localizedDescription)")
                 completion(false)
             } else {
                 completion(true)

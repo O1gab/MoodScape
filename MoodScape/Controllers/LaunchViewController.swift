@@ -14,6 +14,7 @@ class LaunchViewController: UIViewController {
         view.backgroundColor = .white
         setupConstraints()
         animateName()
+        checkAuthentication()
     }
 
     let name: UILabel = {
