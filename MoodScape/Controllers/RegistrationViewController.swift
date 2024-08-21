@@ -166,47 +166,61 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         
         // Check username asynchronously
         usernameCheck { valid in
-            if valid {
-                self.registerUser(email: email, password: password, username: username)
+                if valid {
+                    self.registerUser(email: email, username: username, password: password) { error in
+                        if let error = error {
+                            // Handle registration error if needed
+                            print("Error during registration: \(error.localizedDescription)")
+                        }
+                    }
+                }
             }
-        }
     }
     
-    private func registerUser(email: String, password: String, username: String) {
+    func registerUser(email: String, username: String, password: String, completion: @escaping (Error?) -> Void) {
+        // Step 1: Create the user with Firebase Authentication
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             guard let user = authResult?.user, error == nil else {
                 self.showErrorMessage(error?.localizedDescription ?? "Failed to register")
+                completion(error)
                 return
             }
-            // Send email verification
+            
+            // Step 2: Send email verification
             user.sendEmailVerification { error in
                 if let error = error {
                     self.showErrorMessage("Failed to send verification email: \(error.localizedDescription)")
+                    completion(error) // Notify caller about the error
                     return
                 }
+                
                 self.showSuccessMessage("Verification email sent. Please check your email.")
             }
+            
+            // Step 3: Save user data to Firestore
+            self.saveUserData(userId: user.uid, username: username, email: email) { error in
+                if let error = error {
+                    self.showErrorMessage("Failed to save user data: \(error.localizedDescription)")
+                }
+                completion(error)
+            }
         }
-        saveUserData(username: username, email: email)
     }
     
-    func saveUserData(username: String, email: String) {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        
+    private func saveUserData(userId: String, username: String, email: String, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
-        let userRef = db.collection("users").document(userId)
         
         let userData: [String: Any] = [
-            "username": username,
             "email": email,
-            "registrationDate": Date()
+            "username": username,
+            "registrationDate": Timestamp(date: Date()) // Store the current date and time
         ]
         
-        userRef.setData(userData) { error in
+        db.collection("users").document(userId).setData(userData) { error in
             if let error = error {
-                print("Error saving user data: \(error.localizedDescription)")
+                completion(error)
             } else {
-                print("User data saved successfully")
+                completion(nil)
             }
         }
     }
