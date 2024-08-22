@@ -62,6 +62,7 @@ class ProfileBaseView: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    // - MARK: StartLoading
     func startLoading() {
         view.addSubview(activityIndicator)
         NSLayoutConstraint.activate([
@@ -71,6 +72,7 @@ class ProfileBaseView: UIViewController {
         activityIndicator.startAnimating()
     }
 
+    // - MARK: StopLoading
     func stopLoading() {
         activityIndicator.stopAnimating()
         activityIndicator.removeFromSuperview()

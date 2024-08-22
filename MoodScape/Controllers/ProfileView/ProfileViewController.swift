@@ -14,13 +14,13 @@ class ProfileViewController: ProfileBaseView {
     
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "defaultProfileImage")
+        imageView.image = UIImage(systemName: "person.crop.circle")
+        imageView.tintColor = .white
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
         imageView.layer.cornerRadius = 75
-        imageView.backgroundColor = .black
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -37,9 +37,9 @@ class ProfileViewController: ProfileBaseView {
     private let firstNameLabel: UILabel = {
         let label = UILabel()
         label.text = "First Name:"
-        label.textColor = .white
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -47,9 +47,9 @@ class ProfileViewController: ProfileBaseView {
     private let lastNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Last Name:"
-        label.textColor = .white
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -57,9 +57,9 @@ class ProfileViewController: ProfileBaseView {
     private let emailLabel: UILabel = {
         let label = UILabel()
         label.text = "Email"
-        label.textColor = .white
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -67,9 +67,9 @@ class ProfileViewController: ProfileBaseView {
     private let locationLabel: UILabel = {
         let label = UILabel()
         label.text = "Location:"
-        label.textColor = .white
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -77,9 +77,9 @@ class ProfileViewController: ProfileBaseView {
     private let registrationDate: UILabel = {
         let label = UILabel()
         label.text = "Registration Date:"
-        label.textColor = .white
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -194,13 +194,24 @@ class ProfileViewController: ProfileBaseView {
                         self.usernameLabel.text = username
                     }
                     if let email = data?["email"] as? String {
-                        self.emailLabel.text = "Email: \(email)"
+                        self.emailLabel.attributedText = self.attributedText(
+                            staticText: "Email: ",
+                            dynamicText: email,
+                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
+                            dynamicColor: UIColor.white
+                        )
                     }
+                    
                     if let registrationDate = data?["registrationDate"] as? Timestamp {
                         let date = registrationDate.dateValue()
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateStyle = .medium
-                        self.registrationDate.text = "Registration Date: \(dateFormatter.string(from: date))"
+                        self.registrationDate.attributedText = self.attributedText(
+                            staticText: "Registration Date: ",
+                            dynamicText: dateFormatter.string(from: date),
+                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
+                            dynamicColor: UIColor.white
+                        )
                     } else {
                         print("Registration date not available")
                     }
@@ -230,19 +241,54 @@ class ProfileViewController: ProfileBaseView {
                 let data = document.data()
                 DispatchQueue.main.async {
                     if let firstName = data?["first_name"] as? String {
-                        self.firstNameLabel.text = "First Name: \(firstName)"
+                        self.firstNameLabel.attributedText = self.attributedText(
+                            staticText: "First Name: ",
+                            dynamicText: firstName,
+                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
+                            dynamicColor: UIColor.white
+                        )
                     }
+                    
                     if let lastName = data?["last_name"] as? String {
-                        self.lastNameLabel.text = "Last Name: \(lastName)"
+                        self.lastNameLabel.attributedText = self.attributedText(
+                            staticText: "Last Name: ",
+                            dynamicText: lastName,
+                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
+                            dynamicColor: UIColor.white
+                        )
                     }
+                    
                     if let location = data?["location"] as? String {
-                        self.locationLabel.text = "Location: \(location)"
+                        self.locationLabel.attributedText = self.attributedText(
+                            staticText: "Location: ",
+                            dynamicText: location,
+                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
+                            dynamicColor: UIColor.white
+                        )
                     }
                 }
             } else {
                 print("Document does not exist")
             }
         }
+    }
+    
+    // - MARK: AttributedText
+    private func attributedText(staticText: String, dynamicText: String, staticColor: UIColor, dynamicColor: UIColor) -> NSAttributedString {
+        let staticFont = UIFont.systemFont(ofSize: 18, weight: .bold)
+        let dynamicFont = UIFont.systemFont(ofSize: 18, weight: .medium)
+        
+        let attributedString = NSMutableAttributedString(string: staticText, attributes: [
+            .foregroundColor: staticColor,
+            .font: staticFont
+        ])
+        let dynamicAttributedString = NSAttributedString(string: dynamicText, attributes: [
+            .foregroundColor: dynamicColor,
+            .font: dynamicFont
+        ])
+            
+        attributedString.append(dynamicAttributedString)
+        return attributedString
     }
     
     // - MARK: HandleSettings
