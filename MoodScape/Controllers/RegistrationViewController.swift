@@ -169,7 +169,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
                         // Handle registration error if needed
                         print("Error during registration: \(error.localizedDescription)")
                     }
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
                         let startView = StartViewController()
                         self.present(startView, animated: true, completion: nil)
                     }

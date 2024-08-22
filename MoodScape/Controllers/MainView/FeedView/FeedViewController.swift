@@ -141,7 +141,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
             albumCollectionView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1/3),
             
-            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -25),
+            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -20),
             topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             songCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -149,7 +149,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             songCollectionView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 5),
             songCollectionView.heightAnchor.constraint(equalToConstant: 450),
             
-            previousSearchesLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 30),
+            previousSearchesLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 20),
             previousSearchesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             previousSearchesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
