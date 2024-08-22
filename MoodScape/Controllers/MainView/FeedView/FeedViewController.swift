@@ -42,6 +42,16 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return label
     }()
     
+    private let previousSearchesLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Your previous searches"
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,12 +68,22 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // - MARK: SetupView
     private func setupView() {
-        view.addSubview(topLabel)
-        view.addSubview(topSongsLabel)
-        view.addSubview(loadingIndicator)
+        scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
+        
+        contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubview(topLabel)
+        contentView.addSubview(topSongsLabel)
+        contentView.addSubview(loadingIndicator)
         loadingIndicator.center = view.center
         setupAlbumCollectionView()
         setupSongCollectionView()
+        
+        contentView.addSubview(previousSearchesLabel)
     }
     
     // - MARK: SetupAlbumCollectionView
@@ -79,7 +99,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         albumCollectionView.register(AlbumCollectionViewCell.self, forCellWithReuseIdentifier: "AlbumCell")
         albumCollectionView.dataSource = self
         albumCollectionView.delegate = self
-        view.addSubview(albumCollectionView)
+        contentView.addSubview(albumCollectionView)
     }
     
     // - MARK: SetupSongCollectionView
@@ -91,32 +111,47 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             
         songCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         songCollectionView.backgroundColor = .clear
-        songCollectionView.showsVerticalScrollIndicator = true
+        songCollectionView.showsVerticalScrollIndicator = false
         songCollectionView.translatesAutoresizingMaskIntoConstraints = false
         songCollectionView.register(SongCardCollectionViewCell.self, forCellWithReuseIdentifier: "SongCardCell")
         songCollectionView.dataSource = self
         songCollectionView.delegate = self
-        view.addSubview(songCollectionView)
+        contentView.addSubview(songCollectionView)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            topLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            albumCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            albumCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 5),
-            albumCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1/3),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor),
-            topSongsLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            topLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            topLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             
-            songCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            songCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            albumCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            albumCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
+            albumCollectionView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1/3),
+            
+            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -25),
+            topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            songCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            songCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             songCollectionView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 5),
-            songCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            songCollectionView.heightAnchor.constraint(equalToConstant: 450),
+            
+            previousSearchesLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 30),
+            previousSearchesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            previousSearchesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
