@@ -57,11 +57,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         super.viewDidLoad()
         setupView()
         setupConstraints()
-    }
-    
-    // - MARK: ViewWillAppear
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         fetchAlbums()
         fetchTopSongs()
     }
@@ -71,6 +66,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
+        view.addSubview(profileButton)
         
         contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false

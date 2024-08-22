@@ -18,7 +18,7 @@ class MainBaseView: UIViewController {
         return gifBackground
     }()
     
-    private let profileButton: UIButton = {
+    let profileButton: UIButton = {
         let profileButton = UIButton(type: .custom)
         profileButton.layer.cornerRadius = 25
         profileButton.clipsToBounds = true
