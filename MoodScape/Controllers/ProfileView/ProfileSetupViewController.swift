@@ -120,8 +120,14 @@ class ProfileSetupViewController: ProfileBaseView {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+    }
+    
+    // - MARK: ViewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchExistingData()
     }
+
     
     // - MARK: SetupView
     private func setupView() {
@@ -233,6 +239,7 @@ class ProfileSetupViewController: ProfileBaseView {
             } else {
                 print("Data successfully updated")
                 let profileView = ProfileViewController()
+                profileView.modalPresentationStyle = .overCurrentContext
                 self.present(profileView, animated: true, completion: nil)
             }
         }

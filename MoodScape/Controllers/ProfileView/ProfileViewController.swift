@@ -29,7 +29,7 @@ class ProfileViewController: ProfileBaseView {
         label.text = "Username"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -107,8 +107,15 @@ class ProfileViewController: ProfileBaseView {
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        startLoading()
         setupView()
         setupConstraints()
+        stopLoading()
+    }
+    
+    // - MARK: ViewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchData()
         fetchExtraData()
     }
