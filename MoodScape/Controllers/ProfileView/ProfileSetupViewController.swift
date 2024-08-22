@@ -6,8 +6,9 @@
 
 import Foundation
 import UIKit
+import Firebase
 import FirebaseAuth
-import FirebaseDatabase
+import FirebaseFirestore
 
 class ProfileSetupViewController: ProfileBaseView {
 
@@ -119,6 +120,7 @@ class ProfileSetupViewController: ProfileBaseView {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        fetchExistingData()
     }
     
     // - MARK: SetupView
@@ -195,25 +197,44 @@ class ProfileSetupViewController: ProfileBaseView {
         ])
     }
     
+    // - MARK: FetchExistingData
+    private func fetchExistingData() {
+        guard let user = Auth.auth().currentUser else { return }
+           
+        let db = Firestore.firestore()
+        let documentRef = db.collection("users").document(user.uid)
+        
+        documentRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let data = document.data()
+                self.firstName.text = data?["first_name"] as? String ?? ""
+                self.lastName.text = data?["last_name"] as? String ?? ""
+                self.location.text = data?["location"] as? String ?? ""
+            } else {
+                print("Document does not exist or error occurred: \(String(describing: error))")
+            }
+        }
+    }
+    
     // - MARK: HandleSave
     @objc private func handleSave() {
         guard let user = Auth.auth().currentUser else { return }
-           
-        let ref = Database.database().reference().child("users").child(user.uid)
-        let values = [
+        
+        let db = Firestore.firestore()
+        let documentRef = db.collection("users").document(user.uid)
+        
+        documentRef.updateData([
             "first_name": firstName.text ?? "",
             "last_name": lastName.text ?? "",
             "location": location.text ?? ""
-        ]
-           
-        ref.updateChildValues(values) { (error, ref) in
-            if let error = error {
-                print("Failed to update user:", error)
-                return
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Data successfully updated")
+                let profileView = ProfileViewController()
+                self.present(profileView, animated: true, completion: nil)
             }
-               
-            print("Successfully updated user")
-            self.dismiss(animated: true, completion: nil)
         }
     }
     

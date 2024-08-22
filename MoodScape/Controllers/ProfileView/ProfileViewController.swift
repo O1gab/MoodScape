@@ -73,16 +73,6 @@ class ProfileViewController: ProfileBaseView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
-    private let musicPreferencesLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Music Preferences:"
-        label.textColor = .white
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
     
     private let registrationDate: UILabel = {
         let label = UILabel()
@@ -120,6 +110,7 @@ class ProfileViewController: ProfileBaseView {
         setupView()
         setupConstraints()
         fetchData()
+        fetchExtraData()
     }
     
     // - MARK: SetupView
@@ -130,7 +121,6 @@ class ProfileViewController: ProfileBaseView {
         view.addSubview(lastNameLabel)
         view.addSubview(emailLabel)
         view.addSubview(locationLabel)
-        view.addSubview(musicPreferencesLabel)
         view.addSubview(registrationDate)
         view.addSubview(editButton)
         view.addSubview(settingsButton)
@@ -164,11 +154,9 @@ class ProfileViewController: ProfileBaseView {
             
             locationLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 15),
             locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-                    
-            musicPreferencesLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 15),
-            musicPreferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
-            registrationDate.topAnchor.constraint(equalTo: musicPreferencesLabel.bottomAnchor, constant: 15),
+            registrationDate.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 15),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
              
             editButton.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 40),
@@ -177,9 +165,47 @@ class ProfileViewController: ProfileBaseView {
             editButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
-    
+
     // - MARK: FetchData
     private func fetchData() {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(userId)
+
+        userRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+            if let document = document, document.exists {
+                let data = document.data()
+                DispatchQueue.main.async {
+                    if let username = data?["username"] as? String {
+                        self.usernameLabel.text = username
+                    }
+                    if let email = data?["email"] as? String {
+                        self.emailLabel.text = "Email: \(email)"
+                    }
+                    if let registrationDate = data?["registrationDate"] as? Timestamp {
+                        let date = registrationDate.dateValue()
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateStyle = .medium
+                        self.registrationDate.text = "Registration Date: \(dateFormatter.string(from: date))"
+                    } else {
+                        print("Registration date not available")
+                    }
+                }
+            } else {
+                print("Document does not exist")
+            }
+        }
+    }
+
+    // - MARK: FetchExtraData
+    private func fetchExtraData() {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("User not logged in")
             return
@@ -193,16 +219,9 @@ class ProfileViewController: ProfileBaseView {
                 print("Error fetching user data: \(error.localizedDescription)")
                 return
             }
-                
             if let document = document, document.exists {
                 let data = document.data()
                 DispatchQueue.main.async {
-                    if let username = data?["username"] as? String {
-                        self.usernameLabel.text = username
-                    }
-                    if let email = data?["email"] as? String {
-                        self.emailLabel.text = "Email: \(email)"
-                    }
                     if let firstName = data?["first_name"] as? String {
                         self.firstNameLabel.text = "First Name: \(firstName)"
                     }
@@ -211,17 +230,6 @@ class ProfileViewController: ProfileBaseView {
                     }
                     if let location = data?["location"] as? String {
                         self.locationLabel.text = "Location: \(location)"
-                    }
-                    if let musicPreferences = data?["music_preferences"] as? String {
-                        self.musicPreferencesLabel.text = "Music Preferences: \(musicPreferences)"
-                    }
-                    if let registrationDate = data?["registrationDate"] as? Timestamp {
-                        let date = registrationDate.dateValue()
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateStyle = .medium
-                        self.registrationDate.text = "Registration Date: \(dateFormatter.string(from: date))"
-                    } else {
-                        print("Registration date not available")
                     }
                 }
             } else {
@@ -242,7 +250,6 @@ class ProfileViewController: ProfileBaseView {
     @objc private func handleEdit() {
         let profileSetupView = ProfileSetupViewController()
         profileSetupView.modalPresentationStyle = .overCurrentContext
-        profileSetupView.modalTransitionStyle = .crossDissolve
         self.present(profileSetupView, animated: true, completion: nil)
     }
 }
