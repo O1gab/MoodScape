@@ -9,14 +9,16 @@ import UIKit
 import FirebaseAuth
 import FirebaseDatabase
 
-class ProfileSetupViewController: UIViewController {
-    
-    private let contentView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 1.0)
-        view.layer.cornerRadius = 37
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+class ProfileSetupViewController: ProfileBaseView {
+
+    private let topLabel: UILabel = {
+        let topLabel = UILabel()
+        topLabel.text = "Set up your profile"
+        topLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        topLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        topLabel.textAlignment = .center
+        topLabel.translatesAutoresizingMaskIntoConstraints = false
+        return topLabel
     }()
     
     private let firstName: UITextField = {
@@ -32,6 +34,16 @@ class ProfileSetupViewController: UIViewController {
         return name
     }()
     
+    private let firstNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Your first name:"
+        label.textColor = .white
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let lastName: UITextField = {
         let name = UITextField()
         name.backgroundColor = .none
@@ -43,6 +55,16 @@ class ProfileSetupViewController: UIViewController {
         name.leftViewMode = .always
         name.translatesAutoresizingMaskIntoConstraints = false
         return name
+    }()
+    
+    private let lastNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Your last name:"
+        label.textColor = .white
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
         
     // fix it as geopoint
@@ -59,28 +81,19 @@ class ProfileSetupViewController: UIViewController {
         return location
     }()
     
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 75
-        imageView.clipsToBounds = true
-        imageView.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
-        imageView.layer.borderWidth = 2
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-        
-    private let addProfileImageButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Add Photo", for: .normal)
-        button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    private let locationLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Your location:"
+        label.textColor = .white
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
-    private let saveButton: UIButton = {
+    private let submitButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Save", for: .normal)
+        button.setTitle("Submit", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
@@ -89,10 +102,10 @@ class ProfileSetupViewController: UIViewController {
         return button
     }()
     
-    private let closeButton: UIButton = {
+    private let skipButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("I'll do it later", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        button.setTitle("I will do it later", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -101,78 +114,71 @@ class ProfileSetupViewController: UIViewController {
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         setupView()
         setupConstraints()
     }
     
     // - MARK: SetupView
     private func setupView() {
-        view.addSubview(contentView)
-        contentView.addSubview(firstName)
-        contentView.addSubview(lastName)
-        contentView.addSubview(location)
-        contentView.addSubview(profileImageView)
-        contentView.addSubview(addProfileImageButton)
-        contentView.addSubview(saveButton)
-        contentView.addSubview(closeButton)
+        backButton.isHidden = true
         
-        setPlaceholder(textField: firstName, placeholder: "Enter your first name", color: .systemGray)
-        setPlaceholder(textField: lastName, placeholder: "Enter your last name", color: .systemGray)
-        setPlaceholder(textField: location, placeholder: "Enter your location", color: .systemGray)
+        view.addSubview(topLabel)
+        view.addSubview(firstNameLabel)
+        view.addSubview(firstName)
+        view.addSubview(lastNameLabel)
+        view.addSubview(lastName)
+        view.addSubview(locationLabel)
+        view.addSubview(location)
+        view.addSubview(submitButton)
+        view.addSubview(skipButton)
+        
+        setPlaceholder(textField: firstName, placeholder: "Enter your first name", color: .gray)
+        setPlaceholder(textField: lastName, placeholder: "Enter your last name", color: .gray)
+        setPlaceholder(textField: location, placeholder: "Choose your location", color: .gray)
                 
-        addProfileImageButton.addTarget(self, action: #selector(handleAddProfileImage), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(handleSave), for: .touchUpInside)
-        closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
+        submitButton.addTarget(self, action: #selector(handleSave), for: .touchUpInside)
+        skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            topLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            
+            firstNameLabel.topAnchor.constraint(equalTo: firstName.topAnchor, constant: -30),
+            firstNameLabel.leadingAnchor.constraint(equalTo: firstName.leadingAnchor, constant: 5),
+            
+            firstName.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 55),
+            firstName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            firstName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            firstName.heightAnchor.constraint(equalToConstant: 55),
+            
+            lastNameLabel.topAnchor.constraint(equalTo: lastName.topAnchor, constant: -30),
+            lastNameLabel.leadingAnchor.constraint(equalTo: lastName.leadingAnchor, constant: 5),
+            
+            lastName.topAnchor.constraint(equalTo: firstName.bottomAnchor, constant: 50),
+            lastName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            lastName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            lastName.heightAnchor.constraint(equalToConstant: 55),
+            
+            locationLabel.topAnchor.constraint(equalTo: location.topAnchor, constant: -30),
+            locationLabel.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: 5),
+            
+            location.topAnchor.constraint(equalTo: lastName.bottomAnchor, constant: 50),
+            location.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            location.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            location.heightAnchor.constraint(equalToConstant: 55),
                 
-            profileImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            profileImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            profileImageView.widthAnchor.constraint(equalToConstant: 150),
-            profileImageView.heightAnchor.constraint(equalToConstant: 150),
+            submitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -75),
+            submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            submitButton.widthAnchor.constraint(equalToConstant: 160),
+            submitButton.heightAnchor.constraint(equalToConstant: 60),
                 
-            addProfileImageButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 10),
-            addProfileImageButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                
-            firstName.topAnchor.constraint(equalTo: addProfileImageButton.bottomAnchor, constant: 20),
-            firstName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            firstName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            firstName.heightAnchor.constraint(equalToConstant: 40),
-                
-            lastName.topAnchor.constraint(equalTo: firstName.bottomAnchor, constant: 10),
-            lastName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            lastName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            lastName.heightAnchor.constraint(equalToConstant: 40),
-                
-            location.topAnchor.constraint(equalTo: lastName.bottomAnchor, constant: 10),
-            location.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            location.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            location.heightAnchor.constraint(equalToConstant: 40),
-                
-            saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -35),
-            saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            saveButton.widthAnchor.constraint(equalToConstant: 160),
-            saveButton.heightAnchor.constraint(equalToConstant: 60),
-                
-            closeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            closeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+            skipButton.topAnchor.constraint(equalTo: submitButton.bottomAnchor, constant: 10),
+            skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            
         ])
-    }
-    
-    // - MARK: HandleAddProfileImage
-    @objc private func handleAddProfileImage() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        present(imagePicker, animated: true, completion: nil)
     }
     
     // - MARK: HandleSave
@@ -197,32 +203,9 @@ class ProfileSetupViewController: UIViewController {
         }
     }
     
-    // - MARK: ViewWillAppear
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        animateShow()
-    }
-    
-    // - MARK: ClosePopUp
-    @objc private func closePopUp() {
-        animateHide()
-    }
-    
-    // - MARK: AnimateShow
-    private func animateShow() {
-        contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
-        UIView.animate(withDuration: 0.3, animations: {
-            self.contentView.transform = .identity
-        })
-    }
-    
-    // - MARK: AnimateHide
-    private func animateHide() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
-        }) { _ in
-            self.dismiss(animated: false, completion: nil)
-        }
+    // - MARK: HandleSkip
+    @objc private func handleSkip() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     // - MARK: SetPlaceholder

@@ -17,7 +17,7 @@ class ProfileBaseView: UIViewController {
         return gifImageView
     }()
     
-    private let backButton: UIButton = {
+    let backButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         button.tintColor = .white

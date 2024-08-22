@@ -154,9 +154,18 @@ class LoginViewController: StartBaseView {
             
             if user.isEmailVerified {
                 self.showSuccessMessage("Login successful")
-                let mainView = MainTabBarController()
-                mainView.modalPresentationStyle = .fullScreen
-                self.present(mainView, animated: true, completion: nil)
+                self.checkFirstUsage { isFirstUsage in
+                    if isFirstUsage {
+                    let profileSetupView = ProfileSetupViewController()
+                    profileSetupView.modalPresentationStyle = .fullScreen
+                    self.present(profileSetupView, animated: true, completion: nil)
+                            
+                } else {
+                    let mainView = MainViewController()
+                    mainView.modalPresentationStyle = .fullScreen
+                    self.present(mainView, animated: true)
+                    }
+                }
             }
             else {
                 self.showErrorMessage("Please verify your email before logging in.")
@@ -196,34 +205,29 @@ class LoginViewController: StartBaseView {
     }
     
     // - MARK: CheckFirstUsage (fix it)
-    private func checkFirstUsage(for user: FirebaseAuth.User) {
-        let ref = Database.database().reference().child("users").child(user.uid)
-        ref.observeSingleEvent(of: .value) { snapshot in
-            // Ensure we are on the main thread for UI updates
-            DispatchQueue.main.async {
-                guard let userData = snapshot.value as? [String: Any],
-                      let firstUsage = userData["firstUsage"] as? Bool else {
-                        self.showErrorMessage("Failed to retrieve user data or firstUsage field is missing")
-                        return
-                    }
-                
-                if firstUsage {
-                    
-                    let profileSetupVC = ProfileSetupViewController()
-                    profileSetupVC.modalTransitionStyle = .crossDissolve
-                    profileSetupVC.modalPresentationStyle = .fullScreen
-                    self.present(profileSetupVC, animated: true, completion: nil)
+    func checkFirstUsage(completion: @escaping (Bool) -> Void) {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("User is not logged in.")
+            completion(false)
+            return
+        }
+        
+        let db = Firestore.firestore()
+        let userDocRef = db.collection("users").document(userId)
+        
+        userDocRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                completion(false)
+            } else if let document = document, document.exists {
+                if let firstUsage = document.data()?["firstUsage"] as? Bool {
+                    completion(firstUsage)
                 } else {
-                    
-                    let mainView = MainTabBarController()
-                    mainView.modalTransitionStyle = .crossDissolve
-                    mainView.modalPresentationStyle = .fullScreen
-                    self.present(mainView, animated: true, completion: nil)
+                    completion(false)
                 }
-            }
-        } withCancel: { error in
-            DispatchQueue.main.async {
-                self.showErrorMessage("Failed to retrieve user data: \(error.localizedDescription)")
+            } else {
+                print("Document does not exist")
+                completion(false)
             }
         }
     }
