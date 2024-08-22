@@ -11,7 +11,7 @@ import FirebaseFirestore
 
 class LoginViewController: StartBaseView {
     
-    private let email: UITextField = {
+    private let input: UITextField = {
         let email = UITextField()
         email.borderStyle = .none
         email.backgroundColor = .black
@@ -86,8 +86,8 @@ class LoginViewController: StartBaseView {
     
     // - MARK: SetupForm
     private func setupForm() {
-        setPlaceholder(textField: email, placeholder: "Enter your email", color: .systemGray)
-        view.addSubview(email)
+        setPlaceholder(textField: input, placeholder: "Enter your email or username", color: .systemGray)
+        view.addSubview(input)
         
         setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
         view.addSubview(password)
@@ -109,12 +109,12 @@ class LoginViewController: StartBaseView {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
         
-            email.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40),
-            email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            email.widthAnchor.constraint(equalToConstant: 320),
-            email.heightAnchor.constraint(equalToConstant: 40),
+            input.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40),
+            input.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            input.widthAnchor.constraint(equalToConstant: 320),
+            input.heightAnchor.constraint(equalToConstant: 40),
             
-            password.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 20),
+            password.topAnchor.constraint(equalTo: input.bottomAnchor, constant: 20),
             password.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             password.widthAnchor.constraint(equalToConstant: 320),
             password.heightAnchor.constraint(equalToConstant: 40),
@@ -132,48 +132,80 @@ class LoginViewController: StartBaseView {
     
     // - MARK: HandleLogin
     @objc private func handleLogin() {
-        guard let email = email.text, !email.isEmpty else {
-            showErrorMessage("Email field is empty")
+        guard let email = input.text, !email.isEmpty else {
+            showErrorMessage("Email or username field is empty")
             return
         }
         guard let password = password.text, !password.isEmpty else {
             showErrorMessage("Password field is empty")
             return
         }
-        
-        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            if let error = error {
-                self.showErrorMessage("Login failed: \(error.localizedDescription)")
-                return
-            }
-        
-            guard let user = authResult?.user else {
-                self.showErrorMessage("Failed to get user information.")
-                return
+
+        if email.contains("@") {
+            Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+                if let error = error {
+                    self.showErrorMessage("Login failed: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let user = authResult?.user else {
+                    self.showErrorMessage("Failed to get user information.")
+                    return
+                }
+                self.handleSuccessfulLogin(for: user)
             }
             
-            if user.isEmailVerified {
-                self.showSuccessMessage("Login successful")
-                self.checkFirstUsage { isFirstUsage in
-                    if isFirstUsage {
+        } else {
+            let db = Firestore.firestore()
+            db.collection("users").whereField("username", isEqualTo: input.text).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                self.showErrorMessage("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+
+            guard let document = querySnapshot?.documents.first else {
+                self.showErrorMessage("Username not found.")
+                return
+            }
+
+            Auth.auth().signIn(withEmail: document.data()["email"] as! String, password: password) { authResult, error in
+                    if let error = error {
+                        self.showErrorMessage("Login failed: \(error.localizedDescription)")
+                        return
+                    }
+
+                    guard let user = authResult?.user else {
+                        self.showErrorMessage("Failed to get user information.")
+                        return
+                    }
+
+                    self.handleSuccessfulLogin(for: user)
+                }
+            }
+        }
+    }
+
+    // - MARK: HandleSuccessfulLogin
+    private func handleSuccessfulLogin(for user: FirebaseAuth.User) {
+        if user.isEmailVerified {
+            self.showSuccessMessage("Login successful")
+            self.checkFirstUsage { isFirstUsage in
+                if isFirstUsage {
                     let profileSetupView = ProfileSetupViewController()
                     profileSetupView.modalPresentationStyle = .fullScreen
                     self.present(profileSetupView, animated: true, completion: nil)
-                            
                 } else {
                     let mainView = MainViewController()
                     mainView.modalPresentationStyle = .fullScreen
                     self.present(mainView, animated: true)
-                    }
                 }
             }
-            else {
-                self.showErrorMessage("Please verify your email before logging in.")
-                do {
-                    try Auth.auth().signOut()
-                } catch {
-                    print("Failed to sign out user: \(error.localizedDescription)")
-                }
+        } else {
+            self.showErrorMessage("Please verify your email before logging in.")
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                print("Failed to sign out user: \(error.localizedDescription)")
             }
         }
     }
