@@ -66,9 +66,8 @@ class ProfileSetupViewController: ProfileBaseView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-        
-    // fix it as geopoint
-    private let location: UITextField = {
+    
+    let location: UITextField = {
         let location = UITextField()
         location.backgroundColor = .none
         location.textColor = .white
@@ -111,6 +110,10 @@ class ProfileSetupViewController: ProfileBaseView {
         return button
     }()
     
+    let countries = Locale.isoRegionCodes.compactMap { Locale.current.localizedString(forRegionCode: $0) }.sorted()
+        
+    private let countryPicker = UIPickerView()
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,6 +141,17 @@ class ProfileSetupViewController: ProfileBaseView {
                 
         submitButton.addTarget(self, action: #selector(handleSave), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
+        
+        countryPicker.delegate = self
+        countryPicker.dataSource = self
+        location.inputView = countryPicker
+        
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(donePicker))
+        toolbar.setItems([doneButton], animated: false)
+        toolbar.isUserInteractionEnabled = true
+        location.inputAccessoryView = toolbar
     }
     
     // - MARK: SetupConstraints
@@ -214,5 +228,10 @@ class ProfileSetupViewController: ProfileBaseView {
             string: placeholder,
             attributes: [NSAttributedString.Key.foregroundColor: color]
         )
+    }
+    
+    // - MARK: DonePicker
+    @objc private func donePicker() {
+        view.endEditing(true)
     }
 }
