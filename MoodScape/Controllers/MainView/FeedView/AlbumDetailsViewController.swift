@@ -142,10 +142,15 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        configureWithAlbum()
         
         topSongsTableView.dataSource = self
         topSongsTableView.delegate = self
+    }
+    
+    // - MARK: ViewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureWithAlbum()
     }
     
     // - MARK: ViewDidLayoutSubviews

@@ -67,6 +67,11 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         setupConstraints()
         setupTableView()
         searchBar.delegate = self
+    }
+    
+    // - MARK: ViewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchFriends()
     }
     

@@ -47,6 +47,11 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         super.viewDidLoad()
         setupView()
         setupConstraints()
+    }
+    
+    // - MARK: ViewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchAlbums()
         fetchTopSongs()
     }
