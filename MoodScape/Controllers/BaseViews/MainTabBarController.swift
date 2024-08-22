@@ -32,16 +32,20 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     // - MARK: ViewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        var tabBarFrame = tabBar.frame
+        tabBarFrame.size.height = 100
+        tabBarFrame.origin.y = view.frame.height - 95
+        tabBar.frame = tabBarFrame
         updateMainButtonPosition()
     }
     
     // - MARK: SetupView
     private func setupView() {
-        firstViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "newspaper"), tag: 0)
+        firstViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "music.note"), tag: 0)
         thirdViewController.tabBarItem = UITabBarItem(title: "Social", image: UIImage(systemName: "person.3"), tag: 2)
         UITabBar.appearance().tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         
-        mainButton.center = CGPoint(x: tabBar.center.x, y: tabBar.frame.origin.y - 16)
+        mainButton.center = CGPoint(x: tabBar.center.x, y: tabBar.frame.origin.y)
         mainButton.addTarget(self, action: #selector(mainButtonTapped), for: .touchUpInside)
         view.addSubview(mainButton)
         
@@ -60,7 +64,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         mainButton.frame.size = CGSize(width: buttonSize, height: buttonSize)
         mainButton.center = CGPoint(
             x: tabBar.frame.size.width / 2,
-            y: tabBar.frame.size.height + 700
+            y: tabBar.frame.origin.y + 40
         )
     }
     
