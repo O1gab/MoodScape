@@ -26,6 +26,8 @@ class ProfileBaseView: UIViewController {
         return button
     }()
     
+    let activityIndicator = UIActivityIndicatorView(style: .large)
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,5 +60,19 @@ class ProfileBaseView: UIViewController {
     // - MARK: HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func startLoading() {
+        view.addSubview(activityIndicator)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        activityIndicator.startAnimating()
+    }
+
+    func stopLoading() {
+        activityIndicator.stopAnimating()
+        activityIndicator.removeFromSuperview()
     }
 }
