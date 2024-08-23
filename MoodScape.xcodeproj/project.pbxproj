@@ -15,6 +15,7 @@
 		764E2A322C788ACE00785104 /* ImageSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A312C788ACE00785104 /* ImageSetupViewController.swift */; };
 		764E2A342C788B5300785104 /* SetupBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A332C788B5300785104 /* SetupBaseView.swift */; };
 		764E2A362C78D80200785104 /* SpotifySetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A352C78D80200785104 /* SpotifySetupViewController.swift */; };
+		764E2A382C7939EE00785104 /* MusicSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A372C7939EE00785104 /* MusicSetupViewController.swift */; };
 		764FDE2F2C695EA60060A428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2E2C695EA60060A428 /* User.swift */; };
 		764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE322C696E990060A428 /* RegistrationViewController.swift */; };
 		764FDE352C697C230060A428 /* StartBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE342C697C230060A428 /* StartBaseView.swift */; };
@@ -66,6 +67,7 @@
 		764E2A312C788ACE00785104 /* ImageSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSetupViewController.swift; sourceTree = "<group>"; };
 		764E2A332C788B5300785104 /* SetupBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupBaseView.swift; sourceTree = "<group>"; };
 		764E2A352C78D80200785104 /* SpotifySetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifySetupViewController.swift; sourceTree = "<group>"; };
+		764E2A372C7939EE00785104 /* MusicSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSetupViewController.swift; sourceTree = "<group>"; };
 		764FDE2E2C695EA60060A428 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		764FDE322C696E990060A428 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		764FDE342C697C230060A428 /* StartBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartBaseView.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */,
 				764E2A312C788ACE00785104 /* ImageSetupViewController.swift */,
 				764E2A352C78D80200785104 /* SpotifySetupViewController.swift */,
+				764E2A372C7939EE00785104 /* MusicSetupViewController.swift */,
 			);
 			path = SetupView;
 			sourceTree = "<group>";
@@ -479,6 +482,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				764FDE382C6983040060A428 /* LoginViewController.swift in Sources */,
+				764E2A382C7939EE00785104 /* MusicSetupViewController.swift in Sources */,
 				76976C9B2C74238A00D44DD3 /* SongCollectionView.swift in Sources */,
 				7664856F2C6EB8C000AA050A /* CircleItem.swift in Sources */,
 				766485602C6C471D00AA050A /* MainViewController.swift in Sources */,
