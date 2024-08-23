@@ -114,4 +114,10 @@ class SetupBaseView: UIViewController {
         }
     }
     
+    // - MARK: RevealButton
+    func revealButton(button: UIButton) {
+        UIView.animate(withDuration: 1.5) {
+            button.alpha = 1
+        }
+    }
 }
