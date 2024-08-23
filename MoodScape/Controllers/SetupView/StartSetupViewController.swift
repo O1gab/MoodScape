@@ -47,10 +47,20 @@ class StartSetupView: UIViewController {
             self?.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "We are so happy that you joined us!", typingSpeed: self?.typingSpeed ?? 0.075) {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    self?.startErasingAnimation(label: self?.messageLabel ?? UILabel(), typingSpeed: 0.055, completion: {
+                    self?.startErasingAnimation(label: self?.messageLabel ?? UILabel(), typingSpeed: 0.055) {
                         
-                        self?.transitionToNextView()
-                    })
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                            self?.messageLabel.text = ""
+                            self?.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "Now we would like to know you better :) Please, configure your profile", typingSpeed: 0.075) {
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                    self?.startErasingAnimation(label: self?.messageLabel ?? UILabel(), typingSpeed: 0.045) {
+                                        self?.transitionToNextView()
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -97,17 +107,22 @@ class StartSetupView: UIViewController {
     
     // - MARK: StartErasingAnimation
     private func startErasingAnimation(label: UILabel, typingSpeed: TimeInterval, completion: @escaping () -> Void) {
-        let currentText = label.text ?? ""
-        var index = currentText.count
+        guard let text = label.text, !text.isEmpty else {
+            completion()
+            return
+        }
+        
+        var index = text.count
         timer = Timer.scheduledTimer(withTimeInterval: typingSpeed, repeats: true) { [weak self] timer in
             guard let self = self else { return }
             
             if index > 0 {
-                let endIndex = currentText.index(currentText.startIndex, offsetBy: index - 1)
-                label.text = String(currentText[..<endIndex])
+                let endIndex = text.index(text.startIndex, offsetBy: index - 1)
+                label.text = String(text[..<endIndex])
                 index -= 1
             } else {
                 timer.invalidate()
+                completion()
             }
         }
     }
@@ -115,10 +130,16 @@ class StartSetupView: UIViewController {
     // - MARK: TransitionToNextView
     private func transitionToNextView() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            // TODO: NEXT VIEW, REPLACE IT
             let nextViewController = MainViewController()
-            nextViewController.modalTransitionStyle = .crossDissolve
-            self.present(nextViewController, animated: true, completion: nil)
+            let transition = CATransition()
+            transition.duration = 0.5
+            transition.type = .push
+            transition.subtype = .fromRight
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            
+            // TODO: NEXT VIEW, REPLACE IT
+            self.view.window?.layer.add(transition, forKey: kCATransition)
+            self.present(nextViewController, animated: false, completion: nil)
         }
     }
 }
