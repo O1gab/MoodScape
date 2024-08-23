@@ -29,10 +29,10 @@ class ProfileViewController: ProfileBaseView {
     
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.crop.circle")
         imageView.tintColor = .white
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
         imageView.isUserInteractionEnabled = true
         imageView.layer.cornerRadius = 75
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -145,6 +145,7 @@ class ProfileViewController: ProfileBaseView {
         startLoading()
         setupView()
         setupConstraints()
+        loadProfileImage()
         stopLoading()
     }
     
@@ -348,6 +349,15 @@ class ProfileViewController: ProfileBaseView {
             
         attributedString.append(dynamicAttributedString)
         return attributedString
+    }
+    
+    // - MARK: LoadProfileImage
+    private func loadProfileImage() {
+        if let imageData = UserDefaults.standard.data(forKey: "profileImage") {
+            profileImage.image = UIImage(data: imageData)
+        } else {
+            profileImage.image = UIImage(systemName: "person.crop.circle")
+        }
     }
     
     // - MARK: HandleSettings
