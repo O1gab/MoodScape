@@ -10,6 +10,7 @@
 		761350292C70166A009A3F40 /* ProfileSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761350282C70166A009A3F40 /* ProfileSetup.swift */; };
 		76401AD52C76B4530035C7FA /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76401AD42C76B4530035C7FA /* ContactView.swift */; };
 		764E2A2B2C78195F00785104 /* blinking_stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 764E2A2A2C78195F00785104 /* blinking_stars.gif */; };
+		764E2A2E2C78229A00785104 /* StartSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A2D2C78229A00785104 /* StartSetupViewController.swift */; };
 		764FDE2F2C695EA60060A428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2E2C695EA60060A428 /* User.swift */; };
 		764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE322C696E990060A428 /* RegistrationViewController.swift */; };
 		764FDE352C697C230060A428 /* StartBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE342C697C230060A428 /* StartBaseView.swift */; };
@@ -56,6 +57,7 @@
 		761350282C70166A009A3F40 /* ProfileSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetup.swift; sourceTree = "<group>"; };
 		76401AD42C76B4530035C7FA /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
 		764E2A2A2C78195F00785104 /* blinking_stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = blinking_stars.gif; sourceTree = "<group>"; };
+		764E2A2D2C78229A00785104 /* StartSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSetupViewController.swift; sourceTree = "<group>"; };
 		764FDE2E2C695EA60060A428 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		764FDE322C696E990060A428 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		764FDE342C697C230060A428 /* StartBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartBaseView.swift; sourceTree = "<group>"; };
@@ -122,6 +124,14 @@
 				934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		764E2A2C2C78221700785104 /* SetupView */ = {
+			isa = PBXGroup;
+			children = (
+				764E2A2D2C78229A00785104 /* StartSetupViewController.swift */,
+			);
+			path = SetupView;
 			sourceTree = "<group>";
 		};
 		766485462C6A127A00AA050A /* BaseViews */ = {
@@ -292,6 +302,7 @@
 		76B869B62C67B3D3002866B9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				764E2A2C2C78221700785104 /* SetupView */,
 				76AAD3222C7206A500CBE3D8 /* SettingsView */,
 				76AAD3212C72068800CBE3D8 /* ProfileView */,
 				7664855A2C6C446300AA050A /* MainView */,
@@ -476,6 +487,7 @@
 				766485642C6C479800AA050A /* FeedViewController.swift in Sources */,
 				76AAD3272C72241A00CBE3D8 /* ImageExtensions.swift in Sources */,
 				766485662C6C490400AA050A /* MainBaseView.swift in Sources */,
+				764E2A2E2C78229A00785104 /* StartSetupViewController.swift in Sources */,
 				766485742C6ED0BE00AA050A /* AlbumCollectionView.swift in Sources */,
 				7664856C2C6EB68500AA050A /* ViewExtensions.swift in Sources */,
 				764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */,
