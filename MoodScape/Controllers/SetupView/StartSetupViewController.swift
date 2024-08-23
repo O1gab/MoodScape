@@ -52,36 +52,6 @@ class StartSetupView: UIViewController {
         setupView()
         setupConstraints()
     }
-    // - MARK: SetupGradientBackground
-    private func setupGradientBackground() {
-        let baseColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 0.5).cgColor
-        let darkColor = UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 0.5).cgColor
-        let lightColor = UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 0.5).cgColor
-        
-        gradientLayer.colors = [darkColor, baseColor, lightColor]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-        gradientLayer.frame = view.bounds
-        
-        view.layer.insertSublayer(gradientLayer, at: 0)
-    }
-    
-    // - MARK: AnimateGradient
-    private func animateGradient() {
-        let animation = CABasicAnimation(keyPath: "colors")
-        animation.fromValue = [UIColor(red: 70/255.0, green: 70/255.0, blue: 70/255.0, alpha: 0.35).cgColor,
-                               UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 0.5).cgColor,
-                               UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 0.5).cgColor]
-        animation.toValue = [UIColor(red: 55/255.0, green: 55/255.0, blue: 55/255.0, alpha: 0.5).cgColor,
-                             UIColor(red: 25/255.0, green: 35/255.0, blue: 25/255.0, alpha: 0.5).cgColor,
-                             UIColor(red: 0.0, green: 0.4, blue: 0.31, alpha: 1.0).cgColor]
-        animation.duration = 6.0
-        animation.autoreverses = true
-        animation.repeatCount = .infinity
-        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        
-        gradientLayer.add(animation, forKey: "gradientAnimation")
-    }
     
     // - MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
@@ -176,16 +146,47 @@ class StartSetupView: UIViewController {
     // - MARK: TransitionToNextView
     private func transitionToNextView() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            let nextViewController = MainViewController()
+            let nextViewController = UserSetupView()
+            nextViewController.modalPresentationStyle = .fullScreen
             let transition = CATransition()
             transition.duration = 0.5
             transition.type = .push
             transition.subtype = .fromRight
             transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             
-            // TODO: NEXT VIEW, REPLACE IT
             self.view.window?.layer.add(transition, forKey: kCATransition)
             self.present(nextViewController, animated: false, completion: nil)
         }
+    }
+    
+    // - MARK: SetupGradientBackground
+    private func setupGradientBackground() {
+        let baseColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 0.5).cgColor
+        let darkColor = UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 0.5).cgColor
+        let lightColor = UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 0.5).cgColor
+        
+        gradientLayer.colors = [darkColor, baseColor, lightColor]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+        gradientLayer.frame = view.bounds
+        
+        view.layer.insertSublayer(gradientLayer, at: 0)
+    }
+    
+    // - MARK: AnimateGradient
+    private func animateGradient() {
+        let animation = CABasicAnimation(keyPath: "colors")
+        animation.fromValue = [UIColor(red: 70/255.0, green: 70/255.0, blue: 70/255.0, alpha: 0.35).cgColor,
+                               UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 0.5).cgColor,
+                               UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 0.5).cgColor]
+        animation.toValue = [UIColor(red: 55/255.0, green: 55/255.0, blue: 55/255.0, alpha: 0.5).cgColor,
+                             UIColor(red: 25/255.0, green: 35/255.0, blue: 25/255.0, alpha: 0.5).cgColor,
+                             UIColor(red: 0.0, green: 0.4, blue: 0.31, alpha: 1.0).cgColor]
+        animation.duration = 7.0
+        animation.autoreverses = true
+        animation.repeatCount = .infinity
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        gradientLayer.add(animation, forKey: "gradientAnimation")
     }
 }
