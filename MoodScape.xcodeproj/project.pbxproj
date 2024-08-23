@@ -14,6 +14,7 @@
 		764E2A302C7846CB00785104 /* UserSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */; };
 		764E2A322C788ACE00785104 /* ImageSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A312C788ACE00785104 /* ImageSetupViewController.swift */; };
 		764E2A342C788B5300785104 /* SetupBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A332C788B5300785104 /* SetupBaseView.swift */; };
+		764E2A362C78D80200785104 /* SpotifySetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A352C78D80200785104 /* SpotifySetupViewController.swift */; };
 		764FDE2F2C695EA60060A428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2E2C695EA60060A428 /* User.swift */; };
 		764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE322C696E990060A428 /* RegistrationViewController.swift */; };
 		764FDE352C697C230060A428 /* StartBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE342C697C230060A428 /* StartBaseView.swift */; };
@@ -64,6 +65,7 @@
 		764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetupViewController.swift; sourceTree = "<group>"; };
 		764E2A312C788ACE00785104 /* ImageSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSetupViewController.swift; sourceTree = "<group>"; };
 		764E2A332C788B5300785104 /* SetupBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupBaseView.swift; sourceTree = "<group>"; };
+		764E2A352C78D80200785104 /* SpotifySetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifySetupViewController.swift; sourceTree = "<group>"; };
 		764FDE2E2C695EA60060A428 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		764FDE322C696E990060A428 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		764FDE342C697C230060A428 /* StartBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartBaseView.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				764E2A2D2C78229A00785104 /* StartSetupViewController.swift */,
 				764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */,
 				764E2A312C788ACE00785104 /* ImageSetupViewController.swift */,
+				764E2A352C78D80200785104 /* SpotifySetupViewController.swift */,
 			);
 			path = SetupView;
 			sourceTree = "<group>";
@@ -492,6 +495,7 @@
 				766485622C6C474F00AA050A /* StatsViewController.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
 				764E2A322C788ACE00785104 /* ImageSetupViewController.swift in Sources */,
+				764E2A362C78D80200785104 /* SpotifySetupViewController.swift in Sources */,
 				766485682C6E4EFB00AA050A /* ProfileSetupViewController.swift in Sources */,
 				76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */,
 				766485642C6C479800AA050A /* FeedViewController.swift in Sources */,

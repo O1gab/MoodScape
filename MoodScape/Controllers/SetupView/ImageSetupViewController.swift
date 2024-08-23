@@ -143,6 +143,21 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         }
     }
     
+    // - MARK: NavigateToNextView
+    private func navigateToNextView() {
+        // TODO: implement next view
+        let nextViewController = SpotifySetupView()
+        nextViewController.modalPresentationStyle = .fullScreen
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = .push
+        transition.subtype = .fromRight
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        self.view.window?.layer.add(transition, forKey: kCATransition)
+        self.present(nextViewController, animated: false, completion: nil)
+    }
+    
     // - MARK: HandleSubmit
     @objc private func handleSubmit() {
         guard let image = profileImageView.image else {
@@ -150,11 +165,13 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
             return
         }
         // TODO: store the user's image
+        navigateToNextView()
     }
     
     // - MARK: HandleSkip
     @objc private func handleSkip() {
         // TODO: proceed to the next view
+        navigateToNextView()
     }
 }
 
