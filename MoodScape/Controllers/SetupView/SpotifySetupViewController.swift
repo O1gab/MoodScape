@@ -64,6 +64,9 @@ class SpotifySetupView: SetupBaseView {
         view.addSubview(fieldLabel)
         view.addSubview(spotifyButton)
         view.addSubview(skipButton)
+        
+        spotifyButton.addTarget(self, action: #selector(connectSpotify), for: .touchUpInside)
+        skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
