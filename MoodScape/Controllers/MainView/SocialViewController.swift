@@ -77,6 +77,9 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
     
     // - MARK: SetupView
     private func setupView() {
+        if Auth.auth().currentUser == nil {
+            // TODO: if a user is not authenicated, show login and register buttons
+        }
         view.addSubview(friendsLabel)
         view.addSubview(searchBar)
         view.addSubview(tableView)

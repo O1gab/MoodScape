@@ -33,13 +33,13 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
     
     private let label: UILabel = {
-        let settingsLabel = UILabel()
-        settingsLabel.text = "MoodScape"
-        settingsLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        settingsLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        settingsLabel.textAlignment = .center
-        settingsLabel.translatesAutoresizingMaskIntoConstraints = false
-        return settingsLabel
+        let label = UILabel()
+        label.text = "MoodScape"
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     // - MARK: ViewDidLoad

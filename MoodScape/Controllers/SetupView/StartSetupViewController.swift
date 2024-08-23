@@ -33,6 +33,7 @@ class StartSetupView: UIViewController {
     private let typingSpeed: TimeInterval = 0.075
     private var timer: Timer?
     
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 1.0)
@@ -40,16 +41,19 @@ class StartSetupView: UIViewController {
         setupConstraints()
     }
     
+    // - MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         startTypingAnimation()
     }
 
+    // - MARK: SetupView
     private func setupView() {
         view.addSubview(messageLabel)
         view.addSubview(appLabel)
     }
     
+    // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -62,6 +66,7 @@ class StartSetupView: UIViewController {
         ])
     }
 
+    // - MARK: StartTypingAnimation
     private func startTypingAnimation() {
         let fullText = messageLabel.text ?? ""
         messageLabel.text = ""
@@ -81,6 +86,7 @@ class StartSetupView: UIViewController {
         }
     }
 
+    // - MARK: TransitionToNextView
     private func transitionToNextView() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             // TODO: NEXT VIEW, REPLACE IT
