@@ -14,17 +14,36 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         imageView.layer.borderColor = UIColor.white.cgColor
-        imageView.layer.borderWidth = 4.0
+        imageView.layer.borderWidth = 2.0
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    private let selectImageButton: UIButton = {
+    private let fieldLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let submitButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Select Profile Image", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75)
-        button.layer.cornerRadius = 10
+        button.setTitle("Submit", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
+        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
+        button.backgroundColor = .white.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 25
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let skipButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Skip", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        button.setTitleColor(UIColor(red: 181/255, green: 23/255, blue: 23/255, alpha: 1.0), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -40,34 +59,54 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(profileImageView)
-        view.addSubview(selectImageButton)
+        view.addSubview(fieldLabel)
+        view.addSubview(submitButton)
+        view.addSubview(skipButton)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectProfileImage))
         profileImageView.addGestureRecognizer(tapGestureRecognizer)
         profileImageView.isUserInteractionEnabled = true
         
-        selectImageButton.addTarget(self, action: #selector(selectProfileImage), for: .touchUpInside)
+        submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
+        skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
     }
     
-    // - MARK: SetupConstraints
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            profileImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50),
-            profileImageView.widthAnchor.constraint(equalToConstant: 150),
-            profileImageView.heightAnchor.constraint(equalToConstant: 150),
-            
-            selectImageButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 20),
-            selectImageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            selectImageButton.widthAnchor.constraint(equalToConstant: 200),
-            selectImageButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
+    // - MARK: ViewDidAppear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Select your image", typingSpeed: self?.typingSpeed ?? 0.075) {}
+        }
     }
     
     // - MARK: ViewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
+    }
+    
+    // - MARK: SetupConstraints
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150),
+            profileImageView.widthAnchor.constraint(equalToConstant: 200),
+            profileImageView.heightAnchor.constraint(equalToConstant: 200),
+            
+            fieldLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 40),
+            fieldLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
+            
+            skipButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 80),
+            skipButton.leadingAnchor.constraint(equalTo: fieldLabel.leadingAnchor),
+            skipButton.widthAnchor.constraint(equalToConstant: 120),
+            skipButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            submitButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 80),
+            submitButton.leadingAnchor.constraint(equalTo: skipButton.trailingAnchor, constant: 45),
+            submitButton.widthAnchor.constraint(equalToConstant: 120),
+            submitButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
     }
     
     // - MARK: SelectProfileImage
@@ -102,6 +141,20 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         } else {
             profileImageView.image = UIImage(named: "defaultProfileImage") // Set a default image
         }
+    }
+    
+    // - MARK: HandleSubmit
+    @objc private func handleSubmit() {
+        guard let image = profileImageView.image else {
+            // TODO: implement error label
+            return
+        }
+        // TODO: store the user's image
+    }
+    
+    // - MARK: HandleSkip
+    @objc private func handleSkip() {
+        // TODO: proceed to the next view
     }
 }
 
