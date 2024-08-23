@@ -7,10 +7,17 @@
 
 import UIKit
 import Gifu
+import Firebase
+import FirebaseAuth
+import FirebaseFirestore
 
 class UserSetupView: UIViewController {
 
     private let gradientLayer = CAGradientLayer()
+    private var currentQuestionIndex = 0
+    private let questions = ["Enter your first name:", "Enter your last name:", "Enter your location:"]
+    private let firestoreKeys = ["first_name", "last_name", "location"]
+    private var userData: [String: String] = [:]
     
     private let gifBackground: GIFImageView = {
         let gifBackground = GIFImageView()
@@ -46,7 +53,7 @@ class UserSetupView: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Submit", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
-        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75), for: .normal)
+        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
         button.backgroundColor = .white.withAlphaComponent(0.5)
         button.layer.cornerRadius = 25
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +64,7 @@ class UserSetupView: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("Skip", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        button.setTitleColor(UIColor(red: 179/255, green: 23/255, blue: 23/255, alpha: 1.0), for: .normal)
+        button.setTitleColor(UIColor(red: 181/255, green: 23/255, blue: 23/255, alpha: 1.0), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -79,9 +86,7 @@ class UserSetupView: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Enter your first name:", typingSpeed: self?.typingSpeed ?? 0.075) {
-                // TODO:
-            }
+            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: self?.questions[self?.currentQuestionIndex ?? 0] ?? "", typingSpeed: self?.typingSpeed ?? 0.075) {}
         }
     }
   
@@ -94,6 +99,9 @@ class UserSetupView: UIViewController {
         view.addSubview(textField)
         view.addSubview(submitButton)
         view.addSubview(skipButton)
+        
+        submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
+        skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
@@ -191,6 +199,69 @@ class UserSetupView: UIViewController {
         animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         
         gradientLayer.add(animation, forKey: "gradientAnimation")
+    }
+    
+    // - MARK: HandleSubmit
+    @objc private func handleSubmit() {
+        guard let answer = textField.text, !answer.isEmpty else {
+            // TODO: implement error label
+            return
+        }
+        
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+
+        let firestoreKey = firestoreKeys[currentQuestionIndex]
+        userData[firestoreKey] = answer
+
+        let db = Firestore.firestore()
+        db.collection("users").document(userId).setData(userData, merge: true) { error in
+            if let error = error {
+                print("Error saving data: \(error)")
+            } else {
+                print("Data successfully saved!")
+            }
+        }
+
+        proceedToNextQuestion()
+    }
+    
+    // - MARK: HandleSkip
+    @objc private func handleSkip() {
+        proceedToNextQuestion()
+    }
+
+    // - MARK: ProceedToNextQuestion
+    private func proceedToNextQuestion() {
+        startErasingAnimation(label: fieldLabel, typingSpeed: typingSpeed) { [weak self] in
+            self?.textField.text = ""
+            self?.currentQuestionIndex += 1
+            
+            if self?.currentQuestionIndex ?? 0 < self?.questions.count ?? 0 {
+                let nextQuestion = self?.questions[self?.currentQuestionIndex ?? 0] ?? ""
+                self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: self?.typingSpeed ?? 0.1) {}
+            } else {
+                // All questions answered or skipped, move to the next view
+                self?.navigateToNextView()
+            }
+        }
+    }
+    
+    // - MARK: NavigateToNextView
+    private func navigateToNextView() {
+        // TODO: implement next view
+        let nextViewController = FeedViewController()
+        nextViewController.modalPresentationStyle = .fullScreen
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = .push
+        transition.subtype = .fromRight
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        self.view.window?.layer.add(transition, forKey: kCATransition)
+        self.present(nextViewController, animated: false, completion: nil)
     }
 }
 
