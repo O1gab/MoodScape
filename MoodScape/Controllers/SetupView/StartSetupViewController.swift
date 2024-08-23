@@ -9,9 +9,8 @@ import UIKit
 
 class StartSetupView: UIViewController {
 
-    private let messageLabel: UILabel = {
+    private let firstMessage: UILabel = {
         let label = UILabel()
-        label.text = "We are so happy that you joined us!!"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
@@ -44,22 +43,26 @@ class StartSetupView: UIViewController {
     // - MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        startTypingAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+            self?.startTypingAnimation(label: self?.firstMessage ?? UILabel(), text: "We are so happy that you joined us!", typingSpeed: self?.typingSpeed ?? 0.075) {
+                self?.transitionToNextView()
+            }
+        }
     }
 
     // - MARK: SetupView
     private func setupView() {
-        view.addSubview(messageLabel)
+        view.addSubview(firstMessage)
         view.addSubview(appLabel)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            messageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            messageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            firstMessage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            firstMessage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            firstMessage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            firstMessage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             appLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             appLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
@@ -67,21 +70,21 @@ class StartSetupView: UIViewController {
     }
 
     // - MARK: StartTypingAnimation
-    private func startTypingAnimation() {
-        let fullText = messageLabel.text ?? ""
-        messageLabel.text = ""
+    private func startTypingAnimation(label: UILabel, text: String, typingSpeed: TimeInterval, completion: @escaping () -> Void) {
+        let fullText = text
+        label.text = ""
         
         var index = 0
         timer = Timer.scheduledTimer(withTimeInterval: typingSpeed, repeats: true) { [weak self] timer in
             guard let self = self else { return }
             
-            if index < fullText.count {
+            if index <= fullText.count {
                 let endIndex = fullText.index(fullText.startIndex, offsetBy: index)
-                self.messageLabel.text = String(fullText[..<endIndex])
+                label.text = String(fullText[..<endIndex])
                 index += 1
             } else {
                 timer.invalidate()
-                self.transitionToNextView()
+                completion()
             }
         }
     }
