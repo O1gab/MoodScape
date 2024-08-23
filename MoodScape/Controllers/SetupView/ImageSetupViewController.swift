@@ -35,6 +35,7 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
         button.backgroundColor = .white.withAlphaComponent(0.5)
         button.layer.cornerRadius = 25
+        button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -44,6 +45,7 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         button.setTitle("Skip", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.setTitleColor(UIColor(red: 181/255, green: 23/255, blue: 23/255, alpha: 1.0), for: .normal)
+        button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -75,7 +77,10 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Select your image", typingSpeed: self?.typingSpeed ?? 0.075) {}
+            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Select your image", typingSpeed: self?.typingSpeed ?? 0.05) {
+                self?.revealButton(button: self?.submitButton ?? UIButton())
+                self?.revealButton(button: self?.skipButton ?? UIButton())
+            }
         }
     }
     
@@ -139,7 +144,7 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         if let imageData = UserDefaults.standard.data(forKey: "profileImage") {
             profileImageView.image = UIImage(data: imageData)
         } else {
-            profileImageView.image = UIImage(named: "defaultProfileImage") // Set a default image
+            profileImageView.image = UIImage(systemName: "person.crop.circle")
         }
     }
     
@@ -170,7 +175,6 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
     
     // - MARK: HandleSkip
     @objc private func handleSkip() {
-        // TODO: proceed to the next view
         navigateToNextView()
     }
 }
