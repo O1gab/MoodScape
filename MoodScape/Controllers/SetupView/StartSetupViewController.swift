@@ -6,9 +6,20 @@
 //
 
 import UIKit
+import Gifu
 
 class StartSetupView: UIViewController {
 
+    private let gradientLayer = CAGradientLayer()
+    
+    private let gifBackground: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "gradient_skyline_blinking_stars")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
+    
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -35,9 +46,41 @@ class StartSetupView: UIViewController {
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 1.0)
+        //view.backgroundColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 1.0)
+        setupGradientBackground()
+        animateGradient()
         setupView()
         setupConstraints()
+    }
+    // - MARK: SetupGradientBackground
+    private func setupGradientBackground() {
+        let baseColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 0.5).cgColor
+        let darkColor = UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 0.5).cgColor
+        let lightColor = UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 0.5).cgColor
+        
+        gradientLayer.colors = [darkColor, baseColor, lightColor]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+        gradientLayer.frame = view.bounds
+        
+        view.layer.insertSublayer(gradientLayer, at: 0)
+    }
+    
+    // - MARK: AnimateGradient
+    private func animateGradient() {
+        let animation = CABasicAnimation(keyPath: "colors")
+        animation.fromValue = [UIColor(red: 70/255.0, green: 70/255.0, blue: 70/255.0, alpha: 0.35).cgColor,
+                               UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 0.5).cgColor,
+                               UIColor(red: 45/255.0, green: 45/255.0, blue: 45/255.0, alpha: 0.5).cgColor]
+        animation.toValue = [UIColor(red: 55/255.0, green: 55/255.0, blue: 55/255.0, alpha: 0.5).cgColor,
+                             UIColor(red: 25/255.0, green: 35/255.0, blue: 25/255.0, alpha: 0.5).cgColor,
+                             UIColor(red: 0.0, green: 0.4, blue: 0.31, alpha: 1.0).cgColor]
+        animation.duration = 6.0
+        animation.autoreverses = true
+        animation.repeatCount = .infinity
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        gradientLayer.add(animation, forKey: "gradientAnimation")
     }
     
     // - MARK: ViewDidAppear
@@ -68,6 +111,9 @@ class StartSetupView: UIViewController {
 
     // - MARK: SetupView
     private func setupView() {
+        view.addSubview(gifBackground)
+        view.sendSubviewToBack(gifBackground)
+        
         view.addSubview(messageLabel)
         view.addSubview(appLabel)
     }
