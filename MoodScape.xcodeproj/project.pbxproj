@@ -12,6 +12,8 @@
 		764E2A2B2C78195F00785104 /* blinking_stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 764E2A2A2C78195F00785104 /* blinking_stars.gif */; };
 		764E2A2E2C78229A00785104 /* StartSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A2D2C78229A00785104 /* StartSetupViewController.swift */; };
 		764E2A302C7846CB00785104 /* UserSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */; };
+		764E2A322C788ACE00785104 /* ImageSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A312C788ACE00785104 /* ImageSetupViewController.swift */; };
+		764E2A342C788B5300785104 /* SetupBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A332C788B5300785104 /* SetupBaseView.swift */; };
 		764FDE2F2C695EA60060A428 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE2E2C695EA60060A428 /* User.swift */; };
 		764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE322C696E990060A428 /* RegistrationViewController.swift */; };
 		764FDE352C697C230060A428 /* StartBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE342C697C230060A428 /* StartBaseView.swift */; };
@@ -60,6 +62,8 @@
 		764E2A2A2C78195F00785104 /* blinking_stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = blinking_stars.gif; sourceTree = "<group>"; };
 		764E2A2D2C78229A00785104 /* StartSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSetupViewController.swift; sourceTree = "<group>"; };
 		764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetupViewController.swift; sourceTree = "<group>"; };
+		764E2A312C788ACE00785104 /* ImageSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSetupViewController.swift; sourceTree = "<group>"; };
+		764E2A332C788B5300785104 /* SetupBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupBaseView.swift; sourceTree = "<group>"; };
 		764FDE2E2C695EA60060A428 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		764FDE322C696E990060A428 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		764FDE342C697C230060A428 /* StartBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartBaseView.swift; sourceTree = "<group>"; };
@@ -133,6 +137,7 @@
 			children = (
 				764E2A2D2C78229A00785104 /* StartSetupViewController.swift */,
 				764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */,
+				764E2A312C788ACE00785104 /* ImageSetupViewController.swift */,
 			);
 			path = SetupView;
 			sourceTree = "<group>";
@@ -140,6 +145,7 @@
 		766485462C6A127A00AA050A /* BaseViews */ = {
 			isa = PBXGroup;
 			children = (
+				764E2A332C788B5300785104 /* SetupBaseView.swift */,
 				764FDE342C697C230060A428 /* StartBaseView.swift */,
 				766485652C6C490400AA050A /* MainBaseView.swift */,
 				7664855B2C6C447E00AA050A /* MainTabBarController.swift */,
@@ -485,6 +491,7 @@
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
 				766485622C6C474F00AA050A /* StatsViewController.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
+				764E2A322C788ACE00785104 /* ImageSetupViewController.swift in Sources */,
 				766485682C6E4EFB00AA050A /* ProfileSetupViewController.swift in Sources */,
 				76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */,
 				766485642C6C479800AA050A /* FeedViewController.swift in Sources */,
@@ -497,6 +504,7 @@
 				766485482C6A13AD00AA050A /* ProfileViewController.swift in Sources */,
 				76AAD32C2C729DEA00CBE3D8 /* CirclesBackgroundView.swift in Sources */,
 				764E2A302C7846CB00785104 /* UserSetupViewController.swift in Sources */,
+				764E2A342C788B5300785104 /* SetupBaseView.swift in Sources */,
 				7664855C2C6C447E00AA050A /* MainTabBarController.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */,
 				766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */,
