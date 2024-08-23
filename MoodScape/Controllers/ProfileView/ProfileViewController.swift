@@ -12,6 +12,21 @@ import FirebaseFirestore
 
 class ProfileViewController: ProfileBaseView {
     
+    private let backgroundContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .blue
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let starsBackground: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "blinking_stars")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
+    
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "person.crop.circle")
@@ -22,6 +37,14 @@ class ProfileViewController: ProfileBaseView {
         imageView.layer.cornerRadius = 75
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+    
+    private let spotifyButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "spotify.logo"), for: .normal)
+        button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     private let usernameLabel: UILabel = {
@@ -38,7 +61,7 @@ class ProfileViewController: ProfileBaseView {
         let label = UILabel()
         label.text = "First Name:"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -48,7 +71,7 @@ class ProfileViewController: ProfileBaseView {
         let label = UILabel()
         label.text = "Last Name:"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -58,7 +81,7 @@ class ProfileViewController: ProfileBaseView {
         let label = UILabel()
         label.text = "Email"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -68,7 +91,7 @@ class ProfileViewController: ProfileBaseView {
         let label = UILabel()
         label.text = "Location:"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -78,7 +101,7 @@ class ProfileViewController: ProfileBaseView {
         let label = UILabel()
         label.text = "Registration Date:"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -104,6 +127,18 @@ class ProfileViewController: ProfileBaseView {
         return button
     }()
     
+    private let cardView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        view.layer.cornerRadius = 15
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.4
+        view.layer.shadowOffset = CGSize(width: 0, height: 4)
+        view.layer.shadowRadius = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,15 +157,20 @@ class ProfileViewController: ProfileBaseView {
     
     // - MARK: SetupView
     private func setupView() {
-        view.addSubview(profileImage)
-        view.addSubview(usernameLabel)
-        view.addSubview(firstNameLabel)
-        view.addSubview(lastNameLabel)
-        view.addSubview(emailLabel)
-        view.addSubview(locationLabel)
-        view.addSubview(registrationDate)
-        view.addSubview(editButton)
         view.addSubview(settingsButton)
+        view.addSubview(backButton)
+        view.addSubview(backgroundContainer)
+        backgroundContainer.addSubview(starsBackground)
+        starsBackground.addSubview(profileImage)
+        
+        view.addSubview(usernameLabel)
+        view.addSubview(cardView)
+        view.addSubview(editButton)
+        cardView.addSubview(firstNameLabel)
+        cardView.addSubview(lastNameLabel)
+        cardView.addSubview(emailLabel)
+        cardView.addSubview(locationLabel)
+        cardView.addSubview(registrationDate)
         
         settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
@@ -141,32 +181,51 @@ class ProfileViewController: ProfileBaseView {
         NSLayoutConstraint.activate([
             settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             settingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-                    
+            
+            backgroundContainer.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundContainer.heightAnchor.constraint(equalToConstant: 250),
+            
+            starsBackground.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor),
+            starsBackground.trailingAnchor.constraint(equalTo: backgroundContainer.trailingAnchor),
+            starsBackground.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
+            starsBackground.bottomAnchor.constraint(equalTo: backgroundContainer.bottomAnchor),
+            
             profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             profileImage.widthAnchor.constraint(equalToConstant: 150),
             profileImage.heightAnchor.constraint(equalToConstant: 150),
-                    
+            
             usernameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20),
             usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                    
-            firstNameLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 15),
-            firstNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-                    
-            lastNameLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 15),
-            lastNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-                    
-            emailLabel.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 15),
-            emailLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
-            locationLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 15),
-            locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-            locationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            cardView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
+            cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            registrationDate.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 15),
-            registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-             
-            editButton.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 40),
+            firstNameLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 20),
+            firstNameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            firstNameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            
+            lastNameLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 10),
+            lastNameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            lastNameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            
+            emailLabel.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 10),
+            emailLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            emailLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            
+            locationLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 10),
+            locationLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            locationLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            
+            registrationDate.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10),
+            registrationDate.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            registrationDate.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            registrationDate.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -20),
+            
+            editButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 40),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 160),
             editButton.heightAnchor.constraint(equalToConstant: 50)
