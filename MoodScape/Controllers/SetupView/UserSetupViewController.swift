@@ -18,14 +18,6 @@ class UserSetupView: SetupBaseView {
     private let firestoreKeys = ["first_name", "last_name", "location"]
     private var userData: [String: String] = [:]
     
-    private let gifBackground: GIFImageView = {
-        let gifBackground = GIFImageView()
-        gifBackground.animate(withGIFNamed: "gradient_skyline_blinking_stars")
-        gifBackground.contentMode = .scaleAspectFill
-        gifBackground.translatesAutoresizingMaskIntoConstraints = false
-        return gifBackground
-    }()
-    
     private let fieldLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -67,6 +59,16 @@ class UserSetupView: SetupBaseView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    private let appLabel: UILabel = {
+        let label = UILabel()
+        label.text = "MoodScape"
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
@@ -89,6 +91,7 @@ class UserSetupView: SetupBaseView {
         view.addSubview(textField)
         view.addSubview(submitButton)
         view.addSubview(skipButton)
+        view.addSubview(appLabel)
         
         submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)

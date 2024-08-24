@@ -31,6 +31,16 @@ class MusicSetupView: SetupBaseView {
         return button
     }()
     
+    private let appLabel: UILabel = {
+        let label = UILabel()
+        label.text = "MoodScape"
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +62,7 @@ class MusicSetupView: SetupBaseView {
     private func setupView() {
         view.addSubview(fieldLabel)
         view.addSubview(submitButton)
+        view.addSubview(appLabel)
     }
     
     // - MARK: SetupConstraints
@@ -65,7 +76,10 @@ class MusicSetupView: SetupBaseView {
             submitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 350),
             submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             submitButton.widthAnchor.constraint(equalToConstant: 210),
-            submitButton.heightAnchor.constraint(equalToConstant: 50)
+            submitButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            appLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            appLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 }

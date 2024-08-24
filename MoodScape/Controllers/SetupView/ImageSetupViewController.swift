@@ -8,13 +8,13 @@
 import UIKit
 
 class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
+
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         imageView.layer.borderColor = UIColor.white.cgColor
-        imageView.layer.borderWidth = 2.0
+        //imageView.layer.borderWidth = 2.0
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -50,11 +50,26 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         return button
     }()
     
+    private let appLabel: UILabel = {
+        let label = UILabel()
+        label.text = "MoodScape"
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+    }
+    
+    // - MARK: ViewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         loadProfileImage()
     }
     
@@ -64,6 +79,7 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         view.addSubview(fieldLabel)
         view.addSubview(submitButton)
         view.addSubview(skipButton)
+        view.addSubview(appLabel)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectProfileImage))
         profileImageView.addGestureRecognizer(tapGestureRecognizer)
@@ -110,7 +126,10 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
             submitButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 80),
             submitButton.leadingAnchor.constraint(equalTo: skipButton.trailingAnchor, constant: 45),
             submitButton.widthAnchor.constraint(equalToConstant: 120),
-            submitButton.heightAnchor.constraint(equalToConstant: 50)
+            submitButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            appLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            appLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
@@ -148,21 +167,6 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         }
     }
     
-    // - MARK: NavigateToNextView
-    private func navigateToNextView() {
-        // TODO: implement next view
-        let nextViewController = SpotifySetupView()
-        nextViewController.modalPresentationStyle = .fullScreen
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = .push
-        transition.subtype = .fromRight
-        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        
-        self.view.window?.layer.add(transition, forKey: kCATransition)
-        self.present(nextViewController, animated: false, completion: nil)
-    }
-    
     // - MARK: HandleSubmit
     @objc private func handleSubmit() {
         guard let image = profileImageView.image else {
@@ -170,12 +174,13 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
             return
         }
         // TODO: store the user's image
-        navigateToNextView()
+        
+        navigateToNextView(viewController: SpotifySetupView())
     }
     
     // - MARK: HandleSkip
     @objc private func handleSkip() {
-        navigateToNextView()
+        navigateToNextView(viewController: SpotifySetupView())
     }
 }
 

@@ -41,6 +41,16 @@ class SpotifySetupView: SetupBaseView {
         return button
     }()
     
+    private let appLabel: UILabel = {
+        let label = UILabel()
+        label.text = "MoodScape"
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +74,7 @@ class SpotifySetupView: SetupBaseView {
         view.addSubview(fieldLabel)
         view.addSubview(spotifyButton)
         view.addSubview(skipButton)
+        view.addSubview(appLabel)
         
         spotifyButton.addTarget(self, action: #selector(connectSpotify), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
@@ -86,29 +97,17 @@ class SpotifySetupView: SetupBaseView {
             skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             skipButton.widthAnchor.constraint(equalToConstant: 120),
             skipButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            appLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            appLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
-    
-    // - MARK: NavigateToNextView
-    private func navigateToNextView() {
-        // TODO: implement next view
-        let nextViewController = MainViewController()
-        nextViewController.modalPresentationStyle = .fullScreen
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = .push
-        transition.subtype = .fromRight
-        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        
-        self.view.window?.layer.add(transition, forKey: kCATransition)
-        self.present(nextViewController, animated: false, completion: nil)
-    }
-    
+ 
     @objc private func connectSpotify() {
         // TODO: connect to the user's account on Spotify
     }
     
     @objc private func handleSkip() {
-        navigateToNextView()
+        navigateToNextView(viewController: MusicSetupView())
     }
 }
