@@ -97,6 +97,8 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         view.addSubview(fieldLabel)
         view.addSubview(submitButton)
         view.addSubview(genreCollectionView)
+        
+        submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
@@ -121,6 +123,20 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
             submitButton.widthAnchor.constraint(equalToConstant: 210),
             submitButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    
+    // - MARK: HandleSubmit
+    @objc private func handleSubmit() {
+        if selectedGenres.isEmpty {
+            let alert = UIAlertController(title: "No Genre Selected",
+                                          message: "Please, select at least one genre before submitting",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+        } else {
+            // TODO: save the selection for later use
+            print("Selected genres: \(selectedGenres)")
+        }
     }
     
     // - MARK: RevealCollectionView
