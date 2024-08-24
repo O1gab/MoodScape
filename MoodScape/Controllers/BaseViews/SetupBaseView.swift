@@ -29,7 +29,7 @@ class SetupBaseView: UIViewController {
         return gifBackground
     }()
     
-    private let appLabel: UILabel = {
+    let appLabel: UILabel = {
         let label = UILabel()
         label.text = "MoodScape"
         label.font = UIFont.systemFont(ofSize: 28, weight: .bold)

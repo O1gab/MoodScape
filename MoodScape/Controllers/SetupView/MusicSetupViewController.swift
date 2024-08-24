@@ -10,7 +10,15 @@ import Gifu
 
 class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var genres = ["Pop", "Hip Hop", "Classical", "Jazz", "Rock", "Electronic", "Country", "Blues", "Reggae", "Metal", "Indie", "Techno"]
+    private var genres = [
+        "Pop", "Hip Hop", "Classical", "Jazz", "Rock", "Electronic", "Country",
+        "Blues", "Reggae", "Metal", "Indie", "Techno", "K-Pop", "Folk", "Punk",
+        "Afro", "Funk", "R&B", "Soul", "Alternative", "Latin", "House", "Trance",
+        "Dubstep", "Ambient", "Disco", "Ska", "Grunge", "Gospel", "Opera",
+        "Bluegrass", "Synthwave", "Drum and Bass", "Trap", "Reggaeton",
+        "New Age", "Post-Rock", "Emo", "Chillout", "Dancehall", "Lo-Fi",
+        "Avant-Garde", "Hardcore", "Industrial", "Experimental"]
+    
     var selectedGenres = Set<String>()
     
     private let genreCollectionView: UICollectionView = {
@@ -77,12 +85,14 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Choose the music genres you listen to the most", typingSpeed: 0.05) {
                 self?.revealCollectionView()
+                self?.revealButton(button: self?.submitButton ?? UIButton())
             }
         }
     }
     
     // - MARK: SetupView
     private func setupView() {
+        appLabel.alpha = 0
         view.addSubview(gifGradient)
         view.addSubview(fieldLabel)
         view.addSubview(submitButton)
@@ -104,9 +114,9 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
             genreCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 215),
              genreCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
              genreCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-             genreCollectionView.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -20),
+            genreCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -70),
             
-            submitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40),
+            submitButton.topAnchor.constraint(equalTo: genreCollectionView.bottomAnchor, constant: 20),
             submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             submitButton.widthAnchor.constraint(equalToConstant: 210),
             submitButton.heightAnchor.constraint(equalToConstant: 50)
