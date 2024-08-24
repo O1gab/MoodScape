@@ -10,8 +10,8 @@ import Gifu
 
 class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var genres = ["Pop", "Rock", "Jazz", "Classical", "Hip Hop", "Electronic", "Country", "Blues", "Reggae", "Metal"]
-    private var selectedGenres = Set<String>()
+    private var genres = ["Pop", "Hip Hop", "Classical", "Jazz", "Rock", "Electronic", "Country", "Blues", "Reggae", "Metal", "Indie", "Techno"]
+    var selectedGenres = Set<String>()
     
     private let genreCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -24,6 +24,8 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(GenreCell.self, forCellWithReuseIdentifier: GenreCell.identifier)
+        collectionView.alpha = 0
+        collectionView.isHidden = true
         return collectionView
     }()
     
@@ -74,7 +76,7 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Choose the music genres you listen to the most", typingSpeed: 0.05) {
-                // reveal selection view
+                self?.revealCollectionView()
             }
         }
     }
@@ -110,27 +112,37 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
             submitButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
+    
+    // - MARK: RevealCollectionView
+    private func revealCollectionView() {
+        genreCollectionView.isHidden = false
+        
+        UIView.animate(withDuration: 1.5) {
+            self.genreCollectionView.alpha = 1
+        }
+    }
+    
     // MARK: - CollectionView DataSource
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return genres.count
-        }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return genres.count
+    }
         
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCell.identifier, for: indexPath) as! GenreCell
-            let genre = genres[indexPath.item]
-            let isSelected = selectedGenres.contains(genre)
-            cell.configure(with: genre, isSelected: isSelected)
-            return cell
-        }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCell.identifier, for: indexPath) as! GenreCell
+        let genre = genres[indexPath.item]
+        let isSelected = selectedGenres.contains(genre)
+        cell.configure(with: genre, isSelected: isSelected)
+        return cell
+    }
         
-        // MARK: - CollectionView Delegate
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            let genre = genres[indexPath.item]
-            if selectedGenres.contains(genre) {
-                selectedGenres.remove(genre)
-            } else {
-                selectedGenres.insert(genre)
-            }
-            collectionView.reloadItems(at: [indexPath])
+    // MARK: - CollectionView Delegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let genre = genres[indexPath.item]
+        if selectedGenres.contains(genre) {
+            selectedGenres.remove(genre)
+        } else {
+            selectedGenres.insert(genre)
         }
+        collectionView.reloadItems(at: [indexPath])
+    }
 }
