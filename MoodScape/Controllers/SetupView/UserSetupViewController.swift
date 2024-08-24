@@ -18,6 +18,15 @@ class UserSetupView: SetupBaseView {
     private let firestoreKeys = ["first_name", "last_name", "location"]
     private var userData: [String: String] = [:]
     
+    private let gifGradient: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "green_gradient")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.alpha = 0.5
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
+    
     private let fieldLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -77,6 +86,7 @@ class UserSetupView: SetupBaseView {
   
     // - MARK: SetupView
     private func setupView() {
+        view.addSubview(gifGradient)
         view.addSubview(fieldLabel)
         view.addSubview(textField)
         view.addSubview(submitButton)
@@ -89,6 +99,11 @@ class UserSetupView: SetupBaseView {
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            gifGradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
+            gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 250),
             fieldLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
@@ -152,7 +167,6 @@ class UserSetupView: SetupBaseView {
                 let nextQuestion = self?.questions[self?.currentQuestionIndex ?? 0] ?? ""
                 self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: self?.typingSpeed ?? 0.1) {}
             } else {
-                // All questions answered or skipped, move to the next view
                 self?.navigateToNextView(viewController: ImageSetupView())
             }
         }

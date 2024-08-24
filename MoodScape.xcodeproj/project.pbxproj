@@ -40,7 +40,7 @@
 		766485792C6ED6E700AA050A /* SpotifyAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485782C6ED6E700AA050A /* SpotifyAuthenticationManager.swift */; };
 		7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */; };
 		7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */; };
-		768536C32C7A476500C35FF8 /* green_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 768536C22C7A476500C35FF8 /* green_gradient.gif */; };
+		768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 768536C82C7A84A000C35FF8 /* green_gradient.gif */; };
 		76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76976C942C7401AE00D44DD3 /* SongCell.swift */; };
 		76976C9B2C74238A00D44DD3 /* SongCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76976C9A2C74238A00D44DD3 /* SongCollectionView.swift */; };
 		76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */; };
@@ -94,7 +94,7 @@
 		766485782C6ED6E700AA050A /* SpotifyAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthenticationManager.swift; sourceTree = "<group>"; };
 		7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
 		7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodSelectionView.swift; sourceTree = "<group>"; };
-		768536C22C7A476500C35FF8 /* green_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = green_gradient.gif; sourceTree = "<group>"; };
+		768536C82C7A84A000C35FF8 /* green_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = green_gradient.gif; sourceTree = "<group>"; };
 		76976C942C7401AE00D44DD3 /* SongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCell.swift; sourceTree = "<group>"; };
 		76976C9A2C74238A00D44DD3 /* SongCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCollectionView.swift; sourceTree = "<group>"; };
 		76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBaseView.swift; sourceTree = "<group>"; };
@@ -298,7 +298,7 @@
 				76B869BB2C67B42B002866B9 /* Services */,
 				76B869B92C67B3FE002866B9 /* Tests */,
 				76B869AA2C67B3AA002866B9 /* Assets.xcassets */,
-				768536C22C7A476500C35FF8 /* green_gradient.gif */,
+				768536C82C7A84A000C35FF8 /* green_gradient.gif */,
 				764E2A2A2C78195F00785104 /* blinking_stars.gif */,
 				76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */,
 				764FDE3B2C6989730060A428 /* Main.storyboard */,
@@ -428,8 +428,8 @@
 			files = (
 				764FDE3C2C6989730060A428 /* Main.storyboard in Resources */,
 				7664854F2C6AD34000AA050A /* View.xib in Resources */,
+				768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */,
 				7664854D2C6A1AAF00AA050A /* GoogleService-Info.plist in Resources */,
-				768536C32C7A476500C35FF8 /* green_gradient.gif in Resources */,
 				76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */,
 				764E2A2B2C78195F00785104 /* blinking_stars.gif in Resources */,
 				76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */,
