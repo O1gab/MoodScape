@@ -191,9 +191,9 @@ class LoginViewController: StartBaseView {
             self.showSuccessMessage("Login successful")
             self.checkFirstUsage { isFirstUsage in
                 if isFirstUsage {
-                    let profileSetupView = ProfileSetupViewController()
-                    profileSetupView.modalPresentationStyle = .fullScreen
-                    self.present(profileSetupView, animated: true, completion: nil)
+                    let startSetup = StartSetupView()
+                    startSetup.modalPresentationStyle = .fullScreen
+                    self.present(startSetup, animated: true, completion: nil)
                 } else {
                     let mainView = MainViewController()
                     mainView.modalPresentationStyle = .fullScreen
