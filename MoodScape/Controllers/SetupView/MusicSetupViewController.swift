@@ -8,7 +8,24 @@
 import UIKit
 import Gifu
 
-class MusicSetupView: SetupBaseView {
+class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    private var genres = ["Pop", "Rock", "Jazz", "Classical", "Hip Hop", "Electronic", "Country", "Blues", "Reggae", "Metal"]
+    private var selectedGenres = Set<String>()
+    
+    private let genreCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(GenreCell.self, forCellWithReuseIdentifier: GenreCell.identifier)
+        return collectionView
+    }()
     
     private let gifGradient: GIFImageView = {
         let gifBackground = GIFImageView()
@@ -44,6 +61,9 @@ class MusicSetupView: SetupBaseView {
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        genreCollectionView.delegate = self
+                genreCollectionView.dataSource = self
+                genreCollectionView.register(GenreCell.self, forCellWithReuseIdentifier: GenreCell.identifier)
         setupView()
         setupConstraints()
     }
@@ -63,6 +83,7 @@ class MusicSetupView: SetupBaseView {
         view.addSubview(gifGradient)
         view.addSubview(fieldLabel)
         view.addSubview(submitButton)
+        view.addSubview(genreCollectionView)
     }
     
     // - MARK: SetupConstraints
@@ -72,6 +93,13 @@ class MusicSetupView: SetupBaseView {
             gifGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
             gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            genreCollectionView.topAnchor.constraint(equalTo: fieldLabel.bottomAnchor, constant: 10),
+             genreCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+             genreCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
+             genreCollectionView.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -20),
+             
+                        
             
             fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 270),
             fieldLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -83,4 +111,27 @@ class MusicSetupView: SetupBaseView {
             submitButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
+    // MARK: - CollectionView DataSource
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            return genres.count
+        }
+        
+        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCell.identifier, for: indexPath) as! GenreCell
+            let genre = genres[indexPath.item]
+            let isSelected = selectedGenres.contains(genre)
+            cell.configure(with: genre, isSelected: isSelected)
+            return cell
+        }
+        
+        // MARK: - CollectionView Delegate
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            let genre = genres[indexPath.item]
+            if selectedGenres.contains(genre) {
+                selectedGenres.remove(genre)
+            } else {
+                selectedGenres.insert(genre)
+            }
+            collectionView.reloadItems(at: [indexPath])
+        }
 }
