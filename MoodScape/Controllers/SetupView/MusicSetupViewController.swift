@@ -21,7 +21,7 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         "New Age", "Post-Rock", "Emo", "Chillout", "Dancehall", "Lo-Fi",
         "Avant-Garde", "Hardcore", "Industrial", "Experimental"]
     
-    var selectedGenres: [String] = []
+    private var selectedGenres: [String] = []
     
     private let genreCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -136,9 +136,9 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
         } else {
-            // TODO: save the selection for later use
             print("Selected genres: \(selectedGenres)") // debug
             saveSelectedGenres()
+            navigateToNextView(viewController: ArtistsSetupView())
         }
     }
     
