@@ -13,7 +13,6 @@ import FirebaseFirestore
 
 class UserSetupView: SetupBaseView {
 
-    private let gradientLayer = CAGradientLayer()
     private var currentQuestionIndex = 0
     private let questions = ["Enter your first name:", "Enter your last name:", "Enter your location:"]
     private let firestoreKeys = ["first_name", "last_name", "location"]
@@ -102,7 +101,7 @@ class UserSetupView: SetupBaseView {
             fieldLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
             
-            textField.topAnchor.constraint(equalTo: fieldLabel.bottomAnchor, constant: 20),
+            textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 280),
             textField.leftAnchor.constraint(equalTo: fieldLabel.leftAnchor),
             textField.widthAnchor.constraint(equalToConstant: 300),
             textField.heightAnchor.constraint(equalToConstant: 60),
@@ -162,24 +161,9 @@ class UserSetupView: SetupBaseView {
                 self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: self?.typingSpeed ?? 0.1) {}
             } else {
                 // All questions answered or skipped, move to the next view
-                self?.navigateToNextView()
+                self?.navigateToNextView(viewController: ImageSetupView())
             }
         }
-    }
-    
-    // - MARK: NavigateToNextView
-    private func navigateToNextView() {
-        // TODO: implement next view
-        let nextViewController = ImageSetupView()
-        nextViewController.modalPresentationStyle = .fullScreen
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = .push
-        transition.subtype = .fromRight
-        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        
-        self.view.window?.layer.add(transition, forKey: kCATransition)
-        self.present(nextViewController, animated: false, completion: nil)
     }
 }
 
