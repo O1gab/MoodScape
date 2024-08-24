@@ -32,13 +32,20 @@ class SetupBaseView: UIViewController {
         setupConstraints()
     }
     
+    // - MARK: SetupView
     private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
     }
     
+    // - MARK: SetupConstraints
     private func setupConstraints() {
-        
+        NSLayoutConstraint.activate([
+            gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
+            gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
     
     // - MARK: SetupGradientBackground
@@ -119,5 +126,17 @@ class SetupBaseView: UIViewController {
         UIView.animate(withDuration: 1.5) {
             button.alpha = 1
         }
+    }
+    
+    func navigateToNextView(viewController: UIViewController) {
+        viewController.modalPresentationStyle = .fullScreen
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = .push
+        transition.subtype = .fromRight
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        self.view.window?.layer.add(transition, forKey: kCATransition)
+        self.present(viewController, animated: false, completion: nil)
     }
 }
