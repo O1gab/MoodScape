@@ -41,6 +41,8 @@
 		7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */; };
 		7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */; };
 		768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 768536C82C7A84A000C35FF8 /* green_gradient.gif */; };
+		768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CA2C7A893000C35FF8 /* GenreCell.swift */; };
+		768536CD2C7A896800C35FF8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CC2C7A896800C35FF8 /* Genre.swift */; };
 		76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76976C942C7401AE00D44DD3 /* SongCell.swift */; };
 		76976C9B2C74238A00D44DD3 /* SongCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76976C9A2C74238A00D44DD3 /* SongCollectionView.swift */; };
 		76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */; };
@@ -95,6 +97,8 @@
 		7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
 		7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodSelectionView.swift; sourceTree = "<group>"; };
 		768536C82C7A84A000C35FF8 /* green_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = green_gradient.gif; sourceTree = "<group>"; };
+		768536CA2C7A893000C35FF8 /* GenreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCell.swift; sourceTree = "<group>"; };
+		768536CC2C7A896800C35FF8 /* Genre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
 		76976C942C7401AE00D44DD3 /* SongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCell.swift; sourceTree = "<group>"; };
 		76976C9A2C74238A00D44DD3 /* SongCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongCollectionView.swift; sourceTree = "<group>"; };
 		76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBaseView.swift; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 		7664856D2C6EB8AF00AA050A /* Items */ = {
 			isa = PBXGroup;
 			children = (
+				768536CE2C7A8B9000C35FF8 /* UICollectionViewItems */,
 				76976C962C7401C300D44DD3 /* TableViewItems */,
 				766485702C6EB8C900AA050A /* TabBarItems */,
 			);
@@ -218,6 +223,14 @@
 				7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */,
 			);
 			path = SpotifyAPI;
+			sourceTree = "<group>";
+		};
+		768536CE2C7A8B9000C35FF8 /* UICollectionViewItems */ = {
+			isa = PBXGroup;
+			children = (
+				768536CA2C7A893000C35FF8 /* GenreCell.swift */,
+			);
+			path = UICollectionViewItems;
 			sourceTree = "<group>";
 		};
 		76976C962C7401C300D44DD3 /* TableViewItems */ = {
@@ -339,6 +352,7 @@
 			children = (
 				764FDE2E2C695EA60060A428 /* User.swift */,
 				766485752C6ED52D00AA050A /* Album.swift */,
+				768536CC2C7A896800C35FF8 /* Genre.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -488,6 +502,7 @@
 				764FDE382C6983040060A428 /* LoginViewController.swift in Sources */,
 				764E2A382C7939EE00785104 /* MusicSetupViewController.swift in Sources */,
 				76976C9B2C74238A00D44DD3 /* SongCollectionView.swift in Sources */,
+				768536CD2C7A896800C35FF8 /* Genre.swift in Sources */,
 				7664856F2C6EB8C000AA050A /* CircleItem.swift in Sources */,
 				766485602C6C471D00AA050A /* MainViewController.swift in Sources */,
 				76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */,
@@ -519,6 +534,7 @@
 				764E2A342C788B5300785104 /* SetupBaseView.swift in Sources */,
 				7664855C2C6C447E00AA050A /* MainTabBarController.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */,
+				768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */,
 				766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */,
 				766485762C6ED52D00AA050A /* Album.swift in Sources */,
 				766485792C6ED6E700AA050A /* SpotifyAuthenticationManager.swift in Sources */,
