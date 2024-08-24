@@ -20,6 +20,25 @@ class SetupBaseView: UIViewController {
         return gifBackground
     }()
     
+    private let gradient: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "gradient")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.alpha = 0.5
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
+    
+    private let appLabel: UILabel = {
+        let label = UILabel()
+        label.text = "MoodScape"
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     let typingSpeed: TimeInterval = 0.075
     var timer: Timer?
     
@@ -35,7 +54,9 @@ class SetupBaseView: UIViewController {
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(gifBackground)
+        //view.addSubview(gradient)
         view.sendSubviewToBack(gifBackground)
+        view.addSubview(appLabel)
     }
     
     // - MARK: SetupConstraints
@@ -44,7 +65,15 @@ class SetupBaseView: UIViewController {
             gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
-            gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            /*
+            gradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gradient.topAnchor.constraint(equalTo: view.topAnchor),
+            gradient.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+             */
+            appLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            appLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     

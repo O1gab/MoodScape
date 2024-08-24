@@ -41,16 +41,6 @@ class SpotifySetupView: SetupBaseView {
         return button
     }()
     
-    private let appLabel: UILabel = {
-        let label = UILabel()
-        label.text = "MoodScape"
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +64,6 @@ class SpotifySetupView: SetupBaseView {
         view.addSubview(fieldLabel)
         view.addSubview(spotifyButton)
         view.addSubview(skipButton)
-        view.addSubview(appLabel)
         
         spotifyButton.addTarget(self, action: #selector(connectSpotify), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
@@ -96,10 +85,7 @@ class SpotifySetupView: SetupBaseView {
             skipButton.topAnchor.constraint(equalTo: spotifyButton.bottomAnchor, constant: 20),
             skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             skipButton.widthAnchor.constraint(equalToConstant: 120),
-            skipButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            appLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            appLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            skipButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
  

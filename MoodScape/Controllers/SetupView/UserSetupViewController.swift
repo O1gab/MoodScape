@@ -59,16 +59,6 @@ class UserSetupView: SetupBaseView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    private let appLabel: UILabel = {
-        let label = UILabel()
-        label.text = "MoodScape"
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
 
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
@@ -91,7 +81,6 @@ class UserSetupView: SetupBaseView {
         view.addSubview(textField)
         view.addSubview(submitButton)
         view.addSubview(skipButton)
-        view.addSubview(appLabel)
         
         submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
