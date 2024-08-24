@@ -62,8 +62,9 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         genreCollectionView.delegate = self
-                genreCollectionView.dataSource = self
-                genreCollectionView.register(GenreCell.self, forCellWithReuseIdentifier: GenreCell.identifier)
+        genreCollectionView.dataSource = self
+        genreCollectionView.register(GenreCell.self, forCellWithReuseIdentifier: GenreCell.identifier)
+        
         setupView()
         setupConstraints()
     }
@@ -93,19 +94,17 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
             gifGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
             gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            genreCollectionView.topAnchor.constraint(equalTo: fieldLabel.bottomAnchor, constant: 10),
-             genreCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-             genreCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
-             genreCollectionView.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -20),
-             
-                        
-            
-            fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 270),
+
+            fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150),
             fieldLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
             
-            submitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 350),
+            genreCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 215),
+             genreCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+             genreCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15),
+             genreCollectionView.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -20),
+            
+            submitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40),
             submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             submitButton.widthAnchor.constraint(equalToConstant: 210),
             submitButton.heightAnchor.constraint(equalToConstant: 50)
