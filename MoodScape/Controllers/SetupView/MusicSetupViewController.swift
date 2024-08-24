@@ -7,6 +7,8 @@
 
 import UIKit
 import Gifu
+import FirebaseAuth
+import FirebaseFirestore
 
 class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -19,7 +21,7 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         "New Age", "Post-Rock", "Emo", "Chillout", "Dancehall", "Lo-Fi",
         "Avant-Garde", "Hardcore", "Industrial", "Experimental"]
     
-    var selectedGenres = Set<String>()
+    var selectedGenres: [String] = []
     
     private let genreCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -135,7 +137,24 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
             present(alert, animated: true, completion: nil)
         } else {
             // TODO: save the selection for later use
-            print("Selected genres: \(selectedGenres)")
+            print("Selected genres: \(selectedGenres)") // debug
+            saveSelectedGenres()
+        }
+    }
+    
+    // - MARK: SaveSelectedGenres
+    private func saveSelectedGenres() {
+        let db = Firestore.firestore()
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        
+        let userDocRef = db.collection("users").document(userID)
+        
+        userDocRef.setData(["selectedGenres": selectedGenres], merge: true) { error in
+            if let error = error {
+                print("Error saving selected genres: \(error.localizedDescription)")
+            } else {
+                print("Selected genres successfully saved!")
+            }
         }
     }
     
@@ -164,10 +183,9 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
     // MARK: - CollectionView Delegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let genre = genres[indexPath.item]
-        if selectedGenres.contains(genre) {
-            selectedGenres.remove(genre)
-        } else {
-            selectedGenres.insert(genre)
+        if let index = selectedGenres.firstIndex(of: genre) {
+            selectedGenres.remove(at: index) } else {
+            selectedGenres.append(genre)
         }
         collectionView.reloadItems(at: [indexPath])
     }
