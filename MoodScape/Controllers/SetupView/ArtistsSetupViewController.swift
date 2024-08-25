@@ -18,14 +18,17 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     
     private var selectedGenre: String?
     
-    private var artists: [Artist] = []
+    private var artists: [Artist] = [Artist(name: "dodod", imageURL: URL(string: "https://cdn.arstechnica.net/wp-content/uploads/2018/06/macOS-Mojave-Dynamic-Wallpaper-transition.jpg")!), Artist(name: "jdjdj", imageURL: URL(string: "https://cdn.arstechnica.net/wp-content/uploads/2018/06/macOS-Mojave-Dynamic-Wallpaper-transition.jpg")!),
+                                     Artist(name: "ddjdj", imageURL: URL(string: "https://cdn.arstechnica.net/wp-content/uploads/2018/06/macOS-Mojave-Dynamic-Wallpaper-transition.jpg")!), Artist(name: "ddjdj", imageURL: URL(string: "https://cdn.arstechnica.net/wp-content/uploads/2018/06/macOS-Mojave-Dynamic-Wallpaper-transition.jpg")!)]
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 100, height: 100)
+        layout.itemSize = CGSize(width: 75, height: 112.5)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .blue
+        collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -97,6 +100,8 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         view.addSubview(submitButton)
         
         view.addSubview(collectionView)
+        view.bringSubviewToFront(collectionView)
+
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(ArtistCell.self, forCellWithReuseIdentifier: "ArtistCell")
@@ -117,7 +122,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
             fieldLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
             
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 90),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
             collectionView.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -20),
@@ -139,17 +144,17 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         let genre = genres[currentIndex]
         selectedGenre = genre
         
-        /*SpotifyAPIManager.shared.fetchArtistsByGenre(for: genre) { [weak self] artists in
-            guard let self = self, let artists = artists else { return }
-            self.artists = artists
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-                self.startTypingAnimation(label: self.fieldLabel, text: "Your \(self.currentIndex + 1) choice was \(genre)", typingSpeed: 0.075) {
-                    self.submitButton.isHidden = false
-                }
-            }
-        }
-         */
+        // TODO: fetch data from spotify
+        /* SpotifyAPIManager.shared.fetchArtistsByGenre(for: genre) { [weak self] artists in
+               guard let self = self, let artists = artists else { return }
+               self.artists = artists*/
+               DispatchQueue.main.async {
+                   self.collectionView.reloadData()
+                   self.startTypingAnimation(label: self.fieldLabel, text: "Your \(self.currentIndex + 1) choice was \(genre). Please, select the artists that you like/know.", typingSpeed: 0.075) {
+                       self.submitButton.isHidden = false
+                   }
+               
+           }
     }
     
     // - MARK: FetchSelectedGenres
@@ -208,33 +213,17 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         // TODO: implement this function!
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let width = (collectionView.bounds.width - 30) / 3 // 3 cells per row with some spacing
-            return CGSize(width: width, height: width + 30) // Height a bit larger to accommodate text
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return artists.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistCell", for: indexPath) as! ArtistCell
-        let artist = artists[indexPath.item]
-        cell.backgroundColor = .green
-        return cell
-    }
-    
-    // on touch
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedArtist = artists[indexPath.item]
-        /*fetchSimilarArtists(for: selectedArtist) { [weak self] similarArtists in
-            guard let self = self, let similarArtists = similarArtists else { return }
-            // Update the collection view with similar artists
-            self.artists = similarArtists
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
+    // MARK: - UICollectionViewDataSource
+        
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            return artists.count
         }
-         */
-    }
+        
+        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistCell", for: indexPath) as! ArtistCell
+            let artist = artists[indexPath.item]
+            cell.configure(with: artist)
+            return cell
+        }
+    
 }
