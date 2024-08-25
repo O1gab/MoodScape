@@ -42,9 +42,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return label
     }()
     
-    private let previousSearchesLabel: UILabel = {
+    private let recommendationsLabel: UILabel = {
         let label = UILabel()
-        label.text = "Your previous searches"
+        label.text = "You may like"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textAlignment = .left
@@ -79,7 +79,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         setupAlbumCollectionView()
         setupSongCollectionView()
         
-        contentView.addSubview(previousSearchesLabel)
+        contentView.addSubview(recommendationsLabel)
     }
     
     // - MARK: SetupAlbumCollectionView
@@ -108,6 +108,8 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         songCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         songCollectionView.backgroundColor = .clear
         songCollectionView.showsVerticalScrollIndicator = false
+        songCollectionView.scrollsToTop = false
+        songCollectionView.isScrollEnabled = false
         songCollectionView.translatesAutoresizingMaskIntoConstraints = false
         songCollectionView.register(SongCardCollectionViewCell.self, forCellWithReuseIdentifier: "SongCardCell")
         songCollectionView.dataSource = self
@@ -145,9 +147,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             songCollectionView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 5),
             songCollectionView.heightAnchor.constraint(equalToConstant: 450),
             
-            previousSearchesLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 20),
-            previousSearchesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            previousSearchesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 20),
+            recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            recommendationsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
@@ -191,7 +193,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                     DispatchQueue.main.async {
                         self?.loadingIndicator.stopAnimating()
                         if let songs = songs {
-                            self?.topWeeklySongs = Array(songs.prefix(5)) // Top 5 songs
+                            self?.topWeeklySongs = Array(songs.prefix(5))
                             self?.songCollectionView.reloadData()
                         } else {
                             self?.showError("Failed to fetch top songs")
