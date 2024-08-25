@@ -11,4 +11,5 @@ struct Artist {
     let name: String
     let id: String
     let imageURL: URL
+    let imageURLString: String
 }

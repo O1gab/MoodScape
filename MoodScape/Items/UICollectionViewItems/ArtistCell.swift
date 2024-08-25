@@ -9,7 +9,7 @@ import UIKit
 
 class ArtistCell: UICollectionViewCell {
     
-    private let artistImageView: UIImageView = {
+    let artistImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 37.5

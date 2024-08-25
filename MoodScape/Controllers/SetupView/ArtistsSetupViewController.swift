@@ -212,7 +212,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         guard currentIndex <= endIndex else {
             // All genres have been processed; handle transition to next view
             saveSelectedArtists()
-            navigateToNextView(viewController: MainViewController())
+            navigateToNextView(viewController: EndSetupView())
             return
         }
         
@@ -258,6 +258,20 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         let artist = artists[indexPath.item]
         let isSelected = selectedArtists.contains(where: { $0.name == artist.name})
         cell.configure(with: artist, isSelected: isSelected)
+        // Load the image asynchronously and cache it
+        if let cachedImage = ImageCache.shared.image(forKey: artist.imageURLString) {
+            cell.artistImageView.image = cachedImage
+        } else {
+            DispatchQueue.global().async {
+                if let imageUrl = URL(string: artist.imageURLString), let data = try? Data(contentsOf: imageUrl), let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        ImageCache.shared.setImage(image, forKey: artist.imageURLString)
+                        cell.artistImageView.image = image
+                    }
+                }
+            }
+        }
+        
         return cell
     }
     
