@@ -10,11 +10,22 @@ import Gifu
 import FirebaseAuth
 import FirebaseFirestore
 
-class ArtistsSetupView: SetupBaseView {
+class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource {
     
     private var currentIndex: Int = 0
     private var endIndex: Int = 0
     private var genres: [String] = []
+    
+    private var artists: [Artist] = []
+    
+    private let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .blue
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
     
     private let gifGradient: GIFImageView = {
         let gifBackground = GIFImageView()
@@ -77,9 +88,15 @@ class ArtistsSetupView: SetupBaseView {
     
     // - MARK: SetupView
     private func setupView() {
+        appLabel.alpha = 0
         view.addSubview(gifGradient)
         view.addSubview(fieldLabel)
         view.addSubview(submitButton)
+        
+        view.addSubview(collectionView)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(ArtistCell.self, forCellWithReuseIdentifier: "ArtistCell")
         
         submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
     }
@@ -91,10 +108,15 @@ class ArtistsSetupView: SetupBaseView {
             gifGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
             gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
+            
             fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150),
             fieldLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
+            
+            collectionView.topAnchor.constraint(equalTo: fieldLabel.bottomAnchor, constant: 20),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+            collectionView.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -20),
             
             submitButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -173,4 +195,28 @@ class ArtistsSetupView: SetupBaseView {
         // TODO: implement this function!
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return artists.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistCell", for: indexPath) as! ArtistCell
+        let artist = artists[indexPath.item]
+        cell.configure(with: artist)
+        return cell
+    }
+    
+    // on touch
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedArtist = artists[indexPath.item]
+        /*fetchSimilarArtists(for: selectedArtist) { [weak self] similarArtists in
+            guard let self = self, let similarArtists = similarArtists else { return }
+            // Update the collection view with similar artists
+            self.artists = similarArtists
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+         */
+    }
 }

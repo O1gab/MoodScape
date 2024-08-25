@@ -14,6 +14,7 @@ class ArtistCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 25
         imageView.clipsToBounds = true
+        imageView.backgroundColor = .blue
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
