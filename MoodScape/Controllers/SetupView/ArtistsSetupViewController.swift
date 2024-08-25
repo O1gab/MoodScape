@@ -111,7 +111,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(ArtistCell.self, forCellWithReuseIdentifier: "ArtistCell")
-        collectionView.backgroundColor = .clear // Change background to clear
+        collectionView.backgroundColor = .clear
         
         submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
     }
@@ -142,11 +142,6 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     
     // - MARK: DisplayNextGenre
     private func displayNextGenre() {
-        guard currentIndex <= endIndex else {
-            navigateToNextView(viewController: MainViewController())
-            return
-        }
-
         let genre = genres[currentIndex]
         selectedGenre = genre
         
@@ -204,6 +199,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     
     // - MARK: HandleSubmit
     @objc private func handleSubmit() {
+        self.currentIndex += 1
         guard currentIndex <= endIndex else {
             saveSelectedArtists()
             navigateToNextView(viewController: EndSetupView())
@@ -211,19 +207,20 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
         
         startErasingAnimation(label: fieldLabel, typingSpeed: 0.035) {
-            self.currentIndex += 1
             self.displayNextGenre()
         }
     }
     
     // - MARK: SaveSelectedArtists
     private func saveSelectedArtists() {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+       
+        let userDocRef = db.collection("users").document(userId)
         
         let selectedArtistNames = selectedArtists.map { $0.name }
         
-        db.collection("users").document(userId).updateData(["selectedArtists": selectedArtistNames]) { error in
+        db.collection("users").document(userId).setData(["selectedArtists": selectedArtistNames], merge: true) { error in
             if let error = error {
                 print("Error saving selected artists: \(error.localizedDescription)")
             } else {
@@ -251,7 +248,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         let artist = artists[indexPath.item]
         let isSelected = selectedArtists.contains(where: { $0.name == artist.name})
         cell.configure(with: artist, isSelected: isSelected)
-        // Load the image asynchronously and cache it
+        
         if let cachedImage = ImageCache.shared.image(forKey: artist.imageURLString) {
             cell.artistImageView.image = cachedImage
         } else {

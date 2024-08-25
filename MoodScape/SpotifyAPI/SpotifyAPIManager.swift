@@ -196,7 +196,6 @@ class SpotifyAPIManager {
                    let artistsData = json["artists"] as? [String: Any],
                    
                    let items = artistsData["items"] as? [[String: Any]] {
-                    print("\(items) pooop")
                     let artists = items.compactMap { item -> Artist? in
                         guard let name = item["name"] as? String,
                               let images = item["images"] as? [[String: Any]],
@@ -217,6 +216,67 @@ class SpotifyAPIManager {
             }
         }.resume()
     }
+    
+    func fetchSimilarArtists(for artist: Artist, completion: @escaping ([Artist]?) -> Void) {
+        // Spotify API call to get similar artists
+        guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
+            completion([])
+            print("Unable to get the access token")
+            return
+        }
+        
+        let urlString = "https://api.spotify.com/v1/artists/\(artist.id)/related-artists"
+        
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error fetching similar artists: \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid response")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data else {
+                completion(nil)
+                return
+            }
+            
+            do {
+                           if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                              let artistsData = json["artists"] as? [[String: Any]] {
+                               let similarArtists = artistsData.compactMap { item -> Artist? in
+                                   guard let name = item["name"] as? String,
+                                         let images = item["images"] as? [[String: Any]],
+                                         let imageURLString = images.first?["url"] as? String,
+                                         let imageURL = URL(string: imageURLString),
+                                         let id = item["id"] as? String else { return nil }
+                                   return Artist(name: name, id: id, imageURL: imageURL, imageURLString: imageURLString)
+                               }
+                               completion(similarArtists)
+                           } else {
+                               completion(nil)
+                           }
+                       } catch {
+                           print("Error parsing similar artists JSON: \(error)")
+                           completion(nil)
+                       }
+                   }
+                   
+                   task.resume()
+               }
     
     // - MARK: FormatDuration
     private func formatDuration(durationMs: Int) -> String {
