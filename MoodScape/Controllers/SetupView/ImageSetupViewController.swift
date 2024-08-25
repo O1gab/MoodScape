@@ -24,7 +24,6 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         imageView.layer.borderColor = UIColor.white.cgColor
-        //imageView.layer.borderWidth = 2.0
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()

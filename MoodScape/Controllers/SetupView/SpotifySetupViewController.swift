@@ -104,10 +104,12 @@ class SpotifySetupView: SetupBaseView {
         ])
     }
  
+    // - MARK: ConnectSpotify
     @objc private func connectSpotify() {
         // TODO: connect to the user's account on Spotify
     }
     
+    // - MARK: HandleSkip
     @objc private func handleSkip() {
         navigateToNextView(viewController: MusicSetupView())
     }

@@ -89,11 +89,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchSelectedGenres { [weak self] genres in
-            /*
-            self?.genres = genres ?? [""]
-            self?.endIndex = (genres?.count ?? 1) - 1
-            self?.currentIndex = 0
-            */
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self?.revealCollectionView()
                 self?.revealButton(button: self?.submitButton ?? UIButton())
@@ -154,7 +150,6 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         let genre = genres[currentIndex]
         selectedGenre = genre
         
-        // TODO: fetch data from spotify
         SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
             SpotifyAPIManager.shared.fetchArtistsByGenre(for: genre) { [weak self] artists in
                 guard let self = self, let artists = artists else { return }
@@ -210,13 +205,11 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     // - MARK: HandleSubmit
     @objc private func handleSubmit() {
         guard currentIndex <= endIndex else {
-            // All genres have been processed; handle transition to next view
             saveSelectedArtists()
             navigateToNextView(viewController: EndSetupView())
             return
         }
         
-        // Start the erasing animation
         startErasingAnimation(label: fieldLabel, typingSpeed: 0.035) {
             self.currentIndex += 1
             self.displayNextGenre()
