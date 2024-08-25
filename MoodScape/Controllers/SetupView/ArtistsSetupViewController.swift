@@ -181,8 +181,11 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
                 let genres = data?["selectedGenres"] as? [String]
                 completion(genres)
             } else {
-                // TODO: Alert message
-                print("Document does not exist or error fetching document: \(error?.localizedDescription ?? "Unknown error")")
+                let alert = UIAlertController(title: "No document found",
+                                              message: "An error with database occured, please, contact us.",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 completion(nil)
             }
         }

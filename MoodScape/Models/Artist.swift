@@ -9,6 +9,6 @@ import Foundation
 
 struct Artist {
     let name: String
-    //let id: String
+    let id: String
     let imageURL: URL
 }

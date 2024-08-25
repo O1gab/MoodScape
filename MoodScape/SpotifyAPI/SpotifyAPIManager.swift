@@ -201,9 +201,9 @@ class SpotifyAPIManager {
                         guard let name = item["name"] as? String,
                               let images = item["images"] as? [[String: Any]],
                               let imageURLString = images.first?["url"] as? String,
-                              let imageURL = URL(string: imageURLString) else { return nil}
-                              //let id = item["id"] as? String else { return nil }
-                        return Artist(name: name, imageURL: imageURL)
+                              let imageURL = URL(string: imageURLString),
+                              let id = item["id"] as? String else { return nil }
+                        return Artist(name: name, id: id, imageURL: imageURL)
                     }
                     print("Successfully fetched \(artists.count) artists")
                     completion(artists)
