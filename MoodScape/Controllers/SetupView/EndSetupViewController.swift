@@ -7,6 +7,8 @@
 
 import UIKit
 import Gifu
+import FirebaseAuth
+import FirebaseFirestore
 
 class EndSetupView: SetupBaseView {
     
@@ -43,6 +45,7 @@ class EndSetupView: SetupBaseView {
             self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Thank you for configuring your profile! Now we are configuring the app for you.", typingSpeed: self?.typingSpeed ?? 0.05) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     self?.startErasingAnimation(label: self?.fieldLabel ?? UILabel(), typingSpeed: 0.035) {
+                        self?.updateData()
                         self?.navigateToNextView(viewController: MainTabBarController())
                     }
                 }
@@ -68,5 +71,19 @@ class EndSetupView: SetupBaseView {
             fieldLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15)
         ])
+    }
+    
+    // - MARK: UpdateData
+    private func updateData() {
+        let db = Firestore.firestore()
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        db.collection("users").document(userId).updateData(["firstUsage": false]) { error in
+            if let error = error {
+                print("Error updating firstUsage: \(error.localizedDescription)")
+            } else {
+                print("firstUsage updated successfully.")
+            }
+        }
     }
 }
