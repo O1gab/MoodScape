@@ -61,6 +61,7 @@
 		76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* StartViewController.swift */; };
 		76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */; };
 		76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */; };
+		76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */; };
 		CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */; };
 /* End PBXBuildFile section */
 
@@ -122,6 +123,7 @@
 		76B869BE2C67B93C002866B9 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gradient_skyline_blinking_stars.gif; sourceTree = "<group>"; };
 		76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSetupViewController.swift; sourceTree = "<group>"; };
 		7A27C3F833B9F95DF63F4D42 /* Pods-MoodScape.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.release.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.release.xcconfig"; sourceTree = "<group>"; };
 		934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoodScape.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC1BC4BC73FD92CE5543BE7E /* Pods-MoodScape.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.debug.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.debug.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				764E2A352C78D80200785104 /* SpotifySetupViewController.swift */,
 				764E2A372C7939EE00785104 /* MusicSetupViewController.swift */,
 				768536CF2C7A98C600C35FF8 /* ArtistsSetupViewController.swift */,
+				76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */,
 			);
 			path = SetupView;
 			sourceTree = "<group>";
@@ -544,6 +547,7 @@
 				764E2A302C7846CB00785104 /* UserSetupViewController.swift in Sources */,
 				764E2A342C788B5300785104 /* SetupBaseView.swift in Sources */,
 				7664855C2C6C447E00AA050A /* MainTabBarController.swift in Sources */,
+				76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */,
 				768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */,
 				766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */,
