@@ -18,8 +18,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     
     private var selectedGenre: String?
     
-    private var artists: [Artist] = [Artist(name: "dodod", imageURL: URL(string: "https://cdn.arstechnica.net/wp-content/uploads/2018/06/macOS-Mojave-Dynamic-Wallpaper-transition.jpg")!), Artist(name: "jdjdj", imageURL: URL(string: "https://cdn.arstechnica.net/wp-content/uploads/2018/06/macOS-Mojave-Dynamic-Wallpaper-transition.jpg")!),
-                                     Artist(name: "ddjdj", imageURL: URL(string: "https://cdn.arstechnica.net/wp-content/uploads/2018/06/macOS-Mojave-Dynamic-Wallpaper-transition.jpg")!), Artist(name: "ddjdj", imageURL: URL(string: "https://cdn.arstechnica.net/wp-content/uploads/2018/06/macOS-Mojave-Dynamic-Wallpaper-transition.jpg")!)]
+    private var artists: [Artist] = []
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -145,16 +144,18 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         selectedGenre = genre
         
         // TODO: fetch data from spotify
-        /* SpotifyAPIManager.shared.fetchArtistsByGenre(for: genre) { [weak self] artists in
-               guard let self = self, let artists = artists else { return }
-               self.artists = artists*/
-               DispatchQueue.main.async {
-                   self.collectionView.reloadData()
-                   self.startTypingAnimation(label: self.fieldLabel, text: "Your \(self.currentIndex + 1) choice was \(genre). Please, select the artists that you like/know.", typingSpeed: 0.075) {
-                       self.submitButton.isHidden = false
-                   }
-               
-           }
+        SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
+            SpotifyAPIManager.shared.fetchArtistsByGenre(for: genre) { [weak self] artists in
+                guard let self = self, let artists = artists else { return }
+                self.artists = artists
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                    self.startTypingAnimation(label: self.fieldLabel, text: "Your \(self.currentIndex + 1) choice was \(genre). Please, select the artists that you like/know.", typingSpeed: 0.075) {
+                        self.submitButton.isHidden = false
+                    }
+                }
+            }
+        }
     }
     
     // - MARK: FetchSelectedGenres
@@ -214,16 +215,14 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     }
     
     // MARK: - UICollectionViewDataSource
-        
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return artists.count
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistCell", for: indexPath) as! ArtistCell
-            let artist = artists[indexPath.item]
-            cell.configure(with: artist)
-            return cell
-        }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return artists.count
+    }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistCell", for: indexPath) as! ArtistCell
+        let artist = artists[indexPath.item]
+        cell.configure(with: artist)
+        return cell
+    }
 }

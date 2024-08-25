@@ -145,34 +145,43 @@ class SpotifyAPIManager {
         task.resume()
     }
     
-    // - MARK: FormatDuration
-    private func formatDuration(durationMs: Int) -> String {
-        let minutes = durationMs / 60000
-        let seconds = (durationMs % 60000) / 1000
-        return String(format: "%d:%02d", minutes, seconds)
-    }
-    
     func fetchArtistsByGenre(for genre: String, completion: @escaping ([Artist]?) -> Void) {
         guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion([])
+            print("Unable to get the access token")
             return
         }
-        // Encode the genre to ensure it's safely included in the URL
+        
         let encodedGenre = genre.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? genre
         print(encodedGenre)
-        let urlString = "https://api.spotify.com/v1/search?q=genre:\(encodedGenre)&type=artist&limit=50" // Added limit to fetch more items
+        let urlString = "https://api.spotify.com/v1/search?q=genre:\(encodedGenre)&type=artist&limit=50"
         
         guard let url = URL(string: urlString) else {
             completion(nil)
+            print("Invalid url")
             return
         }
         
         var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Error fetching artists: \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid response")
+                completion(nil)
+                return
+            }
+            print("HTTP Status Code: \(httpResponse.statusCode)")
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("HTTP Error: \(httpResponse.statusCode)")
                 completion(nil)
                 return
             }
@@ -185,8 +194,9 @@ class SpotifyAPIManager {
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                    let artistsData = json["artists"] as? [String: Any],
+                   
                    let items = artistsData["items"] as? [[String: Any]] {
-                    
+                    print("\(items) pooop")
                     let artists = items.compactMap { item -> Artist? in
                         guard let name = item["name"] as? String,
                               let images = item["images"] as? [[String: Any]],
@@ -195,9 +205,10 @@ class SpotifyAPIManager {
                               //let id = item["id"] as? String else { return nil }
                         return Artist(name: name, imageURL: imageURL)
                     }
-                    print("alles gut")
+                    print("Successfully fetched \(artists.count) artists")
                     completion(artists)
                 } else {
+                    print("Unexpected JSON structure")
                     completion(nil)
                 }
             } catch {
@@ -205,6 +216,13 @@ class SpotifyAPIManager {
                 completion(nil)
             }
         }.resume()
+    }
+    
+    // - MARK: FormatDuration
+    private func formatDuration(durationMs: Int) -> String {
+        let minutes = durationMs / 60000
+        let seconds = (durationMs % 60000) / 1000
+        return String(format: "%d:%02d", minutes, seconds)
     }
 }
     
