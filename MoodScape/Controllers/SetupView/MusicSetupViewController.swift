@@ -13,7 +13,7 @@ import FirebaseFirestore
 class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var genres = [
-        "Pop", "Hip Hop", "Classical", "Jazz", "Rock", "Electronic", "Country",
+        "Pop", "Rap", "Classical", "Jazz", "Rock", "Electronic", "Country",
         "Blues", "Reggae", "Metal", "Indie", "Techno", "K-Pop", "Folk", "Punk",
         "Afro", "Funk", "R&B", "Soul", "Alternative", "Latin", "House", "Trance",
         "Dubstep", "Ambient", "Disco", "Ska", "Grunge", "Gospel", "Opera",

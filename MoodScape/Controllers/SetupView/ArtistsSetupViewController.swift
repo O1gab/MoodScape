@@ -30,6 +30,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         layout.minimumLineSpacing = 10
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
+        collectionView.alpha = 0
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
@@ -75,20 +76,28 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     // - MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        fetchSelectedGenres { [weak self] genres in
+            
+            self?.genres = genres ?? [""]
+            self?.endIndex = (genres?.count ?? 1) - 1
+            self?.currentIndex = 0
+            self?.displayNextGenre()
+        }
     }
     
     // - MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchSelectedGenres { [weak self] genres in
-            
+            /*
             self?.genres = genres ?? [""]
             self?.endIndex = (genres?.count ?? 1) - 1
             self?.currentIndex = 0
-            
+            */
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self?.displayNextGenre()
+                self?.revealCollectionView()
                 self?.revealButton(button: self?.submitButton ?? UIButton())
+               
             }
         }
     }
@@ -152,7 +161,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
                 self.artists = artists
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
-                    self.startTypingAnimation(label: self.fieldLabel, text: "Your \(self.currentIndex + 1) choice was \(genre). Please, select the artists that you like/know.", typingSpeed: 0.075) {
+                    self.startTypingAnimation(label: self.fieldLabel, text: "Your \(self.currentIndex + 1) choice was \(genre). Please, select the artists that you like/know.", typingSpeed: 0.05) {
                         self.submitButton.isHidden = false
                     }
                 }
@@ -205,7 +214,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
         
         // Start the erasing animation
-        startErasingAnimation(label: fieldLabel, typingSpeed: 0.045) {
+        startErasingAnimation(label: fieldLabel, typingSpeed: 0.035) {
             self.currentIndex += 1
             self.displayNextGenre()
         }
@@ -227,6 +236,15 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
     }
     
+    // - MARK: RevealCollectionView
+    private func revealCollectionView() {
+        collectionView.isHidden = false
+        
+        UIView.animate(withDuration: 1.5) {
+            self.collectionView.alpha = 1
+        }
+    }
+    
     // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return artists.count
@@ -235,7 +253,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistCell", for: indexPath) as! ArtistCell
         let artist = artists[indexPath.item]
-        let isSelected = selectedArtists.contains(where: { $0.name == artist.name && $0.imageURL == artist.imageURL })
+        let isSelected = selectedArtists.contains(where: { $0.name == artist.name})
         cell.configure(with: artist, isSelected: isSelected)
         return cell
     }
@@ -244,7 +262,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let artist = artists[indexPath.item]
         
-        if let index = selectedArtists.firstIndex(where: { $0.name == artist.name && $0.imageURL == artist.imageURL }) {
+        if let index = selectedArtists.firstIndex(where: { $0.name == artist.name}) {
             selectedArtists.remove(at: index)
         } else {
             selectedArtists.append(artist)
