@@ -16,11 +16,14 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     private var endIndex: Int = 0
     private var genres: [String] = []
     
+    private var selectedGenre: String?
+    
     private var artists: [Artist] = []
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
+        layout.itemSize = CGSize(width: 100, height: 100)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .blue
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -97,6 +100,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(ArtistCell.self, forCellWithReuseIdentifier: "ArtistCell")
+        collectionView.backgroundColor = .clear // Change background to clear
         
         submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
     }
@@ -109,11 +113,11 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
             gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
             gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150),
+            fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25),
             fieldLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
             
-            collectionView.topAnchor.constraint(equalTo: fieldLabel.bottomAnchor, constant: 20),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
             collectionView.bottomAnchor.constraint(equalTo: submitButton.topAnchor, constant: -20),
@@ -128,15 +132,24 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     // - MARK: DisplayNextGenre
     private func displayNextGenre() {
         guard currentIndex <= endIndex else {
-            // All genres have been displayed; handle completion or transition to next view
             navigateToNextView(viewController: MainViewController())
             return
         }
 
         let genre = genres[currentIndex]
-        startTypingAnimation(label: fieldLabel, text: "Your \(currentIndex + 1) choice was \(genre)", typingSpeed: 0.075) {
-            self.submitButton.isHidden = false
+        selectedGenre = genre
+        
+        /*SpotifyAPIManager.shared.fetchArtistsByGenre(for: genre) { [weak self] artists in
+            guard let self = self, let artists = artists else { return }
+            self.artists = artists
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.startTypingAnimation(label: self.fieldLabel, text: "Your \(self.currentIndex + 1) choice was \(genre)", typingSpeed: 0.075) {
+                    self.submitButton.isHidden = false
+                }
+            }
         }
+         */
     }
     
     // - MARK: FetchSelectedGenres
@@ -195,6 +208,11 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         // TODO: implement this function!
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            let width = (collectionView.bounds.width - 30) / 3 // 3 cells per row with some spacing
+            return CGSize(width: width, height: width + 30) // Height a bit larger to accommodate text
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return artists.count
     }
@@ -202,7 +220,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistCell", for: indexPath) as! ArtistCell
         let artist = artists[indexPath.item]
-        cell.configure(with: artist)
+        cell.backgroundColor = .green
         return cell
     }
     

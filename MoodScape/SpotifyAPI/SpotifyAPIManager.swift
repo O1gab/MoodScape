@@ -18,48 +18,48 @@ class SpotifyAPIManager {
             completion(nil)
             return
         }
-            
+        
         let url = URL(string: "https://api.spotify.com/v1/browse/new-releases?country=US")!
         var request = URLRequest(url: url)
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-            
+        
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-        guard let data = data, error == nil,
-            let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-            let albumsJson = json["albums"] as? [String: Any],
-            let items = albumsJson["items"] as? [[String: Any]] else {
-            completion(nil)
-            return
-        }
-                
-        var albums: [Album] = []
-        let dispatchGroup = DispatchGroup()
-                
-        for item in items {
-            dispatchGroup.enter()
-                    
-            guard let name = item["name"] as? String,
-                let artists = item["artists"] as? [[String: Any]],
-                let artistName = artists.first?["name"] as? String,
-                let images = item["images"] as? [[String: Any]],
-                let imageUrl = images.first?["url"] as? String,
-                let spotifyUrl = item["external_urls"] as? [String: String],
-                let releaseDate = item["release_date"] as? String,
-                let albumId = item["id"] as? String else {
-                dispatchGroup.leave()
-                continue
+            guard let data = data, error == nil,
+                  let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                  let albumsJson = json["albums"] as? [String: Any],
+                  let items = albumsJson["items"] as? [[String: Any]] else {
+                completion(nil)
+                return
             }
-                    
-        self.fetchTopSongsForAlbum(albumId: albumId) { songs in
-            let album = Album(name: name, artist: artistName, imageUrl: imageUrl, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: releaseDate, topSongs: songs)
-            albums.append(album)
-            dispatchGroup.leave()
-            }
-        }
-                dispatchGroup.notify(queue: .main) {
-                    completion(albums)
+            
+            var albums: [Album] = []
+            let dispatchGroup = DispatchGroup()
+            
+            for item in items {
+                dispatchGroup.enter()
+                
+                guard let name = item["name"] as? String,
+                      let artists = item["artists"] as? [[String: Any]],
+                      let artistName = artists.first?["name"] as? String,
+                      let images = item["images"] as? [[String: Any]],
+                      let imageUrl = images.first?["url"] as? String,
+                      let spotifyUrl = item["external_urls"] as? [String: String],
+                      let releaseDate = item["release_date"] as? String,
+                      let albumId = item["id"] as? String else {
+                    dispatchGroup.leave()
+                    continue
+                }
+                
+                self.fetchTopSongsForAlbum(albumId: albumId) { songs in
+                    let album = Album(name: name, artist: artistName, imageUrl: imageUrl, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: releaseDate, topSongs: songs)
+                    albums.append(album)
+                    dispatchGroup.leave()
                 }
             }
+            dispatchGroup.notify(queue: .main) {
+                completion(albums)
+            }
+        }
         task.resume()
     }
     
@@ -69,32 +69,32 @@ class SpotifyAPIManager {
             completion([])
             return
         }
-                
+        
         let url = URL(string: "https://api.spotify.com/v1/albums/\(albumId)/tracks")!
         var request = URLRequest(url: url)
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-                
+        
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, error == nil,
-                let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                let items = json["items"] as? [[String: Any]] else {
+                  let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                  let items = json["items"] as? [[String: Any]] else {
                 completion([])
                 return
-                }
-                    
+            }
+            
             let songs: [Song] = items.prefix(3).compactMap { item in
                 guard let name = item["name"] as? String,
-                    let artistsArray = item["artists"] as? [[String: Any]],
-                    let artist = artistsArray.first?["name"] as? String,
-                    let durationMs = item["duration_ms"] as? Int,
-                    let spotifyUrl = item["external_urls"] as? [String: String] else {
-                        return nil
-                    }
+                      let artistsArray = item["artists"] as? [[String: Any]],
+                      let artist = artistsArray.first?["name"] as? String,
+                      let durationMs = item["duration_ms"] as? Int,
+                      let spotifyUrl = item["external_urls"] as? [String: String] else {
+                    return nil
+                }
                 let duration = self.formatDuration(durationMs: durationMs)
                 return Song(name: name, artist: artist, duration: duration, spotifyUrl: spotifyUrl["spotify"]!)
-                }
-            completion(songs)
             }
+            completion(songs)
+        }
         task.resume()
     }
     
@@ -110,18 +110,18 @@ class SpotifyAPIManager {
             return
         }
         var request = URLRequest(url: url)
-            
+        
         
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
-
+        
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data, error == nil else {
                 print("Failed to fetch songs: \(error?.localizedDescription ?? "Unknown error")")
                 completion(nil)
                 return
             }
-
+            
             do {
                 let jsonDecoder = JSONDecoder()
                 let response = try jsonDecoder.decode(SpotifyPlaylistResponse.self, from: data)
@@ -129,19 +129,19 @@ class SpotifyAPIManager {
                 let songs = response.items.compactMap { item -> Song? in
                     guard let track = item.track else { return nil }
                     let artistName = track.artists.first?.name ?? "Unknown Artist"
-                        return Song(
-                            name: track.name,
-                            artist: artistName,
-                            duration: "0",
-                            spotifyUrl: track.external_urls["spotify"] ?? ""
-                        )
-                    }
-                    completion(songs)
-                } catch {
-                    print("Failed to parse JSON: \(error.localizedDescription)")
-                    completion(nil)
+                    return Song(
+                        name: track.name,
+                        artist: artistName,
+                        duration: "0",
+                        spotifyUrl: track.external_urls["spotify"] ?? ""
+                    )
                 }
+                completion(songs)
+            } catch {
+                print("Failed to parse JSON: \(error.localizedDescription)")
+                completion(nil)
             }
+        }
         task.resume()
     }
     
@@ -151,8 +151,63 @@ class SpotifyAPIManager {
         let seconds = (durationMs % 60000) / 1000
         return String(format: "%d:%02d", minutes, seconds)
     }
+    
+    func fetchArtistsByGenre(for genre: String, completion: @escaping ([Artist]?) -> Void) {
+        guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
+            completion([])
+            return
+        }
+        // Encode the genre to ensure it's safely included in the URL
+        let encodedGenre = genre.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? genre
+        print(encodedGenre)
+        let urlString = "https://api.spotify.com/v1/search?q=genre:\(encodedGenre)&type=artist&limit=50" // Added limit to fetch more items
+        
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error fetching artists: \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data else {
+                completion(nil)
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let artistsData = json["artists"] as? [String: Any],
+                   let items = artistsData["items"] as? [[String: Any]] {
+                    
+                    let artists = items.compactMap { item -> Artist? in
+                        guard let name = item["name"] as? String,
+                              let images = item["images"] as? [[String: Any]],
+                              let imageURLString = images.first?["url"] as? String,
+                              let imageURL = URL(string: imageURLString),
+                              let id = item["id"] as? String else { return nil }
+                        return Artist(name: name, id: id, imageURL: imageURL)
+                    }
+                    print("alles gut")
+                    completion(artists)
+                } else {
+                    completion(nil)
+                }
+            } catch {
+                print("Error parsing JSON: \(error)")
+                completion(nil)
+            }
+        }.resume()
+    }
 }
-
+    
 struct SpotifyPlaylistResponse: Codable {
     let items: [SpotifyTrackItem]
 }

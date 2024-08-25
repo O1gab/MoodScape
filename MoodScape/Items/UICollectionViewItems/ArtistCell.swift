@@ -13,8 +13,9 @@ class ArtistCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 25
+        imageView.layer.borderColor = UIColor.green.cgColor
         imageView.clipsToBounds = true
-        imageView.backgroundColor = .blue
+        imageView.backgroundColor = .red
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -37,7 +38,7 @@ class ArtistCell: UICollectionViewCell {
 
     // - MARK: Init
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
 
     // - MARK: SetupView
@@ -64,12 +65,15 @@ class ArtistCell: UICollectionViewCell {
     // - MARK: Configure
     func configure(with artist: Artist) {
         artistNameLabel.text = artist.name
+        artistImageView.backgroundColor = .green
         /*
-        if let url = URL(string: artist.images.first?.url ?? "") {
-            // Load image from URL
-            // Example: use a library like SDWebImage to load the image asynchronously
-            artistImageView.sd_setImage(with: url, completed: nil)
-        }
+        URLSession.shared.dataTask(with: artist.imageURL) { data, _, _ in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.artistImageView.image = image
+                }
+            }
+        }.resume()
          */
     }
 }
