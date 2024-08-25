@@ -24,6 +24,7 @@ class ArtistCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        label.numberOfLines = 0
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -45,6 +46,7 @@ class ArtistCell: UICollectionViewCell {
     private func setupView() {
         contentView.addSubview(artistImageView)
         contentView.addSubview(artistNameLabel)
+        contentView.layer.cornerRadius = 37.5
     }
     
     // - MARK: SetupConstraints
@@ -63,16 +65,16 @@ class ArtistCell: UICollectionViewCell {
     }
 
     // - MARK: Configure
-    func configure(with artist: Artist) {
+    func configure(with artist: Artist, isSelected: Bool) {
         artistNameLabel.text = artist.name
         
-        URLSession.shared.dataTask(with: artist.imageURL) { data, _, _ in
-            if let data = data, let image = UIImage(data: data) {
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: artist.imageURL), let image = UIImage(data: data) {
                 DispatchQueue.main.async {
                     self.artistImageView.image = image
                 }
             }
-        }.resume()
-         
+        }
+        contentView.backgroundColor = isSelected ? UIColor(red: 0/255, green: 104/255, blue: 80/255, alpha: 1.0) : UIColor.clear
     }
 }
