@@ -10,7 +10,7 @@ import Gifu
 import FirebaseAuth
 import FirebaseFirestore
 
-class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource {
+class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var currentIndex: Int = 0
     private var endIndex: Int = 0
@@ -19,6 +19,8 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     private var selectedGenre: String?
     
     private var artists: [Artist] = []
+    
+    private var selectedArtists: [Artist] = []
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -211,7 +213,18 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     
     // - MARK: SaveSelectedArtists
     private func saveSelectedArtists() {
-        // TODO: implement this function!
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+        
+        let selectedArtistNames = selectedArtists.map { $0.name }
+        
+        db.collection("users").document(userId).updateData(["selectedArtists": selectedArtistNames]) { error in
+            if let error = error {
+                print("Error saving selected artists: \(error.localizedDescription)")
+            } else {
+                print("Selected artists saved successfully.")
+            }
+        }
     }
     
     // MARK: - UICollectionViewDataSource
@@ -222,7 +235,21 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistCell", for: indexPath) as! ArtistCell
         let artist = artists[indexPath.item]
-        cell.configure(with: artist)
+        let isSelected = selectedArtists.contains(where: { $0.name == artist.name && $0.imageURL == artist.imageURL })
+        cell.configure(with: artist, isSelected: isSelected)
         return cell
+    }
+    
+    // MARK: - UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let artist = artists[indexPath.item]
+        
+        if let index = selectedArtists.firstIndex(where: { $0.name == artist.name && $0.imageURL == artist.imageURL }) {
+            selectedArtists.remove(at: index)
+        } else {
+            selectedArtists.append(artist)
+        }
+        
+        collectionView.reloadItems(at: [indexPath])
     }
 }
