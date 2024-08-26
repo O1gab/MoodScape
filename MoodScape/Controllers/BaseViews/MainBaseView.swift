@@ -17,6 +17,15 @@ class MainBaseView: UIViewController {
         gifBackground.translatesAutoresizingMaskIntoConstraints = false
         return gifBackground
     }()
+    
+    private let gifGradient: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "green_gradient")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.alpha = 0.5
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
 
     let profileButton: UIButton = {
         let profileButton = UIButton(type: .custom)
@@ -45,6 +54,7 @@ class MainBaseView: UIViewController {
     private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
+        view.addSubview(gifGradient)
         
         profileButton.frame = CGRect(x: view.frame.width - 60, y: 50, width: 50, height: 50)
         profileButton.addTarget(self, action: #selector(profileTapped), for: .touchUpInside)
@@ -61,6 +71,11 @@ class MainBaseView: UIViewController {
             gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
             gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            gifGradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
+            gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             profileButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 210),
             profileButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
