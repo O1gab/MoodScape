@@ -14,10 +14,3 @@ struct Album {
     let releaseDate: String
     var topSongs: [Song]
 }
-
-struct Song {
-    let name: String
-    let artist: String
-    let duration: String
-    let spotifyUrl: String
-}
