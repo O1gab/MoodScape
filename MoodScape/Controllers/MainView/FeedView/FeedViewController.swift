@@ -23,7 +23,10 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     private var recommendedSongsCollectionView: UICollectionView!
     private var recommendedSongs: [Song] = []
     
-    private let loadingIndicator = UIActivityIndicatorView(style: .large)
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        return indicator
+    }()
     
     private let topLabel: UILabel = {
         let topLabel = UILabel()
@@ -47,12 +50,32 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     private let recommendationsLabel: UILabel = {
         let label = UILabel()
-        label.text = "You may like"
+        label.text = "You may also like"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    private let infoButton: UIButton = {
+        let button = UIButton(type: .infoLight)
+        button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let infoMessage: UILabel = {
+        let message = UILabel()
+        message.text = "These recommendations are based on your listening history and preferences."
+        message.textColor = .white
+        message.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        message.textAlignment = .right
+        message.backgroundColor = UIColor(white: 0, alpha: 0.7)
+        message.layer.cornerRadius = 5
+        message.clipsToBounds = true
+        message.isHidden = true
+        return message
     }()
     
     private let exploreButton: UIButton = {
@@ -65,16 +88,25 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+
+    private func setupInfoButton() {
+        NSLayoutConstraint.activate([
+            
+        ])
+    }
+
+    @objc private func infoButtonTapped() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.infoMessage.isHidden = false
+        })
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.infoMessage.isHidden = true
+            })
+        }
+    }
     
-    private let hintLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Recommendations based on your preferences"
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.font = UIFont.systemFont(ofSize: 14, weight: .light)
-        label.textAlignment = .left
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
     
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
@@ -83,7 +115,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         setupConstraints()
         fetchAlbums()
         fetchTopSongs()
-        
     }
     
     // - MARK: SetupView
@@ -96,15 +127,19 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
-        
         contentView.addSubview(topLabel)
         contentView.addSubview(topSongsLabel)
         contentView.addSubview(loadingIndicator)
+        contentView.addSubview(recommendationsLabel)
+        contentView.addSubview(infoButton)
+        contentView.addSubview(infoMessage)
+       
+        
+        infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .allTouchEvents)
         //contentView.addSubview(exploreButton)
-        //contentView.addSubview(hintLabel)
-        loadingIndicator.center = view.center
         setupAlbumCollectionView()
         setupSongCollectionView()
+        
         ///
         setupRecommendedSongsCollectionView()
         /*fetchSelectedArtists { [weak self] artists in
@@ -114,8 +149,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             }
         }
          */
-        
-        contentView.addSubview(recommendationsLabel)
     }
     
     // - MARK: SetupAlbumCollectionView
@@ -190,7 +223,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             albumCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             albumCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
-            albumCollectionView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 1/3),
+            albumCollectionView.heightAnchor.constraint(equalToConstant: 300),
             
             topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -20),
             topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -200,7 +233,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             songCollectionView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 5),
             songCollectionView.heightAnchor.constraint(equalToConstant: 450),
             
-            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 20),
+            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 40),
             recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             recommendationsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             
@@ -261,6 +294,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
+    // - MARK: FetchSelectedArtists
     private func fetchSelectedArtists(completion: @escaping ([String]?) -> Void) {
         let db = Firestore.firestore()
         let userId = Auth.auth().currentUser?.uid
