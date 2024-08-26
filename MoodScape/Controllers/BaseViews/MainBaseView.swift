@@ -17,12 +17,12 @@ class MainBaseView: UIViewController {
         gifBackground.translatesAutoresizingMaskIntoConstraints = false
         return gifBackground
     }()
-    
+
     let profileButton: UIButton = {
         let profileButton = UIButton(type: .custom)
         profileButton.layer.cornerRadius = 25
         profileButton.clipsToBounds = true
-        profileButton.backgroundColor = .blue
+        profileButton.imageView?.contentMode = .scaleAspectFill
         return profileButton
     }()
     
@@ -37,6 +37,7 @@ class MainBaseView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupProfileButton()
         setupConstraints()
     }
     
@@ -67,6 +68,16 @@ class MainBaseView: UIViewController {
             exitButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             exitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
         ])
+    }
+    
+    private func setupProfileButton() {
+        if let imageData = UserDefaults.standard.data(forKey: "profileImage"),
+           let image = UIImage(data: imageData) {
+            profileButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+        } else {
+            profileButton.setImage(UIImage(systemName: "person.circle.fill"), for: .normal)
+            profileButton.tintColor = .white
+        }
     }
     
     // - MARK: ExitTapped

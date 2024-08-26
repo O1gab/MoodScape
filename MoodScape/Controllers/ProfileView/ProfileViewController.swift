@@ -12,21 +12,6 @@ import FirebaseFirestore
 
 class ProfileViewController: ProfileBaseView {
     
-    private let backgroundContainer: UIView = {
-        let view = UIView()
-        view.backgroundColor = .blue
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let starsBackground: GIFImageView = {
-        let gifBackground = GIFImageView()
-        gifBackground.animate(withGIFNamed: "blinking_stars")
-        gifBackground.contentMode = .scaleAspectFill
-        gifBackground.translatesAutoresizingMaskIntoConstraints = false
-        return gifBackground
-    }()
-    
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = .white
@@ -160,10 +145,7 @@ class ProfileViewController: ProfileBaseView {
     private func setupView() {
         view.addSubview(settingsButton)
         view.addSubview(backButton)
-        view.addSubview(backgroundContainer)
-        backgroundContainer.addSubview(starsBackground)
-        starsBackground.addSubview(profileImage)
-        
+        view.addSubview(profileImage)
         view.addSubview(usernameLabel)
         view.addSubview(cardView)
         view.addSubview(editButton)
@@ -182,16 +164,6 @@ class ProfileViewController: ProfileBaseView {
         NSLayoutConstraint.activate([
             settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             settingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            backgroundContainer.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundContainer.heightAnchor.constraint(equalToConstant: 250),
-            
-            starsBackground.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor),
-            starsBackground.trailingAnchor.constraint(equalTo: backgroundContainer.trailingAnchor),
-            starsBackground.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
-            starsBackground.bottomAnchor.constraint(equalTo: backgroundContainer.bottomAnchor),
             
             profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
