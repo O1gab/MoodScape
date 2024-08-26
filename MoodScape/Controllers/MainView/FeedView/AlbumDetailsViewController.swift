@@ -11,11 +11,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private var album: Album
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
+    private var scrollView: UIScrollView!
     
     private let contentView: UIView = {
         let view = UIView()
@@ -97,6 +93,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         button.setImage(UIImage(systemName: "star"), for: .normal)
         button.setImage(UIImage(systemName: "star.fill"), for: .selected)
         button.tintColor = .yellow
+        button.backgroundColor = .clear
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -169,6 +166,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     // - MARK: SetupView
     private func setupView() {
+        scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(closeButton)
@@ -207,7 +206,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            contentView.heightAnchor.constraint(equalToConstant: 780),
+            contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
             
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             closeButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
