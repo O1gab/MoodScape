@@ -87,11 +87,12 @@ class SpotifyAPIManager {
                       let artistsArray = item["artists"] as? [[String: Any]],
                       let artist = artistsArray.first?["name"] as? String,
                       let durationMs = item["duration_ms"] as? Int,
-                      let spotifyUrl = item["external_urls"] as? [String: String] else {
+                      let spotifyUrl = item["external_urls"] as? [String: String],
+                      let imageURLString = "" as? String else {
                     return nil
                 }
                 let duration = self.formatDuration(durationMs: durationMs)
-                return Song(name: name, artist: artist, duration: duration, spotifyUrl: spotifyUrl["spotify"]!)
+                return Song(name: name, artist: artist, duration: duration, spotifyUrl: spotifyUrl["spotify"]!, imageUrl: imageURLString)
             }
             completion(songs)
         }
@@ -133,7 +134,8 @@ class SpotifyAPIManager {
                         name: track.name,
                         artist: artistName,
                         duration: "0",
-                        spotifyUrl: track.external_urls["spotify"] ?? ""
+                        spotifyUrl: track.external_urls["spotify"] ?? "",
+                        imageUrl: ""
                     )
                 }
                 completion(songs)
@@ -218,7 +220,6 @@ class SpotifyAPIManager {
     }
     
     func fetchSimilarArtists(for artist: Artist, completion: @escaping ([Artist]?) -> Void) {
-        // Spotify API call to get similar artists
         guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion([])
             print("Unable to get the access token")
@@ -239,12 +240,6 @@ class SpotifyAPIManager {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Error fetching similar artists: \(error)")
-                completion(nil)
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("Invalid response")
                 completion(nil)
                 return
             }
@@ -278,6 +273,64 @@ class SpotifyAPIManager {
                    task.resume()
                }
     
+    func fetchRecommendedSongs(for artists: [String], completion: @escaping ([Song]?) -> Void) {
+        guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
+            completion(nil)
+            return
+        }
+        
+        var allSongs: [Song] = []
+        let dispatchGroup = DispatchGroup()
+        
+        for artistId in artists {
+            dispatchGroup.enter()
+            
+            let url = URL(string: "https://api.spotify.com/v1/artists/\(artistId)/top-tracks?market=US")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                defer { dispatchGroup.leave() }
+                
+                guard let data = data, error == nil else {
+                    // Handle network error
+                    return
+                }
+                
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let tracksData = json["tracks"] as? [[String: Any]] {
+                        
+                        let tracks = tracksData.compactMap { item -> Song? in
+                            guard let name = item["name"] as? String,
+                                  let externalUrls = item["external_urls"] as? [String: Any],
+                                  let spotifyUrl = externalUrls["spotify"] as? String,
+                                  let artists = item["artists"] as? [[String: Any]],
+                                  let artistName = artists.first?["name"] as? String,
+                                  let album = item["album"] as? [String: Any],
+                                  let images = album["images"] as? [[String: Any]],
+                                  let imageUrlString = images.first?["url"] as? String else {
+                                return nil
+                            }
+                            
+                            return Song(name: name, artist: artistName, duration: "0", spotifyUrl: spotifyUrl, imageUrl: imageUrlString)
+                        }
+                        
+                        allSongs.append(contentsOf: tracks)
+                    }
+                } catch {
+                    fatalError("Fetching data from Spotify unsuccessful!")
+                }
+            }.resume()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            let randomSongs = Array(allSongs.shuffled().prefix(20)) // maybe change???
+            completion(randomSongs)
+        }
+    }
+
     // - MARK: FormatDuration
     private func formatDuration(durationMs: Int) -> String {
         let minutes = durationMs / 60000
