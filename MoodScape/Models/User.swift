@@ -7,7 +7,6 @@
 import Foundation
 
 struct User {
-    //let uid: String
     var id: String
     var email: String
     var username: String
@@ -20,7 +19,6 @@ struct User {
     var friends: [String]?
     
     init(data: [String: Any]) {
-        //self.uid = uid
         self.id = data["uid"] as? String ?? ""
         self.email = data["email"] as? String ?? ""
         self.username = data["username"] as? String ?? ""
@@ -34,14 +32,15 @@ struct User {
     }
     
     func toDictionary() -> [String: Any] {
-            return [
-                "email": email,
-                "username": username,
-                "firstName": firstName ?? "",
-                "lastName": lastName ?? "",
-                "profileImageUrl": profileImageUrl ?? "",
-                "location": location ?? "",
-                "musicPreferences": musicPreferences ?? ""
-            ]
-        }
+        return [
+            "uid": id,
+            "email": email,
+            "username": username,
+            "firstName": firstName ?? "",
+            "lastName": lastName ?? "",
+            "profileImageUrl": profileImageUrl ?? "",
+            "location": location ?? "",
+            "musicPreferences": musicPreferences ?? ""
+        ]
+    }
 }
