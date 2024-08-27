@@ -158,6 +158,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7616BD7A2C7E7B4C0083D227 /* SocialView */ = {
+			isa = PBXGroup;
+			children = (
+				7664855D2C6C46A700AA050A /* SocialViewController.swift */,
+			);
+			path = SocialView;
+			sourceTree = "<group>";
+		};
+		7616BD7B2C7E7B6F0083D227 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				7616BD762C7E33AF0083D227 /* custom_tabbar.png */,
+				768536C82C7A84A000C35FF8 /* green_gradient.gif */,
+				764E2A2A2C78195F00785104 /* blinking_stars.gif */,
+				76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		764E2A2C2C78221700785104 /* SetupView */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +206,7 @@
 		766485542C6B989F00AA050A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				76F31B492C7BCA7D00B65B72 /* ImageCache.swift */,
 				766485552C6B98A900AA050A /* AuthExtensions */,
 				7664856B2C6EB68500AA050A /* ViewExtensions.swift */,
 				761350282C70166A009A3F40 /* ProfileSetup.swift */,
@@ -208,9 +228,9 @@
 		7664855A2C6C446300AA050A /* MainView */ = {
 			isa = PBXGroup;
 			children = (
+				7616BD7A2C7E7B4C0083D227 /* SocialView */,
 				76AAD32A2C729DD000CBE3D8 /* MainView */,
 				76AAD3232C721A0C00CBE3D8 /* FeedView */,
-				7664855D2C6C46A700AA050A /* SocialViewController.swift */,
 				766485612C6C474F00AA050A /* StatsViewController.swift */,
 				7616BD742C7E33800083D227 /* CustomTabBar.swift */,
 			);
@@ -223,7 +243,6 @@
 				768536CE2C7A8B9000C35FF8 /* UICollectionViewItems */,
 				76976C962C7401C300D44DD3 /* TableViewItems */,
 				766485702C6EB8C900AA050A /* TabBarItems */,
-				76F31B492C7BCA7D00B65B72 /* ImageCache.swift */,
 			);
 			path = Items;
 			sourceTree = "<group>";
@@ -331,11 +350,8 @@
 				76B869B82C67B3F0002866B9 /* Models */,
 				76B869BB2C67B42B002866B9 /* Services */,
 				76B869B92C67B3FE002866B9 /* Tests */,
+				7616BD7B2C7E7B6F0083D227 /* Images */,
 				76B869AA2C67B3AA002866B9 /* Assets.xcassets */,
-				7616BD762C7E33AF0083D227 /* custom_tabbar.png */,
-				768536C82C7A84A000C35FF8 /* green_gradient.gif */,
-				764E2A2A2C78195F00785104 /* blinking_stars.gif */,
-				76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */,
 				764FDE3B2C6989730060A428 /* Main.storyboard */,
 				76B869AF2C67B3AA002866B9 /* Info.plist */,
 			);
