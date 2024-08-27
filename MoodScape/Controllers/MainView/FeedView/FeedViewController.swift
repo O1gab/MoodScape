@@ -161,20 +161,36 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // - MARK: SetupRecommendedSongsCollectionView (You may also like)
     private func setupRecommendedSongsCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
-        recommendedSongsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        recommendedSongsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         recommendedSongsCollectionView.backgroundColor = .clear
         recommendedSongsCollectionView.showsHorizontalScrollIndicator = false
         recommendedSongsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         recommendedSongsCollectionView.register(SongViewCell.self, forCellWithReuseIdentifier: "SongViewCell")
         recommendedSongsCollectionView.dataSource = self
         recommendedSongsCollectionView.delegate = self
+        setupTwoColumnLayout(for: recommendedSongsCollectionView)
         contentView.addSubview(recommendedSongsCollectionView)
+    }
+    
+    private func setupTwoColumnLayout(for collectionView: UICollectionView) {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        
+        let numberOfColumns: CGFloat = 2
+        let itemSpacing: CGFloat = 5
+        let rowSpacing: CGFloat = 5
+        let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
+        let totalSpacing = itemSpacing * (numberOfColumns - 1) + sectionInsets.left + sectionInsets.right
+        let itemWidth = (collectionView.bounds.width - totalSpacing) / numberOfColumns
+        let itemHeight = itemWidth // Maintain a square shape for the items
+        
+        layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
+        layout.minimumInteritemSpacing = itemSpacing
+        layout.minimumLineSpacing = rowSpacing
+        layout.sectionInset = sectionInsets
+        
+        collectionView.collectionViewLayout = layout
     }
     
     // - MARK: SetupConstraints
@@ -215,11 +231,11 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             infoButton.widthAnchor.constraint(equalToConstant: 20),
             infoButton.heightAnchor.constraint(equalToConstant: 20),
             
-            recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 30),
-                recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                recommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 200),
-                recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 10),
+            recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            recommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 350),
+            recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -200)
         ])
     }
     
@@ -273,6 +289,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
+    // - MARK: FetchRecommendedSongs (you may also like)
     private func fetchRecommendedSongs() {
         fetchSelectedArtists { [weak self] artistNames in
             guard let artistNames = artistNames, !artistNames.isEmpty else {
@@ -309,6 +326,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
+    // - MARK: FetchSelectedArtists
     private func fetchSelectedArtists(completion: @escaping ([String]?) -> Void) {
         let db = Firestore.firestore()
         let userId = Auth.auth().currentUser?.uid
