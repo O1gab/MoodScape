@@ -33,7 +33,15 @@ class SongViewCell: UICollectionViewCell {
     }
     
     func configure(with song: Song) {
-        imageView.image = nil // Set image from URL if needed
-        // Optionally load image asynchronously
+        imageView.image = nil // Optionally load image from URL here
+        if let url = URL(string: song.imageUrl ?? "") {
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data, error == nil, let image = UIImage(data: data) else { return }
+                DispatchQueue.main.async {
+                    self.imageView.image = image
+                }
+            }
+            task.resume()
+        }
     }
 }

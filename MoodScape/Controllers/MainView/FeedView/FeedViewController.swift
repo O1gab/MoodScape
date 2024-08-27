@@ -96,6 +96,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         setupConstraints()
         fetchAlbums()
         fetchTopSongs()
+        fetchRecommendedSongs()
     }
     
     // - MARK: SetupView
@@ -120,23 +121,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         //contentView.addSubview(exploreButton)
         setupAlbumCollectionView()
         setupSongCollectionView()
-        
         setupRecommendedSongsCollectionView()
-        fetchSelectedArtists { [weak self] artists in
-            SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
-                SpotifyAPIManager.shared.fetchRecommendedSongs(for: artists ?? [""]) { songs in
-                    DispatchQueue.main.async {
-                        if let songs = songs {
-                            self?.recommendedSongs = songs
-                            self?.recommendedSongsCollectionView.reloadData()
-                            print("Recommended songs count: \(self?.recommendedSongs.count)")
-                        } else {
-                            self?.showError("Failed to fetch recommended songs")
-                        }
-                    }
-                }
-            }
-        }
     }
     
     // - MARK: SetupAlbumCollectionView
@@ -179,13 +164,14 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-            
+        
         recommendedSongsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        recommendedSongsCollectionView.backgroundColor = .blue
-        recommendedSongsCollectionView.showsVerticalScrollIndicator = false
+        recommendedSongsCollectionView.backgroundColor = .clear
+        recommendedSongsCollectionView.showsHorizontalScrollIndicator = false
         recommendedSongsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        recommendedSongsCollectionView.register(SongCardCollectionViewCell.self, forCellWithReuseIdentifier: "SongCardCell")
+        recommendedSongsCollectionView.register(SongViewCell.self, forCellWithReuseIdentifier: "SongViewCell")
         recommendedSongsCollectionView.dataSource = self
         recommendedSongsCollectionView.delegate = self
         contentView.addSubview(recommendedSongsCollectionView)
@@ -287,7 +273,42 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
-    // - MARK: FetchSelectedArtists (selection of the user)
+    private func fetchRecommendedSongs() {
+        fetchSelectedArtists { [weak self] artistNames in
+            guard let artistNames = artistNames, !artistNames.isEmpty else {
+                self?.showError("No artists selected")
+                return
+            }
+            
+            let group = DispatchGroup()
+            var allSongs: [Song] = []
+            
+            for artistName in artistNames {
+                group.enter()
+                
+                SpotifyAPIManager.shared.fetchArtistID(for: artistName) { artistID in
+                    guard let artistID = artistID else {
+                        group.leave()
+                        return
+                    }
+                    
+                    SpotifyAPIManager.shared.fetchTopTracks(for: artistID) { songs in
+                        if let songs = songs {
+                            allSongs.append(contentsOf: songs)
+                        }
+                        group.leave()
+                    }
+                }
+            }
+            
+            group.notify(queue: .main) {
+                // Randomly select 20 songs
+                self?.recommendedSongs = Array(allSongs.shuffled().prefix(20))
+                self?.recommendedSongsCollectionView.reloadData()
+            }
+        }
+    }
+    
     private func fetchSelectedArtists(completion: @escaping ([String]?) -> Void) {
         let db = Firestore.firestore()
         let userId = Auth.auth().currentUser?.uid
@@ -297,14 +318,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             if let document = document, document.exists {
                 let data = document.data()
                 let artists = data?["selectedArtists"] as? [String]
-                print("Selected artists: \(String(describing: artists))")
                 completion(artists)
             } else {
-                let alert = UIAlertController(title: "Your artists selection not found",
-                                              message: "An error with database occured, please, contact us.",
-                                              preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                self.showError("Failed to fetch selected artists")
                 completion(nil)
             }
         }
@@ -369,7 +385,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
 
         // RECOMMENDED SONGS COLLECTIONS VIEW
         } else if collectionView == recommendedSongsCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SongCardCell", for: indexPath) as! SongCardCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SongViewCell", for: indexPath) as! SongViewCell
             let song = recommendedSongs[indexPath.item]
             cell.configure(with: song)
             return cell
@@ -382,7 +398,8 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         if collectionView == albumCollectionView {
             return CGSize(width: 110, height: 190)
         } else if collectionView == recommendedSongsCollectionView {
-            return CGSize(width: collectionView.bounds.width - 20, height: 80)
+            let width = (collectionView.bounds.width - 40) / 3 // Adjust the divisor based on the number of cells you want to display horizontally
+            return CGSize(width: width, height: width) // Make the height equal to the width to ensure square cells
         }
         return CGSize(width: collectionView.bounds.width - 20, height: 80)
     }

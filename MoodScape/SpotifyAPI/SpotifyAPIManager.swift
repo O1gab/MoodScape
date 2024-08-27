@@ -274,84 +274,118 @@ class SpotifyAPIManager {
         task.resume()
     }
     
-    // - MARK: FetchRecommendedSongs (used in the FeedView)
-    func fetchRecommendedSongs(for artists: [String], completion: @escaping ([Song]?) -> Void) {
+    private let baseURL = "https://api.spotify.com/v1/"
+    
+    func fetchArtistID(for artistName: String, completion: @escaping (String?) -> Void) {
         guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion(nil)
-            print("Unable to get the access token")
             return
         }
-
-        var allSongs: [Song] = []
-        let dispatchGroup = DispatchGroup()
-
-        for artist in artists {
-            dispatchGroup.enter()
-            
-            // URL encode the artist name
-            guard let encodedArtistName = artist.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-                dispatchGroup.leave()
-                continue
-            }
-            
-            let urlString = "https://api.spotify.com/v1/artists/\(encodedArtistName)/top-tracks?market=US"
-            
-            guard let url = URL(string: urlString) else {
-                dispatchGroup.leave()
-                print("Invalid URL: \(urlString)")
-                continue
-            }
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                defer { dispatchGroup.leave() }
-                
-                if let error = error {
-                    print("Error fetching artist's top tracks: \(error)")
-                    return
-                }
-                
-                guard let data = data else {
-                    print("No data received")
-                    return
-                }
-                
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                       let tracksData = json["tracks"] as? [[String: Any]] {
-                        
-                        let tracks = tracksData.compactMap { item -> Song? in
-                            guard let name = item["name"] as? String,
-                                  let externalUrls = item["external_urls"] as? [String: Any],
-                                  let spotifyUrl = externalUrls["spotify"] as? String,
-                                  let artists = item["artists"] as? [[String: Any]],
-                                  let artistName = artists.first?["name"] as? String,
-                                  let album = item["album"] as? [String: Any],
-                                  let images = album["images"] as? [[String: Any]],
-                                  let imageUrlString = images.first?["url"] as? String else {
-                                return nil
-                            }
-                            
-                            return Song(name: name, artist: artistName, duration: "0", spotifyUrl: spotifyUrl, imageUrl: imageUrlString)
-                        }
-                        
-                        allSongs.append(contentsOf: tracks)
-                    }
-                } catch {
-                    print("Error parsing JSON: \(error)")
-                }
-            }.resume()
+        
+        let encodedArtistName = artistName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let urlString = "\(baseURL)search?q=\(encodedArtistName)&type=artist&limit=1"
+        
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
         }
         
-        dispatchGroup.notify(queue: .main) {
-            let randomSongs = Array(allSongs.shuffled().prefix(20))
-            completion(randomSongs)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error fetching artist ID for \(artistName): \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data else {
+                print("No data returned for artist \(artistName)")
+                completion(nil)
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let artistsData = json["artists"] as? [String: Any],
+                   let items = artistsData["items"] as? [[String: Any]],
+                   let artist = items.first,
+                   let id = artist["id"] as? String {
+                    completion(id)
+                } else {
+                    print("Error parsing JSON for artist \(artistName)")
+                    completion(nil)
+                }
+            } catch {
+                print("Error parsing JSON for artist \(artistName): \(error)")
+                completion(nil)
+            }
         }
+        task.resume()
     }
-
+    
+    func fetchTopTracks(for artistID: String, completion: @escaping ([Song]?) -> Void) {
+        guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
+            completion(nil)
+            return
+        }
+        
+        let urlString = "\(baseURL)artists/\(artistID)/top-tracks?market=US"
+        
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error fetching top tracks for artist \(artistID): \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data else {
+                print("No data returned for artist \(artistID)")
+                completion(nil)
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let tracksData = json["tracks"] as? [[String: Any]] {
+                    let tracks = tracksData.compactMap { item -> Song? in
+                        guard let name = item["name"] as? String,
+                              let artists = item["artists"] as? [[String: Any]],
+                              let artistName = artists.first?["name"] as? String,
+                              let id = item["id"] as? String,
+                              let album = item["album"] as? [String: Any],
+                              let images = album["images"] as? [[String: Any]],
+                              let imageURLString = images.first?["url"] as? String,
+                              let imageURL = URL(string: imageURLString) else {
+                            print("Error parsing track item: \(item)")
+                            return nil
+                        }
+                        return Song(name: name, artist: artistName, duration: "", spotifyUrl: "", imageUrl: imageURLString)
+                    }
+                    completion(tracks)
+                } else {
+                    print("Error parsing JSON for artist \(artistID)")
+                    completion(nil)
+                }
+            } catch {
+                print("Error parsing JSON for artist \(artistID): \(error)")
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
+    
     // - MARK: FormatDuration
     private func formatDuration(durationMs: Int) -> String {
         let minutes = durationMs / 60000
