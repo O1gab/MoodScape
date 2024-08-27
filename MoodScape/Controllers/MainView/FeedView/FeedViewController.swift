@@ -88,25 +88,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
-    private func setupInfoButton() {
-        NSLayoutConstraint.activate([
-            
-        ])
-    }
-
-    @objc private func infoButtonTapped() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.infoMessage.isHidden = false
-        })
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.infoMessage.isHidden = true
-            })
-        }
-    }
-    
     
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
@@ -235,9 +216,13 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             
             recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 40),
             recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            recommendationsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             
-            recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 10),
+            infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 15),
+            infoButton.centerYAnchor.constraint(equalTo: recommendationsLabel.centerYAnchor),
+            infoButton.widthAnchor.constraint(equalToConstant: 20),
+            infoButton.heightAnchor.constraint(equalToConstant: 20),
+            
+            recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 30),
             recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 200),
             recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
@@ -312,6 +297,21 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 completion(nil)
+            }
+        }
+    }
+    
+    // - MARK: InfoButtonTapped
+    @objc private func infoButtonTapped() {
+        UIView.animate(withDuration: 0.3) {
+            self.infoMessage.isHidden = !self.infoMessage.isHidden
+        }
+        
+        if !infoMessage.isHidden {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                UIView.animate(withDuration: 0.3) {
+                    self.infoMessage.isHidden = true
+                }
             }
         }
     }
