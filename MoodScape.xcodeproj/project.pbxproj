@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		761350292C70166A009A3F40 /* ProfileSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761350282C70166A009A3F40 /* ProfileSetup.swift */; };
+		7616BD752C7E33800083D227 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD742C7E33800083D227 /* CustomTabBar.swift */; };
+		7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7616BD762C7E33AF0083D227 /* custom_tabbar.png */; };
 		76401AD52C76B4530035C7FA /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76401AD42C76B4530035C7FA /* ContactView.swift */; };
 		764E2A2B2C78195F00785104 /* blinking_stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 764E2A2A2C78195F00785104 /* blinking_stars.gif */; };
 		764E2A2E2C78229A00785104 /* StartSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A2D2C78229A00785104 /* StartSetupViewController.swift */; };
@@ -69,6 +71,8 @@
 
 /* Begin PBXFileReference section */
 		761350282C70166A009A3F40 /* ProfileSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetup.swift; sourceTree = "<group>"; };
+		7616BD742C7E33800083D227 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		7616BD762C7E33AF0083D227 /* custom_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom_tabbar.png; sourceTree = "<group>"; };
 		76401AD42C76B4530035C7FA /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
 		764E2A2A2C78195F00785104 /* blinking_stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = blinking_stars.gif; sourceTree = "<group>"; };
 		764E2A2D2C78229A00785104 /* StartSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSetupViewController.swift; sourceTree = "<group>"; };
@@ -208,6 +212,7 @@
 				76AAD3232C721A0C00CBE3D8 /* FeedView */,
 				7664855D2C6C46A700AA050A /* SocialViewController.swift */,
 				766485612C6C474F00AA050A /* StatsViewController.swift */,
+				7616BD742C7E33800083D227 /* CustomTabBar.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -327,6 +332,7 @@
 				76B869BB2C67B42B002866B9 /* Services */,
 				76B869B92C67B3FE002866B9 /* Tests */,
 				76B869AA2C67B3AA002866B9 /* Assets.xcassets */,
+				7616BD762C7E33AF0083D227 /* custom_tabbar.png */,
 				768536C82C7A84A000C35FF8 /* green_gradient.gif */,
 				764E2A2A2C78195F00785104 /* blinking_stars.gif */,
 				76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */,
@@ -460,6 +466,7 @@
 			files = (
 				764FDE3C2C6989730060A428 /* Main.storyboard in Resources */,
 				7664854F2C6AD34000AA050A /* View.xib in Resources */,
+				7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */,
 				768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */,
 				7664854D2C6A1AAF00AA050A /* GoogleService-Info.plist in Resources */,
 				76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */,
@@ -542,6 +549,7 @@
 				766485682C6E4EFB00AA050A /* ProfileSetupViewController.swift in Sources */,
 				76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */,
 				766485642C6C479800AA050A /* FeedViewController.swift in Sources */,
+				7616BD752C7E33800083D227 /* CustomTabBar.swift in Sources */,
 				768536D42C7AA8DC00C35FF8 /* Artist.swift in Sources */,
 				76AAD3272C72241A00CBE3D8 /* ImageExtensions.swift in Sources */,
 				766485662C6C490400AA050A /* MainBaseView.swift in Sources */,
