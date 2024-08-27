@@ -147,6 +147,7 @@ class SpotifyAPIManager {
         task.resume()
     }
     
+    // - MARK: FetchArtistsByGenre (used during registration)
     func fetchArtistsByGenre(for genre: String, completion: @escaping ([Artist]?) -> Void) {
         guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion([])
@@ -219,6 +220,7 @@ class SpotifyAPIManager {
         }.resume()
     }
     
+    // - MARK: FetchSimilarArtists (used during registration)
     func fetchSimilarArtists(for artist: Artist, completion: @escaping ([Artist]?) -> Void) {
         guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion([])
@@ -250,29 +252,29 @@ class SpotifyAPIManager {
             }
             
             do {
-                           if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                              let artistsData = json["artists"] as? [[String: Any]] {
-                               let similarArtists = artistsData.compactMap { item -> Artist? in
-                                   guard let name = item["name"] as? String,
-                                         let images = item["images"] as? [[String: Any]],
-                                         let imageURLString = images.first?["url"] as? String,
-                                         let imageURL = URL(string: imageURLString),
-                                         let id = item["id"] as? String else { return nil }
-                                   return Artist(name: name, id: id, imageURL: imageURL, imageURLString: imageURLString)
-                               }
-                               completion(similarArtists)
-                           } else {
-                               completion(nil)
-                           }
-                       } catch {
-                           print("Error parsing similar artists JSON: \(error)")
-                           completion(nil)
-                       }
-                   }
-                   
-                   task.resume()
-               }
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let artistsData = json["artists"] as? [[String: Any]] {
+                    let similarArtists = artistsData.compactMap { item -> Artist? in
+                        guard let name = item["name"] as? String,
+                              let images = item["images"] as? [[String: Any]],
+                              let imageURLString = images.first?["url"] as? String,
+                              let imageURL = URL(string: imageURLString),
+                              let id = item["id"] as? String else { return nil }
+                        return Artist(name: name, id: id, imageURL: imageURL, imageURLString: imageURLString)
+                    }
+                    completion(similarArtists)
+                } else {
+                    completion(nil)
+                }
+            } catch {
+                print("Error parsing similar artists JSON: \(error)")
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
     
+    // - MARK: FetchRecommendedSongs (used in the FeedView)
     func fetchRecommendedSongs(for artists: [String], completion: @escaping ([Song]?) -> Void) {
         guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion(nil)
@@ -285,7 +287,13 @@ class SpotifyAPIManager {
         for artistId in artists {
             dispatchGroup.enter()
             
-            let url = URL(string: "https://api.spotify.com/v1/artists/\(artistId)/top-tracks?market=US")!
+            let urlString = "https://api.spotify.com/v1/artists/\(artistId)/top-tracks?market=US"
+            
+            guard let url = URL(string: urlString) else {
+                completion(nil)
+                return
+            }
+            
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
@@ -324,7 +332,6 @@ class SpotifyAPIManager {
                 }
             }.resume()
         }
-        
         dispatchGroup.notify(queue: .main) {
             let randomSongs = Array(allSongs.shuffled().prefix(20)) // maybe change???
             completion(randomSongs)
