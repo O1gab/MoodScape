@@ -276,33 +276,46 @@ class SpotifyAPIManager {
     
     // - MARK: FetchRecommendedSongs (used in the FeedView)
     func fetchRecommendedSongs(for artists: [String], completion: @escaping ([Song]?) -> Void) {
-        guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
+        guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion(nil)
+            print("Unable to get the access token")
             return
         }
-        
+
         var allSongs: [Song] = []
         let dispatchGroup = DispatchGroup()
-        
-        for artistId in artists {
+
+        for artist in artists {
             dispatchGroup.enter()
             
-            let urlString = "https://api.spotify.com/v1/artists/\(artistId)/top-tracks?market=US"
+            // URL encode the artist name
+            guard let encodedArtistName = artist.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+                dispatchGroup.leave()
+                continue
+            }
+            
+            let urlString = "https://api.spotify.com/v1/artists/\(encodedArtistName)/top-tracks?market=US"
             
             guard let url = URL(string: urlString) else {
-                completion(nil)
-                return
+                dispatchGroup.leave()
+                print("Invalid URL: \(urlString)")
+                continue
             }
             
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
             
             URLSession.shared.dataTask(with: request) { data, response, error in
                 defer { dispatchGroup.leave() }
                 
-                guard let data = data, error == nil else {
-                    // Handle network error
+                if let error = error {
+                    print("Error fetching artist's top tracks: \(error)")
+                    return
+                }
+                
+                guard let data = data else {
+                    print("No data received")
                     return
                 }
                 
@@ -328,12 +341,13 @@ class SpotifyAPIManager {
                         allSongs.append(contentsOf: tracks)
                     }
                 } catch {
-                    fatalError("Fetching data from Spotify unsuccessful!")
+                    print("Error parsing JSON: \(error)")
                 }
             }.resume()
         }
+        
         dispatchGroup.notify(queue: .main) {
-            let randomSongs = Array(allSongs.shuffled().prefix(20)) // maybe change???
+            let randomSongs = Array(allSongs.shuffled().prefix(20))
             completion(randomSongs)
         }
     }

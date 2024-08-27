@@ -114,22 +114,29 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView.addSubview(recommendationsLabel)
         contentView.addSubview(infoButton)
         contentView.addSubview(infoMessage)
-       
+        
         
         infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .allTouchEvents)
         //contentView.addSubview(exploreButton)
         setupAlbumCollectionView()
         setupSongCollectionView()
         
-        ///
         setupRecommendedSongsCollectionView()
-        /*fetchSelectedArtists { [weak self] artists in
+        fetchSelectedArtists { [weak self] artists in
             SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
-                SpotifyAPIManager.shared.fetchRecommendedSongs(for: artists ?? [""]) { [weak self] artists in
+                SpotifyAPIManager.shared.fetchRecommendedSongs(for: artists ?? [""]) { songs in
+                    DispatchQueue.main.async {
+                        if let songs = songs {
+                            self?.recommendedSongs = songs
+                            self?.recommendedSongsCollectionView.reloadData()
+                            print("Recommended songs count: \(self?.recommendedSongs.count)")
+                        } else {
+                            self?.showError("Failed to fetch recommended songs")
+                        }
+                    }
                 }
             }
         }
-         */
     }
     
     // - MARK: SetupAlbumCollectionView
@@ -175,7 +182,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
             
         recommendedSongsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        recommendedSongsCollectionView.backgroundColor = .clear
+        recommendedSongsCollectionView.backgroundColor = .blue
         recommendedSongsCollectionView.showsVerticalScrollIndicator = false
         recommendedSongsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         recommendedSongsCollectionView.register(SongCardCollectionViewCell.self, forCellWithReuseIdentifier: "SongCardCell")
@@ -198,23 +205,23 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            topLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             topLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            topLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
+            albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
             albumCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             albumCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
             albumCollectionView.heightAnchor.constraint(equalToConstant: 300),
             
-            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -20),
+            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -25),
             topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
+            songCollectionView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 5),
             songCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             songCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            songCollectionView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 5),
             songCollectionView.heightAnchor.constraint(equalToConstant: 450),
             
-            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 40),
+            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 30),
             recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 15),
@@ -223,13 +230,14 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             infoButton.heightAnchor.constraint(equalToConstant: 20),
             
             recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 30),
-            recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 200),
-            recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+                recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                recommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 200),
+                recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
-    // - MARK: FetchAlbums
+    // - MARK: FetchAlbums (recently published popular albums)
     private func fetchAlbums() {
         loadingIndicator.startAnimating()
         SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
@@ -254,7 +262,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
-    // - MARK: FetchTopSongs
+    // - MARK: FetchTopSongs (5 best songs on this week)
     private func fetchTopSongs() {
         loadingIndicator.startAnimating()
         SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
@@ -279,7 +287,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
-    // - MARK: FetchSelectedArtists
+    // - MARK: FetchSelectedArtists (selection of the user)
     private func fetchSelectedArtists(completion: @escaping ([String]?) -> Void) {
         let db = Firestore.firestore()
         let userId = Auth.auth().currentUser?.uid
@@ -289,9 +297,10 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             if let document = document, document.exists {
                 let data = document.data()
                 let artists = data?["selectedArtists"] as? [String]
+                print("Selected artists: \(String(describing: artists))")
                 completion(artists)
             } else {
-                let alert = UIAlertController(title: "No document found",
+                let alert = UIAlertController(title: "Your artists selection not found",
                                               message: "An error with database occured, please, contact us.",
                                               preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -337,6 +346,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // - MARK: CollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        // ALBUM COLLECTION VIEW
         if collectionView == albumCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AlbumCell", for: indexPath) as! AlbumCollectionViewCell
             let album = albums[indexPath.item]
@@ -350,11 +360,14 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                     task.resume()
                 }
             return cell
+        // SONG COLLECTION VIEW
         } else if collectionView == songCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SongCardCell", for: indexPath) as! SongCardCollectionViewCell
             let song = topWeeklySongs[indexPath.item]
             cell.configure(with: song)
             return cell
+
+        // RECOMMENDED SONGS COLLECTIONS VIEW
         } else if collectionView == recommendedSongsCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SongCardCell", for: indexPath) as! SongCardCollectionViewCell
             let song = recommendedSongs[indexPath.item]
