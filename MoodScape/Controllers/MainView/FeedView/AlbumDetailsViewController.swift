@@ -119,6 +119,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private let topSongsTableView: UITableView = {
         let tableView = UITableView()
+        tableView.backgroundColor = .clear
         tableView.register(SongTableViewCell.self, forCellReuseIdentifier: "SongCell")
         tableView.isScrollEnabled = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -154,7 +155,6 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // Updating the frame of divider
         guard let releaseDateLabelFrame = releaseDateLabel.superview?.convert(releaseDateLabel.frame, to: contentView) else { return }
         divider.frame = CGRect(
             x: 10,
@@ -290,8 +290,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
                 DispatchQueue.main.async {
                     self.albumImageView.image = image
                     if let color = image.dominantColor() {
-                        self.contentView.backgroundColor = color
-                        self.topSongsTableView.backgroundColor = color
+                        let complementaryColor = color.complementaryColor()
+                        self.animateBackgroundGradient(from: color, to: complementaryColor)
                         self.artistLabel.textColor = color.contrastingColor()
                         self.albumName.textColor = color.contrastingComplementaryColor()
                         self.shareButton.tintColor = color.contrastingColor()
@@ -306,6 +306,33 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         artistLabel.text = "\(album.artist)"
         albumName.text = "\(album.name)"
         topSongsTableView.reloadData()
+    }
+    
+    // - MARK: AnimateBackgroundGradient
+    private func animateBackgroundGradient(from dominantColor: UIColor, to complementaryColor: UIColor) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [dominantColor.cgColor, complementaryColor.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.frame = self.contentView.bounds
+        gradientLayer.cornerRadius = self.contentView.layer.cornerRadius
+        gradientLayer.name = "backgroundGradient"
+        
+        if let oldGradientLayer = self.contentView.layer.sublayers?.first(where: { $0.name == "backgroundGradient" }) {
+            oldGradientLayer.removeFromSuperlayer()
+        }
+
+        // Add the new gradient layer
+        self.contentView.layer.insertSublayer(gradientLayer, at: 0)
+
+        // Add animation to the gradient
+        let animation = CABasicAnimation(keyPath: "colors")
+        animation.fromValue = [dominantColor.cgColor, complementaryColor.cgColor]
+        animation.toValue = [complementaryColor.cgColor, dominantColor.cgColor]
+        animation.duration = 7.0
+        animation.autoreverses = true
+        animation.repeatCount = .infinity
+        gradientLayer.add(animation, forKey: nil)
     }
     
     // - MARK: ToggleFavorite
