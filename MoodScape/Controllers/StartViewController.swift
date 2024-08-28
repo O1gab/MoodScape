@@ -64,16 +64,16 @@ class StartViewController: StartBaseView {
 
     // - MARK: HandleRegister
     @objc private func handleRegister() {
-        let registrationVC = RegistrationViewController()
-        registrationVC.modalPresentationStyle = .fullScreen
-        present(registrationVC, animated: true, completion: nil)
+        let registrationView = RegistrationViewController()
+        registrationView.modalPresentationStyle = .fullScreen
+        present(registrationView, animated: true, completion: nil)
     }
 
     // - MARK: HandleLogin
     @objc private func handleLogin() {
-        let loginVC = LoginViewController()
-        loginVC.modalPresentationStyle = .fullScreen
-        present(loginVC, animated: true, completion: nil)
+        let loginView = LoginViewController()
+        loginView.modalPresentationStyle = .fullScreen
+        present(loginView, animated: true, completion: nil)
     }
 }
 

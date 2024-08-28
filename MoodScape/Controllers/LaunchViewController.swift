@@ -9,15 +9,7 @@ import Firebase
 
 class LaunchViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 1.0)
-        setupConstraints()
-        animateName()
-        checkAuthentication()
-    }
-
-    let name: UILabel = {
+    private let name: UILabel = {
         let name = UILabel()
         name.text = "MoodScape"
         name.font = UIFont.systemFont(ofSize: 37, weight: .bold)
@@ -27,13 +19,22 @@ class LaunchViewController: UIViewController {
         return name
     }()
     
+    // - MARK: ViewDidLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 1.0)
+        setupConstraints()
+        animateName()
+        checkAuthentication()
+    }
+    
     // - MARK: SetupConstraints
     private func setupConstraints() {
         view.addSubview(name)
 
         NSLayoutConstraint.activate([
-            name.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            name.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            name.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            name.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
     }
 
@@ -49,16 +50,16 @@ class LaunchViewController: UIViewController {
     // - MARK: CheckAuthentication
     private func checkAuthentication() {
         if Auth.auth().currentUser == nil {
-            let startViewController = StartViewController()
-            startViewController.modalTransitionStyle = .crossDissolve
-            startViewController.modalPresentationStyle = .fullScreen
-            self.present(startViewController, animated: true, completion: nil)
+            let startView = StartViewController()
+            startView.modalTransitionStyle = .crossDissolve
+            startView.modalPresentationStyle = .fullScreen
+            self.present(startView, animated: true, completion: nil)
         
          } else {
-            let mainVC = MainTabBarController()
-            mainVC.modalTransitionStyle = .crossDissolve
-            mainVC.modalPresentationStyle = .fullScreen
-            self.present(mainVC, animated: true, completion: nil)
+            let mainView = MainTabBarController()
+            mainView.modalTransitionStyle = .crossDissolve
+            mainView.modalPresentationStyle = .fullScreen
+            self.present(mainView, animated: true, completion: nil)
         }
     }
 }

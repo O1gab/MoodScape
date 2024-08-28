@@ -9,6 +9,7 @@ import FirebaseAuth
 import FirebaseFirestore
 
 class RegistrationViewController: StartBaseView, UITextFieldDelegate {
+    
     private let email: UITextField = {
         let email = UITextField()
         email.borderStyle = .none
@@ -151,7 +152,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         ])
     }
     
-    // - MARK: HANDLE REGISTER
+    // - MARK: HandleRegister
     @objc private func handleRegister() {
         guard let email = email.text, !email.isEmpty,
             let username = username.text, !username.isEmpty,
@@ -178,7 +179,8 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         }
     }
     
-    func registerUser(email: String, username: String, password: String, completion: @escaping (Error?) -> Void) {
+    // - MARK: RegisterUser
+    private func registerUser(email: String, username: String, password: String, completion: @escaping (Error?) -> Void) {
         // Step 1: Create the user with Firebase Authentication
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             guard let user = authResult?.user, error == nil else {
@@ -191,7 +193,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             user.sendEmailVerification { error in
                 if let error = error {
                     self.showErrorMessage("Failed to send verification email: \(error.localizedDescription)")
-                    completion(error) // Notify caller about the error
+                    completion(error)
                     return
                 }
                 
@@ -208,6 +210,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         }
     }
     
+    // - MARK: SaveUserData
     private func saveUserData(userId: String, username: String, email: String, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         
@@ -297,7 +300,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         return true
     }
     
-    // - MARK: Error Handling
+    // - MARK: ShowErrorMessage
     private func showErrorMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.isHidden = false
@@ -306,6 +309,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         }
     }
     
+    // - MARK: ShowSuccessMessage
     private func showSuccessMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.textColor = .green
@@ -316,6 +320,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         }
     }
     
+    // - MARK: SetPlaceholder
     private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
         let placeholderAttributes = [
             NSAttributedString.Key.foregroundColor: color
