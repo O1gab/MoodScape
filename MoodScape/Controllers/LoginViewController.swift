@@ -109,7 +109,7 @@ class LoginViewController: StartBaseView {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
         
-            input.topAnchor.constraint(equalTo: appLabel.bottomAnchor, constant: 40),
+            input.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 200),
             input.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             input.widthAnchor.constraint(equalToConstant: 320),
             input.heightAnchor.constraint(equalToConstant: 40),
