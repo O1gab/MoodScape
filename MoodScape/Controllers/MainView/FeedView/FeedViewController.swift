@@ -9,6 +9,9 @@ import SafariServices
 import FirebaseAuth
 import FirebaseFirestore
 
+/*
+ ! POTENTIAL PROBLEM: IF UR A GUEST, THIS VIEW CANNOT BE OPENED !
+ */
 class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     private var scrollView: UIScrollView!
@@ -172,25 +175,25 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView.addSubview(recommendedSongsCollectionView)
     }
     
+    // - MARK: SetupTwoColumnLayout
     private func setupTwoColumnLayout(for collectionView: UICollectionView) {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         
-        let numberOfColumns: CGFloat = 2
-        let itemSpacing: CGFloat = 5
-        let rowSpacing: CGFloat = 5
-        let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
-        let totalSpacing = itemSpacing * (numberOfColumns - 1) + sectionInsets.left + sectionInsets.right
-        let itemWidth = (collectionView.bounds.width - totalSpacing) / numberOfColumns
-        let itemHeight = itemWidth // Maintain a square shape for the items
-        
+        let itemWidth: CGFloat = 130
+        let itemHeight: CGFloat = 130
+        let itemSpacing: CGFloat = 10
+        let rowSpacing: CGFloat = 10
+
         layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
         layout.minimumInteritemSpacing = itemSpacing
         layout.minimumLineSpacing = rowSpacing
-        layout.sectionInset = sectionInsets
-        
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+
         collectionView.collectionViewLayout = layout
+
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
     }
     
     // - MARK: SetupConstraints
@@ -415,10 +418,11 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == albumCollectionView {
             return CGSize(width: 110, height: 190)
+            
         } else if collectionView == recommendedSongsCollectionView {
-            let width = (collectionView.bounds.width - 40) / 3 // Adjust the divisor based on the number of cells you want to display horizontally
-            return CGSize(width: width, height: width) // Make the height equal to the width to ensure square cells
+            return CGSize(width: 130, height: 130)
         }
+        
         return CGSize(width: collectionView.bounds.width - 20, height: 80)
     }
     
