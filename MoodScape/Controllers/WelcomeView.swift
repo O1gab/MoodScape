@@ -1,0 +1,59 @@
+//
+//  WelcomeView.swift
+//  MoodScape
+//
+//  Created by Olga Batiunia on 28.08.24.
+//
+
+import UIKit
+
+class WelcomeView: StartBaseView {
+
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    // - MARK: ViewDidLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+        setupConstraints()
+    }
+    
+    // - MARK: SetupView
+    private func setupView() {
+        view.addSubview(messageLabel)
+    }
+    
+    // - MARK: SetupConstraints
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            messageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            messageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+    }
+
+    // - MARK: TransitionToNextView
+    private func transitionToNextView() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            let nextViewController = UserSetupView()
+            nextViewController.modalPresentationStyle = .fullScreen
+            let transition = CATransition()
+            transition.duration = 0.5
+            transition.type = .push
+            transition.subtype = .fromRight
+            transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            
+            self.view.window?.layer.add(transition, forKey: kCATransition)
+            self.present(nextViewController, animated: false, completion: nil)
+        }
+    }
+}

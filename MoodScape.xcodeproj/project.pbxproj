@@ -43,6 +43,7 @@
 		766485792C6ED6E700AA050A /* SpotifyAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485782C6ED6E700AA050A /* SpotifyAuthenticationManager.swift */; };
 		7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */; };
 		7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */; };
+		766FD14F2C7F837700D9ACF6 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD14E2C7F837700D9ACF6 /* WelcomeView.swift */; };
 		768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 768536C82C7A84A000C35FF8 /* green_gradient.gif */; };
 		768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CA2C7A893000C35FF8 /* GenreCell.swift */; };
 		768536CD2C7A896800C35FF8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CC2C7A896800C35FF8 /* Genre.swift */; };
@@ -108,6 +109,7 @@
 		766485782C6ED6E700AA050A /* SpotifyAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthenticationManager.swift; sourceTree = "<group>"; };
 		7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAPIManager.swift; sourceTree = "<group>"; };
 		7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodSelectionView.swift; sourceTree = "<group>"; };
+		766FD14E2C7F837700D9ACF6 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		768536C82C7A84A000C35FF8 /* green_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = green_gradient.gif; sourceTree = "<group>"; };
 		768536CA2C7A893000C35FF8 /* GenreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCell.swift; sourceTree = "<group>"; };
 		768536CC2C7A896800C35FF8 /* Genre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
@@ -177,6 +179,15 @@
 				76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		7624E6532C7ED4AE004EA785 /* LaunchViews */ = {
+			isa = PBXGroup;
+			children = (
+				76B869BE2C67B93C002866B9 /* StartViewController.swift */,
+				76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */,
+			);
+			path = LaunchViews;
 			sourceTree = "<group>";
 		};
 		764E2A2C2C78221700785104 /* SetupView */ = {
@@ -379,11 +390,11 @@
 				76AAD3212C72068800CBE3D8 /* ProfileView */,
 				7664855A2C6C446300AA050A /* MainView */,
 				766485462C6A127A00AA050A /* BaseViews */,
-				764FDE372C6983040060A428 /* LoginViewController.swift */,
+				7624E6532C7ED4AE004EA785 /* LaunchViews */,
 				764FDE322C696E990060A428 /* RegistrationViewController.swift */,
-				76B869BE2C67B93C002866B9 /* StartViewController.swift */,
-				76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */,
+				764FDE372C6983040060A428 /* LoginViewController.swift */,
 				7664854E2C6AD34000AA050A /* View.xib */,
+				766FD14E2C7F837700D9ACF6 /* WelcomeView.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -554,6 +565,7 @@
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
 				76AAD3302C72A8A600CBE3D8 /* EmotionCell.swift in Sources */,
 				7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */,
+				766FD14F2C7F837700D9ACF6 /* WelcomeView.swift in Sources */,
 				76AAD3292C72263500CBE3D8 /* ColorExtensions.swift in Sources */,
 				7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */,
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
