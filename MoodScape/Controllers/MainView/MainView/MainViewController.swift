@@ -48,12 +48,6 @@ class MainViewController: MainBaseView {
         return view
     }()
     
-    private let circlesBackgroundView: CirclesBackgroundView = {
-        let view = CirclesBackgroundView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,17 +57,12 @@ class MainViewController: MainBaseView {
     
     // - MARK: SetupLayout
     private func setupView() {
-        view.addSubview(circlesBackgroundView)
         view.addSubview(topLabel)
         view.addSubview(addMoodButton)
         view.addSubview(addMoodLabel)
         view.addSubview(bottomInfoView)
             
         NSLayoutConstraint.activate([
-            // Circles background view constraints
-            circlesBackgroundView.centerXAnchor.constraint(equalTo: addMoodButton.centerXAnchor),
-            circlesBackgroundView.centerYAnchor.constraint(equalTo: addMoodButton.centerYAnchor),
-                        
             // Top label constraints
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -91,6 +80,7 @@ class MainViewController: MainBaseView {
             addMoodLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
+    
     // - MARK: HandleAddMood
     @objc private func handleAddMood() {
         let moodSelectionView = MoodSelectionView()

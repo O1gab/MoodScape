@@ -56,7 +56,6 @@
 		76AAD3252C721C0300CBE3D8 /* AlbumDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */; };
 		76AAD3272C72241A00CBE3D8 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */; };
 		76AAD3292C72263500CBE3D8 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3282C72263500CBE3D8 /* ColorExtensions.swift */; };
-		76AAD32C2C729DEA00CBE3D8 /* CirclesBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD32B2C729DEA00CBE3D8 /* CirclesBackgroundView.swift */; };
 		76AAD3302C72A8A600CBE3D8 /* EmotionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD32F2C72A8A600CBE3D8 /* EmotionCell.swift */; };
 		76B645B82C7BFF8100ADC097 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B645B72C7BFF8100ADC097 /* Song.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
@@ -122,7 +121,6 @@
 		76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetailsViewController.swift; sourceTree = "<group>"; };
 		76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
 		76AAD3282C72263500CBE3D8 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
-		76AAD32B2C729DEA00CBE3D8 /* CirclesBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesBackgroundView.swift; sourceTree = "<group>"; };
 		76AAD32F2C72A8A600CBE3D8 /* EmotionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCell.swift; sourceTree = "<group>"; };
 		76B645B72C7BFF8100ADC097 /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -329,7 +327,6 @@
 			children = (
 				7664855F2C6C471D00AA050A /* MainViewController.swift */,
 				7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */,
-				76AAD32B2C729DEA00CBE3D8 /* CirclesBackgroundView.swift */,
 				76AAD32F2C72A8A600CBE3D8 /* EmotionCell.swift */,
 			);
 			path = MainView;
@@ -590,7 +587,6 @@
 				7664856C2C6EB68500AA050A /* ViewExtensions.swift in Sources */,
 				764FDE332C696E990060A428 /* RegistrationViewController.swift in Sources */,
 				766485482C6A13AD00AA050A /* ProfileViewController.swift in Sources */,
-				76AAD32C2C729DEA00CBE3D8 /* CirclesBackgroundView.swift in Sources */,
 				764E2A302C7846CB00785104 /* UserSetupViewController.swift in Sources */,
 				764E2A342C788B5300785104 /* SetupBaseView.swift in Sources */,
 				7664855C2C6C447E00AA050A /* MainTabBarController.swift in Sources */,
