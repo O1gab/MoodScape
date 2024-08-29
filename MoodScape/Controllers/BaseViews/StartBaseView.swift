@@ -16,8 +16,17 @@ class StartBaseView: UIViewController {
         gifBackground.translatesAutoresizingMaskIntoConstraints = false
         return gifBackground
     }()
+    
+    private let gifGradient: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "green_gradient")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.alpha = 0.5
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
 
-    let label: UILabel = {
+    let appLabel: UILabel = {
         let label = UILabel()
         label.text = "MoodScape"
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
@@ -38,7 +47,8 @@ class StartBaseView: UIViewController {
     private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
-        view.addSubview(label)
+        view.addSubview(gifGradient)
+        view.addSubview(appLabel)
     }
 
     // - MARK: SetupConstraints
@@ -49,8 +59,13 @@ class StartBaseView: UIViewController {
             gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
             gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            gifGradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
+            gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            appLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            appLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 }
