@@ -195,7 +195,7 @@ class LoginViewController: StartBaseView {
                     startSetup.modalPresentationStyle = .fullScreen
                     self.present(startSetup, animated: true, completion: nil)
                 } else {
-                    let mainView = MainViewController()
+                    let mainView = MainTabBarController()
                     mainView.modalPresentationStyle = .fullScreen
                     self.present(mainView, animated: true)
                 }
