@@ -7,7 +7,7 @@
 import UIKit
 import Firebase
 
-class LaunchViewController: UIViewController {
+class LaunchViewController: StartBaseView {
 
     private let name: UILabel = {
         let name = UILabel()
@@ -22,16 +22,20 @@ class LaunchViewController: UIViewController {
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 1.0)
+        setupView()
         setupConstraints()
         animateName()
         checkAuthentication()
     }
     
+    // - MARK: SetupView
+    private func setupView() {
+        appLabel.alpha = 0
+        view.addSubview(name)
+    }
+    
     // - MARK: SetupConstraints
     private func setupConstraints() {
-        view.addSubview(name)
-
         NSLayoutConstraint.activate([
             name.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             name.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
