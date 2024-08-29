@@ -109,7 +109,7 @@ class LoginViewController: StartBaseView {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
         
-            input.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 40),
+            input.topAnchor.constraint(equalTo: appLabel.bottomAnchor, constant: 40),
             input.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             input.widthAnchor.constraint(equalToConstant: 320),
             input.heightAnchor.constraint(equalToConstant: 40),
@@ -157,7 +157,7 @@ class LoginViewController: StartBaseView {
             
         } else {
             let db = Firestore.firestore()
-            db.collection("users").whereField("username", isEqualTo: input.text).getDocuments { (querySnapshot, error) in
+            db.collection("users").whereField("username", isEqualTo: input.text ?? "").getDocuments { (querySnapshot, error) in
             if let error = error {
                 self.showErrorMessage("Error fetching user data: \(error.localizedDescription)")
                 return

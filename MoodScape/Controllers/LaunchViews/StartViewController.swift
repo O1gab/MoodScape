@@ -50,7 +50,7 @@ class StartViewController: StartBaseView {
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            loginButton.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 210),
+            loginButton.topAnchor.constraint(equalTo: appLabel.bottomAnchor, constant: 210),
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loginButton.widthAnchor.constraint(equalToConstant: 250),
             loginButton.heightAnchor.constraint(equalToConstant: 55),
