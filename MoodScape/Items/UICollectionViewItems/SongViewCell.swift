@@ -17,14 +17,42 @@ class SongViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    private let artistNameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let songTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
+        contentView.addSubview(artistNameLabel)
+        contentView.addSubview(songTitleLabel)
+        
         NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            artistNameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 4),
+            artistNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            artistNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            
+            songTitleLabel.topAnchor.constraint(equalTo: artistNameLabel.bottomAnchor, constant: 2),
+            songTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            songTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            songTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
         ])
     }
     
@@ -43,5 +71,7 @@ class SongViewCell: UICollectionViewCell {
             }
             task.resume()
         }
+        artistNameLabel.text = song.artist
+        songTitleLabel.text = song.name
     }
 }
