@@ -51,7 +51,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), for: .normal)
         button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -150,11 +150,11 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     // - MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let index = selectedEmotions.firstIndex(of: indexPath) {
-                    selectedEmotions.remove(at: index)
-                } else {
-                    selectedEmotions.append(indexPath)
-                }
-                collectionView.reloadItems(at: [indexPath])
+            selectedEmotions.remove(at: index)
+        } else {
+            selectedEmotions.append(indexPath)
+        }
+        collectionView.reloadItems(at: [indexPath])
     }
 
     // MARK: UICollectionViewDelegateFlowLayout

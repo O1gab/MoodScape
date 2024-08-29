@@ -18,7 +18,7 @@ class ProfileBaseView: UIViewController {
     }()
     
     let backButton: UIButton = {
-        let button = UIButton(type: .custom)
+        let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         button.tintColor = .white
         button.imageView?.contentMode = .scaleAspectFit
