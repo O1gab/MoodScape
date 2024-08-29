@@ -11,6 +11,17 @@ import FirebaseFirestore
 
 class LoginViewController: StartBaseView {
     
+    private let fieldLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        label.numberOfLines = 0
+        label.alpha = 0.75
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let input: UITextField = {
         let email = UITextField()
         email.borderStyle = .none
@@ -50,7 +61,7 @@ class LoginViewController: StartBaseView {
         let loginButton = UIButton(type: .system)
         loginButton.setTitle("Log In", for: .normal)
         loginButton.setTitleColor(.white, for: .normal)
-        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         loginButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         loginButton.layer.cornerRadius = 18
         loginButton.translatesAutoresizingMaskIntoConstraints = false
@@ -82,10 +93,13 @@ class LoginViewController: StartBaseView {
         super.viewDidLoad()
         setupForm()
         setupConstraints()
+        startText()
     }
     
     // - MARK: SetupForm
     private func setupForm() {
+        view.addSubview(fieldLabel)
+        
         setPlaceholder(textField: input, placeholder: "Enter your email or username", color: .systemGray)
         view.addSubview(input)
         
@@ -94,7 +108,6 @@ class LoginViewController: StartBaseView {
         
         loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         view.addSubview(loginButton)
-        
         
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
         view.addSubview(backButton)
@@ -109,6 +122,10 @@ class LoginViewController: StartBaseView {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
         
+            fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 120),
+            fieldLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            fieldLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -40),
+            
             input.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 200),
             input.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             input.widthAnchor.constraint(equalToConstant: 320),
@@ -128,6 +145,10 @@ class LoginViewController: StartBaseView {
             notificationMessage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             notificationMessage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
+    }
+    
+    private func startText() {
+        fieldLabel.startTypingAnimation(label: fieldLabel, text: "Please, enter your email or username and password", typingSpeed: 0.05){}
     }
     
     // - MARK: HandleLogin
