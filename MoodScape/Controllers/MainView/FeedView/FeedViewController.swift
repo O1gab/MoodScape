@@ -68,17 +68,36 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return button
     }()
     
-    private let infoMessage: UILabel = {
-        let message = UILabel()
-        message.text = "These recommendations are based on your listening history and preferences."
-        message.textColor = .white
-        message.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-        message.textAlignment = .right
-        message.backgroundColor = UIColor(white: 0, alpha: 0.7)
-        message.layer.cornerRadius = 5
-        message.clipsToBounds = true
-        message.isHidden = true
-        return message
+    private let infoMessage: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.7)
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
+        view.isHidden = true
+        view.layer.zPosition = CGFloat.greatestFiniteMagnitude
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first {
+               window.addSubview(view)
+           }
+        
+        let label = UILabel()
+        label.text = "These recommendations are based on your preferences that you set up before."
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.numberOfLines = 0
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(label)
+        NSLayoutConstraint.activate([
+                    label.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
+                    label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+                    label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+                    label.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -8)
+                ])
+        return view
     }()
     
     private let exploreButton: UIButton = {
@@ -118,7 +137,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView.addSubview(recommendationsLabel)
         contentView.addSubview(infoButton)
         contentView.addSubview(infoMessage)
-        
         
         infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .allTouchEvents)
         //contentView.addSubview(exploreButton)
@@ -233,6 +251,11 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             infoButton.centerYAnchor.constraint(equalTo: recommendationsLabel.centerYAnchor),
             infoButton.widthAnchor.constraint(equalToConstant: 20),
             infoButton.heightAnchor.constraint(equalToConstant: 20),
+            
+            infoMessage.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 8),
+                        infoMessage.leadingAnchor.constraint(equalTo: recommendationsLabel.leadingAnchor),
+                        infoMessage.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -8),
+                        infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
             
             recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 10),
             recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -350,15 +373,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     // - MARK: InfoButtonTapped
     @objc private func infoButtonTapped() {
         UIView.animate(withDuration: 0.3) {
-            self.infoMessage.isHidden = !self.infoMessage.isHidden
-        }
-        
-        if !infoMessage.isHidden {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                UIView.animate(withDuration: 0.3) {
-                    self.infoMessage.isHidden = true
-                }
-            }
+            self.infoMessage.isHidden.toggle()
         }
     }
 
