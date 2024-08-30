@@ -345,6 +345,7 @@ class newRegistration: StartBaseView {
         notificationMessage.isHidden = false
     }
     
+    // - MARK: TogglePasswordVisibility
     @objc func togglePasswordVisibility() {
         textField.isSecureTextEntry.toggle()
         let imageName = textField.isSecureTextEntry ? "eye.slash" : "eye"

@@ -167,7 +167,7 @@ class LoginViewController: StartBaseView {
         if email.contains("@") {
             Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
                 if let error = error {
-                    self.showErrorMessage("Login failed: \(error.localizedDescription)")
+                    self.showErrorMessage("Login failed: wrong email or password!")
                     return
                 }
                 
@@ -193,7 +193,7 @@ class LoginViewController: StartBaseView {
 
             Auth.auth().signIn(withEmail: document.data()["email"] as! String, password: password) { authResult, error in
                     if let error = error {
-                        self.showErrorMessage("Login failed: \(error.localizedDescription)")
+                        self.showErrorMessage("Wrong password")
                         return
                     }
 

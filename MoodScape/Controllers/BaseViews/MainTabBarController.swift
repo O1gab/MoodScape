@@ -22,6 +22,8 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     }()
     
     private var initialTouchPoint: CGPoint = CGPoint(x: 0, y: 0)
+    private var targetViewController: UIViewController?
+    private var originalViewPosition: CGPoint?
     
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
@@ -77,6 +79,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         selectedIndex = 1
     }
     
+    // - MARK: HandlePan
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
         let velocity = gesture.velocity(in: view)
@@ -106,9 +109,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
     }
 
-    private var targetViewController: UIViewController?
-    private var originalViewPosition: CGPoint?
-
+    // - MARK: AnimatePanTransition
     private func animatePanTransition(to nextIndex: Int, translation: CGFloat) {
         guard let fromView = selectedViewController?.view else { return }
         guard let toView = viewControllers?[nextIndex].view else { return }
@@ -127,6 +128,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         toView.frame.origin.x = newToViewPosition
     }
 
+    // - MARK: FinishPanTransition
     private func finishPanTransition(shouldComplete: Bool) {
         guard let fromView = selectedViewController?.view else { return }
         guard let toView = targetViewController?.view else { return }
