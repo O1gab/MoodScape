@@ -45,6 +45,7 @@
 		7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */; };
 		766FD14F2C7F837700D9ACF6 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD14E2C7F837700D9ACF6 /* WelcomeView.swift */; };
 		766FD1512C81390100D9ACF6 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD1502C81390100D9ACF6 /* UILabelExtensions.swift */; };
+		766FD1532C81554700D9ACF6 /* newRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD1522C81554700D9ACF6 /* newRegistration.swift */; };
 		768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 768536C82C7A84A000C35FF8 /* green_gradient.gif */; };
 		768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CA2C7A893000C35FF8 /* GenreCell.swift */; };
 		768536CD2C7A896800C35FF8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CC2C7A896800C35FF8 /* Genre.swift */; };
@@ -111,6 +112,7 @@
 		7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodSelectionView.swift; sourceTree = "<group>"; };
 		766FD14E2C7F837700D9ACF6 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		766FD1502C81390100D9ACF6 /* UILabelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
+		766FD1522C81554700D9ACF6 /* newRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newRegistration.swift; sourceTree = "<group>"; };
 		768536C82C7A84A000C35FF8 /* green_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = green_gradient.gif; sourceTree = "<group>"; };
 		768536CA2C7A893000C35FF8 /* GenreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCell.swift; sourceTree = "<group>"; };
 		768536CC2C7A896800C35FF8 /* Genre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 				764FDE372C6983040060A428 /* LoginViewController.swift */,
 				7664854E2C6AD34000AA050A /* View.xib */,
 				766FD14E2C7F837700D9ACF6 /* WelcomeView.swift */,
+				766FD1522C81554700D9ACF6 /* newRegistration.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -565,6 +568,7 @@
 				768536D02C7A98C600C35FF8 /* ArtistsSetupViewController.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
 				76AAD3302C72A8A600CBE3D8 /* EmotionCell.swift in Sources */,
+				766FD1532C81554700D9ACF6 /* newRegistration.swift in Sources */,
 				7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */,
 				766FD14F2C7F837700D9ACF6 /* WelcomeView.swift in Sources */,
 				76AAD3292C72263500CBE3D8 /* ColorExtensions.swift in Sources */,
