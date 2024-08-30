@@ -249,19 +249,31 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         let isSelected = selectedArtists.contains(where: { $0.name == artist.name})
         cell.configure(with: artist, isSelected: isSelected)
         
-        if let cachedImage = ImageCache.shared.image(forKey: artist.imageURLString) {
+        let cachedImage = ImageCache.shared.image(forKey: artist.imageURLString)
+         
+        // Prevent incorrect image assignment by resetting the image view initially
+        cell.artistImageView.image = nil
+        
+        if let cachedImage = cachedImage {
+        // Use the cached image if available
             cell.artistImageView.image = cachedImage
         } else {
+            // Set a placeholder image while the image is being downloaded
+            cell.artistImageView.image = UIImage(named: "placeholder") // Use a placeholder image
+            
+            // Download image asynchronously
             DispatchQueue.global().async {
                 if let imageUrl = URL(string: artist.imageURLString), let data = try? Data(contentsOf: imageUrl), let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        ImageCache.shared.setImage(image, forKey: artist.imageURLString)
-                        cell.artistImageView.image = image
+                        // Before setting the image, check if the cell is still displaying the same artist
+                        if collectionView.indexPath(for: cell) == indexPath {
+                            ImageCache.shared.setImage(image, forKey: artist.imageURLString)
+                            cell.artistImageView.image = image
+                        }
                     }
                 }
             }
         }
-        
         return cell
     }
     

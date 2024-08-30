@@ -67,14 +67,6 @@ class ArtistCell: UICollectionViewCell {
     // - MARK: Configure
     func configure(with artist: Artist, isSelected: Bool) {
         artistNameLabel.text = artist.name
-        
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: artist.imageURL), let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    self.artistImageView.image = image
-                }
-            }
-        }
         contentView.backgroundColor = isSelected ? UIColor(red: 0/255, green: 104/255, blue: 80/255, alpha: 1.0) : UIColor.clear
     }
 }
