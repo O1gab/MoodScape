@@ -10,11 +10,21 @@ import FirebaseAuth
 
 class MainViewController: MainBaseView {
     
+    private let greetingLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let topLabel: UILabel = {
         let label = UILabel()
         label.text = "How are you feeling now?"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .left
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -51,23 +61,28 @@ class MainViewController: MainBaseView {
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        addMoodButton.addTarget(self, action: #selector(handleAddMood), for: .touchUpInside)
+        determineGreeting()
         setupView()
     }
     
     // - MARK: SetupLayout
     private func setupView() {
+        view.addSubview(greetingLabel)
         view.addSubview(topLabel)
         view.addSubview(addMoodButton)
+        addMoodButton.addTarget(self, action: #selector(handleAddMood), for: .touchUpInside)
         view.addSubview(addMoodLabel)
         view.addSubview(bottomInfoView)
             
         NSLayoutConstraint.activate([
+            // Greeting Label constraints
+            greetingLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            greetingLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            greetingLabel.widthAnchor.constraint(equalToConstant: 250),
+            
             // Top label constraints
-            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            topLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            topLabel.widthAnchor.constraint(equalToConstant: 200),
+            topLabel.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
+            topLabel.leadingAnchor.constraint(equalTo: greetingLabel.leadingAnchor),
             
             // "Add Mood" Button constraints
             addMoodButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -79,6 +94,50 @@ class MainViewController: MainBaseView {
             addMoodLabel.topAnchor.constraint(equalTo: addMoodButton.bottomAnchor, constant: 3),
             addMoodLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
+    }
+    
+    // - MARK: DetermineGreeting
+    private func determineGreeting() {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            // TODO: ERROR HANDLING
+            return
+        }
+        let db = Firestore.firestore()
+        db.collection("users").document(userId).getDocument { [weak self] (document, error) in
+            if let error = error {
+                print("Error fetching user document: \(error)")
+                return
+            }
+            
+            guard let document = document, document.exists else {
+                print("User document does not exist")
+                return
+            }
+            
+            if let name = document.data()?["name"] as? String {
+                print("fetched name: \(name)")
+                DispatchQueue.main.async {
+                    let hour = Calendar.current.component(.hour, from: Date())
+                    var greeting = ""
+                    
+                switch hour {
+                    case 5..<12:
+                        greeting = "Good Morning"
+                    case 12..<17:
+                        greeting = "Hello"
+                    case 17..<21:
+                        greeting = "Good Afternoon"
+                    case 21..<24, 0..<5:
+                        greeting = "Good Night"
+                    default:
+                        greeting = "Hello"
+                }
+                    self?.greetingLabel.text = "\(greeting), \(name)"
+                }
+            } else {
+                self?.greetingLabel.text = "Good to see you here"
+            }
+        }
     }
     
     // - MARK: HandleAddMood
