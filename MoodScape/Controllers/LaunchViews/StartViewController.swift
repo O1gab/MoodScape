@@ -9,6 +9,18 @@ import Gifu
 
 class StartViewController: StartBaseView {
 
+    private let introLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Create an account to save your activity"
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 21, weight: .semibold)
+        label.numberOfLines = 0
+        label.alpha = 1
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let registerButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
@@ -50,6 +62,8 @@ class StartViewController: StartBaseView {
     
     // - MARK: SetupView
     private func setupView() {
+        view.addSubview(introLabel)
+        
         registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         view.addSubview(registerButton)
 
