@@ -80,7 +80,7 @@ class LoginViewController: StartBaseView {
     private let notificationMessage: UILabel = {
         let notificationMessage = UILabel()
         notificationMessage.textColor = .red
-        notificationMessage.font = UIFont.systemFont(ofSize: 14)
+        notificationMessage.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         notificationMessage.numberOfLines = 0
         notificationMessage.textAlignment = .center
         notificationMessage.isHidden = true
@@ -117,7 +117,6 @@ class LoginViewController: StartBaseView {
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
-        
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
@@ -136,7 +135,7 @@ class LoginViewController: StartBaseView {
             password.widthAnchor.constraint(equalToConstant: 320),
             password.heightAnchor.constraint(equalToConstant: 40),
             
-            loginButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 20),
+            loginButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 30),
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loginButton.widthAnchor.constraint(equalToConstant: 160),
             loginButton.heightAnchor.constraint(equalToConstant: 50),
@@ -147,8 +146,11 @@ class LoginViewController: StartBaseView {
         ])
     }
     
+    // - MARK: StartText
     private func startText() {
-        fieldLabel.startTypingAnimation(label: fieldLabel, text: "Please, enter your email or username and password", typingSpeed: 0.05){}
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Please enter your email or username and your password", typingSpeed: 0.05){}
+        }
     }
     
     // - MARK: HandleLogin
