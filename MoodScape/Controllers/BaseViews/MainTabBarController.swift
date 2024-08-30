@@ -21,11 +21,19 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         return button
     }()
     
+    private var initialTouchPoint: CGPoint = CGPoint(x: 0, y: 0)
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
         self.viewControllers = [firstViewController, secondViewController, thirdViewController]
+        
+        // preloading
+        _ = firstViewController.view
+        _ = secondViewController.view
+        _ = thirdViewController.view
+        
         setupView()
     }
     
@@ -50,12 +58,8 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         view.addSubview(mainButton)
         
         // - MARK: SWIPE GESTURES
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeLeft.direction = .left
-        view.addGestureRecognizer(swipeLeft)
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeRight.direction = .right
-        view.addGestureRecognizer(swipeRight)
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+          view.addGestureRecognizer(panGesture)
     }
     
     // - MARK: UpdateMainButtonPosition
@@ -73,17 +77,79 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         selectedIndex = 1
     }
     
-    // - MARK: HandleSwipe
-    @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
-        if let currentIndex = viewControllers?.firstIndex(of: selectedViewController!) {
-            if gesture.direction == .left {
-                if currentIndex < (viewControllers?.count)! - 1 {
-                    selectedIndex = currentIndex + 1
-                }
-            } else if gesture.direction == .right {
-                if currentIndex > 0 {
-                    selectedIndex = currentIndex - 1
-                }
+    @objc func handlePan(gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: view)
+        let velocity = gesture.velocity(in: view)
+
+        switch gesture.state {
+        case .began:
+            initialTouchPoint = gesture.location(in: view)
+        case .changed:
+            guard let currentIndex = viewControllers?.firstIndex(of: selectedViewController!) else { return }
+            var nextIndex = currentIndex
+            
+            if translation.x < 0 { // Swiping left
+                nextIndex = min(currentIndex + 1, (viewControllers?.count ?? 1) - 1)
+            } else if translation.x > 0 { // Swiping right
+                nextIndex = max(currentIndex - 1, 0)
+            }
+
+            guard nextIndex != currentIndex else { return }
+            animatePanTransition(to: nextIndex, translation: translation.x)
+            
+        case .ended, .cancelled:
+            let shouldComplete = abs(translation.x) > view.bounds.width / 2 || abs(velocity.x) > 500
+            finishPanTransition(shouldComplete: shouldComplete)
+            
+        default:
+            break
+        }
+    }
+
+    private var targetViewController: UIViewController?
+    private var originalViewPosition: CGPoint?
+
+    private func animatePanTransition(to nextIndex: Int, translation: CGFloat) {
+        guard let fromView = selectedViewController?.view else { return }
+        guard let toView = viewControllers?[nextIndex].view else { return }
+
+        if targetViewController == nil || targetViewController != viewControllers?[nextIndex] {
+            targetViewController = viewControllers?[nextIndex]
+            toView.frame = fromView.frame.offsetBy(dx: translation < 0 ? view.bounds.width : -view.bounds.width, dy: 0)
+            view.addSubview(toView)
+            originalViewPosition = toView.frame.origin
+        }
+        
+        let newFromViewPosition = fromView.frame.origin.x + translation
+        let newToViewPosition = (originalViewPosition?.x ?? 0) + translation
+        
+        fromView.frame.origin.x = newFromViewPosition
+        toView.frame.origin.x = newToViewPosition
+    }
+
+    private func finishPanTransition(shouldComplete: Bool) {
+        guard let fromView = selectedViewController?.view else { return }
+        guard let toView = targetViewController?.view else { return }
+        
+        let completeDuration: TimeInterval = 0.2
+        let cancelDuration: TimeInterval = 0.2
+        
+        if shouldComplete {
+            UIView.animate(withDuration: completeDuration, animations: {
+                fromView.frame.origin.x = fromView.frame.origin.x > 0 ? self.view.bounds.width : -self.view.bounds.width
+                toView.frame.origin.x = 0
+            }) { _ in
+                fromView.removeFromSuperview()
+                self.selectedIndex = self.viewControllers?.firstIndex(of: self.targetViewController!) ?? 0
+                self.targetViewController = nil
+            }
+        } else {
+            UIView.animate(withDuration: cancelDuration, animations: {
+                fromView.frame.origin.x = 0
+                toView.frame.origin.x = self.originalViewPosition?.x ?? 0
+            }) { _ in
+                toView.removeFromSuperview()
+                self.targetViewController = nil
             }
         }
     }
