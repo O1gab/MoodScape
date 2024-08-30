@@ -42,7 +42,7 @@ class EndSetupView: SetupBaseView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Thank you for configuring your profile! Now we are configuring the app for you.", typingSpeed: self?.typingSpeed ?? 0.05) {
+            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Thank you for configuring your profile! Now we are configuring the app for you.", typingSpeed: 0.05) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     self?.startErasingAnimation(label: self?.fieldLabel ?? UILabel(), typingSpeed: 0.035) {
                         self?.updateData()

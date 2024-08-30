@@ -14,8 +14,8 @@ import FirebaseFirestore
 class UserSetupView: SetupBaseView {
 
     private var currentQuestionIndex = 0
-    private let questions = ["Enter your first name:", "Enter your last name:", "Enter your location:"]
-    private let firestoreKeys = ["first_name", "last_name", "location"]
+    private let questions = ["Enter your name:", "Enter your location:"]
+    private let firestoreKeys = ["name", "location"]
     private var userData: [String: String] = [:]
     
     private let gifGradient: GIFImageView = {
@@ -37,16 +37,17 @@ class UserSetupView: SetupBaseView {
     }()
     
     private let textField: UITextField = {
-        let name = UITextField()
-        name.backgroundColor = .none
-        name.textColor = .white
-        name.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
-        name.layer.borderWidth = 2
-        name.layer.cornerRadius = 15
-        name.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: name.frame.height))
-        name.leftViewMode = .always
-        name.translatesAutoresizingMaskIntoConstraints = false
-        return name
+        let field = UITextField()
+        field.backgroundColor = .none
+        field.textColor = .white
+        field.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
+        field.layer.borderWidth = 2
+        field.layer.cornerRadius = 15
+        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: field.frame.height))
+        field.leftViewMode = .always
+        field.alpha = 0
+        field.translatesAutoresizingMaskIntoConstraints = false
+        return field
     }()
     
     private let submitButton: UIButton = {
@@ -56,6 +57,7 @@ class UserSetupView: SetupBaseView {
         button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
         button.backgroundColor = .white.withAlphaComponent(0.5)
         button.layer.cornerRadius = 25
+        button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -65,6 +67,7 @@ class UserSetupView: SetupBaseView {
         button.setTitle("Skip", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.setTitleColor(UIColor(red: 181/255, green: 23/255, blue: 23/255, alpha: 1.0), for: .normal)
+        button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -80,7 +83,14 @@ class UserSetupView: SetupBaseView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: self?.questions[self?.currentQuestionIndex ?? 0] ?? "", typingSpeed: self?.typingSpeed ?? 0.075) {}
+            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: self?.questions[self?.currentQuestionIndex ?? 0] ?? "", typingSpeed: 0.05) {
+                    DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+                        UIView.animate(withDuration: 2.0) {
+                            self?.textField.alpha = 1.0
+                            self?.submitButton.alpha = 1.0
+                    }
+                }
+            }
         }
     }
   
@@ -128,7 +138,23 @@ class UserSetupView: SetupBaseView {
     // - MARK: HandleSubmit
     @objc private func handleSubmit() {
         guard let answer = textField.text, !answer.isEmpty else {
-            // TODO: implement error label
+            let errorAlert = UIAlertController(title: "Oops!", message: "The field is empty. Please fill it in.", preferredStyle: .alert)
+            errorAlert.view.tintColor = UIColor(red: 0/255, green: 215/255, blue: 96/255, alpha: 1.0)
+            
+            if let titleLabel = errorAlert.view.subviews.first?.subviews.first?.subviews.first as? UILabel {
+                titleLabel.textColor = .white
+            }
+            
+            if let messageLabel = errorAlert.view.subviews.first?.subviews.first?.subviews.last as? UILabel {
+                messageLabel.textColor = .lightGray
+            }
+            
+            errorAlert.view.subviews.first?.subviews.first?.backgroundColor = UIColor(red: 25/255, green: 25/255, blue: 25/255, alpha: 1.0)
+            
+            let okAction = UIAlertAction(title: "Got it", style: .default, handler: nil)
+            errorAlert.addAction(okAction)
+            
+            self.present(errorAlert, animated: true, completion: nil)
             return
         }
         
@@ -159,13 +185,21 @@ class UserSetupView: SetupBaseView {
 
     // - MARK: ProceedToNextQuestion
     private func proceedToNextQuestion() {
-        startErasingAnimation(label: fieldLabel, typingSpeed: typingSpeed) { [weak self] in
+        startErasingAnimation(label: fieldLabel, typingSpeed: 0.045) { [weak self] in
             self?.textField.text = ""
             self?.currentQuestionIndex += 1
             
+            if (self?.currentQuestionIndex == 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+                    UIView.animate(withDuration: 2.0) {
+                        self?.skipButton.alpha = 1.0
+                    }
+                }
+            }
+            
             if self?.currentQuestionIndex ?? 0 < self?.questions.count ?? 0 {
                 let nextQuestion = self?.questions[self?.currentQuestionIndex ?? 0] ?? ""
-                self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: self?.typingSpeed ?? 0.1) {}
+                self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: 0.05) {}
             } else {
                 self?.navigateToNextView(viewController: ImageSetupView())
             }

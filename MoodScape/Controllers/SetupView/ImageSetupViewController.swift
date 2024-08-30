@@ -92,7 +92,7 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Select your image", typingSpeed: self?.typingSpeed ?? 0.05) {
+            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Select your profile's future image", typingSpeed: 0.05) {
                 self?.revealButton(button: self?.submitButton ?? UIButton())
                 self?.revealButton(button: self?.skipButton ?? UIButton())
             }
@@ -174,8 +174,6 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
             // TODO: implement error label
             return
         }
-        // TODO: store the user's image
-        
         navigateToNextView(viewController: SpotifySetupView())
     }
     
