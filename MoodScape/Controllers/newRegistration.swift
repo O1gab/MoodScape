@@ -16,6 +16,15 @@ class newRegistration: StartBaseView {
     private let firestoreKeys = ["email", "username", "password"]
     private var userData: [String: String] = [:]
     
+    private let backButton: UIButton = {
+        let backButton = UIButton(type: .custom)
+        backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
+        backButton.tintColor = .white
+        backButton.imageView?.contentMode = .scaleAspectFit
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        return backButton
+    }()
+    
     private let fieldLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -103,13 +112,18 @@ class newRegistration: StartBaseView {
         view.addSubview(eyeButton)
         view.addSubview(submitButton)
         view.addSubview(notificationMessage)
+        view.addSubview(backButton)
         
         submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            
             fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 250),
             fieldLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
@@ -350,5 +364,10 @@ class newRegistration: StartBaseView {
         textField.isSecureTextEntry.toggle()
         let imageName = textField.isSecureTextEntry ? "eye.slash" : "eye"
         textField.eyeButton.setImage(UIImage(systemName: imageName), for: .normal)
+    }
+    
+    // - MARK: HandleBack
+    @objc private func handleBack() {
+        dismiss(animated: true, completion: nil)
     }
 }
