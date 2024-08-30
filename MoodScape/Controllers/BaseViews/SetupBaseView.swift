@@ -39,7 +39,6 @@ class SetupBaseView: UIViewController {
         return label
     }()
     
-    let typingSpeed: TimeInterval = 0.075
     var timer: Timer?
     
     // - MARK: ViewDidLoad
@@ -53,10 +52,9 @@ class SetupBaseView: UIViewController {
     
     // - MARK: SetupView
     private func setupView() {
-        view.addSubview(gifBackground)
-        //view.addSubview(gradient)
-        view.sendSubviewToBack(gifBackground)
         view.addSubview(appLabel)
+        view.addSubview(gifBackground)
+        view.sendSubviewToBack(gifBackground)
     }
     
     // - MARK: SetupConstraints
@@ -66,12 +64,7 @@ class SetupBaseView: UIViewController {
             gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
             gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            /*
-            gradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            gradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            gradient.topAnchor.constraint(equalTo: view.topAnchor),
-            gradient.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-             */
+
             appLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             appLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
