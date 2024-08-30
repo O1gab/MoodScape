@@ -10,6 +10,17 @@ import FirebaseFirestore
 
 class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     
+    private let fieldLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        label.numberOfLines = 0
+        label.alpha = 0.75
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let email: UITextField = {
         let email = UITextField()
         email.borderStyle = .none
@@ -63,7 +74,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         let registerButton = UIButton(type: .system)
         registerButton.setTitle("Register", for: .normal)
         registerButton.setTitleColor(.white, for: .normal)
-        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         registerButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         registerButton.layer.cornerRadius = 18
         registerButton.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +93,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     private let notificationMessage: UILabel = {
         let notificationMessage = UILabel()
         notificationMessage.textColor = .red
-        notificationMessage.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        notificationMessage.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         notificationMessage.numberOfLines = 0
         notificationMessage.textAlignment = .center
         notificationMessage.isHidden = true
@@ -95,22 +106,24 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         super.viewDidLoad()
         setupForm()
         setupConstraints()
+        startText()
     }
     
     // - MARK: SetupForm
     private func setupForm() {
+        view.addSubview(fieldLabel)
+        
+        setPlaceholder(textField: email, placeholder: "Enter your email", color: .systemGray)
         view.addSubview(email)
         email.delegate = self
         
+        setPlaceholder(textField: username, placeholder: "Enter your username", color: .systemGray)
         view.addSubview(username)
         username.delegate = self
             
+        setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
         view.addSubview(password)
         
-        setPlaceholder(textField: email, placeholder: "Enter your email", color: .systemGray)
-        setPlaceholder(textField: username, placeholder: "Enter your username", color: .systemGray)
-        setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
-            
         view.addSubview(registerButton)
         registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         
@@ -126,7 +139,11 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
-            email.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150),
+            fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 120),
+            fieldLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            fieldLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -40),
+            
+            email.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 200),
             email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             email.widthAnchor.constraint(equalToConstant: 320),
             email.heightAnchor.constraint(equalToConstant: 40),
@@ -141,7 +158,7 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             password.widthAnchor.constraint(equalToConstant: 320),
             password.heightAnchor.constraint(equalToConstant: 40),
                 
-            registerButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 20),
+            registerButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 30),
             registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             registerButton.widthAnchor.constraint(equalToConstant: 160),
             registerButton.heightAnchor.constraint(equalToConstant: 50),
@@ -150,6 +167,13 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             notificationMessage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             notificationMessage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
+    }
+    
+    // - MARK: StartText
+    private func startText() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Please enter your email, username, and your password", typingSpeed: 0.05){}
+        }
     }
     
     // - MARK: HandleRegister
