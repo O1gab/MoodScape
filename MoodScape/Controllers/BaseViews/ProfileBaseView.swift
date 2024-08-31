@@ -17,6 +17,15 @@ class ProfileBaseView: UIViewController {
         return gifImageView
     }()
     
+    private let gifGradient: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "green_gradient")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.alpha = 0.75
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
+    
     let backButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "arrow.left"), for: .normal)
@@ -39,6 +48,7 @@ class ProfileBaseView: UIViewController {
     private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
+        view.addSubview(gifGradient)
         view.addSubview(backButton)
     }
     
@@ -51,6 +61,11 @@ class ProfileBaseView: UIViewController {
             gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
             gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            gifGradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
+            gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
                     
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
