@@ -10,7 +10,6 @@ import SafariServices
 
 class SongCardCollectionViewCell: UICollectionViewCell {
     
-    // UILabel for song title
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
@@ -19,7 +18,6 @@ class SongCardCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    // UILabel for artist name
     private let artistLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -28,7 +26,6 @@ class SongCardCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    // Play button
     private let playButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
@@ -37,11 +34,10 @@ class SongCardCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    // Initialization
+    // - MARK: Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        // Customize the cell appearance
         contentView.backgroundColor = UIColor.darkGray
         contentView.layer.cornerRadius = 12
         contentView.clipsToBounds = true
@@ -50,7 +46,6 @@ class SongCardCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(artistLabel)
         contentView.addSubview(playButton)
         
-        // Constraints
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             titleLabel.trailingAnchor.constraint(equalTo: playButton.leadingAnchor, constant: -10),
@@ -67,7 +62,35 @@ class SongCardCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    // Configure the cell with a song
+    // - MARK: Initialization
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        
+        contentView.backgroundColor = UIColor.darkGray
+        contentView.layer.cornerRadius = 12
+        contentView.clipsToBounds = true
+        
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(artistLabel)
+        contentView.addSubview(playButton)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            titleLabel.trailingAnchor.constraint(equalTo: playButton.leadingAnchor, constant: -10),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            
+            artistLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            artistLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            artistLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            
+            playButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            playButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            playButton.widthAnchor.constraint(equalToConstant: 30),
+            playButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
+    }
+    
+    // - MARK: Configure
     func configure(with song: Song) {
         titleLabel.text = song.name
         artistLabel.text = song.artist
@@ -76,10 +99,5 @@ class SongCardCollectionViewCell: UICollectionViewCell {
                 UIApplication.shared.open(url)
             }
         }, for: .touchUpInside)
-    }
-    
-    // Required init
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
