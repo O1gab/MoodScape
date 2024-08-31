@@ -11,12 +11,14 @@ class StartViewController: StartBaseView {
 
     private let introLabel: UILabel = {
         let label = UILabel()
-        label.text = "Create an account to save your activity"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 21, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         label.alpha = 1
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -60,6 +62,16 @@ class StartViewController: StartBaseView {
         setupConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.introLabel.startTypingAnimation(label: self?.introLabel ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {
+                UIView.animate(withDuration: 2.0) {
+                }
+            }
+        }
+    }
+    
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(introLabel)
@@ -77,6 +89,10 @@ class StartViewController: StartBaseView {
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            introLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150),
+            introLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            introLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
             loginButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 250),
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loginButton.widthAnchor.constraint(equalToConstant: 250),
