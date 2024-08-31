@@ -11,7 +11,11 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private var album: Album
     
-    private var scrollView: UIScrollView!
+    private var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
     
     private let contentView: UIView = {
         let view = UIView()
@@ -166,8 +170,6 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     // - MARK: SetupView
     private func setupView() {
-        scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(closeButton)
@@ -321,11 +323,9 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         if let oldGradientLayer = self.contentView.layer.sublayers?.first(where: { $0.name == "backgroundGradient" }) {
             oldGradientLayer.removeFromSuperlayer()
         }
-
-        // Add the new gradient layer
+        
         self.contentView.layer.insertSublayer(gradientLayer, at: 0)
 
-        // Add animation to the gradient
         let animation = CABasicAnimation(keyPath: "colors")
         animation.fromValue = [dominantColor.cgColor, complementaryColor.cgColor]
         animation.toValue = [complementaryColor.cgColor, dominantColor.cgColor]
@@ -337,7 +337,6 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     // - MARK: ToggleFavorite
     @objc private func toggleFavorite() {
-        // TODO: Add an album or a song to your favorites
         favoriteButton.isSelected.toggle()
     }
     
