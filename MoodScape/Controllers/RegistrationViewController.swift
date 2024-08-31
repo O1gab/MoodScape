@@ -8,78 +8,12 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class RegistrationViewController: StartBaseView, UITextFieldDelegate {
+class RegistrationViewController: StartBaseView {
     
-    private let fieldLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
-        label.numberOfLines = 0
-        label.alpha = 0.75
-        label.textAlignment = .left
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let email: UITextField = {
-        let email = UITextField()
-        email.borderStyle = .none
-        email.backgroundColor = .black
-        email.textColor = .white
-        email.layer.borderColor = UIColor.white.cgColor
-        email.layer.borderWidth = 1
-        email.layer.cornerRadius = 18
-        email.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
-        email.leftViewMode = .always
-        email.autocapitalizationType = .none
-        email.translatesAutoresizingMaskIntoConstraints = false
-        return email
-    }()
-    
-    private let username: UITextField = {
-        let username = UITextField()
-        username.borderStyle = .none
-        username.backgroundColor = .black
-        username.textColor = .white
-        username.layer.borderColor = UIColor.white.cgColor
-        username.layer.borderWidth = 1
-        username.layer.cornerRadius = 18
-        username.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
-        username.leftViewMode = .always
-        username.autocapitalizationType = .none
-        username.translatesAutoresizingMaskIntoConstraints = false
-        return username
-    }()
-    
-    private let password: UITextField = {
-        let password = UITextField()
-        password.isSecureTextEntry = true
-        password.borderStyle = .none
-        password.backgroundColor = .black
-        password.textColor = .white
-        password.layer.borderColor = UIColor.white.cgColor
-        password.layer.borderWidth = 1
-        password.layer.cornerRadius = 18
-        password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
-        password.leftViewMode = .always
-        let rightViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        password.rightView = rightViewContainer
-        password.rightViewMode = .always
-        password.autocapitalizationType = .none
-        password.translatesAutoresizingMaskIntoConstraints = false
-        return password
-    }()
-    
-    private let registerButton: UIButton = {
-        let registerButton = UIButton(type: .system)
-        registerButton.setTitle("Register", for: .normal)
-        registerButton.setTitleColor(.white, for: .normal)
-        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        registerButton.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        registerButton.layer.cornerRadius = 18
-        registerButton.translatesAutoresizingMaskIntoConstraints = false
-        return registerButton
-    }()
+    private var currentQuestionIndex = 0
+    private let questions = ["Enter your email:", "Enter your preferred username:", "Enter your password:"]
+    private let firestoreKeys = ["email", "username", "password"]
+    private var userData: [String: String] = [:]
     
     private let backButton: UIButton = {
         let backButton = UIButton(type: .custom)
@@ -90,47 +24,97 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         return backButton
     }()
     
+    private let fieldLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let textField: UITextField = {
+        let field = UITextField()
+        field.backgroundColor = .none
+        field.textColor = .white
+        field.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
+        field.layer.borderWidth = 2
+        field.layer.cornerRadius = 15
+        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: field.frame.height))
+        field.leftViewMode = .always
+        field.autocapitalizationType = .none
+        field.alpha = 0
+        field.translatesAutoresizingMaskIntoConstraints = false
+        return field
+    }()
+    
+    private let submitButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Submit", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
+        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
+        button.backgroundColor = .white.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 25
+        button.alpha = 0
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private let notificationMessage: UILabel = {
         let notificationMessage = UILabel()
         notificationMessage.textColor = .red
-        notificationMessage.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        notificationMessage.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         notificationMessage.numberOfLines = 0
-        notificationMessage.textAlignment = .center
+        notificationMessage.textAlignment = .left
+        notificationMessage.lineBreakMode = .byWordWrapping
+        notificationMessage.adjustsFontSizeToFitWidth = true
+        notificationMessage.minimumScaleFactor = 0.5
         notificationMessage.isHidden = true
         notificationMessage.translatesAutoresizingMaskIntoConstraints = false
         return notificationMessage
+    }()
+
+    private let eyeButton: UIButton = {
+        let eyeButton = UIButton(type: .custom)
+        eyeButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        eyeButton.tintColor = .white
+        eyeButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        eyeButton.addTarget(RegistrationViewController.self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        eyeButton.alpha = 0
+        return eyeButton
     }()
     
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupForm()
+        setupView()
         setupConstraints()
-        startText()
     }
     
-    // - MARK: SetupForm
-    private func setupForm() {
+    // - MARK: ViewDidAppear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: self?.questions[self?.currentQuestionIndex ?? 0] ?? "", typingSpeed: 0.05) {
+                UIView.animate(withDuration: 2.0) {
+                    self?.textField.alpha = 1.0
+                    self?.submitButton.alpha = 1.0
+                }
+            }
+        }
+    }
+  
+    // - MARK: SetupView
+    private func setupView() {
         view.addSubview(fieldLabel)
-        
-        setPlaceholder(textField: email, placeholder: "Enter your email", color: .systemGray)
-        view.addSubview(email)
-        email.delegate = self
-        
-        setPlaceholder(textField: username, placeholder: "Enter your username", color: .systemGray)
-        view.addSubview(username)
-        username.delegate = self
-            
-        setPlaceholder(textField: password, placeholder: "Enter your password", color: .systemGray)
-        view.addSubview(password)
-        
-        view.addSubview(registerButton)
-        registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
-        
-        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
+        view.addSubview(textField)
+        view.addSubview(eyeButton)
+        view.addSubview(submitButton)
+        view.addSubview(notificationMessage)
         view.addSubview(backButton)
         
-        view.addSubview(notificationMessage)
+        submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
@@ -139,76 +123,177 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
-            fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 120),
-            fieldLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            fieldLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -40),
+            fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 250),
+            fieldLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
             
-            email.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 200),
-            email.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            email.widthAnchor.constraint(equalToConstant: 320),
-            email.heightAnchor.constraint(equalToConstant: 40),
+            textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 290),
+            textField.leftAnchor.constraint(equalTo: fieldLabel.leftAnchor),
+            textField.widthAnchor.constraint(equalToConstant: 300),
+            textField.heightAnchor.constraint(equalToConstant: 60),
+
+            submitButton.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 30),
+            submitButton.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 10),
+            submitButton.widthAnchor.constraint(equalToConstant: 120),
+            submitButton.heightAnchor.constraint(equalToConstant: 50),
             
-            username.topAnchor.constraint(equalTo: email.bottomAnchor, constant: 20),
-            username.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            username.widthAnchor.constraint(equalToConstant: 320),
-            username.heightAnchor.constraint(equalToConstant: 40),
-                
-            password.topAnchor.constraint(equalTo: username.bottomAnchor, constant: 20),
-            password.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            password.widthAnchor.constraint(equalToConstant: 320),
-            password.heightAnchor.constraint(equalToConstant: 40),
-                
-            registerButton.topAnchor.constraint(equalTo: password.bottomAnchor, constant: 30),
-            registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            registerButton.widthAnchor.constraint(equalToConstant: 160),
-            registerButton.heightAnchor.constraint(equalToConstant: 50),
-                
-            notificationMessage.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 10),
-            notificationMessage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            notificationMessage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            notificationMessage.topAnchor.constraint(equalTo: submitButton.topAnchor),
+            notificationMessage.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor),
+            notificationMessage.leadingAnchor.constraint(equalTo: submitButton.trailingAnchor, constant: 5),
+            notificationMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            notificationMessage.heightAnchor.constraint(equalToConstant: 350)
         ])
     }
     
-    // - MARK: StartText
-    private func startText() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Please enter your email, username, and your password", typingSpeed: 0.05){}
+    // - MARK: HandleSubmit
+    @objc private func handleSubmit() {
+        guard let answer = textField.text, !answer.isEmpty else {
+            showErrorMessage("The field cannot be empty")
+            return
+        }
+        
+        if currentQuestionIndex == 0 {
+            if emailCheck() {
+                saveData(data: textField.text ?? "")
+                currentQuestionIndex+=1
+                proceedToNextQuestion()
+            }
+            return
+        }
+        else if currentQuestionIndex == 1 {
+            if usernameCheck() {
+                saveData(data: textField.text ?? "")
+                currentQuestionIndex+=1
+                proceedToNextQuestion()
+            }
+            return
+        }
+        else if currentQuestionIndex == 2 {
+            if passwordCheck() {
+                saveData(data: textField.text ?? "")
+                currentQuestionIndex+=1
+                proceedToNextQuestion()
+            }
+            return
+        }
+        proceedToNextQuestion()
+    }
+    
+    // - MARK: EmailCheck
+    private func emailCheck() -> Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        
+        let emailText = textField.text
+
+        if !emailPredicate.evaluate(with: emailText) {
+            showErrorMessage("The email address is badly formatted!")
+            return false
+        }
+        // TODO: check if the email is already taken
+        return true
+    }
+    
+    // - MARK: UsernameCheck
+    private func usernameCheck() -> Bool {
+        let usernameText = textField.text
+        // minimum 4 chars
+        if usernameText?.count ?? 0 < 4 {
+            showErrorMessage("Username must be at least 4 characters long")
+            return false
+        }
+        
+        if usernameText?.count ?? 0 > 20 {
+            showErrorMessage("Username must be max. 20 characters long")
+        }
+       
+        // only alphanumeric and underscores are allowed.
+        let usernameRegEx = "^[A-Za-z0-9_]{4,20}$"
+        let usernamePredicate = NSPredicate(format: "SELF MATCHES %@", usernameRegEx)
+        
+        if !usernamePredicate.evaluate(with: usernameText) {
+            showErrorMessage("The email address is badly formatted!")
+            return false
+        }
+        
+        // cannot contain the forbidden characters
+        let forbiddenChars = CharacterSet(charactersIn: "!@#$%^&*()+=[]{}|\\:;\"'<>,.?/~` ")
+        if usernameText?.rangeOfCharacter(from: forbiddenChars) != nil {
+            showErrorMessage("Username contains forbidden characters")
+            return false
+        }
+        
+        // TODO: CHECK IF THE USERNAME IS ALREADY TAKEN
+        return true
+    }
+    
+    // - MARK: PasswordCheck
+    private func passwordCheck() -> Bool {
+        // letters and numeric Values, minimum 8 characters
+        let password = textField.text
+        
+        let passwordRegEx = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"
+        let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
+        return passwordPredicate.evaluate(with: password)
+    }
+    
+    // - MARK: SaveUserData
+    private func saveData(data: String) {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+
+        let firestoreKey = firestoreKeys[currentQuestionIndex]
+        userData[firestoreKey] = data
+    }
+    
+    // - MARK: ProceedToNextQuestion
+    private func proceedToNextQuestion() {
+        self.fieldLabel.startErasingAnimation(label: fieldLabel, typingSpeed: 0.05) { [weak self] in
+            self?.textField.text = ""
+            
+            if self?.currentQuestionIndex == 2 {
+                let rightViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+                rightViewContainer.addSubview((self?.textField.eyeButton)!)
+                self?.textField.rightView = rightViewContainer
+                self?.textField.rightViewMode = .always
+                self?.textField.eyeButton.addTarget(self, action: #selector(self?.togglePasswordVisibility), for: .touchUpInside)
+            }
+            if self?.currentQuestionIndex ?? 0 < self?.questions.count ?? 0 {
+                let nextQuestion = self?.questions[self?.currentQuestionIndex ?? 0] ?? ""
+                self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: 0.05) {}
+            } else {
+                self?.handleRegistration()
+            }
         }
     }
     
-    // - MARK: HandleRegister
-    @objc private func handleRegister() {
-        guard let email = email.text, !email.isEmpty,
-            let username = username.text, !username.isEmpty,
-            let password = password.text, !password.isEmpty else {
-                showErrorMessage("Please fill in all fields")
-                return
-            }
-        if !emailCheck() || !passwordCheck() {
+    // - MARK: HandleRegistrationCompletion
+    private func handleRegistration() {
+        guard let email = userData["email"], let username = userData["username"], let password = userData["password"] else {
+            showErrorMessage("Registration data is incomplete.")
             return
         }
-        usernameCheck { valid in
-            if valid {
-                self.registerUser(email: email, username: username, password: password) { error in
-                    if let error = error {
-                        // Handle registration error if needed
-                        print("Error during registration: \(error.localizedDescription)")
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
-                        let startView = StartViewController()
-                        self.present(startView, animated: true, completion: nil)
-                    }
+        
+        registerUser(email: email, username: username, password: password) { [weak self] error in
+            if let error = error {
+                self?.showErrorMessage("Registration failed: \(error.localizedDescription)")
+            } else {
+                self?.showSuccessMessage("Registration successful! Please verify your email.")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    let startView = StartViewController()
+                    self?.navigationController?.pushViewController(startView, animated: true)
                 }
             }
         }
     }
     
     // - MARK: RegisterUser
-    private func registerUser(email: String, username: String, password: String, completion: @escaping (Error?) -> Void) {
+       private func registerUser(email: String, username: String, password: String, completion: @escaping (Error?) -> Void) {
         // Step 1: Create the user with Firebase Authentication
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             guard let user = authResult?.user, error == nil else {
-                self.showErrorMessage(error?.localizedDescription ?? "Failed to register")
                 completion(error)
                 return
             }
@@ -216,20 +301,21 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
             // Step 2: Send email verification
             user.sendEmailVerification { error in
                 if let error = error {
-                    self.showErrorMessage("Failed to send verification email: \(error.localizedDescription)")
                     completion(error)
                     return
                 }
-                
+                self.notificationMessage.text = ""
                 self.showSuccessMessage("Verification email sent. Please check your email.")
             }
             
             // Step 3: Save user data to Firestore
             self.saveUserData(userId: user.uid, username: username, email: email) { error in
                 if let error = error {
-                    self.showErrorMessage("Failed to save user data: \(error.localizedDescription)")
+                    completion(error)
+                } else {
+                    completion(nil)
+                    print("cingras")
                 }
-                completion(error)
             }
         }
     }
@@ -254,82 +340,14 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
         }
     }
     
-    // - MARK: HandleBack
-    @objc private func handleBack() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    // - MARK: EmailCheck
-    private func emailCheck() -> Bool {
-        guard let email = email.text, !email.isEmpty else {
-            showErrorMessage("Email field is empty!")
-            return false
-        }
-        
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        
-        if !emailPredicate.evaluate(with: email) {
-            showErrorMessage("The email address is badly formatted!")
-            return false
-        }
-        return true
-    }
-    
-    // - MARK: UsernameCheck
-    private func usernameCheck(completion: @escaping (Bool) -> Void) {
-        guard let username = username.text, !username.isEmpty else {
-            showErrorMessage("Username field is empty!")
-            completion(false)
-            return
-        }
-        
-        if username.count < 4 {
-            showErrorMessage("Username must be at least 4 characters long")
-            completion(false)
-            return
-        }
-        completion(true)
-        
-        /*
-        // Check if the username is already taken
-        let db = Firestore.firestore()
-        db.collection("users").whereField("username", isEqualTo: username).getDocuments { snapshot, error in
-            if let error = error {
-                self.showErrorMessage("Error checking username: \(error.localizedDescription)")
-                completion(false)
-                    
-            } else if let snapshot = snapshot, !snapshot.isEmpty {
-                self.showErrorMessage("Username is already taken")
-                completion(false)
-            } else {
-                // Username is available and valid
-                completion(true)
-            }
-        }
-        */
-    }
-    
-    // - MARK: PasswordCheck
-    private func passwordCheck() -> Bool {
-        guard let password = password.text, !password.isEmpty else {
-            showErrorMessage("Password field is empty!")
-            return false
-        }
-        
-        if password.count < 6 {
-            showErrorMessage("Password must be at least 6 characters long")
-            return false
-        }
-        return true
-    }
-    
     // - MARK: ShowErrorMessage
     private func showErrorMessage(_ message: String) {
         notificationMessage.text = message
+        notificationMessage.textColor = .red
         notificationMessage.isHidden = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
-            self.notificationMessage.isHidden = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+            self?.notificationMessage.startErasingAnimation(label: self?.notificationMessage ?? UILabel(), typingSpeed: 0.05) {}
         }
     }
     
@@ -337,18 +355,18 @@ class RegistrationViewController: StartBaseView, UITextFieldDelegate {
     private func showSuccessMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.textColor = .green
-        notificationMessage.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         notificationMessage.isHidden = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
-            self.notificationMessage.isHidden = true
-        }
     }
     
-    // - MARK: SetPlaceholder
-    private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
-        let placeholderAttributes = [
-            NSAttributedString.Key.foregroundColor: color
-        ]
-        textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: placeholderAttributes)
+    // - MARK: TogglePasswordVisibility
+    @objc func togglePasswordVisibility() {
+        textField.isSecureTextEntry.toggle()
+        let imageName = textField.isSecureTextEntry ? "eye.slash" : "eye"
+        textField.eyeButton.setImage(UIImage(systemName: imageName), for: .normal)
+    }
+    
+    // - MARK: HandleBack
+    @objc private func handleBack() {
+        dismiss(animated: true, completion: nil)
     }
 }
