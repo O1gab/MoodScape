@@ -26,6 +26,15 @@ class WelcomeView: StartBaseView {
         setupConstraints()
     }
     
+    // - MARK: ViewDidAppear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.messageLabel.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "We are so happy what you joined us!", typingSpeed: 0.05) {
+            }
+        }
+    }
+    
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(messageLabel)
