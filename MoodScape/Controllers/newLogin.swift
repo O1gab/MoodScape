@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class newLogin: StartBaseView {
     private var currentQuestionIndex = 0
@@ -147,18 +148,66 @@ class newLogin: StartBaseView {
     
     // - MARK: HandleSubmit
     @objc private func handleSubmit() {
-        guard let answer = textField.text, !answer.isEmpty else {
-            showErrorMessage("The field cannot be empty")
-            return
-        }
+        let answer = textField.text!
         
         if currentQuestionIndex == 0 {
+            // Check if input is an email or username
+            if answer.contains("@") {
+                // Validate email format
+                let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+                let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+                if !emailPred.evaluate(with: answer) {
+                    showErrorMessage("Invalid email format")
+                    return
+                }
+            } else {
+                if answer.count < 4 {
+                    showErrorMessage("Username must be at least 4 characters long")
+                    return
+                }
+            }
             
+            // Check if email or username exists in the database
+            Auth.auth().fetchSignInMethods(forEmail: answer) { [weak self] (methods, error) in
+                if let error = error {
+                    self?.showErrorMessage("Error checking user: \(error.localizedDescription)")
+                    return
+                }
+                
+                if methods == nil || methods?.isEmpty == true {
+                    self?.showErrorMessage("No account found with this email/username")
+                } else {
+                    // Email/username exists, proceed to next question
+                    self?.currentQuestionIndex += 1
+                    self?.proceedToNextQuestion()
+                }
+            }
             return
         }
         else if currentQuestionIndex == 1 {
-           
-            return
+           // Check if password belongs to the account
+           Auth.auth().signIn(withEmail: answer, password: textField.text!) { [weak self] (result, error) in
+               if let error = error {
+                   self?.showErrorMessage("Invalid password. Please try again.")
+               } else {
+                   self?.showSuccessMessage("Login successful!") // delete it later
+                   // TODO: Implement navigation to main app screen
+               // Perform a smooth transition to MainTabBarController
+               DispatchQueue.main.async {
+                   let mainTabBarController = MainTabBarController()
+                   mainTabBarController.modalPresentationStyle = .fullScreen
+                   mainTabBarController.modalTransitionStyle = .crossDissolve
+                   
+                   UIView.transition(with: UIApplication.shared.windows.first!,
+                                     duration: 0.5,
+                                     options: .transitionCrossDissolve,
+                                     animations: {
+                       UIApplication.shared.windows.first?.rootViewController = mainTabBarController
+                   }, completion: nil)
+                    }
+               }
+           }
+           return
         }
         proceedToNextQuestion()
     }
