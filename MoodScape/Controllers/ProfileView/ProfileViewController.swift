@@ -12,6 +12,18 @@ import FirebaseFirestore
 
 class ProfileViewController: ProfileBaseView {
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.tintColor = .white
@@ -143,12 +155,14 @@ class ProfileViewController: ProfileBaseView {
     
     // - MARK: SetupView
     private func setupView() {
-        view.addSubview(settingsButton)
-        view.addSubview(backButton)
-        view.addSubview(profileImage)
-        view.addSubview(usernameLabel)
-        view.addSubview(cardView)
-        view.addSubview(editButton)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        scrollView.addSubview(settingsButton)
+        scrollView.addSubview(backButton)
+        scrollView.addSubview(profileImage)
+        scrollView.addSubview(usernameLabel)
+        scrollView.addSubview(cardView)
+        scrollView.addSubview(editButton)
         cardView.addSubview(firstNameLabel)
         cardView.addSubview(lastNameLabel)
         cardView.addSubview(emailLabel)
@@ -162,6 +176,17 @@ class ProfileViewController: ProfileBaseView {
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
             settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             settingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
