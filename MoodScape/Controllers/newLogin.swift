@@ -9,8 +9,6 @@ import UIKit
 import FirebaseAuth
 
 class newLogin: StartBaseView {
-    private var currentQuestionIndex = 0
-    private let questions = ["Enter your email or username here:", "Enter your password:"]
     
     private let backButton: UIButton = {
         let backButton = UIButton(type: .custom)
@@ -64,6 +62,7 @@ class newLogin: StartBaseView {
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: field.frame.height))
         field.leftViewMode = .always
         field.autocapitalizationType = .none
+        field.isSecureTextEntry = true
         field.alpha = 0
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
@@ -146,7 +145,7 @@ class newLogin: StartBaseView {
         view.addSubview(notificationMessage)
         view.addSubview(backButton)
         
-        loginButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
     }
     
@@ -186,90 +185,27 @@ class newLogin: StartBaseView {
         ])
     }
     
-    private func handleLogin() {
-        
-    }
-    
     // - MARK: HandleSubmit
-    @objc private func handleSubmit() {
-        let answer = usernameField.text!
-        
-        if currentQuestionIndex == 0 {
-            // Check if input is an email or username
-            if answer.contains("@") {
-                // Validate email format
-                let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-                let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-                if !emailPred.evaluate(with: answer) {
-                    showErrorMessage("Invalid email format")
-                    return
-                }
-            } else {
-                if answer.count < 4 {
-                    showErrorMessage("Username must be at least 4 characters long")
-                    return
-                }
-            }
-            
-            // Check if email or username exists in the database
-            Auth.auth().fetchSignInMethods(forEmail: answer) { [weak self] (methods, error) in
-                if let error = error {
-                    self?.showErrorMessage("Error checking user: \(error.localizedDescription)")
-                    return
-                }
-                
-                if methods == nil || methods?.isEmpty == true {
-                    self?.showErrorMessage("No account found with this email/username")
-                } else {
-                    // Email/username exists, proceed to next question
-                    self?.currentQuestionIndex += 1
-                }
-            }
-            return
-        }
-        else if currentQuestionIndex == 1 {
-           // Check if password belongs to the account
-           Auth.auth().signIn(withEmail: answer, password: passwordField.text!) { [weak self] (result, error) in
-               if let error = error {
-                   self?.showErrorMessage("Invalid password. Please try again.")
-               } else {
-                   self?.showSuccessMessage("Login successful!") // delete it later
-                   // TODO: Implement navigation to main app screen
-               // Perform a smooth transition to MainTabBarController
-               DispatchQueue.main.async {
-                   let mainTabBarController = MainTabBarController()
-                   mainTabBarController.modalPresentationStyle = .fullScreen
-                   mainTabBarController.modalTransitionStyle = .crossDissolve
-                   
-                   UIView.transition(with: UIApplication.shared.windows.first!,
-                                     duration: 0.5,
-                                     options: .transitionCrossDissolve,
-                                     animations: {
-                       UIApplication.shared.windows.first?.rootViewController = mainTabBarController
-                   }, completion: nil)
-                    }
-               }
-           }
-           return
-        }
+    @objc private func handleLogin() {
+        // TODO: IMPLEMENT
     }
     
     // - MARK: ShowErrorMessage
-    private func showErrorMessage(_ message: String) {
-        notificationMessage.text = message
-        notificationMessage.textColor = .red
-        notificationMessage.isHidden = false
+    private func showErrorMessage(_ message: String, label: UILabel) {
+        label.text = message
+        label.textColor = .red
+        label.isHidden = false
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            self?.notificationMessage.startErasingAnimation(label: self?.notificationMessage ?? UILabel(), typingSpeed: 0.05) {}
+            label.startErasingAnimation(label: label, typingSpeed: 0.05) {}
         }
     }
     
-    // - MARK: ShowSuccessMessage
-    private func showSuccessMessage(_ message: String) {
-        notificationMessage.text = message
-        notificationMessage.textColor = .green
-        notificationMessage.isHidden = false
+    // - MARK: ShowSuccessMessage -> DELETE LATER!
+    private func showSuccessMessage(_ message: String, label: UILabel) {
+        label.text = message
+        label.textColor = .green
+        label.isHidden = false
     }
     
     // - MARK: TogglePasswordVisibility
