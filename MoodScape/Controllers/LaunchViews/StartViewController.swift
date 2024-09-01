@@ -11,8 +11,9 @@ class StartViewController: StartBaseView {
 
     private let introLabel: UILabel = {
         let label = UILabel()
+        label.text = "Let your emotions set the playlist."
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 25, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
@@ -23,15 +24,54 @@ class StartViewController: StartBaseView {
         return label
     }()
     
+    private let instructions: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 21, weight: .semibold)
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.alpha = 0.85
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let registerButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Sign Up", for: .normal)
+        button.setTitle("Get Started", for: .normal)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         button.layer.cornerRadius = 25
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    private let loginLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .white
+        
+        let fullText = "Already user? Log in"
+        let attributedString = NSMutableAttributedString(string: fullText)
+        let range = (fullText as NSString).range(of: "Log in")
+        
+        attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 16), range: range)
+        attributedString.addAttribute(.foregroundColor, value: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), range: range)
+        
+        let tapGesture = UITapGestureRecognizer(target: StartViewController.self, action: #selector(handleLogin))
+        label.addGestureRecognizer(tapGesture)
+        attributedString.addAttribute(.foregroundColor, value: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), range: range)
+        
+        label.attributedText = attributedString
+        
+        label.isUserInteractionEnabled = true
+        
+        return label
     }()
     
     private let loginButton: UIButton = {
@@ -55,8 +95,9 @@ class StartViewController: StartBaseView {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.introLabel.startTypingAnimation(label: self?.introLabel ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {
+            self?.instructions.startTypingAnimation(label: self?.instructions ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {
                 UIView.animate(withDuration: 2.0) {
+                    
                 }
             }
         }
@@ -65,30 +106,32 @@ class StartViewController: StartBaseView {
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(introLabel)
+        view.addSubview(instructions)
         
         registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         view.addSubview(registerButton)
-
-        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
-        view.addSubview(loginButton)
+        
+        view.addSubview(loginLabel)
     }
 
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            introLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 150),
+            introLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
             introLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            introLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            introLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 20),
             
-            loginButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 250),
-            loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loginButton.widthAnchor.constraint(equalToConstant: 250),
-            loginButton.heightAnchor.constraint(equalToConstant: 55),
+            instructions.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 380),
+            instructions.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            instructions.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
 
-            registerButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20),
+            registerButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 450),
             registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            registerButton.widthAnchor.constraint(equalToConstant: 250),
-            registerButton.heightAnchor.constraint(equalToConstant: 55)
+            registerButton.widthAnchor.constraint(equalToConstant: 300),
+            registerButton.heightAnchor.constraint(equalToConstant: 55),
+            
+            loginLabel.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 20),
+            loginLabel.trailingAnchor.constraint(equalTo: registerButton.trailingAnchor, constant: -20)
         ])
     }
 
