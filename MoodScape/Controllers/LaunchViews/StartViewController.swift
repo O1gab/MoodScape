@@ -17,7 +17,7 @@ class StartViewController: StartBaseView {
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
-        label.alpha = 1
+        label.alpha = 0
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -47,6 +47,7 @@ class StartViewController: StartBaseView {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         button.layer.cornerRadius = 25
+        button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -70,8 +71,8 @@ class StartViewController: StartBaseView {
         attributedString.addAttribute(.foregroundColor, value: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), range: range)
         
         label.attributedText = attributedString
-        
         label.isUserInteractionEnabled = true
+        label.alpha = 0
         
         return label
     }()
@@ -97,11 +98,15 @@ class StartViewController: StartBaseView {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.instructions.startTypingAnimation(label: self?.instructions ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {
-                UIView.animate(withDuration: 2.0) {
-                    
-                }
+            UIView.animate(withDuration: 1.5) {
+                self?.introLabel.alpha = 1
             }
+            UIView.animate(withDuration: 2.5) {
+                self?.registerButton.alpha = 1
+                self?.loginLabel.alpha = 1
+            }
+            
+            self?.instructions.startTypingAnimation(label: self?.instructions ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {}
         }
     }
     
