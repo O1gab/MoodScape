@@ -34,6 +34,7 @@ class SpotifySetupView: SetupBaseView {
         button.setTitle("Connect to Spotify", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
         button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
+        button.backgroundColor = .white.withAlphaComponent(0.5)
         button.backgroundColor = .white
         button.layer.cornerRadius = 25
         button.alpha = 0

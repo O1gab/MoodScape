@@ -52,7 +52,8 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
-        label.numberOfLines = 2
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

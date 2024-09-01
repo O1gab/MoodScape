@@ -88,13 +88,11 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
     // - MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        fetchSelectedGenres { [weak self] genres in
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self?.revealCollectionView()
-                self?.revealButton(button: self?.submitButton ?? UIButton())
-               
-            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.revealCollectionView()
+            self.revealButton(button: self.submitButton)
+            
         }
     }
     
