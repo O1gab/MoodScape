@@ -83,12 +83,9 @@ class newLogin: StartBaseView {
     private let notificationMessage: UILabel = {
         let notificationMessage = UILabel()
         notificationMessage.textColor = .red
-        notificationMessage.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        notificationMessage.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         notificationMessage.numberOfLines = 0
-        notificationMessage.textAlignment = .left
-        notificationMessage.lineBreakMode = .byWordWrapping
-        notificationMessage.adjustsFontSizeToFitWidth = true
-        notificationMessage.minimumScaleFactor = 0.5
+        notificationMessage.textAlignment = .center
         notificationMessage.isHidden = true
         notificationMessage.translatesAutoresizingMaskIntoConstraints = false
         return notificationMessage
@@ -167,7 +164,7 @@ class newLogin: StartBaseView {
             passwordLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 370),
             passwordLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -15),
             
-            passwordField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 20),
+            passwordField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 15),
             passwordField.rightAnchor.constraint(equalTo: passwordLabel.rightAnchor),
             passwordField.widthAnchor.constraint(equalToConstant: 300),
             passwordField.heightAnchor.constraint(equalToConstant: 60),
@@ -177,27 +174,39 @@ class newLogin: StartBaseView {
             loginButton.widthAnchor.constraint(equalToConstant: 120),
             loginButton.heightAnchor.constraint(equalToConstant: 50),
             
-            notificationMessage.topAnchor.constraint(equalTo: loginButton.topAnchor),
-            notificationMessage.centerYAnchor.constraint(equalTo: loginButton.centerYAnchor),
-            notificationMessage.leadingAnchor.constraint(equalTo: loginButton.trailingAnchor, constant: 5),
+            notificationMessage.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 40),
+            notificationMessage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             notificationMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            notificationMessage.heightAnchor.constraint(equalToConstant: 350)
+            //notificationMessage.heightAnchor.constraint(equalToConstant: 350)
         ])
     }
     
     // - MARK: HandleSubmit
     @objc private func handleLogin() {
         // TODO: IMPLEMENT
+        if (usernameField.text == nil) {
+            showErrorMessage("Username or email field cannot be empty")
+            return
+        }
+        if (passwordField.text == nil) {
+            showErrorMessage("Password field cannot be empty")
+            return
+        }
+        // USERNAME OR EMAIL CHECK:
+        
+        
+        
+        // PASSWORD CHECK:
     }
     
     // - MARK: ShowErrorMessage
-    private func showErrorMessage(_ message: String, label: UILabel) {
-        label.text = message
-        label.textColor = .red
-        label.isHidden = false
+    private func showErrorMessage(_ message: String) {
+        notificationMessage.text = message
+        notificationMessage.isHidden = false
+        
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-            label.startErasingAnimation(label: label, typingSpeed: 0.05) {}
+            self?.notificationMessage.startErasingAnimation(label: self?.notificationMessage ?? UILabel(), typingSpeed: 0.05) {}
         }
     }
     
