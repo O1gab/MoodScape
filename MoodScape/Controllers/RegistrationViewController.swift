@@ -73,10 +73,19 @@ class RegistrationViewController: StartBaseView {
         notificationMessage.translatesAutoresizingMaskIntoConstraints = false
         return notificationMessage
     }()
+    
+    private let successMessage: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
     private let eyeButton: UIButton = {
         let eyeButton = UIButton(type: .custom)
-        eyeButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        eyeButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
         eyeButton.tintColor = .white
         eyeButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         eyeButton.addTarget(RegistrationViewController.self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
@@ -111,6 +120,7 @@ class RegistrationViewController: StartBaseView {
         view.addSubview(eyeButton)
         view.addSubview(submitButton)
         view.addSubview(notificationMessage)
+        view.addSubview(successMessage)
         view.addSubview(backButton)
         
         submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
@@ -141,7 +151,13 @@ class RegistrationViewController: StartBaseView {
             notificationMessage.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor),
             notificationMessage.leadingAnchor.constraint(equalTo: submitButton.trailingAnchor, constant: 5),
             notificationMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            notificationMessage.heightAnchor.constraint(equalToConstant: 350)
+            notificationMessage.heightAnchor.constraint(equalToConstant: 350),
+            
+            successMessage.topAnchor.constraint(equalTo: submitButton.topAnchor),
+            successMessage.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor),
+            successMessage.leadingAnchor.constraint(equalTo: submitButton.trailingAnchor, constant: 5),
+            successMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            successMessage.heightAnchor.constraint(equalToConstant: 350)
         ])
     }
     
@@ -170,6 +186,7 @@ class RegistrationViewController: StartBaseView {
         }
         else if currentQuestionIndex == 2 {
             if passwordCheck() {
+                textField.isSecureTextEntry = true
                 saveData(data: textField.text ?? "")
                 currentQuestionIndex+=1
                 proceedToNextQuestion()
@@ -280,7 +297,7 @@ class RegistrationViewController: StartBaseView {
             if let error = error {
                 self?.showErrorMessage("Registration failed: \(error.localizedDescription)")
             } else {
-                self?.showSuccessMessage("Registration successful! Please verify your email.")
+                self?.showSuccessMessage("Verification email sent. Please check your email.")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     let startView = StartViewController()
                     self?.navigationController?.pushViewController(startView, animated: true)
@@ -353,9 +370,7 @@ class RegistrationViewController: StartBaseView {
     
     // - MARK: ShowSuccessMessage
     private func showSuccessMessage(_ message: String) {
-        notificationMessage.text = message
-        notificationMessage.textColor = .green
-        notificationMessage.isHidden = false
+        successMessage.startTypingAnimation(label: successMessage, text: message, typingSpeed: 0.04) {}
     }
     
     // - MARK: TogglePasswordVisibility
