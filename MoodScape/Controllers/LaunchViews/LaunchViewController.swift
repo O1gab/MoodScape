@@ -24,8 +24,15 @@ class LaunchViewController: StartBaseView {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        animateName()
-        checkAuthentication()
+    }
+    
+    // - MARK: ViewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            self.animateName()
+            self.checkAuthentication()
+        }
     }
     
     // - MARK: SetupView
