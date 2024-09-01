@@ -45,16 +45,6 @@ class StartViewController: StartBaseView {
         return button
     }()
     
-    private let guestButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Continue as guest", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        button.layer.cornerRadius = 25
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,9 +71,6 @@ class StartViewController: StartBaseView {
 
         loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         view.addSubview(loginButton)
-        
-        guestButton.addTarget(self, action: #selector(handleGuest), for: .touchUpInside)
-        view.addSubview(guestButton)
     }
 
     // - MARK: SetupConstraints
@@ -101,10 +88,7 @@ class StartViewController: StartBaseView {
             registerButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20),
             registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             registerButton.widthAnchor.constraint(equalToConstant: 250),
-            registerButton.heightAnchor.constraint(equalToConstant: 55),
-            
-            guestButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 10),
-            guestButton.centerXAnchor.constraint(equalTo: registerButton.centerXAnchor)
+            registerButton.heightAnchor.constraint(equalToConstant: 55)
         ])
     }
 
@@ -120,13 +104,6 @@ class StartViewController: StartBaseView {
         let loginView = LoginViewController()
         loginView.modalPresentationStyle = .fullScreen
         present(loginView, animated: true, completion: nil)
-    }
-    
-    // - MARK: HandleGuest
-    @objc private func handleGuest() {
-        let mainView = MainTabBarController()
-        mainView.modalPresentationStyle = .fullScreen
-        present(mainView, animated: true, completion: nil)
     }
 }
 
