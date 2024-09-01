@@ -228,6 +228,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
+            // "Recently"
             topLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             topLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
@@ -236,6 +237,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             albumCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             albumCollectionView.heightAnchor.constraint(equalToConstant: 300),
             
+            // "Top songs this week"
             topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -25),
             topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
@@ -244,24 +246,27 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             songCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             songCollectionView.heightAnchor.constraint(equalToConstant: 450),
             
-            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 30),
+            // "You may also like"
+            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 25),
             recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            recommendationsLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             
-            infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 15),
-            infoButton.centerYAnchor.constraint(equalTo: recommendationsLabel.centerYAnchor),
-            infoButton.widthAnchor.constraint(equalToConstant: 20),
-            infoButton.heightAnchor.constraint(equalToConstant: 20),
-            
-            infoMessage.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 8),
-                        infoMessage.leadingAnchor.constraint(equalTo: recommendationsLabel.leadingAnchor),
-                        infoMessage.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -8),
-                        infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
-            
-            recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 10),
+            recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 5),
             recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             recommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 350),
-            recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -200)
+            recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -200),
+            
+            infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 40),
+            infoButton.centerYAnchor.constraint(equalTo: recommendationsLabel.centerYAnchor),
+            infoButton.widthAnchor.constraint(equalToConstant: 25),
+            infoButton.heightAnchor.constraint(equalToConstant: 25),
+            infoButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -20),
+            
+            infoMessage.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 8),
+            infoMessage.leadingAnchor.constraint(equalTo: recommendationsLabel.leadingAnchor),
+            infoMessage.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -8),
+            infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250)
         ])
     }
     
@@ -372,8 +377,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // - MARK: InfoButtonTapped
     @objc private func infoButtonTapped() {
-        UIView.animate(withDuration: 0.3) {
-            self.infoMessage.isHidden.toggle()
+        self.infoMessage.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            self.infoMessage.isHidden = true
         }
     }
 
