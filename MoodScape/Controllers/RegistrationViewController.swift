@@ -78,6 +78,10 @@ class RegistrationViewController: StartBaseView {
         let label = UILabel()
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -153,11 +157,10 @@ class RegistrationViewController: StartBaseView {
             notificationMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             notificationMessage.heightAnchor.constraint(equalToConstant: 350),
             
-            successMessage.topAnchor.constraint(equalTo: submitButton.topAnchor),
-            successMessage.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor),
-            successMessage.leadingAnchor.constraint(equalTo: submitButton.trailingAnchor, constant: 5),
-            successMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            successMessage.heightAnchor.constraint(equalToConstant: 350)
+            successMessage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 230),
+            successMessage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            successMessage.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
+            successMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
         ])
     }
     
@@ -186,7 +189,6 @@ class RegistrationViewController: StartBaseView {
         }
         else if currentQuestionIndex == 2 {
             if passwordCheck() {
-                textField.isSecureTextEntry = true
                 saveData(data: textField.text ?? "")
                 currentQuestionIndex+=1
                 proceedToNextQuestion()
@@ -225,16 +227,16 @@ class RegistrationViewController: StartBaseView {
         }
        
         // only alphanumeric and underscores are allowed.
-        let usernameRegEx = "^[A-Za-z0-9_]{4,20}$"
+        let usernameRegEx = "^[A-Za-z0-9_.]{4,20}$"
         let usernamePredicate = NSPredicate(format: "SELF MATCHES %@", usernameRegEx)
         
         if !usernamePredicate.evaluate(with: usernameText) {
-            showErrorMessage("The email address is badly formatted!")
+            showErrorMessage("Username contains forbidden characters")
             return false
         }
         
         // cannot contain the forbidden characters
-        let forbiddenChars = CharacterSet(charactersIn: "!@#$%^&*()+=[]{}|\\:;\"'<>,.?/~` ")
+        let forbiddenChars = CharacterSet(charactersIn: "!@#$%^&*()+=[]{}|\\:;\"'<>,?/~` ")
         if usernameText?.rangeOfCharacter(from: forbiddenChars) != nil {
             showErrorMessage("Username contains forbidden characters")
             return false
@@ -256,11 +258,6 @@ class RegistrationViewController: StartBaseView {
     
     // - MARK: SaveUserData
     private func saveData(data: String) {
-        guard let userId = Auth.auth().currentUser?.uid else {
-            print("User not logged in")
-            return
-        }
-
         let firestoreKey = firestoreKeys[currentQuestionIndex]
         userData[firestoreKey] = data
     }
@@ -271,6 +268,7 @@ class RegistrationViewController: StartBaseView {
             self?.textField.text = ""
             
             if self?.currentQuestionIndex == 2 {
+                self?.textField.isSecureTextEntry = true
                 let rightViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
                 rightViewContainer.addSubview((self?.textField.eyeButton)!)
                 self?.textField.rightView = rightViewContainer
@@ -300,7 +298,14 @@ class RegistrationViewController: StartBaseView {
                 self?.showSuccessMessage("Verification email sent. Please check your email.")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     let startView = StartViewController()
-                    self?.navigationController?.pushViewController(startView, animated: true)
+                    self?.dismiss(animated: true) {
+                        if let sceneDelegate = UIApplication.shared.connectedScenes
+                            .first?.delegate as? SceneDelegate {
+                                let startView = StartViewController()
+                                sceneDelegate.window?.rootViewController = startView
+                                sceneDelegate.window?.makeKeyAndVisible()
+                        }
+                    }
                 }
             }
         }
