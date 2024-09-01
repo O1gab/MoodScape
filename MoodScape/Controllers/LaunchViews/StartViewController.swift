@@ -56,14 +56,14 @@ class StartViewController: StartBaseView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 18)
         label.textColor = .white
         
         let fullText = "Already user? Log in"
         let attributedString = NSMutableAttributedString(string: fullText)
         let range = (fullText as NSString).range(of: "Log in")
         
-        attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 16), range: range)
+        attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 18), range: range)
         attributedString.addAttribute(.foregroundColor, value: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), range: range)
         
         attributedString.addAttribute(.foregroundColor, value: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), range: range)
@@ -103,7 +103,7 @@ class StartViewController: StartBaseView {
             introLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             introLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 20),
             
-            instructions.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 380),
+            instructions.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 400),
             instructions.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             instructions.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
 
