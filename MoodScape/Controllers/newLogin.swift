@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class newLogin: StartBaseView {
     
@@ -184,24 +185,84 @@ class newLogin: StartBaseView {
     // - MARK: HandleSubmit
     @objc private func handleLogin() {
         // TODO: IMPLEMENT
-        if usernameField.text?.isEmpty ?? true {
+        guard let username = usernameField.text, !username.isEmpty else {
             showErrorMessage("Username or email field cannot be empty")
             return
         }
-        if passwordField.text?.isEmpty ?? true {
+        guard let password = passwordField.text, !password.isEmpty else {
             showErrorMessage("Password field cannot be empty")
             return
         }
-        // USERNAME OR EMAIL CHECK:
+        
+        // LOGIN WITH EMAIL
         if ((usernameField.text?.contains("@")) != nil) {
             // Login with email
-            Auth.auth().signIn(withEmail: usernameField.text!, password: passwordField.text!) { [weak self] authResult, error in
-                self?.showErrorMessage(error?.localizedDescription ?? "Error during login with your email. Please, contact us.")
+            Auth.auth().signIn(withEmail: username, password: password) { [weak self] authResult, error in
+                guard let user = authResult?.user, error == nil else {
+                    self?.showErrorMessage(error?.localizedDescription ?? "Failed to login")
+                    return
+                }
+                if user.isEmailVerified {
+                    print("User logged in: \(user.email!)")
+                    self?.showSuccessMessage("Login successful")
+                    
+                    self?.checkFirstUsage { isFirstUsage in
+                        print("is first usage: \(isFirstUsage)")
+                        if isFirstUsage {
+                            DispatchQueue.main.async {
+                            let startSetup = StartSetupView()
+                            startSetup.modalPresentationStyle = .fullScreen
+                            self?.present(startSetup, animated: true, completion: nil)
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                let mainView = MainTabBarController()
+                                mainView.modalPresentationStyle = .fullScreen
+                                self?.present(mainView, animated: true, completion: nil)
+                            }
+                        }
+                    }
+                } else {
+                    self?.showErrorMessage("Please verify your email before logging in.")
+                    do {
+                        try Auth.auth().signOut()
+                    } catch {
+                        print("Failed to sign out user: \(error.localizedDescription)")
+                    }
+                }
             }
         }
         
+        // LOGIN WITH USERNAME
         
-        // PASSWORD CHECK:
+    }
+                    
+    // - MARK: CheckFirstUsage
+    private func checkFirstUsage(completion: @escaping (Bool) -> Void) {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("User is not logged in.")
+            completion(false)
+            return
+        }
+        
+        let db = Firestore.firestore()
+        let userDocRef = db.collection("users").document(userId)
+        
+        userDocRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                completion(false)
+            } else if let document = document, document.exists {
+                if let firstUsage = document.data()?["firstUsage"] as? Bool {
+                    completion(firstUsage)
+                } else {
+                    completion(false)
+                }
+            } else {
+                print("Document does not exist")
+                completion(false)
+            }
+        }
     }
     
     // - MARK: ShowErrorMessage
@@ -216,10 +277,10 @@ class newLogin: StartBaseView {
     }
     
     // - MARK: ShowSuccessMessage -> DELETE LATER!
-    private func showSuccessMessage(_ message: String, label: UILabel) {
-        label.text = message
-        label.textColor = .green
-        label.isHidden = false
+    private func showSuccessMessage(_ message: String) {
+        notificationMessage.text = message
+        notificationMessage.textColor = .green
+        notificationMessage.isHidden = false
     }
     
     // - MARK: TogglePasswordVisibility
