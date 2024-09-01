@@ -141,7 +141,7 @@ class StartViewController: StartBaseView {
 
     // - MARK: HandleLogin
     @objc private func handleLogin() {
-        let loginView = LoginViewController()
+        let loginView = newLogin()
         loginView.modalPresentationStyle = .fullScreen
         present(loginView, animated: true, completion: nil)
     }

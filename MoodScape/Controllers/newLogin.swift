@@ -21,7 +21,7 @@ class newLogin: StartBaseView {
         return backButton
     }()
     
-    private let fieldLabel: UILabel = {
+    private let usernameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
@@ -30,7 +30,31 @@ class newLogin: StartBaseView {
         return label
     }()
     
-    private let textField: UITextField = {
+    private let passwordLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        label.textAlignment = .right
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let usernameField: UITextField = {
+        let field = UITextField()
+        field.backgroundColor = .none
+        field.textColor = .white
+        field.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
+        field.layer.borderWidth = 2
+        field.layer.cornerRadius = 15
+        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: field.frame.height))
+        field.leftViewMode = .always
+        field.autocapitalizationType = .none
+        field.alpha = 0
+        field.translatesAutoresizingMaskIntoConstraints = false
+        return field
+    }()
+    
+    private let passwordField: UITextField = {
         let field = UITextField()
         field.backgroundColor = .none
         field.textColor = .white
@@ -76,7 +100,7 @@ class newLogin: StartBaseView {
         eyeButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         eyeButton.tintColor = .white
         eyeButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        eyeButton.addTarget(newRegistration.self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        eyeButton.addTarget(newLogin.self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         eyeButton.alpha = 0
         return eyeButton
     }()
@@ -92,10 +116,20 @@ class newLogin: StartBaseView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: self?.questions[self?.currentQuestionIndex ?? 0] ?? "", typingSpeed: 0.05) {
+            self?.usernameLabel.startTypingAnimation(label: self?.usernameLabel ?? UILabel(), text: "Enter your email or username here", typingSpeed: 0.05) {
                 UIView.animate(withDuration: 2.0) {
-                    self?.textField.alpha = 1.0
-                    self?.loginButton.alpha = 1.0
+                    self?.usernameField.alpha = 1.0
+                }
+                
+                self?.passwordLabel.startTypingAnimation(label: self?.passwordLabel ?? UILabel(), text: "Enter your password here", typingSpeed: 0.05) {
+                    UIView.animate(withDuration: 2.0) {
+                        self?.passwordField.alpha = 1.0
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                        UIView.animate(withDuration: 2.0) {
+                            self?.loginButton.alpha = 1.0
+                        }
+                    }
                 }
             }
         }
@@ -103,8 +137,10 @@ class newLogin: StartBaseView {
     
     // - MARK: SetupView
     private func setupView() {
-        view.addSubview(fieldLabel)
-        view.addSubview(textField)
+        view.addSubview(usernameLabel)
+        view.addSubview(usernameField)
+        view.addSubview(passwordLabel)
+        view.addSubview(passwordField)
         view.addSubview(eyeButton)
         view.addSubview(loginButton)
         view.addSubview(notificationMessage)
@@ -120,17 +156,25 @@ class newLogin: StartBaseView {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             
-            fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 250),
-            fieldLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
+            usernameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 220),
+            usernameLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            usernameLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
             
-            textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 290),
-            textField.leftAnchor.constraint(equalTo: fieldLabel.leftAnchor),
-            textField.widthAnchor.constraint(equalToConstant: 300),
-            textField.heightAnchor.constraint(equalToConstant: 60),
+            usernameField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 260),
+            usernameField.leftAnchor.constraint(equalTo: usernameLabel.leftAnchor),
+            usernameField.widthAnchor.constraint(equalToConstant: 300),
+            usernameField.heightAnchor.constraint(equalToConstant: 60),
+            
+            passwordLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 370),
+            passwordLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -15),
+            
+            passwordField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 20),
+            passwordField.rightAnchor.constraint(equalTo: passwordLabel.rightAnchor),
+            passwordField.widthAnchor.constraint(equalToConstant: 300),
+            passwordField.heightAnchor.constraint(equalToConstant: 60),
 
-            loginButton.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 30),
-            loginButton.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 10),
+            loginButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 50),
+            loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loginButton.widthAnchor.constraint(equalToConstant: 120),
             loginButton.heightAnchor.constraint(equalToConstant: 50),
             
@@ -148,7 +192,7 @@ class newLogin: StartBaseView {
     
     // - MARK: HandleSubmit
     @objc private func handleSubmit() {
-        let answer = textField.text!
+        let answer = usernameField.text!
         
         if currentQuestionIndex == 0 {
             // Check if input is an email or username
@@ -179,14 +223,13 @@ class newLogin: StartBaseView {
                 } else {
                     // Email/username exists, proceed to next question
                     self?.currentQuestionIndex += 1
-                    self?.proceedToNextQuestion()
                 }
             }
             return
         }
         else if currentQuestionIndex == 1 {
            // Check if password belongs to the account
-           Auth.auth().signIn(withEmail: answer, password: textField.text!) { [weak self] (result, error) in
+           Auth.auth().signIn(withEmail: answer, password: passwordField.text!) { [weak self] (result, error) in
                if let error = error {
                    self?.showErrorMessage("Invalid password. Please try again.")
                } else {
@@ -208,22 +251,6 @@ class newLogin: StartBaseView {
                }
            }
            return
-        }
-        proceedToNextQuestion()
-    }
-    
-    // - MARK: ProceedToNextQuestion
-    private func proceedToNextQuestion() {
-        self.fieldLabel.startErasingAnimation(label: fieldLabel, typingSpeed: 0.05) { [weak self] in
-            self?.textField.text = ""
-            
-            if self?.currentQuestionIndex ?? 0 < self?.questions.count ?? 0 {
-                let nextQuestion = self?.questions[self?.currentQuestionIndex ?? 0] ?? ""
-                self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: 0.05) {}
-            } else {
-                // HANDLE LOGIN
-                //self?.handleLoign()
-            }
         }
     }
     
@@ -247,9 +274,9 @@ class newLogin: StartBaseView {
     
     // - MARK: TogglePasswordVisibility
     @objc func togglePasswordVisibility() {
-        textField.isSecureTextEntry.toggle()
-        let imageName = textField.isSecureTextEntry ? "eye.slash" : "eye"
-        textField.eyeButton.setImage(UIImage(systemName: imageName), for: .normal)
+        passwordField.isSecureTextEntry.toggle()
+        let imageName = passwordField.isSecureTextEntry ? "eye.slash" : "eye"
+        passwordField.eyeButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
     
     // - MARK: HandleBack
