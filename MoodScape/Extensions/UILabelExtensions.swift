@@ -53,3 +53,88 @@ extension UILabel {
         }
     }
 }
+
+class GradientLabel: UILabel {
+
+    var gradientColors: [UIColor] = [UIColor.white, UIColor.gray, UIColor.systemGreen]
+       private var gradientLayer: CAGradientLayer!
+
+       override func layoutSubviews() {
+           super.layoutSubviews()
+           applyGradientMask()
+       }
+
+    private func applyGradientMask() {
+        if gradientLayer == nil {
+            gradientLayer = CAGradientLayer()
+            gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+            gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+            gradientLayer.frame = bounds
+            
+            let textLayer = CATextLayer()
+            textLayer.string = createAttributedString()
+            textLayer.font = font
+            textLayer.fontSize = font.pointSize
+            textLayer.alignmentMode = convertAlignment()
+            textLayer.frame = bounds
+            textLayer.contentsScale = UIScreen.main.scale
+            textLayer.isWrapped = true
+            textLayer.truncationMode = .end
+               
+            // Set the text layer as the mask for the gradient layer
+            gradientLayer.mask = textLayer
+               
+            // Add the gradient layer to the label's layer
+            layer.addSublayer(gradientLayer)
+        }
+           
+        // Animate the gradient
+        animateGradient()
+    }
+    
+    private func createAttributedString() -> NSAttributedString {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = .byWordWrapping
+        paragraphStyle.alignment = textAlignment
+           
+        return NSAttributedString(
+            string: text ?? "",
+            attributes: [
+                .font: font as Any,
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+    }
+
+    private func convertAlignment() -> CATextLayerAlignmentMode {
+        switch textAlignment {
+        case .center:
+            return .center
+        case .right:
+            return .right
+        case .left:
+            return .left
+        case .justified:
+            return .justified
+        case .natural:
+            return .natural
+        @unknown default:
+            return .left
+        }
+    }
+    
+    private func animateGradient() {
+        let colorAnimation = CABasicAnimation(keyPath: "colors")
+        colorAnimation.fromValue = gradientColors.map { $0.cgColor }
+        colorAnimation.toValue = [UIColor.systemGreen.cgColor, UIColor.gray.cgColor, UIColor.white.cgColor]
+        colorAnimation.duration = 3.0
+        colorAnimation.autoreverses = true
+        colorAnimation.repeatCount = .infinity
+        
+        gradientLayer.add(colorAnimation, forKey: "colorChange")
+           
+        gradientLayer.colors = [UIColor.systemGreen.cgColor, UIColor.gray.cgColor, UIColor.white.cgColor]
+    }
+
+    override func draw(_ rect: CGRect) {}
+}
