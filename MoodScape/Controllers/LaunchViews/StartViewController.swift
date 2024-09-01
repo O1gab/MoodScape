@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  StartViewController.swift
 //  MoodScape
 //
 //
@@ -66,8 +66,6 @@ class StartViewController: StartBaseView {
         attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 16), range: range)
         attributedString.addAttribute(.foregroundColor, value: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), range: range)
         
-        let tapGesture = UITapGestureRecognizer(target: StartViewController.self, action: #selector(handleLogin))
-        label.addGestureRecognizer(tapGesture)
         attributedString.addAttribute(.foregroundColor, value: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), range: range)
         
         label.attributedText = attributedString
@@ -77,37 +75,12 @@ class StartViewController: StartBaseView {
         return label
     }()
     
-    private let loginButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Log In", for: .normal)
-        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        button.layer.cornerRadius = 25
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            UIView.animate(withDuration: 1.5) {
-                self?.introLabel.alpha = 1
-            }
-            UIView.animate(withDuration: 2.5) {
-                self?.registerButton.alpha = 1
-                self?.loginLabel.alpha = 1
-            }
-            
-            self?.instructions.startTypingAnimation(label: self?.instructions ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {}
-        }
+        appearingAnimation()
     }
     
     // - MARK: SetupView
@@ -119,6 +92,8 @@ class StartViewController: StartBaseView {
         view.addSubview(registerButton)
         
         view.addSubview(loginLabel)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLogin))
+        loginLabel.addGestureRecognizer(tapGesture)
     }
 
     // - MARK: SetupConstraints
@@ -140,6 +115,21 @@ class StartViewController: StartBaseView {
             loginLabel.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 20),
             loginLabel.trailingAnchor.constraint(equalTo: registerButton.trailingAnchor, constant: -20)
         ])
+    }
+    
+    // - MARK: AppearingAnimation
+    private func appearingAnimation() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            UIView.animate(withDuration: 1.5) {
+                self?.introLabel.alpha = 1
+            }
+            UIView.animate(withDuration: 2.5) {
+                self?.registerButton.alpha = 1
+                self?.loginLabel.alpha = 1
+            }
+            
+            self?.instructions.startTypingAnimation(label: self?.instructions ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {}
+        }
     }
 
     // - MARK: HandleRegister
