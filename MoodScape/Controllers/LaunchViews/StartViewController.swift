@@ -9,10 +9,9 @@ import Gifu
 
 class StartViewController: StartBaseView {
 
-    private let introLabel: UILabel = {
-        let label = UILabel()
+    private let introLabel: GradientLabel = {
+        let label = GradientLabel()
         label.text = "Let your emotions set the playlist."
-        label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -21,6 +20,9 @@ class StartViewController: StartBaseView {
         label.alpha = 1
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.gradientColors = [UIColor.white, UIColor.gray, UIColor(red: 0/255.0, green: 104/255.0, blue: 80/255.0, alpha: 1.0)]
+
         return label
     }()
     
@@ -149,4 +151,3 @@ class StartViewController: StartBaseView {
         present(loginView, animated: true, completion: nil)
     }
 }
-
