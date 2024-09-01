@@ -184,16 +184,21 @@ class newLogin: StartBaseView {
     // - MARK: HandleSubmit
     @objc private func handleLogin() {
         // TODO: IMPLEMENT
-        if (usernameField.text == nil) {
+        if usernameField.text?.isEmpty ?? true {
             showErrorMessage("Username or email field cannot be empty")
             return
         }
-        if (passwordField.text == nil) {
+        if passwordField.text?.isEmpty ?? true {
             showErrorMessage("Password field cannot be empty")
             return
         }
         // USERNAME OR EMAIL CHECK:
-        
+        if ((usernameField.text?.contains("@")) != nil) {
+            // Login with email
+            Auth.auth().signIn(withEmail: usernameField.text!, password: passwordField.text!) { [weak self] authResult, error in
+                self?.showErrorMessage(error?.localizedDescription ?? "Error during login with your email. Please, contact us.")
+            }
+        }
         
         
         // PASSWORD CHECK:
