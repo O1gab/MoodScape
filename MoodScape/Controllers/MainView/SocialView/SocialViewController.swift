@@ -35,6 +35,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
+        tableView.isHidden = true
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -65,6 +66,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        fetchFriends()
         setupTableView()
         fetchAllUsers()
     }
@@ -83,6 +85,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         view.addSubview(tableView)
         view.addSubview(noFriendsLabel)
         view.addSubview(addFriendsButton)
+        addFriendsButton.addTarget(self, action: #selector(addFriendsButtonTapped), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
@@ -108,6 +111,37 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             addFriendsButton.widthAnchor.constraint(equalToConstant: 160),
             addFriendsButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    private func fetchFriends() {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(userId)
+
+        userRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+            if let document = document, document.exists {
+                let data = document.data()
+                DispatchQueue.main.async {
+                    // THERES FRIENDS
+                    if let friends = data?["friends_ids"] as? [String] {
+                        self.noFriendsLabel.isHidden = true
+                        self.addFriendsButton.isHidden = true
+                        self.searchBar.isHidden = false
+                    } else {
+                        // NO FRIENDS :(
+                    }
+                }
+            } else {
+                print("Document does not exist")
+            }
+        }
     }
     
     private func fetchAllUsers() {
@@ -153,6 +187,10 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
                 }
             }
         }
+    }
+    
+    @objc private func addFriendsButtonTapped() {
+        searchBar.becomeFirstResponder()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
