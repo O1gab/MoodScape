@@ -18,7 +18,7 @@ class SongTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let songLabel: UILabel = {
+    let songLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.textColor = .black

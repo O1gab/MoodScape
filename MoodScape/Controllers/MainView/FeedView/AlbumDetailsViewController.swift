@@ -162,7 +162,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         guard let releaseDateLabelFrame = releaseDateLabel.superview?.convert(releaseDateLabel.frame, to: contentView) else { return }
         divider.frame = CGRect(
             x: 10,
-            y: releaseDateLabelFrame.maxY + 10,
+            y: releaseDateLabelFrame.maxY + 15,
             width: contentView.frame.width - 20,
             height: 2
         )
@@ -232,8 +232,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             favoriteButton.widthAnchor.constraint(equalToConstant: 50),
             favoriteButton.heightAnchor.constraint(equalToConstant: 50),
             
-            topSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 20),
-            topSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 15),
+            topSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 30),
             topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             topSongsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
@@ -298,8 +297,15 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
                         self.albumName.textColor = color.contrastingComplementaryColor()
                         self.shareButton.tintColor = color.contrastingColor()
                         self.topSongsLabel.textColor = color.contrastingComplementaryColor()
+                        // Update table view text color
+                        self.topSongsTableView.visibleCells.forEach { cell in
+                            if let songCell = cell as? SongTableViewCell {
+                                songCell.songLabel.textColor = color.contrastingColor()
+                            }
+                        }
                         self.releaseDateLabel.textColor = color.contrastingColor()
                     }
+                   
                 }
             }
             task.resume()
@@ -312,8 +318,17 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     // - MARK: AnimateBackgroundGradient
     private func animateBackgroundGradient(from dominantColor: UIColor, to complementaryColor: UIColor) {
+        var adjustedDominantColor = dominantColor
+        var adjustedComplementaryColor = complementaryColor
+            
+        // Check if the colors are too similar and adjust
+        if dominantColor.isTooSimilar(to: complementaryColor) {
+            adjustedDominantColor = dominantColor.darker(by: 20)
+            adjustedComplementaryColor = complementaryColor.lighter(by: 20)
+        }
+        
         let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [dominantColor.cgColor, complementaryColor.cgColor]
+        gradientLayer.colors = [adjustedDominantColor.cgColor, adjustedComplementaryColor.cgColor]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         gradientLayer.frame = self.contentView.bounds
@@ -327,8 +342,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         self.contentView.layer.insertSublayer(gradientLayer, at: 0)
 
         let animation = CABasicAnimation(keyPath: "colors")
-        animation.fromValue = [dominantColor.cgColor, complementaryColor.cgColor]
-        animation.toValue = [complementaryColor.cgColor, dominantColor.cgColor]
+        animation.fromValue = [adjustedDominantColor.cgColor, adjustedComplementaryColor.cgColor]
+        animation.toValue = [adjustedComplementaryColor.cgColor, adjustedDominantColor.cgColor]
         animation.duration = 7.0
         animation.autoreverses = true
         animation.repeatCount = .infinity
@@ -352,7 +367,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60 
+        return 65
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
