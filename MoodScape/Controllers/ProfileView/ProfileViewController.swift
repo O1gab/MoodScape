@@ -163,6 +163,16 @@ class ProfileViewController: ProfileBaseView {
         return label
     }()
     
+    private let preferencesLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Your music preferences"
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let shareButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Share your profile", for: .normal)
@@ -235,11 +245,9 @@ class ProfileViewController: ProfileBaseView {
         scrollView.addSubview(profileImage)
         scrollView.addSubview(usernameLabel)
         scrollView.addSubview(inlineBarStackView)
-        scrollView.addSubview(cardView)
+        scrollView.addSubview(preferencesLabel)
         scrollView.addSubview(shareButton)
         scrollView.addSubview(editButton)
-        cardView.addSubview(nameLabel)
-        cardView.addSubview(registrationDate)
         
         settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
@@ -282,20 +290,10 @@ class ProfileViewController: ProfileBaseView {
             inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             inlineBarStackView.heightAnchor.constraint(equalToConstant: 70),
             
-            cardView.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 40),
-            cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            preferencesLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
+            preferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            nameLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 20),
-            nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
-            nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
-            
-            registrationDate.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
-            registrationDate.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
-            registrationDate.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
-            registrationDate.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -20),
-            
-            shareButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 40),
+            shareButton.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 40),
             shareButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             shareButton.widthAnchor.constraint(equalToConstant: 250),
             shareButton.heightAnchor.constraint(equalToConstant: 50),
