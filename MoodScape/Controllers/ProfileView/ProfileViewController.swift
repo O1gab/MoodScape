@@ -62,9 +62,20 @@ class ProfileViewController: ProfileBaseView {
         stackView.layer.cornerRadius = 15
         stackView.layer.masksToBounds = true
         stackView.backgroundColor = UIColor.clear
-        stackView.layer.borderWidth = 1
-        stackView.layer.borderColor = UIColor.white.cgColor
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Create vertical stack views for each section
+        let favouritesStackView = UIStackView()
+        favouritesStackView.axis = .vertical
+        favouritesStackView.distribution = .fill
+        favouritesStackView.spacing = 4
+        favouritesStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        let favouritesCountLabel = UILabel()
+        favouritesCountLabel.text = "0" // Placeholder for actual number
+        favouritesCountLabel.textColor = .white
+        favouritesCountLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        favouritesCountLabel.textAlignment = .center
         
         let favouritesButton = UIButton(type: .system)
         favouritesButton.setTitle("Favourites", for: .normal)
@@ -72,7 +83,21 @@ class ProfileViewController: ProfileBaseView {
         favouritesButton.tag = 0
         favouritesButton.setTitleColor(.white, for: .normal)
         favouritesButton.backgroundColor = .clear
-        stackView.addArrangedSubview(favouritesButton)
+        
+        favouritesStackView.addArrangedSubview(favouritesCountLabel)
+        favouritesStackView.addArrangedSubview(favouritesButton)
+        
+        let searchesStackView = UIStackView()
+        searchesStackView.axis = .vertical
+        searchesStackView.distribution = .fill
+        searchesStackView.spacing = 4
+        searchesStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        let searchesCountLabel = UILabel()
+        searchesCountLabel.text = "0" // Placeholder for actual number
+        searchesCountLabel.textColor = .white
+        searchesCountLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        searchesCountLabel.textAlignment = .center
         
         let searchesButton = UIButton(type: .system)
         searchesButton.setTitle("Searches", for: .normal)
@@ -80,7 +105,21 @@ class ProfileViewController: ProfileBaseView {
         searchesButton.tag = 1
         searchesButton.setTitleColor(.white, for: .normal)
         searchesButton.backgroundColor = .clear
-        stackView.addArrangedSubview(searchesButton)
+        
+        searchesStackView.addArrangedSubview(searchesCountLabel)
+        searchesStackView.addArrangedSubview(searchesButton)
+        
+        let friendsStackView = UIStackView()
+        friendsStackView.axis = .vertical
+        friendsStackView.distribution = .fill
+        friendsStackView.spacing = 4
+        friendsStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        let friendsCountLabel = UILabel()
+        friendsCountLabel.text = "0" // Placeholder for actual number
+        friendsCountLabel.textColor = .white
+        friendsCountLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        friendsCountLabel.textAlignment = .center
         
         let friendsButton = UIButton(type: .system)
         friendsButton.setTitle("Friends", for: .normal)
@@ -88,30 +127,18 @@ class ProfileViewController: ProfileBaseView {
         friendsButton.tag = 2
         friendsButton.setTitleColor(.white, for: .normal)
         friendsButton.backgroundColor = .clear
-        stackView.addArrangedSubview(friendsButton)
         
-        // Vertical lines
-        let verticalLine1 = UIView()
-        verticalLine1.backgroundColor = .lightGray
-        verticalLine1.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addSubview(verticalLine1)
+        friendsStackView.addArrangedSubview(friendsCountLabel)
+        friendsStackView.addArrangedSubview(friendsButton)
         
-        let verticalLine2 = UIView()
-        verticalLine2.backgroundColor = .lightGray
-        verticalLine2.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addSubview(verticalLine2)
+        favouritesStackView.spacing = 0 // Decrease spacing
+        searchesStackView.spacing = 0 // Decrease spacing
+        friendsStackView.spacing = 0 // Decrease spacing
         
-        NSLayoutConstraint.activate([
-            verticalLine1.widthAnchor.constraint(equalToConstant: 1),
-            verticalLine1.topAnchor.constraint(equalTo: stackView.topAnchor),
-            verticalLine1.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-            verticalLine1.leadingAnchor.constraint(equalTo: favouritesButton.trailingAnchor),
-            
-            verticalLine2.widthAnchor.constraint(equalToConstant: 1),
-            verticalLine2.topAnchor.constraint(equalTo: stackView.topAnchor),
-            verticalLine2.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-            verticalLine2.leadingAnchor.constraint(equalTo: searchesButton.trailingAnchor)
-        ])
+        // Add each vertical stack view to the main horizontal stack view
+        stackView.addArrangedSubview(favouritesStackView)
+        stackView.addArrangedSubview(searchesStackView)
+        stackView.addArrangedSubview(friendsStackView)
         
         return stackView
     }()
@@ -250,12 +277,12 @@ class ProfileViewController: ProfileBaseView {
             usernameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20),
             usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            inlineBarStackView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
+            inlineBarStackView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 15),
             inlineBarStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            inlineBarStackView.heightAnchor.constraint(equalToConstant: 40),
+            inlineBarStackView.heightAnchor.constraint(equalToConstant: 70),
             
-            cardView.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
+            cardView.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 40),
             cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
