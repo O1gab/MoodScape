@@ -90,4 +90,22 @@ extension UIColor {
             return self
         }
     }
+    
+    func isTooSimilar(to color: UIColor) -> Bool {
+        let threshold: CGFloat = 0.1
+        
+        var red1: CGFloat = 0
+        var green1: CGFloat = 0
+        var blue1: CGFloat = 0
+        var alpha1: CGFloat = 0
+        self.getRed(&red1, green: &green1, blue: &blue1, alpha: &alpha1)
+        
+        var red2: CGFloat = 0
+        var green2: CGFloat = 0
+        var blue2: CGFloat = 0
+        var alpha2: CGFloat = 0
+        color.getRed(&red2, green: &green2, blue: &blue2, alpha: &alpha2)
+        
+        return abs(red1 - red2) < threshold && abs(green1 - green2) < threshold && abs(blue1 - blue2) < threshold
+    }
 }
