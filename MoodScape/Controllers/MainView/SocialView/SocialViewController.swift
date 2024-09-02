@@ -27,7 +27,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search friends"
         searchBar.backgroundImage = UIImage()
-        searchBar.barTintColor = .white
+        searchBar.barTintColor = .clear
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()
@@ -76,17 +76,13 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
     
     // - MARK: SetupView
     private func setupView() {
-        if Auth.auth().currentUser == nil {
-            // TODO: if a user is not authenicated, show login and register buttons
-        }
         searchBar.delegate = self
-        
+        searchBar.target(forAction: #selector(searchBarSearchButtonClicked), withSender: .none)
         view.addSubview(friendsLabel)
         view.addSubview(searchBar)
         view.addSubview(tableView)
         view.addSubview(noFriendsLabel)
         view.addSubview(addFriendsButton)
-        
     }
     
     // - MARK: SetupConstraints
@@ -158,6 +154,10 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             }
         }
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+          searchBar.resignFirstResponder()
+      }
     
     // UISearchBarDelegate Method
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
