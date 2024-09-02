@@ -160,6 +160,8 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .left
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

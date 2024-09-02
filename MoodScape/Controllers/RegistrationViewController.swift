@@ -336,7 +336,7 @@ class RegistrationViewController: StartBaseView {
                     completion(error)
                 } else {
                     completion(nil)
-                    print("cingras")
+                    print("User's data successfully saved")
                 }
             }
         }

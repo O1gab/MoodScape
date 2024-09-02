@@ -12,7 +12,7 @@ class MainViewController: MainBaseView {
     
     private let greetingLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textAlignment = .left
         label.numberOfLines = 0
