@@ -56,14 +56,14 @@ class StartViewController: StartBaseView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 20)
         label.textColor = .white
         
         let fullText = "Already user? Log in"
         let attributedString = NSMutableAttributedString(string: fullText)
         let range = (fullText as NSString).range(of: "Log in")
         
-        attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 18), range: range)
+        attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 20), range: range)
         attributedString.addAttribute(.foregroundColor, value: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), range: range)
         
         attributedString.addAttribute(.foregroundColor, value: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), range: range)

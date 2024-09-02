@@ -51,7 +51,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     
     // - MARK: SetupView
     private func setupView() {
-        firstViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "music.note"), tag: 0)
+        firstViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "safari.fill"), tag: 0)
         thirdViewController.tabBarItem = UITabBarItem(title: "Social", image: UIImage(systemName: "person.3"), tag: 2)
         UITabBar.appearance().tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         
