@@ -65,6 +65,7 @@
 		76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */; };
 		76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* StartViewController.swift */; };
 		76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */; };
+		76BF876F2C85422D00C50E28 /* SongDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF876E2C85422D00C50E28 /* SongDetailsViewController.swift */; };
 		76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */; };
 		76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */; };
 		76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B492C7BCA7D00B65B72 /* ImageCache.swift */; };
@@ -133,6 +134,7 @@
 		76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		76B869BE2C67B93C002866B9 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gradient_skyline_blinking_stars.gif; sourceTree = "<group>"; };
+		76BF876E2C85422D00C50E28 /* SongDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailsViewController.swift; sourceTree = "<group>"; };
 		76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSetupViewController.swift; sourceTree = "<group>"; };
 		76F31B492C7BCA7D00B65B72 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				766485632C6C479800AA050A /* FeedViewController.swift */,
 				766485732C6ED0BE00AA050A /* AlbumCollectionView.swift */,
 				76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */,
+				76BF876E2C85422D00C50E28 /* SongDetailsViewController.swift */,
 				76976C9A2C74238A00D44DD3 /* SongCollectionView.swift */,
 			);
 			path = FeedView;
@@ -594,6 +597,7 @@
 				764E2A342C788B5300785104 /* SetupBaseView.swift in Sources */,
 				7664855C2C6C447E00AA050A /* MainTabBarController.swift in Sources */,
 				76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */,
+				76BF876F2C85422D00C50E28 /* SongDetailsViewController.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */,
 				768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */,
 				766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */,

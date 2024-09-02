@@ -9,9 +9,6 @@ import SafariServices
 import FirebaseAuth
 import FirebaseFirestore
 
-/*
- ! POTENTIAL PROBLEM: IF UR A GUEST, THIS VIEW CANNOT BE OPENED !
- */
 class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     private var scrollView: UIScrollView!
@@ -63,7 +60,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     private let infoButton: UIButton = {
         let button = UIButton(type: .infoLight)
-        button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -92,21 +89,21 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         
         view.addSubview(label)
         NSLayoutConstraint.activate([
-                    label.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
-                    label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-                    label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-                    label.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -8)
-                ])
+            label.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
+            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            label.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -8)
+        ])
         return view
     }()
     
     private let exploreButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Explore more", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        button.layer.cornerRadius = 28
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
+        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), for: .normal)
+        button.backgroundColor = .white.withAlphaComponent(0.5)
+        button.layer.cornerRadius = 25
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -137,9 +134,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView.addSubview(recommendationsLabel)
         contentView.addSubview(infoButton)
         contentView.addSubview(infoMessage)
+        contentView.addSubview(exploreButton)
         
         infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .allTouchEvents)
-        //contentView.addSubview(exploreButton)
         setupAlbumCollectionView()
         setupSongCollectionView()
         setupRecommendedSongsCollectionView()
@@ -167,7 +164,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-            
+        
         songCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         songCollectionView.backgroundColor = .clear
         songCollectionView.showsVerticalScrollIndicator = false
@@ -254,7 +251,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 5),
             recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             recommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 350),
+            recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 400),
             recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -200),
             
             infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 40),
@@ -266,7 +263,12 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             infoMessage.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 8),
             infoMessage.leadingAnchor.constraint(equalTo: recommendationsLabel.leadingAnchor),
             infoMessage.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -8),
-            infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250)
+            infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
+            
+            exploreButton.topAnchor.constraint(equalTo: recommendedSongsCollectionView.bottomAnchor, constant: 70),
+            exploreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            exploreButton.widthAnchor.constraint(equalToConstant: 210),
+            exploreButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
@@ -451,15 +453,19 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == albumCollectionView {
             let selectedAlbum = albums[indexPath.item]
-            let detailVC = AlbumDetailsViewController(album: selectedAlbum)
-            present(detailVC, animated: true, completion: nil)
+            let detailView = AlbumDetailsViewController(album: selectedAlbum)
+            present(detailView, animated: true, completion: nil)
             
         } else if collectionView == songCollectionView {
             let selectedSong = topWeeklySongs[indexPath.item]
             if let url = URL(string: selectedSong.spotifyUrl) {
-                let safariVC = SFSafariViewController(url: url)
-                present(safariVC, animated: true, completion: nil)
+                let safariView = SFSafariViewController(url: url)
+                present(safariView, animated: true, completion: nil)
             }
+        } else if collectionView == recommendedSongsCollectionView {
+            let selectedSong = recommendedSongs[indexPath.item]
+            let detailView = SongDetailsViewController(song: selectedSong)
+            present(detailView, animated: true, completion: nil)
         }
     }
 }
