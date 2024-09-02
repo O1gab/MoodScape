@@ -19,7 +19,7 @@ class SongViewCell: UICollectionViewCell {
     
     private let artistNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -27,7 +27,7 @@ class SongViewCell: UICollectionViewCell {
     
     let songTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -45,14 +45,13 @@ class SongViewCell: UICollectionViewCell {
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            artistNameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 4),
+            artistNameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 15),
             artistNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            artistNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            artistNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            songTitleLabel.topAnchor.constraint(equalTo: artistNameLabel.bottomAnchor, constant: 2),
+            songTitleLabel.topAnchor.constraint(equalTo: artistNameLabel.bottomAnchor, constant: 5),
             songTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            songTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
-            songTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
+            songTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
     }
     
