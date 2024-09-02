@@ -10,7 +10,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseFirestore
 
-class ProfileViewController: ProfileBaseView {
+class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -23,6 +23,11 @@ class ProfileViewController: ProfileBaseView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    private var selectedArtists: [Artist] = []
+    private var collectionView: UICollectionView!
+    
+    private var preferences: [Artist] = []
     
     private let profileImage: UIImageView = {
         let imageView = UIImageView()
@@ -153,10 +158,9 @@ class ProfileViewController: ProfileBaseView {
     
     private let registrationDate: UILabel = {
         let label = UILabel()
-        label.text = "Registration Date:"
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.textColor = .white
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -181,6 +185,7 @@ class ProfileViewController: ProfileBaseView {
         button.tintColor = .white
         button.layer.cornerRadius = 25
         button.layer.borderWidth = 4
+        button.layer.borderColor = UIColor.white.cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -221,7 +226,6 @@ class ProfileViewController: ProfileBaseView {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchData()
-        fetchExtraData()
     }
     
     // - MARK: SetupView
@@ -234,18 +238,21 @@ class ProfileViewController: ProfileBaseView {
         scrollView.addSubview(usernameLabel)
         scrollView.addSubview(inlineBarStackView)
         scrollView.addSubview(preferencesLabel)
+        scrollView.addSubview(registrationDate)
         scrollView.addSubview(shareButton)
         scrollView.addSubview(editButton)
         
         settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
         
-        // Add target actions for inline bar buttons
         for view in inlineBarStackView.arrangedSubviews {
             if let button = view as? UIButton {
                 button.addTarget(self, action: #selector(handleInlineBarButtonTap(_:)), for: .touchUpInside)
             }
         }
+        
+        setupCollectionView()
     }
     
     // - MARK: SetupConstraints
@@ -281,7 +288,16 @@ class ProfileViewController: ProfileBaseView {
             preferencesLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 30),
             preferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            editButton.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 40),
+            collectionView.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 20),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            collectionView.heightAnchor.constraint(equalToConstant: 120),
+            
+            registrationDate.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
+            registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            registrationDate.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            
+            editButton.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 40),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 250),
             editButton.heightAnchor.constraint(equalToConstant: 50),
@@ -292,7 +308,23 @@ class ProfileViewController: ProfileBaseView {
             shareButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
-
+    
+    private func setupCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
+        
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.register(PreferencesCell.self, forCellWithReuseIdentifier: "PreferencesCell")
+        
+        view.addSubview(collectionView)
+    }
+    
     // - MARK: FetchData
     private func fetchData() {
         guard let userId = Auth.auth().currentUser?.uid else {
@@ -315,50 +347,14 @@ class ProfileViewController: ProfileBaseView {
                     }
                     
                     if let registrationDate = data?["registrationDate"] as? Timestamp {
-                        let date = registrationDate.dateValue()
                         let dateFormatter = DateFormatter()
-                        dateFormatter.dateStyle = .medium
-                        self.registrationDate.attributedText = self.attributedText(
-                            staticText: "Registration Date: ",
-                            dynamicText: dateFormatter.string(from: date),
-                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
-                            dynamicColor: UIColor.white
-                        )
+                            dateFormatter.dateFormat = "MMMM d, yyyy"
+                            let dateString = dateFormatter.string(from: registrationDate.dateValue())
+                            DispatchQueue.main.async {
+                                self.registrationDate.text = "On MoodScape since \(dateString)"
+                            }
                     } else {
                         print("Registration date not available")
-                    }
-                }
-            } else {
-                print("Document does not exist")
-            }
-        }
-    }
-
-    // - MARK: FetchExtraData
-    private func fetchExtraData() {
-        guard let userId = Auth.auth().currentUser?.uid else {
-            print("User not logged in")
-            return
-        }
-        
-        let db = Firestore.firestore()
-        let userRef = db.collection("users").document(userId)
-
-        userRef.getDocument { (document, error) in
-            if let error = error {
-                print("Error fetching user data: \(error.localizedDescription)")
-                return
-            }
-            if let document = document, document.exists {
-                let data = document.data()
-                DispatchQueue.main.async {
-                    if let firstName = data?["name"] as? String {
-                        self.nameLabel.attributedText = self.attributedText(
-                            staticText: "Name: ",
-                            dynamicText: firstName,
-                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
-                            dynamicColor: UIColor.white
-                        )
                     }
                 }
             } else {
@@ -425,5 +421,48 @@ class ProfileViewController: ProfileBaseView {
         let profileSetupView = ProfileSetupViewController()
         profileSetupView.modalPresentationStyle = .overCurrentContext
         self.present(profileSetupView, animated: true, completion: nil)
+    }
+    
+    // - MARK: HandleShare
+    @objc private func handleShare() {
+        guard let username = usernameLabel.text else { return }
+        // TODO: REPLACE WITH ACTUAL APPSTORE LINK
+        let appStoreLink = ""
+        let textToShare = "Check out my profile on MoodScape: @\(username)\nDownload the app: \(appStoreLink)"
+        let activityViewController = UIActivityViewController(activityItems: [textToShare], applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
+    }
+    
+    // - MARK: UICollectionViewDataSource
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return selectedArtists.count
+    }
+    
+    // - MARK: CollectionView
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreferencesCell", for: indexPath) as! PreferencesCell
+         let artist = selectedArtists[indexPath.item]
+         
+         // Fetch image data asynchronously
+         URLSession.shared.dataTask(with: artist.imageURL) { data, response, error in
+             if let data = data, let image = UIImage(data: data) {
+                 DispatchQueue.main.async {
+                     cell.configure(with: image)
+                 }
+             }
+         }.resume()
+         
+         return cell
+    }
+        
+    // - MARK: UICollectionViewDelegateFlowLayout
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 110, height: 190)
+    }
+    
+    // - MARK: UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedAlbum = preferences[indexPath.item]
+        // TODO: FIX IT
     }
 }
