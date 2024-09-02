@@ -31,7 +31,7 @@ class ProfileViewController: ProfileBaseView {
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.isUserInteractionEnabled = true
-        imageView.layer.cornerRadius = 75
+        imageView.layer.cornerRadius = 50
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -54,39 +54,71 @@ class ProfileViewController: ProfileBaseView {
         return label
     }()
     
-    private let firstNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "First Name:"
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    private let lastNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Last Name:"
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let inlineBarStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 0
+        stackView.layer.cornerRadius = 15
+        stackView.layer.masksToBounds = true
+        stackView.backgroundColor = UIColor.clear
+        stackView.layer.borderWidth = 1
+        stackView.layer.borderColor = UIColor.white.cgColor
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let favouritesButton = UIButton(type: .system)
+        favouritesButton.setTitle("Favourites", for: .normal)
+        favouritesButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        favouritesButton.tag = 0
+        favouritesButton.setTitleColor(.white, for: .normal)
+        favouritesButton.backgroundColor = .clear
+        stackView.addArrangedSubview(favouritesButton)
+        
+        let searchesButton = UIButton(type: .system)
+        searchesButton.setTitle("Searches", for: .normal)
+        searchesButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        searchesButton.tag = 1
+        searchesButton.setTitleColor(.white, for: .normal)
+        searchesButton.backgroundColor = .clear
+        stackView.addArrangedSubview(searchesButton)
+        
+        let friendsButton = UIButton(type: .system)
+        friendsButton.setTitle("Friends", for: .normal)
+        friendsButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        friendsButton.tag = 2
+        friendsButton.setTitleColor(.white, for: .normal)
+        friendsButton.backgroundColor = .clear
+        stackView.addArrangedSubview(friendsButton)
+        
+        // Vertical lines
+        let verticalLine1 = UIView()
+        verticalLine1.backgroundColor = .lightGray
+        verticalLine1.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addSubview(verticalLine1)
+        
+        let verticalLine2 = UIView()
+        verticalLine2.backgroundColor = .lightGray
+        verticalLine2.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addSubview(verticalLine2)
+        
+        NSLayoutConstraint.activate([
+            verticalLine1.widthAnchor.constraint(equalToConstant: 1),
+            verticalLine1.topAnchor.constraint(equalTo: stackView.topAnchor),
+            verticalLine1.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
+            verticalLine1.leadingAnchor.constraint(equalTo: favouritesButton.trailingAnchor),
+            
+            verticalLine2.widthAnchor.constraint(equalToConstant: 1),
+            verticalLine2.topAnchor.constraint(equalTo: stackView.topAnchor),
+            verticalLine2.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
+            verticalLine2.leadingAnchor.constraint(equalTo: searchesButton.trailingAnchor)
+        ])
+        
+        return stackView
     }()
     
-    private let emailLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Email"
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    private let locationLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Location:"
+        label.text = "Name:"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -104,13 +136,27 @@ class ProfileViewController: ProfileBaseView {
         return label
     }()
     
+    private let shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Share your profile", for: .normal)
+        button.backgroundColor  = .clear
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        button.tintColor = .white
+        button.layer.cornerRadius = 25
+        button.layer.borderWidth = 4
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private let editButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Edit profile", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        button.backgroundColor = .clear
         button.layer.cornerRadius = 25
+        button.layer.borderWidth = 4
+        button.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -161,16 +207,22 @@ class ProfileViewController: ProfileBaseView {
         scrollView.addSubview(backButton)
         scrollView.addSubview(profileImage)
         scrollView.addSubview(usernameLabel)
+        scrollView.addSubview(inlineBarStackView)
         scrollView.addSubview(cardView)
+        scrollView.addSubview(shareButton)
         scrollView.addSubview(editButton)
-        cardView.addSubview(firstNameLabel)
-        cardView.addSubview(lastNameLabel)
-        cardView.addSubview(emailLabel)
-        cardView.addSubview(locationLabel)
+        cardView.addSubview(nameLabel)
         cardView.addSubview(registrationDate)
         
         settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
+        
+        // Add target actions for inline bar buttons
+        for view in inlineBarStackView.arrangedSubviews {
+            if let button = view as? UIButton {
+                button.addTarget(self, action: #selector(handleInlineBarButtonTap(_:)), for: .touchUpInside)
+            }
+        }
     }
     
     // - MARK: SetupConstraints
@@ -190,42 +242,40 @@ class ProfileViewController: ProfileBaseView {
             settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             settingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
-            profileImage.widthAnchor.constraint(equalToConstant: 150),
-            profileImage.heightAnchor.constraint(equalToConstant: 150),
+            profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profileImage.widthAnchor.constraint(equalToConstant: 100),
+            profileImage.heightAnchor.constraint(equalToConstant: 100),
             
             usernameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20),
             usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            cardView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
+            inlineBarStackView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
+            inlineBarStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            inlineBarStackView.heightAnchor.constraint(equalToConstant: 40),
+            
+            cardView.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
             cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            firstNameLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 20),
-            firstNameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
-            firstNameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            nameLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 20),
+            nameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            nameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
             
-            lastNameLabel.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 10),
-            lastNameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
-            lastNameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
-            
-            emailLabel.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 10),
-            emailLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
-            emailLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
-            
-            locationLabel.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 10),
-            locationLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
-            locationLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
-            
-            registrationDate.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10),
+            registrationDate.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
             registrationDate.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
             registrationDate.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
             registrationDate.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -20),
             
-            editButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 40),
+            shareButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 40),
+            shareButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            shareButton.widthAnchor.constraint(equalToConstant: 250),
+            shareButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            editButton.topAnchor.constraint(equalTo: shareButton.bottomAnchor, constant: 20),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            editButton.widthAnchor.constraint(equalToConstant: 160),
+            editButton.widthAnchor.constraint(equalToConstant: 250),
             editButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
@@ -249,14 +299,6 @@ class ProfileViewController: ProfileBaseView {
                 DispatchQueue.main.async {
                     if let username = data?["username"] as? String {
                         self.usernameLabel.text = username
-                    }
-                    if let email = data?["email"] as? String {
-                        self.emailLabel.attributedText = self.attributedText(
-                            staticText: "Email: ",
-                            dynamicText: email,
-                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
-                            dynamicColor: UIColor.white
-                        )
                     }
                     
                     if let registrationDate = data?["registrationDate"] as? Timestamp {
@@ -297,28 +339,10 @@ class ProfileViewController: ProfileBaseView {
             if let document = document, document.exists {
                 let data = document.data()
                 DispatchQueue.main.async {
-                    if let firstName = data?["first_name"] as? String {
-                        self.firstNameLabel.attributedText = self.attributedText(
-                            staticText: "First Name: ",
+                    if let firstName = data?["name"] as? String {
+                        self.nameLabel.attributedText = self.attributedText(
+                            staticText: "Name: ",
                             dynamicText: firstName,
-                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
-                            dynamicColor: UIColor.white
-                        )
-                    }
-                    
-                    if let lastName = data?["last_name"] as? String {
-                        self.lastNameLabel.attributedText = self.attributedText(
-                            staticText: "Last Name: ",
-                            dynamicText: lastName,
-                            staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
-                            dynamicColor: UIColor.white
-                        )
-                    }
-                    
-                    if let location = data?["location"] as? String {
-                        self.locationLabel.attributedText = self.attributedText(
-                            staticText: "Location: ",
-                            dynamicText: location,
                             staticColor: UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0),
                             dynamicColor: UIColor.white
                         )
@@ -355,6 +379,24 @@ class ProfileViewController: ProfileBaseView {
         } else {
             profileImage.image = UIImage(systemName: "person.crop.circle")
         }
+    }
+    
+    @objc private func handleInlineBarButtonTap(_ sender: UIButton) {
+        let viewController: UIViewController
+        
+        switch sender.tag {
+        case 0:
+            viewController = MainTabBarController() // FAVOURITES
+        case 1:
+            viewController = MainTabBarController() // SEARCHES
+        case 2:
+            viewController = MainTabBarController() // FRIENDS
+        default:
+            return
+        }
+        
+        viewController.modalPresentationStyle = .fullScreen
+        present(viewController, animated: true, completion: nil)
     }
     
     // - MARK: HandleSettings
