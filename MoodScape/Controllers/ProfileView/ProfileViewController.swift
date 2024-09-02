@@ -162,12 +162,14 @@ class ProfileViewController: ProfileBaseView {
     }()
     
     private let preferencesLabel: UILabel = {
-        let label = UILabel()
+        let label = GradientLabel()
         label.text = "Your music preferences"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
+        
+        label.gradientColors = [UIColor.white, UIColor.gray, UIColor(red: 0/255.0, green: 104/255.0, blue: 80/255.0, alpha: 1.0)]
         return label
     }()
     
