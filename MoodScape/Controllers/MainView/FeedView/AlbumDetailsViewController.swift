@@ -42,6 +42,13 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         return imageView
     }()
     
+    private let spotifyLogoImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "Spotify_Icon"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let artistLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
@@ -174,6 +181,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         scrollView.addSubview(contentView)
         contentView.addSubview(closeButton)
         contentView.addSubview(albumImageView)
+        contentView.addSubview(spotifyLogoImageView)
         contentView.addSubview(releaseDateLabel)
         contentView.addSubview(artistLabel)
         contentView.addSubview(albumName)
@@ -217,6 +225,11 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             albumImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             albumImageView.widthAnchor.constraint(equalToConstant: 300),
             albumImageView.heightAnchor.constraint(equalToConstant: 300),
+            
+            spotifyLogoImageView.bottomAnchor.constraint(equalTo: albumImageView.bottomAnchor, constant: -8),
+            spotifyLogoImageView.trailingAnchor.constraint(equalTo: albumImageView.trailingAnchor, constant: -8),
+            spotifyLogoImageView.widthAnchor.constraint(equalToConstant: 50),
+            spotifyLogoImageView.heightAnchor.constraint(equalToConstant: 50),
             
             artistLabel.topAnchor.constraint(equalTo: albumImageView.bottomAnchor, constant: 10),
             artistLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),

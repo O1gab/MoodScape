@@ -11,6 +11,8 @@
 		7616BD752C7E33800083D227 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD742C7E33800083D227 /* CustomTabBar.swift */; };
 		7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7616BD762C7E33AF0083D227 /* custom_tabbar.png */; };
 		7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD7C2C7E81B00083D227 /* SongViewCell.swift */; };
+		7628AAC42C860D780021433F /* Spotify_Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7628AAC32C860D780021433F /* Spotify_Logo.png */; };
+		7628AAC62C860FAC0021433F /* Spotify_Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7628AAC52C860FAB0021433F /* Spotify_Icon.png */; };
 		76401AD52C76B4530035C7FA /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76401AD42C76B4530035C7FA /* ContactView.swift */; };
 		764E2A2E2C78229A00785104 /* StartSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A2D2C78229A00785104 /* StartSetupViewController.swift */; };
 		764E2A302C7846CB00785104 /* UserSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */; };
@@ -77,6 +79,8 @@
 		7616BD742C7E33800083D227 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		7616BD762C7E33AF0083D227 /* custom_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom_tabbar.png; sourceTree = "<group>"; };
 		7616BD7C2C7E81B00083D227 /* SongViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongViewCell.swift; sourceTree = "<group>"; };
+		7628AAC32C860D780021433F /* Spotify_Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotify_Logo.png; sourceTree = "<group>"; };
+		7628AAC52C860FAB0021433F /* Spotify_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotify_Icon.png; sourceTree = "<group>"; };
 		76401AD42C76B4530035C7FA /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
 		764E2A2D2C78229A00785104 /* StartSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSetupViewController.swift; sourceTree = "<group>"; };
 		764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetupViewController.swift; sourceTree = "<group>"; };
@@ -175,6 +179,8 @@
 		7616BD7B2C7E7B6F0083D227 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				7628AAC32C860D780021433F /* Spotify_Logo.png */,
+				7628AAC52C860FAB0021433F /* Spotify_Icon.png */,
 				7616BD762C7E33AF0083D227 /* custom_tabbar.png */,
 				768536C82C7A84A000C35FF8 /* green_gradient.gif */,
 				76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */,
@@ -497,7 +503,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7628AAC62C860FAC0021433F /* Spotify_Icon.png in Resources */,
 				764FDE3C2C6989730060A428 /* Main.storyboard in Resources */,
+				7628AAC42C860D780021433F /* Spotify_Logo.png in Resources */,
 				7664854F2C6AD34000AA050A /* View.xib in Resources */,
 				7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */,
 				768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */,

@@ -43,6 +43,13 @@ class SongDetailsViewController: UIViewController {
         return imageView
     }()
     
+    private let spotifyLogoImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "Spotify_Icon"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let artistLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
@@ -126,6 +133,7 @@ class SongDetailsViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubview(closeButton)
         contentView.addSubview(songImageView)
+        contentView.addSubview(spotifyLogoImageView)
         contentView.addSubview(artistLabel)
         contentView.addSubview(songName)
         contentView.addSubview(spotifyButton)
@@ -164,6 +172,11 @@ class SongDetailsViewController: UIViewController {
             songImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             songImageView.widthAnchor.constraint(equalToConstant: 300),
             songImageView.heightAnchor.constraint(equalToConstant: 300),
+            
+            spotifyLogoImageView.bottomAnchor.constraint(equalTo: songImageView.bottomAnchor, constant: -8),
+            spotifyLogoImageView.trailingAnchor.constraint(equalTo: songImageView.trailingAnchor, constant: -8),
+            spotifyLogoImageView.widthAnchor.constraint(equalToConstant: 50),
+            spotifyLogoImageView.heightAnchor.constraint(equalToConstant: 50),
             
             artistLabel.topAnchor.constraint(equalTo: songImageView.bottomAnchor, constant: 10),
             artistLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
