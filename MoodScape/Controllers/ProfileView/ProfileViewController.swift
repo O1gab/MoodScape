@@ -64,7 +64,6 @@ class ProfileViewController: ProfileBaseView {
         stackView.backgroundColor = UIColor.clear
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        // Create vertical stack views for each section
         let favouritesStackView = UIStackView()
         favouritesStackView.axis = .vertical
         favouritesStackView.distribution = .fill
@@ -131,11 +130,10 @@ class ProfileViewController: ProfileBaseView {
         friendsStackView.addArrangedSubview(friendsCountLabel)
         friendsStackView.addArrangedSubview(friendsButton)
         
-        favouritesStackView.spacing = 0 // Decrease spacing
-        searchesStackView.spacing = 0 // Decrease spacing
-        friendsStackView.spacing = 0 // Decrease spacing
+        favouritesStackView.spacing = 0
+        searchesStackView.spacing = 0
+        friendsStackView.spacing = 0
         
-        // Add each vertical stack view to the main horizontal stack view
         stackView.addArrangedSubview(favouritesStackView)
         stackView.addArrangedSubview(searchesStackView)
         stackView.addArrangedSubview(friendsStackView)
@@ -205,18 +203,6 @@ class ProfileViewController: ProfileBaseView {
         button.imageView?.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
-    }()
-    
-    private let cardView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .darkGray
-        view.layer.cornerRadius = 15
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.4
-        view.layer.shadowOffset = CGSize(width: 0, height: 4)
-        view.layer.shadowRadius = 10
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
     }()
     
     // - MARK: ViewDidLoad
@@ -290,18 +276,18 @@ class ProfileViewController: ProfileBaseView {
             inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             inlineBarStackView.heightAnchor.constraint(equalToConstant: 70),
             
-            preferencesLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
+            preferencesLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 30),
             preferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            shareButton.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 40),
-            shareButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            shareButton.widthAnchor.constraint(equalToConstant: 250),
-            shareButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            editButton.topAnchor.constraint(equalTo: shareButton.bottomAnchor, constant: 20),
+            editButton.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 40),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 250),
-            editButton.heightAnchor.constraint(equalToConstant: 50)
+            editButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            shareButton.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 20),
+            shareButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            shareButton.widthAnchor.constraint(equalToConstant: 250),
+            shareButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 
