@@ -64,9 +64,20 @@ class newLogin: StartBaseView {
         field.leftViewMode = .always
         field.autocapitalizationType = .none
         field.isSecureTextEntry = true
+        let rightViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         field.alpha = 0
         field.translatesAutoresizingMaskIntoConstraints = false
         return field
+    }()
+    
+    private let eyeButton: UIButton = {
+        let eyeButton = UIButton(type: .custom)
+        eyeButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        eyeButton.tintColor = .white
+        eyeButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        eyeButton.addTarget(newLogin.self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        eyeButton.alpha = 0
+        return eyeButton
     }()
     
     private let loginButton: UIButton = {
@@ -90,16 +101,6 @@ class newLogin: StartBaseView {
         notificationMessage.isHidden = true
         notificationMessage.translatesAutoresizingMaskIntoConstraints = false
         return notificationMessage
-    }()
-
-    private let eyeButton: UIButton = {
-        let eyeButton = UIButton(type: .custom)
-        eyeButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-        eyeButton.tintColor = .white
-        eyeButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        eyeButton.addTarget(newLogin.self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
-        eyeButton.alpha = 0
-        return eyeButton
     }()
     
     // - MARK: ViewDidLoad
@@ -152,6 +153,12 @@ class newLogin: StartBaseView {
         view.addSubview(loginButton)
         view.addSubview(notificationMessage)
         view.addSubview(backButton)
+        
+        let rightViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        rightViewContainer.addSubview(passwordField.eyeButton)
+        passwordField.rightView = rightViewContainer
+        passwordField.rightViewMode = .always
+        passwordField.eyeButton.addTarget(self, action: #selector(self.togglePasswordVisibility), for: .touchUpInside)
         
         loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
