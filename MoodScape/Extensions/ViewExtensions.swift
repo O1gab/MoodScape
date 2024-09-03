@@ -8,6 +8,28 @@ import UIKit
 
 extension UIView {
     
+    func colorAtPoint(point: CGPoint) -> UIColor? {
+        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        let image = renderer.image { ctx in
+            layer.render(in: ctx.cgContext)
+        }
+        
+        guard let cgImage = image.cgImage else { return nil }
+        let dataProvider = cgImage.dataProvider
+        guard let data = dataProvider?.data else { return nil }
+        let bytes = CFDataGetBytePtr(data)
+        
+        let bytesPerPixel = cgImage.bitsPerPixel / cgImage.bitsPerComponent
+        let pixelIndex = ((Int(point.y) * cgImage.bytesPerRow) + (Int(point.x) * bytesPerPixel))
+        
+        let red = CGFloat(bytes![pixelIndex]) / 255.0
+        let green = CGFloat(bytes![pixelIndex+1]) / 255.0
+        let blue = CGFloat(bytes![pixelIndex+2]) / 255.0
+        let alpha = CGFloat(bytes![pixelIndex+3]) / 255.0
+        
+        return UIColor(red: red, green: green, blue: blue, alpha: alpha)
+    }
+    
     func startFallingStarsAnimation(numberOfStars: Int = 50, starSize: CGFloat = 10.0, duration: TimeInterval = 2.0) {
         for _ in 0..<numberOfStars {
             let star = createStar(size: starSize)
