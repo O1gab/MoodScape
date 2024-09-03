@@ -69,6 +69,8 @@
 		76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* StartViewController.swift */; };
 		76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */; };
 		76BF876F2C85422D00C50E28 /* SongDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF876E2C85422D00C50E28 /* SongDetailsViewController.swift */; };
+		76DAE5822C873FF400F631F1 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */; };
+		76DAE5842C87435100F631F1 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5832C87435100F631F1 /* FavoritesManager.swift */; };
 		76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */; };
 		76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */; };
 		76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B492C7BCA7D00B65B72 /* ImageCache.swift */; };
@@ -141,6 +143,8 @@
 		76B869BE2C67B93C002866B9 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gradient_skyline_blinking_stars.gif; sourceTree = "<group>"; };
 		76BF876E2C85422D00C50E28 /* SongDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailsViewController.swift; sourceTree = "<group>"; };
+		76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		76DAE5832C87435100F631F1 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
 		76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSetupViewController.swift; sourceTree = "<group>"; };
 		76F31B492C7BCA7D00B65B72 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -379,6 +383,7 @@
 				76B869AA2C67B3AA002866B9 /* Assets.xcassets */,
 				764FDE3B2C6989730060A428 /* Main.storyboard */,
 				76B869AF2C67B3AA002866B9 /* Info.plist */,
+				76DAE5832C87435100F631F1 /* FavoritesManager.swift */,
 			);
 			path = MoodScape;
 			sourceTree = "<group>";
@@ -396,6 +401,7 @@
 		76B869B62C67B3D3002866B9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				76DAE5852C87458900F631F1 /* FavoritesView */,
 				764E2A2C2C78221700785104 /* SetupView */,
 				76AAD3222C7206A500CBE3D8 /* SettingsView */,
 				76AAD3212C72068800CBE3D8 /* ProfileView */,
@@ -435,6 +441,14 @@
 			children = (
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		76DAE5852C87458900F631F1 /* FavoritesView */ = {
+			isa = PBXGroup;
+			children = (
+				76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */,
+			);
+			path = FavoritesView;
 			sourceTree = "<group>";
 		};
 		BC465058499E8DE89A17D7BE /* Pods */ = {
@@ -577,6 +591,7 @@
 				76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */,
 				768536D02C7A98C600C35FF8 /* ArtistsSetupViewController.swift in Sources */,
 				76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */,
+				76DAE5822C873FF400F631F1 /* FavoritesViewController.swift in Sources */,
 				76AAD3302C72A8A600CBE3D8 /* EmotionCell.swift in Sources */,
 				766FD1532C81554700D9ACF6 /* RegistrationViewController.swift in Sources */,
 				7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */,
@@ -621,6 +636,7 @@
 				766FD1552C836EBE00D9ACF6 /* newLogin.swift in Sources */,
 				76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */,
 				76AAD3252C721C0300CBE3D8 /* AlbumDetailsViewController.swift in Sources */,
+				76DAE5842C87435100F631F1 /* FavoritesManager.swift in Sources */,
 				76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */,
 				764FDE352C697C230060A428 /* StartBaseView.swift in Sources */,
 			);
