@@ -47,13 +47,14 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
     }()
     
     private let albumsLabel: UILabel = {
-        let topLabel = UILabel()
-        topLabel.text = "Albums"
-        topLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        topLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        topLabel.textAlignment = .left
-        topLabel.translatesAutoresizingMaskIntoConstraints = false
-        return topLabel
+        let label = GradientLabel()
+        label.text = "Albums"
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.gradientColors = [UIColor.white, UIColor.gray, UIColor(red: 0/255.0, green: 104/255.0, blue: 80/255.0, alpha: 1.0)]
+        return label
     }()
     
     private let albumsCollectionView: UICollectionView = {
@@ -68,13 +69,14 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
     }()
     
     private let songsLabel: UILabel = {
-        let topLabel = UILabel()
-        topLabel.text = "Songs"
-        topLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        topLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        topLabel.textAlignment = .left
-        topLabel.translatesAutoresizingMaskIntoConstraints = false
-        return topLabel
+        let label = GradientLabel()
+        label.text = "Songs"
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.gradientColors = [UIColor.white, UIColor.gray, UIColor(red: 0/255.0, green: 104/255.0, blue: 80/255.0, alpha: 1.0)]
+        return label
     }()
     
     private let songsCollectionView: UICollectionView = {
@@ -103,12 +105,12 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
         view.addSubview(gifGradient)
+        view.addSubview(backButton)
         view.addSubview(topLabel)
         view.addSubview(albumsLabel)
         view.addSubview(albumsCollectionView)
         view.addSubview(songsLabel)
         view.addSubview(songsCollectionView)
-        
         
         albumsCollectionView.dataSource = self
         albumsCollectionView.delegate = self
@@ -129,12 +131,18 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
             gifGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
             gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            // "Favorites"
-            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            albumsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 10),
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            
+            // "Favorites"
+            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            topLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            
+            albumsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 30),
             albumsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            albumsLabel.bottomAnchor.constraint(equalTo: albumsLabel.topAnchor, constant: 30),
             
             // Albums
             albumsCollectionView.topAnchor.constraint(equalTo: albumsLabel.bottomAnchor, constant: 10),
@@ -146,11 +154,10 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
             songsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
             // Songs
-            songsCollectionView.topAnchor.constraint(equalTo: songsLabel.bottomAnchor, constant: 20),
+            songsCollectionView.topAnchor.constraint(equalTo: songsLabel.bottomAnchor, constant: 10),
             songsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             songsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            songsCollectionView.heightAnchor.constraint(equalToConstant: 200),
-            songsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+            songsCollectionView.heightAnchor.constraint(equalToConstant: 220)
         ])
     }
     
