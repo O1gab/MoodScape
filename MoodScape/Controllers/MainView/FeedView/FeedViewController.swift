@@ -137,9 +137,71 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView.addSubview(exploreButton)
         
         infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .allTouchEvents)
+        exploreButton.addTarget(self, action: #selector(handleExplore), for: .touchUpInside)
         setupAlbumCollectionView()
         setupSongCollectionView()
         setupRecommendedSongsCollectionView()
+    }
+    
+    // - MARK: SetupConstraints
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            // "Recently"
+            topLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            topLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
+            albumCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            albumCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            albumCollectionView.heightAnchor.constraint(equalToConstant: 300),
+            
+            // "Top songs this week"
+            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -25),
+            topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            songCollectionView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 5),
+            songCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            songCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            songCollectionView.heightAnchor.constraint(equalToConstant: 450),
+            
+            // "You may also like"
+            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 25),
+            recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            recommendationsLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            
+            recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 5),
+            recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            recommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 400),
+            recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -200),
+            
+            infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 40),
+            infoButton.centerYAnchor.constraint(equalTo: recommendationsLabel.centerYAnchor),
+            infoButton.widthAnchor.constraint(equalToConstant: 25),
+            infoButton.heightAnchor.constraint(equalToConstant: 25),
+            infoButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -20),
+            
+            infoMessage.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 8),
+            infoMessage.leadingAnchor.constraint(equalTo: recommendationsLabel.leadingAnchor),
+            infoMessage.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -8),
+            infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
+            
+            exploreButton.topAnchor.constraint(equalTo: recommendedSongsCollectionView.bottomAnchor, constant: 70),
+            exploreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            exploreButton.widthAnchor.constraint(equalToConstant: 210),
+            exploreButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
     }
     
     // - MARK: SetupAlbumCollectionView
@@ -209,67 +271,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
 
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
-    }
-    
-    // - MARK: SetupConstraints
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            
-            // "Recently"
-            topLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            topLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            
-            albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
-            albumCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            albumCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            albumCollectionView.heightAnchor.constraint(equalToConstant: 300),
-            
-            // "Top songs this week"
-            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -25),
-            topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            
-            songCollectionView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 5),
-            songCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            songCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            songCollectionView.heightAnchor.constraint(equalToConstant: 450),
-            
-            // "You may also like"
-            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 25),
-            recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            recommendationsLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            
-            recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 5),
-            recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            recommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 400),
-            recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -200),
-            
-            infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 40),
-            infoButton.centerYAnchor.constraint(equalTo: recommendationsLabel.centerYAnchor),
-            infoButton.widthAnchor.constraint(equalToConstant: 25),
-            infoButton.heightAnchor.constraint(equalToConstant: 25),
-            infoButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -20),
-            
-            infoMessage.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 8),
-            infoMessage.leadingAnchor.constraint(equalTo: recommendationsLabel.leadingAnchor),
-            infoMessage.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -8),
-            infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
-            
-            exploreButton.topAnchor.constraint(equalTo: recommendedSongsCollectionView.bottomAnchor, constant: 70),
-            exploreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            exploreButton.widthAnchor.constraint(equalToConstant: 210),
-            exploreButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
     }
     
     // - MARK: FetchAlbums (recently published popular albums)
@@ -383,6 +384,12 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             self.infoMessage.isHidden = true
         }
+    }
+    
+    @objc private func handleExplore() {
+        let favoritesView = FavoritesViewController()
+        favoritesView.modalPresentationStyle = .fullScreen
+        self.present(favoritesView, animated: true)
     }
 
     // - MARK: ShowError
