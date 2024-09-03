@@ -71,6 +71,7 @@
 		76BF876F2C85422D00C50E28 /* SongDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF876E2C85422D00C50E28 /* SongDetailsViewController.swift */; };
 		76DAE5822C873FF400F631F1 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */; };
 		76DAE5842C87435100F631F1 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5832C87435100F631F1 /* FavoritesManager.swift */; };
+		76DAE5872C874A3A00F631F1 /* FavoritesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5862C874A3A00F631F1 /* FavoritesCell.swift */; };
 		76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */; };
 		76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */; };
 		76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B492C7BCA7D00B65B72 /* ImageCache.swift */; };
@@ -145,6 +146,7 @@
 		76BF876E2C85422D00C50E28 /* SongDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailsViewController.swift; sourceTree = "<group>"; };
 		76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		76DAE5832C87435100F631F1 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
+		76DAE5862C874A3A00F631F1 /* FavoritesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCell.swift; sourceTree = "<group>"; };
 		76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSetupViewController.swift; sourceTree = "<group>"; };
 		76F31B492C7BCA7D00B65B72 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				768536D12C7AA8AD00C35FF8 /* ArtistCell.swift */,
 				7616BD7C2C7E81B00083D227 /* SongViewCell.swift */,
 				7628AAC72C8642E80021433F /* PreferencesCell.swift */,
+				76DAE5862C874A3A00F631F1 /* FavoritesCell.swift */,
 			);
 			path = UICollectionViewItems;
 			sourceTree = "<group>";
@@ -627,6 +630,7 @@
 				76BF876F2C85422D00C50E28 /* SongDetailsViewController.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */,
 				768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */,
+				76DAE5872C874A3A00F631F1 /* FavoritesCell.swift in Sources */,
 				766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */,
 				768536D22C7AA8AD00C35FF8 /* ArtistCell.swift in Sources */,
 				766485762C6ED52D00AA050A /* Album.swift in Sources */,
