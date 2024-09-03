@@ -6,11 +6,26 @@
 //
 
 import UIKit
+import Gifu
 
-class FavoritesViewController: MainBaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class FavoritesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var scrollView: UIScrollView!
-    private var contentView: UIView!
+    private let gifBackground: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "gradient_skyline_blinking_stars")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
+    
+    private let gifGradient: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "green_gradient")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.alpha = 0.5
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
+    }()
     
     private let topLabel: UILabel = {
         let topLabel = UILabel()
@@ -85,20 +100,15 @@ class FavoritesViewController: MainBaseView, UICollectionViewDataSource, UIColle
     }
     
     private func setupView() {
-        scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(scrollView)
-        view.addSubview(backButton)
+        view.addSubview(gifBackground)
+        view.sendSubviewToBack(gifBackground)
+        view.addSubview(gifGradient)
+        view.addSubview(topLabel)
+        view.addSubview(albumsLabel)
+        view.addSubview(albumsCollectionView)
+        view.addSubview(songsLabel)
+        view.addSubview(songsCollectionView)
         
-        contentView = UIView()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentView)
-        contentView.addSubview(topLabel)
-        
-        contentView.addSubview(albumsLabel)
-        contentView.addSubview(albumsCollectionView)
-        contentView.addSubview(songsLabel)
-        contentView.addSubview(songsCollectionView)
         
         albumsCollectionView.dataSource = self
         albumsCollectionView.delegate = self
@@ -110,42 +120,37 @@ class FavoritesViewController: MainBaseView, UICollectionViewDataSource, UIColle
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifBackground.topAnchor.constraint(equalTo: view.topAnchor),
+            gifBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            
+            gifGradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gifGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
+            gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             // "Favorites"
-            topLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 75),
-            topLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            topLabel.heightAnchor.constraint(equalToConstant: 32),
+            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            albumsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 20),
-            albumsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            albumsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 10),
+            albumsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
             // Albums
-            albumsCollectionView.topAnchor.constraint(equalTo: albumsLabel.bottomAnchor, constant: 20),
-            albumsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            albumsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            albumsCollectionView.heightAnchor.constraint(equalToConstant: 200),
+            albumsCollectionView.topAnchor.constraint(equalTo: albumsLabel.bottomAnchor, constant: 10),
+            albumsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            albumsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            albumsCollectionView.heightAnchor.constraint(equalToConstant: 220),
             
             songsLabel.topAnchor.constraint(equalTo: albumsCollectionView.bottomAnchor, constant: 30),
-            songsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            songsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
             // Songs
             songsCollectionView.topAnchor.constraint(equalTo: songsLabel.bottomAnchor, constant: 20),
-            songsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            songsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            songsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            songsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             songsCollectionView.heightAnchor.constraint(equalToConstant: 200),
-            songsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
-            
-            // Back button
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
-            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
+            songsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
         ])
     }
     
