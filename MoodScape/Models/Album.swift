@@ -6,11 +6,12 @@
 
 import Foundation
 
-struct Album {
+struct Album: Codable {
     let name: String
     let artist: String
     let imageUrl: String
     let spotifyUrl: String
     let releaseDate: String
     var topSongs: [Song]
+    let id: String
 }

@@ -51,7 +51,7 @@ class SpotifyAPIManager {
                 }
                 
                 self.fetchTopSongsForAlbum(albumId: albumId) { songs in
-                    let album = Album(name: name, artist: artistName, imageUrl: imageUrl, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: releaseDate, topSongs: songs)
+                    let album = Album(name: name, artist: artistName, imageUrl: imageUrl, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: releaseDate, topSongs: songs, id: albumId)
                     albums.append(album)
                     dispatchGroup.leave()
                 }
