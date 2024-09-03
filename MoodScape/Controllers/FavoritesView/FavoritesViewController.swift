@@ -90,6 +90,28 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         return collectionView
     }()
     
+    private let noAlbumsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No albums added to favorites"
+        label.textColor = UIColor.lightGray
+        label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
+        label.textAlignment = .center
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let noSongsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No songs added to favorites"
+        label.textColor = UIColor.lightGray
+        label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
+        label.textAlignment = .center
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private var favoriteAlbums: [Album] = []
     private var favoriteSongs: [Song] = []
     private let favoritesManager = FavoritesManager()
@@ -111,6 +133,8 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         view.addSubview(albumsCollectionView)
         view.addSubview(songsLabel)
         view.addSubview(songsCollectionView)
+        view.addSubview(noAlbumsLabel)
+        view.addSubview(noSongsLabel)
         
         albumsCollectionView.dataSource = self
         albumsCollectionView.delegate = self
@@ -157,7 +181,14 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
             songsCollectionView.topAnchor.constraint(equalTo: songsLabel.bottomAnchor, constant: 10),
             songsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             songsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            songsCollectionView.heightAnchor.constraint(equalToConstant: 220)
+            songsCollectionView.heightAnchor.constraint(equalToConstant: 220),
+            
+            noAlbumsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noAlbumsLabel.centerYAnchor.constraint(equalTo: albumsCollectionView.centerYAnchor),
+            
+            // No songs label
+            noSongsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noSongsLabel.centerYAnchor.constraint(equalTo: songsCollectionView.centerYAnchor)
         ])
     }
     
@@ -166,9 +197,15 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         favoriteAlbums = favoritesManager.getFavoriteAlbums()
         favoriteSongs = favoritesManager.getFavoriteSongs()
         
-        print("Favorite Albums count: \(favoriteAlbums.count)") // Debugging statement
-        print("Favorite Songs count: \(favoriteSongs.count)") // Debugging statement
-    
+        print("Favorite Albums count: \(favoriteAlbums.count)") // DEBUG
+        print("Favorite Songs count: \(favoriteSongs.count)") // DEBUG
+        
+        noAlbumsLabel.isHidden = !favoriteAlbums.isEmpty
+        albumsCollectionView.isHidden = favoriteAlbums.isEmpty
+        
+        noSongsLabel.isHidden = !favoriteSongs.isEmpty
+        songsCollectionView.isHidden = favoriteSongs.isEmpty
+        
         albumsCollectionView.reloadData()
         songsCollectionView.reloadData()
     }
