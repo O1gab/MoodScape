@@ -5,27 +5,28 @@
 //  Created by Olga Batiunia on 03.09.24.
 //
 
-import UIKit
+import Foundation
 
 class FavoritesManager {
+    
     private let albumsKey = "favoriteAlbums"
     private let songsKey = "favoriteSongs"
     
     static let shared = FavoritesManager()
     
-    private init() {}
+    init() {}
     
     func addFavoriteAlbum(_ album: Album) {
         var favorites = getFavoriteAlbums()
-        if !favorites.contains(album.id) {
-            favorites.append(album.id)
+        if !favorites.contains(where: { $0.id == album.id }) {
+            favorites.append(album)
             saveFavoriteAlbums(favorites)
         }
     }
     
     func removeFavoriteAlbum(_ album: Album) {
         var favorites = getFavoriteAlbums()
-        if let index = favorites.firstIndex(of: album.id) {
+        if let index = favorites.firstIndex(where: { $0.id == album.id }) {
             favorites.remove(at: index)
             saveFavoriteAlbums(favorites)
         }
@@ -33,20 +34,20 @@ class FavoritesManager {
     
     func isFavoriteAlbum(_ album: Album) -> Bool {
         let favorites = getFavoriteAlbums()
-        return favorites.contains(album.id)
+        return favorites.contains(where: { $0.id == album.id })
     }
     
     func addFavoriteSong(_ song: Song) {
         var favorites = getFavoriteSongs()
-        if !favorites.contains(song.name) {
-            favorites.append(song.name)
+        if !favorites.contains(where: { $0.name == song.name && $0.artist == song.artist }) {
+            favorites.append(song)
             saveFavoriteSongs(favorites)
         }
     }
     
     func removeFavoriteSong(_ song: Song) {
         var favorites = getFavoriteSongs()
-        if let index = favorites.firstIndex(of: song.name) {
+        if let index = favorites.firstIndex(where: { $0.name == song.name && $0.artist == song.artist }) {
             favorites.remove(at: index)
             saveFavoriteSongs(favorites)
         }
@@ -54,23 +55,40 @@ class FavoritesManager {
     
     func isFavoriteSong(_ song: Song) -> Bool {
         let favorites = getFavoriteSongs()
-        return favorites.contains(song.name)
+        return favorites.contains(where: { $0.name == song.name && $0.artist == song.artist })
     }
     
-    private func saveFavoriteAlbums(_ favorites: [String]) {
-        UserDefaults.standard.set(favorites, forKey: albumsKey)
+    private func saveFavoriteAlbums(_ favorites: [Album]) {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(favorites) {
+            UserDefaults.standard.set(encoded, forKey: albumsKey)
+        }
     }
     
-    private func getFavoriteAlbums() -> [String] {
-        return UserDefaults.standard.array(forKey: albumsKey) as? [String] ?? []
+   func getFavoriteAlbums() -> [Album] {
+        if let savedData = UserDefaults.standard.data(forKey: albumsKey) {
+            let decoder = JSONDecoder()
+            if let loadedAlbums = try? decoder.decode([Album].self, from: savedData) {
+                return loadedAlbums
+            }
+        }
+        return []
     }
     
-    private func saveFavoriteSongs(_ favorites: [String]) {
-        UserDefaults.standard.set(favorites, forKey: songsKey)
+    private func saveFavoriteSongs(_ favorites: [Song]) {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(favorites) {
+            UserDefaults.standard.set(encoded, forKey: songsKey)
+        }
     }
     
-    private func getFavoriteSongs() -> [String] {
-        return UserDefaults.standard.array(forKey: songsKey) as? [String] ?? []
+    func getFavoriteSongs() -> [Song] {
+        if let savedData = UserDefaults.standard.data(forKey: songsKey) {
+            let decoder = JSONDecoder()
+            if let loadedSongs = try? decoder.decode([Song].self, from: savedData) {
+                return loadedSongs
+            }
+        }
+        return []
     }
 }
-
