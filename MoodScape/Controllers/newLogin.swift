@@ -107,6 +107,16 @@ class newLogin: StartBaseView {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     // - MARK: ViewDidAppear
@@ -293,5 +303,26 @@ class newLogin: StartBaseView {
     // - MARK: HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    // - MARK: KeyboardWillShow
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= keyboardSize.height - 150
+            }
+        }
+    }
+
+    // - MARK: KeyboardWillHide
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+    
+    // - MARK: DismissKeyboard
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
