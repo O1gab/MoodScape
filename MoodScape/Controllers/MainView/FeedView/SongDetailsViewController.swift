@@ -89,7 +89,6 @@ class SongDetailsViewController: UIViewController {
     private let favoriteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.setImage(UIImage(systemName: "star.fill"), for: .selected)
         button.tintColor = .yellow
         button.backgroundColor = .clear
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -281,7 +280,21 @@ class SongDetailsViewController: UIViewController {
     
     // - MARK: ToggleFavorite
     @objc private func toggleFavorite() {
-        favoriteButton.isSelected.toggle()
+        if FavoritesManager.shared.isFavoriteSong(song) {
+            FavoritesManager.shared.removeFavoriteSong(song)
+            self.favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+        } else {
+            FavoritesManager.shared.addFavoriteSong(song)
+            self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        }
+        
+        // Optionally, update UI or notify the user
+        let feedback = FavoritesManager.shared.isFavoriteSong(song) ? "Added to favorites" : "Removed from favorites"
+        let alert = UIAlertController(title: nil, message: feedback, preferredStyle: .alert)
+        self.present(alert, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            alert.dismiss(animated: true, completion: nil)
+        }
     }
     
     // - MARK: ShareAlbum

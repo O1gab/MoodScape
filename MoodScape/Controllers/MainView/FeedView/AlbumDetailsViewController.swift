@@ -104,7 +104,6 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     private let favoriteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "star"), for: .normal)
-               
         button.tintColor = .yellow
         button.backgroundColor = .clear
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -361,14 +360,21 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     // - MARK: ToggleFavorite
     @objc private func favoriteButtonTapped(_ sender: UIButton) {
-        self.isSelected = !isSelected
-        if (isSelected) {
-            self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
-        } else {
+        if FavoritesManager.shared.isFavoriteAlbum(album) {
+            FavoritesManager.shared.removeFavoriteAlbum(album)
             self.favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+        } else {
+            FavoritesManager.shared.addFavoriteAlbum(album)
+            self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
         }
         
-        // TODO: Add a song/album to the favorites
+        // Optionally, update UI or notify the user
+        let feedback = FavoritesManager.shared.isFavoriteAlbum(album) ? "Added to favorites" : "Removed from favorites"
+        let alert = UIAlertController(title: nil, message: feedback, preferredStyle: .alert)
+        self.present(alert, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            alert.dismiss(animated: true, completion: nil)
+        }
     }
     
     // - MARK: ShareAlbum
