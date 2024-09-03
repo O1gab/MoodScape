@@ -11,6 +11,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private var album: Album
     
+    private var isSelected: Bool = false
+    
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -101,10 +103,9 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private let favoriteButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "heart"), for: .normal)
-        button.setImage(UIImage(systemName: "heart.fill"), for: .selected)
+        button.setImage(UIImage(systemName: "star"), for: .normal)
                
-        button.tintColor = .red
+        button.tintColor = .yellow
         button.backgroundColor = .clear
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -360,13 +361,14 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     // - MARK: ToggleFavorite
     @objc private func favoriteButtonTapped(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        
-        if sender.isSelected {
-            sender.tintColor = .red
+        self.isSelected = !isSelected
+        if (isSelected) {
+            self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
         } else {
-            sender.tintColor = .red
+            self.favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
         }
+        
+        // TODO: Add a song/album to the favorites
     }
     
     // - MARK: ShareAlbum
