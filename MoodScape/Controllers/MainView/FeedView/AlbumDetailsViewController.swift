@@ -101,9 +101,10 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private let favoriteButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "star"), for: .normal)
-        button.setImage(UIImage(systemName: "star.fill"), for: .selected)
-        button.tintColor = .yellow
+        button.setImage(UIImage(systemName: "heart"), for: .normal)
+        button.setImage(UIImage(systemName: "heart.fill"), for: .selected)
+               
+        button.tintColor = .red
         button.backgroundColor = .clear
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -195,7 +196,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
-        favoriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
+        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
         shareButton.addTarget(self, action: #selector(shareAlbum), for: .touchUpInside)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInSpotify))
@@ -310,12 +311,6 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
                         self.albumName.textColor = color.contrastingComplementaryColor()
                         self.shareButton.tintColor = color.contrastingColor()
                         self.topSongsLabel.textColor = color.contrastingComplementaryColor()
-                        // Update table view text color
-                        self.topSongsTableView.visibleCells.forEach { cell in
-                            if let songCell = cell as? SongTableViewCell {
-                                songCell.songLabel.textColor = color.contrastingColor()
-                            }
-                        }
                         self.releaseDateLabel.textColor = color.contrastingColor()
                     }
                    
@@ -364,8 +359,14 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     // - MARK: ToggleFavorite
-    @objc private func toggleFavorite() {
-        favoriteButton.isSelected.toggle()
+    @objc private func favoriteButtonTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        
+        if sender.isSelected {
+            sender.tintColor = .red
+        } else {
+            sender.tintColor = .red
+        }
     }
     
     // - MARK: ShareAlbum
@@ -388,6 +389,11 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             return UITableViewCell()
         }
         cell.backgroundColor = .clear
+        
+        if let backgroundColor = self.view.colorAtPoint(point: cell.frame.origin) {
+            cell.songLabel.textColor = backgroundColor.contrastingColor()
+        }
+        
         let song = album.topSongs[indexPath.row]
         cell.configure(with: song)
         return cell
