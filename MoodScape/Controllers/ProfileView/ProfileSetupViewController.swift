@@ -10,7 +10,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseFirestore
 
-class ProfileSetupViewController: ProfileBaseView {
+class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
 
     private let topLabel: UILabel = {
         let topLabel = UILabel()
@@ -22,7 +22,38 @@ class ProfileSetupViewController: ProfileBaseView {
         return topLabel
     }()
     
-    private let firstName: UITextField = {
+    let profileImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.tintColor = .white
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
+        imageView.isUserInteractionEnabled = true
+        imageView.layer.cornerRadius = 50
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private let imageButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Change Photo", for: .normal)
+        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Your name:"
+        label.textColor = .white
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let name: UITextField = {
         let name = UITextField()
         name.backgroundColor = .none
         name.textColor = .white
@@ -35,9 +66,9 @@ class ProfileSetupViewController: ProfileBaseView {
         return name
     }()
     
-    private let firstNameLabel: UILabel = {
+    private let bioLabel: UILabel = {
         let label = UILabel()
-        label.text = "Your first name:"
+        label.text = "Your bio:"
         label.textColor = .white
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -45,51 +76,26 @@ class ProfileSetupViewController: ProfileBaseView {
         return label
     }()
     
-    private let lastName: UITextField = {
-        let name = UITextField()
-        name.backgroundColor = .none
-        name.textColor = .white
-        name.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
-        name.layer.borderWidth = 2
-        name.layer.cornerRadius = 18
-        name.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: name.frame.height))
-        name.leftViewMode = .always
-        name.translatesAutoresizingMaskIntoConstraints = false
-        return name
+    private let bioField: UITextField = {
+        let textView = UITextField()
+        textView.backgroundColor = .none
+        textView.textColor = .white
+        textView.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
+        textView.layer.borderWidth = 2
+        textView.layer.cornerRadius = 18
+        textView.font = UIFont.systemFont(ofSize: 16)
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
     }()
     
-    private let lastNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Your last name:"
-        label.textColor = .white
-        label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let location: UITextField = {
-        let location = UITextField()
-        location.backgroundColor = .none
-        location.textColor = .white
-        location.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
-        location.layer.borderWidth = 2
-        location.layer.cornerRadius = 18
-        location.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: location.frame.height))
-        location.leftViewMode = .always
-        location.translatesAutoresizingMaskIntoConstraints = false
-        return location
-    }()
-    
-    private let locationLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Your location:"
-        label.textColor = .white
-        label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private let bioCharacterCountLabel: UILabel = {
+           let label = UILabel()
+           label.textColor = .gray
+           label.font = UIFont.systemFont(ofSize: 14)
+           label.text = "0/200"
+           label.translatesAutoresizingMaskIntoConstraints = false
+           return label
+       }()
     
     private let submitButton: UIButton = {
         let button = UIButton(type: .system)
@@ -104,16 +110,12 @@ class ProfileSetupViewController: ProfileBaseView {
     
     private let skipButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("I will do it later", for: .normal)
+        button.setTitle("Skip", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    let countries = Locale.isoRegionCodes.compactMap { Locale.current.localizedString(forRegionCode: $0) }.sorted()
-        
-    private let countryPicker = UIPickerView()
     
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
@@ -126,6 +128,7 @@ class ProfileSetupViewController: ProfileBaseView {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchExistingData()
+        loadProfileImage()
     }
 
     
@@ -134,64 +137,62 @@ class ProfileSetupViewController: ProfileBaseView {
         backButton.isHidden = true
         
         view.addSubview(topLabel)
-        view.addSubview(firstNameLabel)
-        view.addSubview(firstName)
-        view.addSubview(lastNameLabel)
-        view.addSubview(lastName)
-        view.addSubview(locationLabel)
-        view.addSubview(location)
+        view.addSubview(profileImage)
+        view.addSubview(imageButton)
+        view.addSubview(nameLabel)
+        view.addSubview(name)
+        view.addSubview(bioLabel)
+        view.addSubview(bioField)
+        view.addSubview(bioCharacterCountLabel)
         view.addSubview(submitButton)
         view.addSubview(skipButton)
         
-        setPlaceholder(textField: firstName, placeholder: "Enter your first name", color: .gray)
-        setPlaceholder(textField: lastName, placeholder: "Enter your last name", color: .gray)
-        setPlaceholder(textField: location, placeholder: "Choose your location", color: .gray)
-                
+        setPlaceholder(textField: name, placeholder: "Enter your first name", color: .gray)
+        
         submitButton.addTarget(self, action: #selector(handleSave), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
+        imageButton.addTarget(self, action: #selector(changeProfileImageTapped), for: .touchUpInside)
         
-        countryPicker.delegate = self
-        countryPicker.dataSource = self
-        location.inputView = countryPicker
-        
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(donePicker))
-        toolbar.setItems([doneButton], animated: false)
-        toolbar.isUserInteractionEnabled = true
-        location.inputAccessoryView = toolbar
+        bioField.delegate = self
     }
     
+    private func setPlaceholder(for textView: UITextView, placeholder: String) {
+           textView.text = placeholder
+           textView.textColor = .gray
+       }
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             topLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
-            firstNameLabel.topAnchor.constraint(equalTo: firstName.topAnchor, constant: -30),
-            firstNameLabel.leadingAnchor.constraint(equalTo: firstName.leadingAnchor, constant: 5),
+            profileImage.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 20),
+            profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profileImage.widthAnchor.constraint(equalToConstant: 100),
+            profileImage.heightAnchor.constraint(equalToConstant: 100),
             
-            firstName.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 55),
-            firstName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            firstName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            firstName.heightAnchor.constraint(equalToConstant: 55),
+            imageButton.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 10),
+            imageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            lastNameLabel.topAnchor.constraint(equalTo: lastName.topAnchor, constant: -30),
-            lastNameLabel.leadingAnchor.constraint(equalTo: lastName.leadingAnchor, constant: 5),
+            nameLabel.topAnchor.constraint(equalTo: imageButton.bottomAnchor, constant: 30),
+            nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
-            lastName.topAnchor.constraint(equalTo: firstName.bottomAnchor, constant: 50),
-            lastName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            lastName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            lastName.heightAnchor.constraint(equalToConstant: 55),
+            name.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
+            name.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            name.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            name.heightAnchor.constraint(equalToConstant: 55),
             
-            locationLabel.topAnchor.constraint(equalTo: location.topAnchor, constant: -30),
-            locationLabel.leadingAnchor.constraint(equalTo: location.leadingAnchor, constant: 5),
+            bioLabel.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 30),
+            bioLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
-            location.topAnchor.constraint(equalTo: lastName.bottomAnchor, constant: 50),
-            location.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            location.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            location.heightAnchor.constraint(equalToConstant: 55),
-                
+            bioField.topAnchor.constraint(equalTo: bioLabel.bottomAnchor, constant: 10),
+            bioField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            bioField.heightAnchor.constraint(equalToConstant: 150),
+            bioField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            
+            bioCharacterCountLabel.topAnchor.constraint(equalTo: bioField.bottomAnchor, constant: 5),
+            bioCharacterCountLabel.leadingAnchor.constraint(equalTo: bioField.leadingAnchor),
+            
             submitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -75),
             submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             submitButton.widthAnchor.constraint(equalToConstant: 160),
@@ -199,7 +200,7 @@ class ProfileSetupViewController: ProfileBaseView {
                 
             skipButton.topAnchor.constraint(equalTo: submitButton.bottomAnchor, constant: 10),
             skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-            
+        
         ])
     }
     
@@ -213,9 +214,8 @@ class ProfileSetupViewController: ProfileBaseView {
         documentRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 let data = document.data()
-                self.firstName.text = data?["first_name"] as? String ?? ""
-                self.lastName.text = data?["last_name"] as? String ?? ""
-                self.location.text = data?["location"] as? String ?? ""
+                self.name.text = data?["name"] as? String ?? ""
+                self.bioField.text = data?["bio"] as? String ?? ""
             } else {
                 print("Document does not exist or error occurred: \(String(describing: error))")
             }
@@ -230,9 +230,8 @@ class ProfileSetupViewController: ProfileBaseView {
         let documentRef = db.collection("users").document(user.uid)
         
         documentRef.updateData([
-            "first_name": firstName.text ?? "",
-            "last_name": lastName.text ?? "",
-            "location": location.text ?? ""
+            "name": name.text ?? "",
+            "bio": bioField.text ?? ""
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
@@ -243,6 +242,26 @@ class ProfileSetupViewController: ProfileBaseView {
                 self.present(profileView, animated: true, completion: nil)
             }
         }
+    }
+    
+    // - MARK: Change Profile Image
+    @objc private func changeProfileImageTapped() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        present(imagePicker, animated: true, completion: nil)
+    }
+
+    // - MARK: Handle Bio Field Text Change
+    @objc private func textDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        let maxLength = 200
+        if text.count > maxLength {
+            textField.text = String(text.prefix(maxLength))
+        }
+        // Update character count
+        let charCount = textField.text?.count ?? 0
+        bioField.placeholder = "\(charCount)/200"
     }
     
     // - MARK: HandleSkip
@@ -258,8 +277,50 @@ class ProfileSetupViewController: ProfileBaseView {
         )
     }
     
-    // - MARK: DonePicker
-    @objc private func donePicker() {
-        view.endEditing(true)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[.originalImage] as? UIImage {
+            profileImage.image = selectedImage
+            saveProfileImage(image: selectedImage)
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // - MARK: SaveProfileImage
+    private func saveProfileImage(image: UIImage) {
+        if let imageData = image.jpegData(compressionQuality: 0.8) {
+            UserDefaults.standard.set(imageData, forKey: "profileImage")
+        }
+    }
+    
+    // - MARK: LoadProfileImage
+    private func loadProfileImage() {
+        if let imageData = UserDefaults.standard.data(forKey: "profileImage") {
+            profileImage.image = UIImage(data: imageData)
+        } else {
+            profileImage.image = UIImage(systemName: "person.circle") // Placeholder image
+        }
+    }
+    
+    // - MARK: UITextViewDelegate - Character Count and Placeholder Handling
+     func textViewDidChange(_ textView: UITextView) {
+         let maxLength = 200
+         if textView.text.count > maxLength {
+             textView.text = String(textView.text.prefix(maxLength))
+         }
+         bioCharacterCountLabel.text = "\(textView.text.count)/200"
+     }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .gray {
+            textView.text = nil
+            textView.textColor = .white
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Set up your description (max. 200 chars)"
+            textView.textColor = .gray
+        }
     }
 }
