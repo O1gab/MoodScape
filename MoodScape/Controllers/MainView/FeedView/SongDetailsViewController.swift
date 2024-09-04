@@ -124,6 +124,7 @@ class SongDetailsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureWithSong()
+        checkFavorites()
     }
     
     // - MARK: SetupView
@@ -199,6 +200,14 @@ class SongDetailsViewController: UIViewController {
             shareButton.widthAnchor.constraint(equalToConstant: 60),
             shareButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    private func checkFavorites() {
+        if FavoritesManager.shared.isFavoriteSong(song) {
+            self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        } else {
+            self.favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+        }
     }
     
     // - MARK: ClosePopUp
@@ -283,12 +292,12 @@ class SongDetailsViewController: UIViewController {
         if FavoritesManager.shared.isFavoriteSong(song) {
             FavoritesManager.shared.removeFavoriteSong(song)
             self.favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+            NotificationCenter.default.post(name: .songRemoved, object: nil, userInfo: ["song": song])
         } else {
             FavoritesManager.shared.addFavoriteSong(song)
             self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
         }
         
-        // Optionally, update UI or notify the user
         let feedback = FavoritesManager.shared.isFavoriteSong(song) ? "Added to favorites" : "Removed from favorites"
         let alert = UIAlertController(title: nil, message: feedback, preferredStyle: .alert)
         self.present(alert, animated: true)

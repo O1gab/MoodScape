@@ -120,6 +120,11 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleSongRemoved(_:)), name: .songRemoved, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchFavorites()
     }
     
@@ -210,6 +215,17 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         songsCollectionView.reloadData()
     }
     
+    // - MARK: HandleSongRemoved
+    @objc private func handleSongRemoved(_ notification: Notification) {
+        if let removedSong = notification.userInfo?["song"] as? Song {
+            if let index = favoriteSongs.firstIndex(where: { $0.name == removedSong.name && $0.artist == removedSong.artist }) {
+                favoriteSongs.remove(at: index)
+            }
+            
+            songsCollectionView.reloadData()
+        }
+    }
+    
     // - MARK: HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
@@ -256,5 +272,23 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 10
     }
+    
+    // - MARK: UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if (collectionView == songsCollectionView) {
+            let selectedSong = favoriteSongs[indexPath.item]
+            let detailView = SongDetailsViewController(song: selectedSong)
+            present(detailView, animated: true, completion: nil)
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+extension Notification.Name {
+    static let songRemoved = Notification.Name("songRemoved")
+    static let albumRemoved = Notification.Name("albumRemoved")
 }
 
