@@ -146,12 +146,12 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return stackView
     }()
     
-    private let nameLabel: UILabel = {
+    private let greetingLabel: UILabel = {
         let label = UILabel()
-        label.text = "Name:"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -162,7 +162,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         label.textAlignment = .left
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -172,7 +172,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         label.text = "Your music preferences"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.gradientColors = [UIColor.white, UIColor.gray, UIColor(red: 0/255.0, green: 104/255.0, blue: 80/255.0, alpha: 1.0)]
@@ -222,6 +222,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         startLoading()
         setupView()
         setupConstraints()
+        determineGreeting()
         setupLabels()
         loadProfileImage()
         stopLoading()
@@ -242,6 +243,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         scrollView.addSubview(profileImage)
         scrollView.addSubview(usernameLabel)
         scrollView.addSubview(inlineBarStackView)
+        scrollView.addSubview(greetingLabel)
         scrollView.addSubview(preferencesLabel)
         scrollView.addSubview(registrationDate)
         scrollView.addSubview(shareButton)
@@ -289,7 +291,10 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             inlineBarStackView.heightAnchor.constraint(equalToConstant: 70),
             
-            preferencesLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 30),
+            greetingLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 30),
+            greetingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
+            preferencesLabel.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
             preferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
             collectionView.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 20),
@@ -311,6 +316,50 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             shareButton.widthAnchor.constraint(equalToConstant: 250),
             shareButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    
+    // - MARK: DetermineGreeting
+    private func determineGreeting() {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            // TODO: ERROR HANDLING
+            return
+        }
+        let db = Firestore.firestore()
+        db.collection("users").document(userId).getDocument { [weak self] (document, error) in
+            if let error = error {
+                print("Error fetching user document: \(error)")
+                return
+            }
+            
+            guard let document = document, document.exists else {
+                print("User document does not exist")
+                return
+            }
+            
+            if let name = document.data()?["name"] as? String {
+                print("fetched name: \(name)")
+                DispatchQueue.main.async {
+                    let hour = Calendar.current.component(.hour, from: Date())
+                    var greeting = ""
+                    
+                switch hour {
+                    case 5..<12:
+                        greeting = "Good Morning"
+                    case 12..<17:
+                        greeting = "Hello"
+                    case 17..<21:
+                        greeting = "Good Afternoon"
+                    case 21..<24, 0..<5:
+                        greeting = "Good Night"
+                    default:
+                        greeting = "Hello"
+                }
+                    self?.greetingLabel.text = "\(greeting), \(name)"
+                }
+            } else {
+                self?.greetingLabel.text = "Good to see you here"
+            }
+        }
     }
     
     private func setupLabels() {
