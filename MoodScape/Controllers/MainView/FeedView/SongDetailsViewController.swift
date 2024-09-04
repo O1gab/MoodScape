@@ -77,9 +77,8 @@ class SongDetailsViewController: UIViewController {
     
     private let releaseDateLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        label.textAlignment = .center
-        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -196,7 +195,7 @@ class SongDetailsViewController: UIViewController {
             songName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 20),
             
             releaseDateLabel.topAnchor.constraint(equalTo: songName.bottomAnchor, constant: 10),
-            releaseDateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            releaseDateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             favoriteButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
             favoriteButton.trailingAnchor.constraint(equalTo: spotifyButton.leadingAnchor, constant: -20),
