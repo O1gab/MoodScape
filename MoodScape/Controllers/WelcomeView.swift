@@ -13,7 +13,7 @@ class WelcomeView: StartBaseView {
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 27, weight: .bold)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -40,9 +40,34 @@ class WelcomeView: StartBaseView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.messageLabel.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "We are so happy what you joined us!", typingSpeed: 0.05) {
+            let phrase = "Let your emotions define the playlist."
+            let words = phrase.split(separator: " ")
+            var currentIndex = 0
+
+            func showNextWord() {
+                guard currentIndex < words.count else {
+                    // Transition to the next view after the phrase is fully displayed
+                   
+                    return
+                }
+
+                let word = words[currentIndex]
+                self?.messageLabel.text = String(word)
+                
+                currentIndex += 1
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    showNextWord()
+                }
+            }
+            
+            showNextWord()
+        }
+        /*
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.messageLabel.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "We are so happy what you joined us!", typingSpeed: 0.05) { // !!! change the font size back to 24
             }
         }
+         */
     }
     
     // - MARK: SetupView
