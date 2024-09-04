@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		761350292C70166A009A3F40 /* ProfileSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761350282C70166A009A3F40 /* ProfileSetup.swift */; };
 		7616BD752C7E33800083D227 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD742C7E33800083D227 /* CustomTabBar.swift */; };
 		7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7616BD762C7E33AF0083D227 /* custom_tabbar.png */; };
 		7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD7C2C7E81B00083D227 /* SongViewCell.swift */; };
@@ -80,7 +79,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		761350282C70166A009A3F40 /* ProfileSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetup.swift; sourceTree = "<group>"; };
 		7616BD742C7E33800083D227 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		7616BD762C7E33AF0083D227 /* custom_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom_tabbar.png; sourceTree = "<group>"; };
 		7616BD7C2C7E81B00083D227 /* SongViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongViewCell.swift; sourceTree = "<group>"; };
@@ -240,7 +238,6 @@
 				76F31B492C7BCA7D00B65B72 /* ImageCache.swift */,
 				766485552C6B98A900AA050A /* AuthExtensions */,
 				7664856B2C6EB68500AA050A /* ViewExtensions.swift */,
-				761350282C70166A009A3F40 /* ProfileSetup.swift */,
 				76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */,
 				76AAD3282C72263500CBE3D8 /* ColorExtensions.swift */,
 				766FD1502C81390100D9ACF6 /* UILabelExtensions.swift */,
@@ -608,7 +605,6 @@
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
 				7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */,
 				76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */,
-				761350292C70166A009A3F40 /* ProfileSetup.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
 				766485622C6C474F00AA050A /* StatsViewController.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
