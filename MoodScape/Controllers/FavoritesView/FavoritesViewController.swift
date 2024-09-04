@@ -221,7 +221,6 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
             if let index = favoriteSongs.firstIndex(where: { $0.name == removedSong.name && $0.artist == removedSong.artist }) {
                 favoriteSongs.remove(at: index)
             }
-            
             songsCollectionView.reloadData()
         }
     }
@@ -275,9 +274,14 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
     
     // - MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if (collectionView == songsCollectionView) {
+        if collectionView == songsCollectionView {
             let selectedSong = favoriteSongs[indexPath.item]
             let detailView = SongDetailsViewController(song: selectedSong)
+            present(detailView, animated: true, completion: nil)
+        }
+        else if collectionView == albumsCollectionView {
+            let selectedAlbum = favoriteAlbums[indexPath.item]
+            let detailView = AlbumDetailsViewController(album: selectedAlbum)
             present(detailView, animated: true, completion: nil)
         }
     }
