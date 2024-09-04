@@ -226,6 +226,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         }
     }
     
+    // - MARK: HandleAlbumRemoved
     @objc private func handleAlbumRemoved(_ notification: Notification) {
         if let removedAlbum = notification.userInfo?["album"] as? Album {
             if let index = favoriteAlbums.firstIndex(where: { $0.name == removedAlbum.name && $0.artist == removedAlbum.artist }) {
@@ -269,7 +270,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
+        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     }
     
     // minimum interitem spacing
