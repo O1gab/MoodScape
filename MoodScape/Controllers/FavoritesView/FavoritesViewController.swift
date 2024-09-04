@@ -121,6 +121,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         setupView()
         setupConstraints()
         NotificationCenter.default.addObserver(self, selector: #selector(handleSongRemoved(_:)), name: .songRemoved, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleAlbumRemoved(_:)), name: .albumRemoved, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -222,6 +223,15 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
                 favoriteSongs.remove(at: index)
             }
             songsCollectionView.reloadData()
+        }
+    }
+    
+    @objc private func handleAlbumRemoved(_ notification: Notification) {
+        if let removedAlbum = notification.userInfo?["album"] as? Album {
+            if let index = favoriteAlbums.firstIndex(where: { $0.name == removedAlbum.name && $0.artist == removedAlbum.artist }) {
+                favoriteAlbums.remove(at: index)
+            }
+            albumsCollectionView.reloadData()
         }
     }
     

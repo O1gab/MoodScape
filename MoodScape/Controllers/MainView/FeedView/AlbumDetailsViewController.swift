@@ -372,6 +372,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         if FavoritesManager.shared.isFavoriteAlbum(album) {
             FavoritesManager.shared.removeFavoriteAlbum(album)
             self.favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+            
+            NotificationCenter.default.post(name: .albumRemoved, object: nil, userInfo: ["album": album])
         } else {
             FavoritesManager.shared.addFavoriteAlbum(album)
             self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
