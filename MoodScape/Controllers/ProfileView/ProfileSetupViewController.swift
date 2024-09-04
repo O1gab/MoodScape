@@ -97,6 +97,15 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
            return label
        }()
     
+    private let preferencesButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Set up preferences", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private let submitButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Submit", for: .normal)
@@ -130,7 +139,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         fetchExistingData()
         loadProfileImage()
     }
-
     
     // - MARK: SetupView
     private func setupView() {
@@ -144,11 +152,13 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         view.addSubview(bioLabel)
         view.addSubview(bioField)
         view.addSubview(bioCharacterCountLabel)
+        view.addSubview(preferencesButton)
         view.addSubview(submitButton)
         view.addSubview(skipButton)
         
         setPlaceholder(textField: name, placeholder: "Enter your first name", color: .gray)
         
+        preferencesButton.addTarget(self, action: #selector(editPreferences), for: .touchUpInside)
         submitButton.addTarget(self, action: #selector(handleSave), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
         imageButton.addTarget(self, action: #selector(changeProfileImageTapped), for: .touchUpInside)
@@ -156,10 +166,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         bioField.delegate = self
     }
     
-    private func setPlaceholder(for textView: UITextView, placeholder: String) {
-           textView.text = placeholder
-           textView.textColor = .gray
-       }
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -193,6 +199,9 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
             bioCharacterCountLabel.topAnchor.constraint(equalTo: bioField.bottomAnchor, constant: 5),
             bioCharacterCountLabel.leadingAnchor.constraint(equalTo: bioField.leadingAnchor),
             
+            preferencesButton.topAnchor.constraint(equalTo: bioCharacterCountLabel.bottomAnchor, constant: 15),
+            preferencesButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            
             submitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -75),
             submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             submitButton.widthAnchor.constraint(equalToConstant: 160),
@@ -220,6 +229,13 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
                 print("Document does not exist or error occurred: \(String(describing: error))")
             }
         }
+    }
+    
+    // - MARK: editPreferences
+    @objc private func editPreferences() {
+        let musicSetupView = MusicSetupView()
+        musicSetupView.modalPresentationStyle = .fullScreen
+        self.present(musicSetupView, animated: true)
     }
     
     // - MARK: HandleSave
@@ -259,7 +275,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         if text.count > maxLength {
             textField.text = String(text.prefix(maxLength))
         }
-        // Update character count
         let charCount = textField.text?.count ?? 0
         bioField.placeholder = "\(charCount)/200"
     }
