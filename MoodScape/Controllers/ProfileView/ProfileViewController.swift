@@ -238,17 +238,18 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(scrollView)
+        view.addSubview(settingsButton)
+        view.addSubview(backButton)
+        
         scrollView.addSubview(contentView)
-        scrollView.addSubview(settingsButton)
-        scrollView.addSubview(backButton)
-        scrollView.addSubview(profileImage)
-        scrollView.addSubview(usernameLabel)
-        scrollView.addSubview(inlineBarStackView)
-        scrollView.addSubview(greetingLabel)
-        scrollView.addSubview(preferencesLabel)
-        scrollView.addSubview(registrationDate)
-        scrollView.addSubview(shareButton)
-        scrollView.addSubview(editButton)
+        contentView.addSubview(profileImage)
+        contentView.addSubview(usernameLabel)
+        contentView.addSubview(inlineBarStackView)
+        contentView.addSubview(greetingLabel)
+        contentView.addSubview(preferencesLabel)
+        contentView.addSubview(registrationDate)
+        contentView.addSubview(shareButton)
+        contentView.addSubview(editButton)
         
         settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
