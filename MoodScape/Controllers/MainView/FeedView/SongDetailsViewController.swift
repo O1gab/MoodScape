@@ -75,6 +75,15 @@ class SongDetailsViewController: UIViewController {
         return label
     }()
     
+    private let releaseDateLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let spotifyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Open in Spotify", for: .normal)
@@ -136,6 +145,7 @@ class SongDetailsViewController: UIViewController {
         contentView.addSubview(spotifyLogoImageView)
         contentView.addSubview(artistLabel)
         contentView.addSubview(songName)
+        contentView.addSubview(releaseDateLabel)
         contentView.addSubview(spotifyButton)
         contentView.addSubview(favoriteButton)
         contentView.addSubview(shareButton)
@@ -184,6 +194,9 @@ class SongDetailsViewController: UIViewController {
             songName.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 10),
             songName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             songName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 20),
+            
+            releaseDateLabel.topAnchor.constraint(equalTo: songName.bottomAnchor, constant: 10),
+            releaseDateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             favoriteButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
             favoriteButton.trailingAnchor.constraint(equalTo: spotifyButton.leadingAnchor, constant: -20),
@@ -260,6 +273,7 @@ class SongDetailsViewController: UIViewController {
         }
         artistLabel.text = "\(song.artist)"
         songName.text = "\(song.name)"
+        releaseDateLabel.text = "Released: \(song.releaseDate)"
     }
     
     // - MARK: AnimateBackgroundGradient

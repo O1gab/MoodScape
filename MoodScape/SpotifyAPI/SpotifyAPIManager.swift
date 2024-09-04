@@ -368,11 +368,11 @@ class SpotifyAPIManager {
                               let album = item["album"] as? [String: Any],
                               let images = album["images"] as? [[String: Any]],
                               let imageURLString = images.first?["url"] as? String,
-                              let imageURL = URL(string: imageURLString) else {
+                              let releaseDate = album["release_date"] as? String else {
                             print("Error parsing track item: \(item)")
                             return nil
                         }
-                        return Song(name: name, artist: artistName, duration: "", spotifyUrl: "", releaseDate: "", imageUrl: imageURLString)
+                        return Song(name: name, artist: artistName, duration: "", spotifyUrl: "", releaseDate: releaseDate, imageUrl: imageURLString)
                     }
                     completion(tracks)
                 } else {
