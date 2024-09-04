@@ -251,10 +251,10 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             topSongsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
-            topSongsTableView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 15),
+            topSongsTableView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 10),
             topSongsTableView.leadingAnchor.constraint(equalTo: topSongsLabel.leadingAnchor, constant: 20),
             topSongsTableView.trailingAnchor.constraint(equalTo: topSongsLabel.trailingAnchor, constant: -20),
-            topSongsTableView.bottomAnchor.constraint(equalTo: spotifyButton.topAnchor, constant: -20),
+            topSongsTableView.bottomAnchor.constraint(equalTo: spotifyButton.topAnchor, constant: -10),
             
             spotifyButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
             spotifyButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -318,7 +318,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
                         self.animateBackgroundGradient(from: color, to: complementaryColor)
                         self.artistLabel.textColor = color.contrastingColor()
                         self.albumName.textColor = color.contrastingComplementaryColor()
-                        self.shareButton.tintColor = color.contrastingColor()
+                        self.shareButton.tintColor = .white // fix
                         self.topSongsLabel.textColor = color.contrastingComplementaryColor()
                         self.releaseDateLabel.textColor = color.contrastingColor()
                     }
@@ -337,8 +337,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     private func animateBackgroundGradient(from dominantColor: UIColor, to complementaryColor: UIColor) {
         var adjustedDominantColor = dominantColor
         var adjustedComplementaryColor = complementaryColor
-            
-        // Check if the colors are too similar and adjust
+        
         if dominantColor.isTooSimilar(to: complementaryColor) {
             adjustedDominantColor = dominantColor.darker(by: 20)
             adjustedComplementaryColor = complementaryColor.lighter(by: 20)
@@ -357,7 +356,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
         
         self.contentView.layer.insertSublayer(gradientLayer, at: 0)
-
+        
         let animation = CABasicAnimation(keyPath: "colors")
         animation.fromValue = [adjustedDominantColor.cgColor, adjustedComplementaryColor.cgColor]
         animation.toValue = [adjustedComplementaryColor.cgColor, adjustedDominantColor.cgColor]
@@ -379,7 +378,6 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
         }
         
-        // Optionally, update UI or notify the user
         let feedback = FavoritesManager.shared.isFavoriteAlbum(album) ? "Added to favorites" : "Removed from favorites"
         let alert = UIAlertController(title: nil, message: feedback, preferredStyle: .alert)
         self.present(alert, animated: true)
@@ -408,10 +406,6 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             return UITableViewCell()
         }
         cell.backgroundColor = .clear
-        
-        if let backgroundColor = self.view.colorAtPoint(point: cell.frame.origin) {
-            cell.songLabel.textColor = backgroundColor.contrastingColor()
-        }
         
         let song = album.topSongs[indexPath.row]
         cell.configure(with: song)
