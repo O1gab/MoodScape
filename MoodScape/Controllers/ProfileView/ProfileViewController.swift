@@ -82,7 +82,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         favouritesCountLabel.textAlignment = .center
         
         let favouritesButton = UIButton(type: .system)
-        favouritesButton.setTitle("Favourites", for: .normal)
+        favouritesButton.setTitle("Favorites", for: .normal)
         favouritesButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         favouritesButton.tag = 0
         favouritesButton.setTitleColor(.white, for: .normal)
@@ -214,12 +214,15 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return button
     }()
     
+    private let favoritesManager = FavoritesManager()
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         startLoading()
         setupView()
         setupConstraints()
+        setupLabels()
         loadProfileImage()
         stopLoading()
     }
@@ -248,10 +251,9 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
         shareButton.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
         
-        for view in inlineBarStackView.arrangedSubviews {
-            if let button = view as? UIButton {
-                button.addTarget(self, action: #selector(handleInlineBarButtonTap(_:)), for: .touchUpInside)
-            }
+        if let favouritesStackView = inlineBarStackView.arrangedSubviews.first as? UIStackView,
+           let favouritesButton = favouritesStackView.arrangedSubviews.last as? UIButton {
+            favouritesButton.addTarget(self, action: #selector(openFavoritesView), for: .touchUpInside)
         }
         
         setupCollectionView()
@@ -309,6 +311,18 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             shareButton.widthAnchor.constraint(equalToConstant: 250),
             shareButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+    }
+    
+    private func setupLabels() {
+        let songsCount = FavoritesManager.getFavoriteSongs(favoritesManager)().count
+        let albumsCount = FavoritesManager.getFavoriteAlbums(favoritesManager)().count
+        let totalFavorites = songsCount + albumsCount
+        
+        // Assuming the first subview in `inlineBarStackView` is the favorites stack view
+        if let favoritesStackView = inlineBarStackView.arrangedSubviews.first as? UIStackView,
+           let favoritesCountLabel = favoritesStackView.arrangedSubviews.first as? UILabel {
+            favoritesCountLabel.text = "\(totalFavorites)"
+        }
     }
     
     private func setupCollectionView() {
@@ -433,6 +447,13 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         let textToShare = "Check out my profile on MoodScape: @\(username)\nDownload the app: \(appStoreLink)"
         let activityViewController = UIActivityViewController(activityItems: [textToShare], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
+    }
+    
+    // - MARK: OpenFavoritesView
+    @objc private func openFavoritesView() {
+        let favoritesView = FavoritesViewController()
+        favoritesView.modalPresentationStyle = .fullScreen
+        present(favoritesView, animated: true, completion: nil)
     }
     
     // - MARK: UICollectionViewDataSource
