@@ -83,6 +83,12 @@ class SongDetailsViewController: UIViewController {
         return label
     }()
     
+    private let divider: CALayer = {
+        let divider = CALayer()
+        divider.backgroundColor = UIColor.lightGray.cgColor
+        return divider
+    }()
+    
     private let spotifyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Open in Spotify", for: .normal)
@@ -135,6 +141,19 @@ class SongDetailsViewController: UIViewController {
         checkFavorites()
     }
     
+    // - MARK: ViewDidLayoutSubviews
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard let releaseDateLabelFrame = releaseDateLabel.superview?.convert(releaseDateLabel.frame, to: contentView) else { return }
+        divider.frame = CGRect(
+            x: 10,
+            y: releaseDateLabelFrame.maxY + 15,
+            width: contentView.frame.width - 20,
+            height: 2
+        )
+    }
+    
     // - MARK: SetupView
     private func setupView() {
         view.addSubview(scrollView)
@@ -148,6 +167,11 @@ class SongDetailsViewController: UIViewController {
         contentView.addSubview(spotifyButton)
         contentView.addSubview(favoriteButton)
         contentView.addSubview(shareButton)
+        
+        contentView.layer.addSublayer(divider)
+        
+        releaseDateLabel.alpha = 0
+        divider.opacity = 0
         
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
@@ -244,6 +268,17 @@ class SongDetailsViewController: UIViewController {
         }
     }
     
+    // - MARK: AnimateElements
+    private func animateElements() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.releaseDateLabel.alpha = 1
+        }) { _ in
+            UIView.animate(withDuration: 0.5, animations: {
+                self.divider.opacity = 1
+            })
+        }
+    }
+    
     // - MARK: OpenInSpotify
     @objc private func openInSpotify() {
         if let url = URL(string: song.spotifyUrl) {
@@ -273,6 +308,7 @@ class SongDetailsViewController: UIViewController {
         artistLabel.text = "\(song.artist)"
         songName.text = "\(song.name)"
         releaseDateLabel.text = "Released: \(song.releaseDate)"
+        animateElements()
     }
     
     // - MARK: AnimateBackgroundGradient
