@@ -161,6 +161,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureWithAlbum()
+        checkFavorites()
     }
     
     // - MARK: ViewDidLayoutSubviews
@@ -265,6 +266,14 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             shareButton.widthAnchor.constraint(equalToConstant: 60),
             shareButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    private func checkFavorites() {
+        if FavoritesManager.shared.isFavoriteAlbum(album) {
+            self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        } else {
+            self.favoriteButton.setImage(UIImage(systemName: "star"), for: .normal)
+        }
     }
     
     // - MARK: ClosePopUp
