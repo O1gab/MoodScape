@@ -12,5 +12,6 @@ struct Song: Codable {
     let artist: String
     let duration: String
     let spotifyUrl: String
+    let releaseDate: String
     let imageUrl: String?
 }

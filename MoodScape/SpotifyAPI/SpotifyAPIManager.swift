@@ -92,7 +92,7 @@ class SpotifyAPIManager {
                     return nil
                 }
                 let duration = self.formatDuration(durationMs: durationMs)
-                return Song(name: name, artist: artist, duration: duration, spotifyUrl: spotifyUrl["spotify"]!, imageUrl: imageURLString)
+                return Song(name: name, artist: artist, duration: duration, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: "", imageUrl: imageURLString)
             }
             completion(songs)
         }
@@ -135,6 +135,7 @@ class SpotifyAPIManager {
                         artist: artistName,
                         duration: "0",
                         spotifyUrl: track.external_urls["spotify"] ?? "",
+                        releaseDate: "",
                         imageUrl: ""
                     )
                 }
@@ -371,7 +372,7 @@ class SpotifyAPIManager {
                             print("Error parsing track item: \(item)")
                             return nil
                         }
-                        return Song(name: name, artist: artistName, duration: "", spotifyUrl: "", imageUrl: imageURLString)
+                        return Song(name: name, artist: artistName, duration: "", spotifyUrl: "", releaseDate: "", imageUrl: imageURLString)
                     }
                     completion(tracks)
                 } else {
