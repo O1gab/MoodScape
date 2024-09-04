@@ -72,6 +72,7 @@
 		76DAE5842C87435100F631F1 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5832C87435100F631F1 /* FavoritesManager.swift */; };
 		76DAE5872C874A3A00F631F1 /* FavoritesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5862C874A3A00F631F1 /* FavoritesCell.swift */; };
 		76DAE5892C889C1200F631F1 /* welcome_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 76DAE5882C889C1200F631F1 /* welcome_gradient.gif */; };
+		76DAE58B2C891DD700F631F1 /* ImagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE58A2C891DD700F631F1 /* ImagePreviewViewController.swift */; };
 		76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */; };
 		76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */; };
 		76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B492C7BCA7D00B65B72 /* ImageCache.swift */; };
@@ -147,6 +148,7 @@
 		76DAE5832C87435100F631F1 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
 		76DAE5862C874A3A00F631F1 /* FavoritesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCell.swift; sourceTree = "<group>"; };
 		76DAE5882C889C1200F631F1 /* welcome_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = welcome_gradient.gif; sourceTree = "<group>"; };
+		76DAE58A2C891DD700F631F1 /* ImagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewViewController.swift; sourceTree = "<group>"; };
 		76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSetupViewController.swift; sourceTree = "<group>"; };
 		76F31B492C7BCA7D00B65B72 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -318,6 +320,7 @@
 			children = (
 				766485472C6A13AD00AA050A /* ProfileViewController.swift */,
 				766485672C6E4EFB00AA050A /* ProfileSetupViewController.swift */,
+				76DAE58A2C891DD700F631F1 /* ImagePreviewViewController.swift */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
@@ -636,6 +639,7 @@
 				766485762C6ED52D00AA050A /* Album.swift in Sources */,
 				766485792C6ED6E700AA050A /* SpotifyAuthenticationManager.swift in Sources */,
 				76B645B82C7BFF8100ADC097 /* Song.swift in Sources */,
+				76DAE58B2C891DD700F631F1 /* ImagePreviewViewController.swift in Sources */,
 				76401AD52C76B4530035C7FA /* ContactView.swift in Sources */,
 				766FD1552C836EBE00D9ACF6 /* newLogin.swift in Sources */,
 				76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */,

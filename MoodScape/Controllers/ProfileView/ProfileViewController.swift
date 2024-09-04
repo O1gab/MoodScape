@@ -242,7 +242,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         view.addSubview(backButton)
         
         scrollView.addSubview(contentView)
-        contentView.addSubview(profileImage)
+        view.addSubview(profileImage)
         contentView.addSubview(usernameLabel)
         contentView.addSubview(inlineBarStackView)
         contentView.addSubview(greetingLabel)
@@ -254,6 +254,10 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(handleEdit), for: .touchUpInside)
         shareButton.addTarget(self, action: #selector(handleShare), for: .touchUpInside)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(profileImageTapped))
+        profileImage.isUserInteractionEnabled = true
+        profileImage.addGestureRecognizer(tapGestureRecognizer)
         
         if let favouritesStackView = inlineBarStackView.arrangedSubviews.first as? UIStackView,
            let favouritesButton = favouritesStackView.arrangedSubviews.last as? UIButton {
@@ -548,6 +552,14 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)
+    }
+    
+    // MARK: ProfileImageTapped
+    @objc private func profileImageTapped() {
+        let imagePreview = ImagePreviewViewController()
+        imagePreview.image = profileImage.image
+        imagePreview.modalPresentationStyle = .overCurrentContext
+        present(imagePreview, animated: true, completion: nil)
     }
     
     // - MARK: HandleSettings
