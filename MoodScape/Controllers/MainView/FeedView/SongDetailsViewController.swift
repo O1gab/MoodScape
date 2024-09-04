@@ -264,8 +264,17 @@ class SongDetailsViewController: UIViewController {
     
     // - MARK: AnimateBackgroundGradient
     private func animateBackgroundGradient(from dominantColor: UIColor, to complementaryColor: UIColor) {
+        var adjustedDominantColor = dominantColor
+        var adjustedComplementaryColor = complementaryColor
+            
+        // Check if the colors are too similar and adjust
+        if dominantColor.isTooSimilar(to: complementaryColor) {
+            adjustedDominantColor = dominantColor.darker(by: 20)
+            adjustedComplementaryColor = complementaryColor.lighter(by: 20)
+        }
+        
         let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [dominantColor.cgColor, complementaryColor.cgColor]
+        gradientLayer.colors = [adjustedDominantColor.cgColor, adjustedComplementaryColor.cgColor]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         gradientLayer.frame = self.contentView.bounds
@@ -277,10 +286,10 @@ class SongDetailsViewController: UIViewController {
         }
         
         self.contentView.layer.insertSublayer(gradientLayer, at: 0)
-        
+
         let animation = CABasicAnimation(keyPath: "colors")
-        animation.fromValue = [dominantColor.cgColor, complementaryColor.cgColor]
-        animation.toValue = [complementaryColor.cgColor, dominantColor.cgColor]
+        animation.fromValue = [adjustedDominantColor.cgColor, adjustedComplementaryColor.cgColor]
+        animation.toValue = [adjustedComplementaryColor.cgColor, adjustedDominantColor.cgColor]
         animation.duration = 7.0
         animation.autoreverses = true
         animation.repeatCount = .infinity
