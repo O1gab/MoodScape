@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Gifu
 
 class WelcomeView: StartBaseView {
 
@@ -17,6 +18,15 @@ class WelcomeView: StartBaseView {
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    private let welcomeGradient: GIFImageView = {
+        let gifBackground = GIFImageView()
+        gifBackground.animate(withGIFNamed: "welcome_gradient")
+        gifBackground.contentMode = .scaleAspectFill
+        gifBackground.alpha = 0.5
+        gifBackground.translatesAutoresizingMaskIntoConstraints = false
+        return gifBackground
     }()
     
     // - MARK: ViewDidLoad
@@ -37,12 +47,18 @@ class WelcomeView: StartBaseView {
     
     // - MARK: SetupView
     private func setupView() {
+        view.addSubview(welcomeGradient)
         view.addSubview(messageLabel)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            welcomeGradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            welcomeGradient.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            welcomeGradient.topAnchor.constraint(equalTo: view.topAnchor),
+            welcomeGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
             messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             messageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),

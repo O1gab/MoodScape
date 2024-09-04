@@ -72,6 +72,7 @@
 		76DAE5822C873FF400F631F1 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */; };
 		76DAE5842C87435100F631F1 /* FavoritesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5832C87435100F631F1 /* FavoritesManager.swift */; };
 		76DAE5872C874A3A00F631F1 /* FavoritesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5862C874A3A00F631F1 /* FavoritesCell.swift */; };
+		76DAE5892C889C1200F631F1 /* welcome_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 76DAE5882C889C1200F631F1 /* welcome_gradient.gif */; };
 		76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */; };
 		76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */; };
 		76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B492C7BCA7D00B65B72 /* ImageCache.swift */; };
@@ -147,6 +148,7 @@
 		76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		76DAE5832C87435100F631F1 /* FavoritesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesManager.swift; sourceTree = "<group>"; };
 		76DAE5862C874A3A00F631F1 /* FavoritesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCell.swift; sourceTree = "<group>"; };
+		76DAE5882C889C1200F631F1 /* welcome_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = welcome_gradient.gif; sourceTree = "<group>"; };
 		76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSetupViewController.swift; sourceTree = "<group>"; };
 		76F31B492C7BCA7D00B65B72 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 		7616BD7B2C7E7B6F0083D227 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				76DAE5882C889C1200F631F1 /* welcome_gradient.gif */,
 				7628AAC32C860D780021433F /* Spotify_Logo.png */,
 				7628AAC52C860FAB0021433F /* Spotify_Icon.png */,
 				7616BD762C7E33AF0083D227 /* custom_tabbar.png */,
@@ -532,6 +535,7 @@
 				7664854D2C6A1AAF00AA050A /* GoogleService-Info.plist in Resources */,
 				76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */,
 				76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */,
+				76DAE5892C889C1200F631F1 /* welcome_gradient.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
