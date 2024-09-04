@@ -195,6 +195,14 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         
         contentView.layer.addSublayer(divider)
         
+        releaseDateLabel.alpha = 0
+        divider.opacity = 0
+        topSongsLabel.alpha = 0
+        topSongsTableView.alpha = 0
+        favoriteButton.alpha = 0
+        spotifyButton.alpha = 0
+        shareButton.alpha = 0
+        
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
         favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
@@ -322,7 +330,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
                         self.topSongsLabel.textColor = color.contrastingComplementaryColor()
                         self.releaseDateLabel.textColor = color.contrastingColor()
                     }
-                   
+                    self.animateElements()
                 }
             }
             task.resume()
@@ -331,6 +339,29 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         artistLabel.text = "\(album.artist)"
         albumName.text = "\(album.name)"
         topSongsTableView.reloadData()
+    }
+    
+    private func animateElements() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.releaseDateLabel.alpha = 1
+        }) { _ in
+            UIView.animate(withDuration: 0.5, animations: {
+                self.divider.opacity = 1
+            }) { _ in
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.topSongsLabel.alpha = 1
+                }) { _ in
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.topSongsTableView.alpha = 1
+                    })
+                        UIView.animate(withDuration: 0.5, animations: {
+                            self.favoriteButton.alpha = 1
+                            self.spotifyButton.alpha = 1
+                            self.shareButton.alpha = 1
+                        })
+                }
+            }
+        }
     }
     
     // - MARK: AnimateBackgroundGradient
