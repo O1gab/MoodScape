@@ -101,8 +101,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         let button = UIButton(type: .system)
         button.setTitle("Explore more", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
-        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), for: .normal)
-        button.backgroundColor = .white.withAlphaComponent(0.5)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.borderWidth = 3
+        button.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
         button.layer.cornerRadius = 25
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -199,7 +200,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             
             exploreButton.topAnchor.constraint(equalTo: recommendedSongsCollectionView.bottomAnchor, constant: 70),
             exploreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            exploreButton.widthAnchor.constraint(equalToConstant: 210),
+            exploreButton.widthAnchor.constraint(equalToConstant: 180),
             exploreButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
