@@ -387,6 +387,66 @@ class SpotifyAPIManager {
         task.resume()
     }
     
+    func fetchArtistDetails(for artistID: String, completion: @escaping (Artist?) -> Void) {
+        guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
+            completion(nil)
+            return
+        }
+        
+        let urlString = "\(baseURL)artists/\(artistID)"
+        
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error fetching artist details for artist \(artistID): \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data else {
+                print("No data returned for artist \(artistID)")
+                completion(nil)
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    let name = json["name"] as? String ?? ""
+                    let popularity = json["popularity"] as? Int ?? 0
+                    if let images = json["images"] as? [[String: Any]],
+                       let imageURLString = images.first?["url"] as? String,
+                       let imageURL = URL(string: imageURLString) {
+                        let artist = Artist(
+                            name: name,
+                            id: artistID,
+                            imageURL: imageURL,
+                            imageURLString: imageURLString
+                        )
+                        completion(artist)
+                    } else {
+                        print("Error parsing images for artist \(artistID)")
+                        completion(nil)
+                    }
+                } else {
+                    print("Error parsing JSON for artist \(artistID)")
+                    completion(nil)
+                }
+            } catch {
+                print("Error parsing JSON for artist \(artistID): \(error)")
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
+    
     // - MARK: FormatDuration
     private func formatDuration(durationMs: Int) -> String {
         let minutes = durationMs / 60000

@@ -175,7 +175,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.gradientColors = [UIColor.white, UIColor.gray, UIColor(red: 0/255.0, green: 104/255.0, blue: 80/255.0, alpha: 1.0)]
+        label.gradientColors = [UIColor(red: 0/255.0, green: 104/255.0, blue: 80/255.0, alpha: 1.0), UIColor.darkGray, UIColor.black]
         return label
     }()
     
@@ -232,6 +232,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchData()
+        fetchArtists()
     }
     
     // - MARK: SetupView
@@ -294,19 +295,19 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             greetingLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 30),
             greetingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            preferencesLabel.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
-            preferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            
-            collectionView.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 20),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            collectionView.heightAnchor.constraint(equalToConstant: 120),
-            
-            registrationDate.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
+            registrationDate.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             registrationDate.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            editButton.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 40),
+            preferencesLabel.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 20),
+            preferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
+            collectionView.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 20),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 200),
+            
+            editButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -35),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 250),
             editButton.heightAnchor.constraint(equalToConstant: 50),
@@ -362,6 +363,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
+    // - MARK: SetupLabels
     private func setupLabels() {
         let songsCount = FavoritesManager.getFavoriteSongs(favoritesManager)().count
         let albumsCount = FavoritesManager.getFavoriteAlbums(favoritesManager)().count
@@ -428,6 +430,80 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
+    private func fetchSelectedArtists(completion: @escaping ([String]?) -> Void) {
+        let db = Firestore.firestore()
+        let userId = Auth.auth().currentUser?.uid
+        let userDocRef = db.collection("users").document(userId ?? "")
+        
+        userDocRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let data = document.data()
+                let artists = data?["selectedArtists"] as? [String]
+                completion(artists)
+            } else {
+                self.showError("Failed to fetch selected artists")
+                completion(nil)
+            }
+        }
+    }
+    
+    private func fetchArtists() {
+        // Step 1: Fetch selected artist names
+         fetchSelectedArtists { [weak self] artistNames in
+             guard let self = self, let artistNames = artistNames, !artistNames.isEmpty else {
+                 self?.showError("Failed to fetch artist names or no artists selected")
+                 return
+             }
+             
+             let dispatchGroup = DispatchGroup()
+             var artistIDs: [String] = []
+             var artistDetails: [Artist] = []
+             
+             // Step 2: Convert artist names to IDs
+             for artistName in artistNames {
+                 dispatchGroup.enter()
+                 
+                 SpotifyAPIManager.shared.fetchArtistID(for: artistName) { artistID in
+                     if let artistID = artistID {
+                         artistIDs.append(artistID)
+                     } else {
+                         print("Failed to fetch ID for artist: \(artistName)")
+                     }
+                     dispatchGroup.leave()
+                 }
+             }
+             
+             dispatchGroup.notify(queue: .main) {
+                 guard !artistIDs.isEmpty else {
+                     self.showError("Failed to fetch any artist IDs")
+                     return
+                 }
+                 
+                 // Step 3: Fetch artist details using IDs
+                 let detailGroup = DispatchGroup()
+                 
+                 for artistID in artistIDs {
+                     detailGroup.enter()
+                     
+                     SpotifyAPIManager.shared.fetchArtistDetails(for: artistID) { artist in
+                         if let artist = artist {
+                             artistDetails.append(artist)
+                         } else {
+                             print("Failed to fetch details for artist ID: \(artistID)")
+                         }
+                         detailGroup.leave()
+                     }
+                 }
+                 
+                 detailGroup.notify(queue: .main) {
+                     // Step 4: Update the collection view
+                     self.selectedArtists = artistDetails
+                     self.collectionView.reloadData()
+                 }
+             }
+         }
+    }
+    
     // - MARK: AttributedText
     private func attributedText(staticText: String, dynamicText: String, staticColor: UIColor, dynamicColor: UIColor) -> NSAttributedString {
         let staticFont = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -460,7 +536,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         
         switch sender.tag {
         case 0:
-            viewController = MainTabBarController() // FAVOURITES
+            viewController = FavoritesViewController() // FAVOURITES
         case 1:
             viewController = MainTabBarController() // SEARCHES
         case 2:
@@ -505,6 +581,13 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         present(favoritesView, animated: true, completion: nil)
     }
     
+    // - MARK: ShowError
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     // - MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return selectedArtists.count
@@ -513,18 +596,9 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     // - MARK: CollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PreferencesCell", for: indexPath) as! PreferencesCell
-         let artist = selectedArtists[indexPath.item]
-         
-         // Fetch image data asynchronously
-         URLSession.shared.dataTask(with: artist.imageURL) { data, response, error in
-             if let data = data, let image = UIImage(data: data) {
-                 DispatchQueue.main.async {
-                     cell.configure(with: image)
-                 }
-             }
-         }.resume()
-         
-         return cell
+        let artist = selectedArtists[indexPath.item]
+        cell.configure(with: artist)
+        return cell
     }
         
     // - MARK: UICollectionViewDelegateFlowLayout
@@ -534,7 +608,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     // - MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedAlbum = preferences[indexPath.item]
+        let selectedArtist = selectedArtists[indexPath.item]
         // TODO: FIX IT
     }
 }
