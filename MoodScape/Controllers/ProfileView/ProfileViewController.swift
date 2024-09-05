@@ -156,6 +156,21 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return label
     }()
     
+    private let bioLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.numberOfLines = 0
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label.backgroundColor = UIColor(white: 1, alpha: 0.05)
+        label.layer.cornerRadius = 12
+        label.layer.masksToBounds = true
+        label.layer.borderColor = UIColor.white.cgColor
+        label.layer.borderWidth = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let registrationDate: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -225,14 +240,9 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         determineGreeting()
         setupLabels()
         loadProfileImage()
-        stopLoading()
-    }
-    
-    // - MARK: ViewWillAppear
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         fetchData()
         fetchArtists()
+        stopLoading()
     }
     
     // - MARK: SetupView
@@ -246,6 +256,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         contentView.addSubview(usernameLabel)
         contentView.addSubview(inlineBarStackView)
         contentView.addSubview(greetingLabel)
+        contentView.addSubview(bioLabel)
         contentView.addSubview(preferencesLabel)
         contentView.addSubview(registrationDate)
         contentView.addSubview(shareButton)
@@ -300,7 +311,12 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             greetingLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 30),
             greetingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            registrationDate.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
+            bioLabel.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
+            bioLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            bioLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            bioLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 80), // Height for the bio box
+            
+            registrationDate.topAnchor.constraint(equalTo: bioLabel.bottomAnchor, constant: 20),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             registrationDate.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
@@ -427,6 +443,12 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
                             }
                     } else {
                         print("Registration date not available")
+                    }
+                    
+                    if let bio = data?["bio"] as? String {
+                        self.bioLabel.text = bio
+                    } else {
+                        self.bioLabel.text = "Set up your bio :)"
                     }
                 }
             } else {
