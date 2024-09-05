@@ -38,7 +38,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         let button = UIButton(type: .system)
         button.setTitle("Change Photo", for: .normal)
         button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -102,8 +102,11 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
     private let preferencesButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Set up preferences", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.tintColor = .white
+        button.layer.borderWidth = 3
+        button.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
+        button.layer.cornerRadius = 25
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -206,6 +209,8 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
             
             preferencesButton.topAnchor.constraint(equalTo: bioCharacterCountLabel.bottomAnchor, constant: 15),
             preferencesButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            preferencesButton.widthAnchor.constraint(equalToConstant: 200),
+            preferencesButton.heightAnchor.constraint(equalToConstant: 50),
             
             submitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -75),
             submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -285,11 +290,9 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         let maxLength = 200
         let currentText = textView.text ?? ""
         
-        // Update character count
         let charCount = currentText.count
         bioCharacterCountLabel.text = "\(charCount)/200"
         
-        // Check if character count exceeds limit
         if charCount > maxLength {
             bioCharacterCountLabel.textColor = .red
         } else {
