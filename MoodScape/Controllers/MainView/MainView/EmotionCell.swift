@@ -38,26 +38,9 @@ class EmotionCell: UICollectionViewCell {
         super.init(coder: coder)
     }
     
-    override var isSelected: Bool {
-        didSet {
-            updateAppearance()
-        }
-    }
-    
-    func configure(with emotion: String) {
-           emotionLabel.text = emotion
-           updateAppearance()
-       }
-       
-    private func updateAppearance() {
-        if isSelected {
-            contentView.backgroundColor = UIColor.gray
-            emotionLabel.textColor = UIColor.white
-            contentView.layer.borderColor = UIColor.green.cgColor
-        } else {
-            contentView.backgroundColor = UIColor.clear
-            emotionLabel.textColor = UIColor.gray
-            contentView.layer.borderColor = UIColor.gray.cgColor
-        }
+    func configure(with emotion: String, isSelected: Bool) {
+        emotionLabel.text = emotion
+        contentView.backgroundColor = isSelected ? UIColor(red: 0/255, green: 104/255, blue: 80/255, alpha: 1.0) : UIColor.gray
+        contentView.layer.borderColor = isSelected ? UIColor(red: 0/255, green: 104/255, blue: 80/255, alpha: 1.0).cgColor : UIColor.gray.cgColor
     }
 }

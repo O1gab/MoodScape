@@ -142,8 +142,9 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmotionCell", for: indexPath) as! EmotionCell
-        cell.configure(with: emotions[indexPath.item])
-        cell.isSelected = selectedEmotions.contains(indexPath)
+        let emotion = emotions[indexPath.item]
+        let isSelected = selectedEmotions.contains(indexPath)
+        cell.configure(with: emotion, isSelected: isSelected)
         return cell
     }
         
