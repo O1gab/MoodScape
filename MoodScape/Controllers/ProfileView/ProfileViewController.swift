@@ -235,6 +235,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         startLoading()
+        
         setupView()
         setupConstraints()
         determineGreeting()
@@ -242,6 +243,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         loadProfileImage()
         fetchData()
         fetchArtists()
+        
         stopLoading()
     }
     
@@ -252,7 +254,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         view.addSubview(backButton)
         
         scrollView.addSubview(contentView)
-        view.addSubview(profileImage)
+        contentView.addSubview(profileImage)
         contentView.addSubview(usernameLabel)
         contentView.addSubview(inlineBarStackView)
         contentView.addSubview(greetingLabel)
@@ -292,16 +294,16 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            settingsButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            settingsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            settingsButton.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 10),
+            settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
-            profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
-            profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            profileImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 50),
+            profileImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             profileImage.widthAnchor.constraint(equalToConstant: 100),
             profileImage.heightAnchor.constraint(equalToConstant: 100),
             
             usernameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20),
-            usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            usernameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             inlineBarStackView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 15),
             inlineBarStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -328,7 +330,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 200),
             
-            editButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: -35),
+            editButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 250),
             editButton.heightAnchor.constraint(equalToConstant: 50),
@@ -336,7 +338,9 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             shareButton.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 20),
             shareButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             shareButton.widthAnchor.constraint(equalToConstant: 250),
-            shareButton.heightAnchor.constraint(equalToConstant: 50)
+            shareButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            shareButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
@@ -410,7 +414,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(PreferencesCell.self, forCellWithReuseIdentifier: "PreferencesCell")
         
-        view.addSubview(collectionView)
+        contentView.addSubview(collectionView)
     }
     
     // - MARK: FetchData
