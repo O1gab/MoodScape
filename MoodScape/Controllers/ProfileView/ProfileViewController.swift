@@ -306,7 +306,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             
             gradientCircleView.centerXAnchor.constraint(equalTo: profileImage.centerXAnchor),
             gradientCircleView.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
-            gradientCircleView.widthAnchor.constraint(equalToConstant: 150), // Slightly larger than profile image
+            gradientCircleView.widthAnchor.constraint(equalToConstant: 150),
             gradientCircleView.heightAnchor.constraint(equalTo: gradientCircleView.widthAnchor),
             
             profileImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 50),
@@ -413,6 +413,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
+    // - MARK: SetupCollectionView
     private func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -490,6 +491,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
+    // - MARK: FetchArtists (Your preferences)
     private func fetchArtists() {
         // Step 1: Fetch selected artist names
          fetchSelectedArtists { [weak self] artistNames in
@@ -574,6 +576,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
+    // - MARK: HandleInlineBarButtonTap
     @objc private func handleInlineBarButtonTap(_ sender: UIButton) {
         let viewController: UIViewController
         
@@ -660,6 +663,5 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     // - MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedArtist = selectedArtists[indexPath.item]
-        // TODO: FIX IT
     }
 }

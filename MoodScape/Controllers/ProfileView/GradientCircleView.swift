@@ -11,18 +11,21 @@ class GradientCircleView: UIView {
 
     private let shadowLayer = CAShapeLayer()
 
+    // - MARK: Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupShadow()
         startShadowAnimation()
     }
 
+    // - MARK: Init
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupShadow()
         startShadowAnimation()
     }
 
+    // - MARK: SetupShadow
     private func setupShadow() {
         shadowLayer.fillColor = UIColor.clear.cgColor
         shadowLayer.shadowColor = UIColor(red: 127/255, green: 255/255, blue: 212/255, alpha: 1.0).cgColor
@@ -33,6 +36,7 @@ class GradientCircleView: UIView {
         layer.addSublayer(shadowLayer)
     }
 
+    // - MARK: StartShadowAnimation
     private func startShadowAnimation() {
         let shadowAnimation = CABasicAnimation(keyPath: "shadowOpacity")
         shadowAnimation.fromValue = 0.2
@@ -43,6 +47,7 @@ class GradientCircleView: UIView {
         shadowLayer.add(shadowAnimation, forKey: "shadowOpacityAnimation")
     }
 
+    // - MARK: LayoutSubviews
     override func layoutSubviews() {
         super.layoutSubviews()
         let radius = bounds.width / 2
