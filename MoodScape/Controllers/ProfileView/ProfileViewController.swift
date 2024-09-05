@@ -24,6 +24,12 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return view
     }()
     
+    private let gradientCircleView: GradientCircleView = {
+        let view = GradientCircleView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private var selectedArtists: [Artist] = []
     private var collectionView: UICollectionView!
     
@@ -254,6 +260,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         view.addSubview(backButton)
         
         scrollView.addSubview(contentView)
+        contentView.addSubview(gradientCircleView)
         contentView.addSubview(profileImage)
         contentView.addSubview(usernameLabel)
         contentView.addSubview(inlineBarStackView)
@@ -296,6 +303,11 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             
             settingsButton.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 10),
             settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            
+            gradientCircleView.centerXAnchor.constraint(equalTo: profileImage.centerXAnchor),
+            gradientCircleView.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
+            gradientCircleView.widthAnchor.constraint(equalToConstant: 150), // Slightly larger than profile image
+            gradientCircleView.heightAnchor.constraint(equalTo: gradientCircleView.widthAnchor),
             
             profileImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 50),
             profileImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
