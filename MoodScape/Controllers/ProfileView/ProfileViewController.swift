@@ -322,10 +322,10 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             registrationDate.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            preferencesLabel.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 20),
+            preferencesLabel.topAnchor.constraint(equalTo: registrationDate.bottomAnchor, constant: 40),
             preferencesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            collectionView.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 20),
+            collectionView.topAnchor.constraint(equalTo: preferencesLabel.bottomAnchor, constant: 30),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 200),
