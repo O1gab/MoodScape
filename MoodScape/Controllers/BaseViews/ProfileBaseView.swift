@@ -50,12 +50,12 @@ class ProfileBaseView: UIViewController {
         view.sendSubviewToBack(gifBackground)
         view.addSubview(gifGradient)
         view.addSubview(backButton)
+        
+        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
     private func setupConstraints() {
-        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
-        
         NSLayoutConstraint.activate([
             gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             gifBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
