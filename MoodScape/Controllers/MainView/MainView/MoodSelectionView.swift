@@ -211,8 +211,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                     return
                 }
                 
-                // Fetch additional data for the song using artist ID (if needed) here
-                fetchedSongs.append(song) // You can also fetch other song details if necessary
+                fetchedSongs.append(song)
                 print("we just added: \(song) by \(song.artist)") // DEBUG
                 group.leave()
             }
@@ -229,25 +228,22 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    // - MARK: ExtractJSON
     private func extractJSON(from response: String) -> String? {
-        // Locate the starting and ending positions of the JSON
         guard let startIndex = response.range(of: "{")?.lowerBound,
               let endIndex = response.range(of: "}", options: .backwards)?.upperBound else {
             print("Error: Unable to locate JSON boundaries.")
             return nil
         }
         
-        // Extract the JSON substring
         let jsonSubstring = response[startIndex..<endIndex]
         
-        // Convert the substring to a String
         let jsonString = String(jsonSubstring)
-        
         return jsonString
     }
 
     
-    // Function to parse the song list from Groq API into Song structs
+    // - MARK: ParseSongList
     private func parseSongList(_ jsonResponse: String) -> [Song] {
        // TODO: IMPLEMENT THE PARSING
         var parsedSongs: [Song] = []

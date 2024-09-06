@@ -12,10 +12,12 @@ class GroqAPIClient {
     
     private let apiKey: String
     
+    // - MARK: Init
     init() {
         self.apiKey = "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"
     }
     
+    // - MARK: SendPrompt
     func sendPrompt(_ prompt: String, completion: @escaping (Result<String, Error>) -> Void) {
         let endpoint = "https://api.groq.com/openai/v1/chat/completions"
         
