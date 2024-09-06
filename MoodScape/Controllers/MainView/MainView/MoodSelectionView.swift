@@ -150,25 +150,30 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             }
             
             let prompt = """
-                Generate a JSON object following this schema:
+                Generate a JSON object representing a playlist based on the following criteria:
+
+                1. User's current emotions: \(selectedEmotions)
+                2. User's selected artists: \(selectedArtists)
+
+                Guidelines:
+                - Create a playlist of exactly 20 songs.
+                - Each song should match the user's selected mood(s).
+                - Lyrics should correlate with the mood/vibe.
+                - Include songs from artists similar to the user's preferences.
+                - Ensure the sound of each song aligns with the selected mood(s).
+                - Give unique answers
+
+                The JSON object should follow this schema:
+                {
+                  "playlist": [
                     {
-                      "type": "object",
-                      "properties": {
-                        "playlist": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "artist": {"type": "string"},
-                              "song": {"type": "string"}
-                            },
-                            "required": ["artist", "song"]
-                          }
-                        }
-                      },
-                      "required": ["playlist"]
+                      "artist": "string",
+                      "song": "string"
                     }
-                A user currently has the following emotions: \(selectedEmotions). Based on these emotions, generate a playlist of 20 songs that match the user's selected mood. Pay attention to the lyrics; they must correlate with the mood/vibe. The user has also selected the following artists they like to listen to, so it would be great if you could include songs from similar genres/sounds: \(selectedArtists). Ensure the sound of each song matches the user's selected mood (and respect each selected mood.
+                  ]
+                }
+
+                Provide the complete JSON object with 20 songs, ensuring all artist and song fields are filled.
                 """
             
             // Step 2: Send the prompt to the Groq API
@@ -191,8 +196,8 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     
     private func processGroqResponse(_ songList: String) {
         // Step 3: Parse the Groq response and fetch artist IDs for the songs
-        let songs = parseSongList(songList) // Assumes you have a function to parse song text into Song structs
-        
+        let songs = parseSongList(songList) 
+        print(songs)
         var fetchedSongs: [Song] = []
         let group = DispatchGroup()
         
@@ -225,8 +230,39 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     // Function to parse the song list from Groq API into Song structs
-    private func parseSongList(_ songList: String) -> [Song] {
+    private func parseSongList(_ jsonResponse: String) -> [Song] {
        // TODO: IMPLEMENT THE PARSING
+        var parsedSongs: [Song] = []
+         
+         // Convert the JSON response string into Data
+         guard let jsonData = jsonResponse.data(using: .utf8) else {
+             print("Error: Unable to convert string to Data")
+             return []
+         }
+         
+         do {
+             // Parse the JSON data into a dictionary
+             if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+                let playlist = json["playlist"] as? [[String: Any]] {
+                 
+                 // Iterate over each song in the playlist
+                 for songData in playlist {
+                     if let artist = songData["artist"] as? String,
+                        let songName = songData["song"] as? String {
+                         
+                         // Create a Song object and append it to the list
+                         let song = Song(name: songName, artist: artist, duration: "", spotifyUrl: "", releaseDate: "", imageUrl: "")
+                         parsedSongs.append(song)
+                     }
+                 }
+             } else {
+                 print("Error parsing JSON structure")
+             }
+         } catch {
+             print("Error parsing JSON data: \(error.localizedDescription)")
+         }
+         
+         return parsedSongs
     }
     
     // - MARK: AnimateShow
