@@ -17,11 +17,17 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     }()
     
     private let emotions = [
-        "annoyed", "offended", "shocked", "disgusted", "guilty",
-        "happy", "surprised", "pressured", "upset", "sad",
-        "worried", "nervous", "embarrassed", "angry", "lonely",
-        "nostalgic", "insecure", "disappointed", "powerless", "tired",
-        "agressive", "scared", "energized", "confused", "doubtful"
+        "Happy", "Sad", "Angry", "Fearful", "Disgusted", "Surprised",
+        "Joyful", "Excited", "Grateful", "Proud", "Optimistic", "Inspired",
+        "Amused", "Confident", "Peaceful", "Content", "Hopeful", "Enthusiastic",
+        "Elated", "Satisfied", "Anxious", "Frustrated", "Jealous", "Guilty",
+        "Ashamed", "Disappointed", "Envious", "Insecure", "Overwhelmed", "Stressed",
+        "Depressed", "Hopeless", "Resentful", "Bitter", "Hurt", "Nostalgic",
+        "Melancholic", "Bittersweet", "Ambivalent", "Conflicted", "Apathetic",
+        "Indifferent", "Numb", "Empathetic", "Compassionate", "Admiring",
+        "Loving", "Affectionate", "Lonely", "Rejected", "Betrayed", "Curious",
+        "Confused", "Focused", "Distracted", "Bored", "Interested", "Energetic",
+        "Tired", "Relaxed", "Tense"
     ]
     
     private var selectedEmotions: [IndexPath] = []
@@ -114,7 +120,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     
     @objc private func saveEmotions() {
         // TODO: Save selected emotions and generate a playlist based on the selection
-        
         dismiss(animated: true, completion: nil)
     }
     
