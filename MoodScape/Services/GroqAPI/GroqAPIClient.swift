@@ -13,7 +13,6 @@ class GroqAPIClient {
     private let apiKey: String
     
     init() {
-        // Set the API key (replace with environment variable in production)
         self.apiKey = "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"
     }
     
@@ -26,7 +25,7 @@ class GroqAPIClient {
                 ["role": "user", "content": prompt]
             ],
             "temperature": 0.5,
-            "max_tokens": 500
+            "max_tokens": 1900
         ]
         
         let headers: HTTPHeaders = [
