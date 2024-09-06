@@ -369,13 +369,12 @@
 		76B869A02C67B3A9002866B9 /* MoodScape */ = {
 			isa = PBXGroup;
 			children = (
-				766485772C6ED6C700AA050A /* SpotifyAPI */,
+				76EF46102C8B38CA00758AA6 /* Services */,
 				76B869B52C67B3B4002866B9 /* App */,
 				7664856D2C6EB8AF00AA050A /* Items */,
 				766485542C6B989F00AA050A /* Extensions */,
 				76B869B62C67B3D3002866B9 /* Controllers */,
 				76B869B82C67B3F0002866B9 /* Models */,
-				76B869BB2C67B42B002866B9 /* Services */,
 				76B869B92C67B3FE002866B9 /* Tests */,
 				7616BD7B2C7E7B6F0083D227 /* Images */,
 				76B869AA2C67B3AA002866B9 /* Assets.xcassets */,
@@ -434,19 +433,20 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
-		76B869BB2C67B42B002866B9 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
 		76DAE5852C87458900F631F1 /* FavoritesView */ = {
 			isa = PBXGroup;
 			children = (
 				76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */,
 			);
 			path = FavoritesView;
+			sourceTree = "<group>";
+		};
+		76EF46102C8B38CA00758AA6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				766485772C6ED6C700AA050A /* SpotifyAPI */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		BC465058499E8DE89A17D7BE /* Pods */ = {
