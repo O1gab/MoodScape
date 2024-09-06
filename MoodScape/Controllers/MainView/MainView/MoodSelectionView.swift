@@ -183,7 +183,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                     // Parse the song list and process each artist
                     self?.processGroqResponse(songList)
                     print("SUCCESS WITH PROMPT")
-                    print (songList)
+                    print(songList)
                     
                 case .failure(let error):
                     print("Error sending prompt: \(error.localizedDescription)")
@@ -191,12 +191,12 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 }
             }
         }
-        dismiss(animated: true, completion: nil)
+        //dismiss(animated: true, completion: nil)
     }
     
     private func processGroqResponse(_ songList: String) {
         // Step 3: Parse the Groq response and fetch artist IDs for the songs
-        let songs = parseSongList(songList) 
+        let songs = parseSongList(songList)
         print(songs)
         var fetchedSongs: [Song] = []
         let group = DispatchGroup()
@@ -229,40 +229,67 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    private func extractJSON(from response: String) -> String? {
+        // Locate the starting and ending positions of the JSON
+        guard let startIndex = response.range(of: "{")?.lowerBound,
+              let endIndex = response.range(of: "}", options: .backwards)?.upperBound else {
+            print("Error: Unable to locate JSON boundaries.")
+            return nil
+        }
+        
+        // Extract the JSON substring
+        let jsonSubstring = response[startIndex..<endIndex]
+        
+        // Convert the substring to a String
+        let jsonString = String(jsonSubstring)
+        
+        return jsonString
+    }
+
+    
     // Function to parse the song list from Groq API into Song structs
     private func parseSongList(_ jsonResponse: String) -> [Song] {
        // TODO: IMPLEMENT THE PARSING
         var parsedSongs: [Song] = []
-         
-         // Convert the JSON response string into Data
-         guard let jsonData = jsonResponse.data(using: .utf8) else {
-             print("Error: Unable to convert string to Data")
-             return []
-         }
-         
-         do {
-             // Parse the JSON data into a dictionary
-             if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
-                let playlist = json["playlist"] as? [[String: Any]] {
-                 
-                 // Iterate over each song in the playlist
-                 for songData in playlist {
-                     if let artist = songData["artist"] as? String,
-                        let songName = songData["song"] as? String {
-                         
-                         // Create a Song object and append it to the list
-                         let song = Song(name: songName, artist: artist, duration: "", spotifyUrl: "", releaseDate: "", imageUrl: "")
-                         parsedSongs.append(song)
-                     }
-                 }
-             } else {
-                 print("Error parsing JSON structure")
-             }
-         } catch {
-             print("Error parsing JSON data: \(error.localizedDescription)")
-         }
-         
-         return parsedSongs
+        
+        let corrected = extractJSON(from: jsonResponse)!
+        
+        // Convert the JSON response string into Data
+        guard let jsonData = corrected.data(using: .utf8) else {
+            print("Error: Unable to convert string to Data. String might not be properly encoded.")
+            return []
+        }
+        
+        do {
+            // Parse the JSON data into a dictionary
+            if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                
+                // Check if "playlist" exists and is an array
+                if let playlist = json["playlist"] as? [[String: Any]] {
+                    
+                    // Iterate over each song in the playlist
+                    for songData in playlist {
+                        if let artist = songData["artist"] as? String,
+                           let songName = songData["song"] as? String {
+                            
+                            // Create a Song object and append it to the list
+                            let song = Song(name: songName, artist: artist, duration: "N/A", spotifyUrl: "N/A", releaseDate: "N/A", imageUrl: nil)
+                            parsedSongs.append(song)
+                        } else {
+                            print("Error: Missing artist or song in playlist entry.")
+                        }
+                    }
+                } else {
+                    print("Error: 'playlist' key is missing or not an array.")
+                }
+            } else {
+                print("Error: JSON data is not a dictionary or does not match expected schema.")
+            }
+        } catch {
+            print("Error parsing JSON data: \(error.localizedDescription)")
+        }
+        
+        return parsedSongs
     }
     
     // - MARK: AnimateShow
