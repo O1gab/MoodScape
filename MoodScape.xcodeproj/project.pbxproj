@@ -377,7 +377,6 @@
 				766485542C6B989F00AA050A /* Extensions */,
 				76B869B62C67B3D3002866B9 /* Controllers */,
 				76B869B82C67B3F0002866B9 /* Models */,
-				76B869B92C67B3FE002866B9 /* Tests */,
 				7616BD7B2C7E7B6F0083D227 /* Images */,
 				76B869AA2C67B3AA002866B9 /* Assets.xcassets */,
 				764FDE3B2C6989730060A428 /* Main.storyboard */,
@@ -426,13 +425,6 @@
 				76B645B72C7BFF8100ADC097 /* Song.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		76B869B92C67B3FE002866B9 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Tests;
 			sourceTree = "<group>";
 		};
 		76DAE5852C87458900F631F1 /* FavoritesView */ = {
