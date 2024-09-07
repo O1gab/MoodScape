@@ -150,6 +150,7 @@ class SetupBaseView: UIViewController {
         }
     }
     
+    // - MARK: NavigateToNextView
     func navigateToNextView(viewController: UIViewController) {
         viewController.modalPresentationStyle = .fullScreen
         let transition = CATransition()

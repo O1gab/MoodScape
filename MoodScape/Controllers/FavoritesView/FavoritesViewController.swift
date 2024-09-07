@@ -116,6 +116,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
     private var favoriteSongs: [Song] = []
     private let favoritesManager = FavoritesManager()
     
+    // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -124,11 +125,13 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         NotificationCenter.default.addObserver(self, selector: #selector(handleAlbumRemoved(_:)), name: .albumRemoved, object: nil)
     }
     
+    // - MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchFavorites()
     }
     
+    // - MARK: SetupView
     private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
@@ -150,6 +153,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
     }
     
+    // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -297,6 +301,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         }
     }
     
+    // - MARK: Deinit
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

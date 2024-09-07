@@ -85,6 +85,7 @@ class MainBaseView: UIViewController {
         ])
     }
     
+    // - MARK: SetupProfileButton
     private func setupProfileButton() {
         if let imageData = UserDefaults.standard.data(forKey: "profileImage"),
            let image = UIImage(data: imageData) {

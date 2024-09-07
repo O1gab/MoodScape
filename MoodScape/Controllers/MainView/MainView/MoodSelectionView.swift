@@ -218,10 +218,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         group.notify(queue: .main) { [weak self] in
-            guard fetchedSongs.count == 20 else {
-                self?.showError("Failed to retrieve 20 songs")
-                return
-            }
+            print(fetchedSongs.count)
             
             // TODO: Generate playlist on Spotify
             print(fetchedSongs)

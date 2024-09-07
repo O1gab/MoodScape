@@ -123,6 +123,7 @@ class SongDetailsViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    // - MARK: Initializer
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
