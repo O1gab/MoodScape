@@ -33,6 +33,7 @@ class SongViewCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
@@ -59,8 +60,9 @@ class SongViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // - MARK: Configure
     func configure(with song: Song) {
-        imageView.image = nil // Optionally load image from URL here
+        imageView.image = nil
         if let url = URL(string: song.imageUrl ?? "") {
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
                 guard let data = data, error == nil, let image = UIImage(data: data) else { return }

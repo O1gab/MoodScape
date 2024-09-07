@@ -53,13 +53,11 @@ class PreferencesCell: UICollectionViewCell {
     // - MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            // ImageView
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 100),
             imageView.heightAnchor.constraint(equalToConstant: 100),
             
-            // NameLabel
             nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)

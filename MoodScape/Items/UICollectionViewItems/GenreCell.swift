@@ -8,7 +8,7 @@
 import UIKit
 
 class GenreCell: UICollectionViewCell {
-    
+    // MARK: - Properties
     static let identifier = "GenreCell"
     
     private let genreLabel: UILabel = {
@@ -20,6 +20,7 @@ class GenreCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(genreLabel)
@@ -38,6 +39,7 @@ class GenreCell: UICollectionViewCell {
         super.init(coder: coder)
     }
     
+    // MARK: - Configure
     func configure(with genre: String, isSelected: Bool) {
         genreLabel.text = genre
         contentView.backgroundColor = isSelected ? UIColor(red: 0/255, green: 104/255, blue: 80/255, alpha: 1.0) : UIColor.gray

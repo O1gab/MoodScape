@@ -8,7 +8,7 @@
 import UIKit
 
 class ArtistCell: UICollectionViewCell {
-    
+    // MARK: - Properties
     let artistImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -30,19 +30,18 @@ class ArtistCell: UICollectionViewCell {
         return label
     }()
 
-    // - MARK: Init
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         setupConstraints()
     }
 
-    // - MARK: Init
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
 
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         contentView.addSubview(artistImageView)
         contentView.addSubview(artistNameLabel)

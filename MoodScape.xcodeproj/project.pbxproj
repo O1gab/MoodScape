@@ -381,7 +381,6 @@
 				76B869AA2C67B3AA002866B9 /* Assets.xcassets */,
 				764FDE3B2C6989730060A428 /* Main.storyboard */,
 				76B869AF2C67B3AA002866B9 /* Info.plist */,
-				76DAE5832C87435100F631F1 /* FavoritesManager.swift */,
 			);
 			path = MoodScape;
 			sourceTree = "<group>";
@@ -430,6 +429,7 @@
 		76DAE5852C87458900F631F1 /* FavoritesView */ = {
 			isa = PBXGroup;
 			children = (
+				76DAE5832C87435100F631F1 /* FavoritesManager.swift */,
 				76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */,
 			);
 			path = FavoritesView;

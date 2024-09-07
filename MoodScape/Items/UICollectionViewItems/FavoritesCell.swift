@@ -9,6 +9,7 @@ import UIKit
 
 class FavoritesCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -36,6 +37,7 @@ class FavoritesCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
@@ -52,6 +54,7 @@ class FavoritesCollectionViewCell: UICollectionViewCell {
         setupConstraints()
     }
     
+    // MARK: - SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
