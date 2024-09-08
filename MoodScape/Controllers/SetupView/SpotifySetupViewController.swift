@@ -109,17 +109,13 @@ class SpotifySetupView: SetupBaseView {
     // - MARK: ConnectSpotify
     @objc private func connectSpotify() {
         // TODO: connect to the user's account on Spotify
-        SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
-             DispatchQueue.main.async {
+        SpotifyAuthenticationManager.shared.authenticate { success in
                  if success {
-                     // Authentication was successful, now get the user's Spotify ID
-                     self?.fetchSpotifyUserID()
+                     self.fetchSpotifyUserID()
                  } else {
-                     // Handle failure, show an alert or message
-                     self?.showError("Failed to connect to Spotify. Please try again.")
+                     self.showError("Failed to connect to Spotify. Please try again.")
                  }
              }
-         }
     }
     
     // - MARK: FetchSpotifyUserID
@@ -134,9 +130,33 @@ class SpotifySetupView: SetupBaseView {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            guard let data = data, error == nil,
-                  let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+            if let error = error {
+                print("Error fetching user ID: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self?.showError("Failed to retrieve Spotify user ID.")
+                }
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid response")
+                DispatchQueue.main.async {
+                    self?.showError("Failed to retrieve Spotify user ID.")
+                }
+                return
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("HTTP Error: \(httpResponse.statusCode)")
+                DispatchQueue.main.async {
+                    self?.showError("Failed to retrieve Spotify user ID. Status code: \(httpResponse.statusCode)")
+                }
+                return
+            }
+            
+            guard let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                   let userID = json["id"] as? String else {
+                print("Error parsing JSON or missing user ID")
                 DispatchQueue.main.async {
                     self?.showError("Failed to retrieve Spotify user ID.")
                 }
@@ -145,6 +165,7 @@ class SpotifySetupView: SetupBaseView {
             
             DispatchQueue.main.async {
                 print("Spotify User ID: \(userID)")
+                // Store or use the user ID as needed
                 self?.navigateToNextView(viewController: MusicSetupView())
             }
         }
