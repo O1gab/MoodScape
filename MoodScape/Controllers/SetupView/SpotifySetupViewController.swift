@@ -8,6 +8,7 @@
 import UIKit
 import Gifu
 import SafariServices
+import WebKit
 
 class SpotifySetupView: SetupBaseView {
     
@@ -53,11 +54,15 @@ class SpotifySetupView: SetupBaseView {
         return button
     }()
     
+    private var webView: WKWebView!
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        
+        webView = WKWebView(frame: view.bounds)
     }
     
     // - MARK: ViewDidAppear
@@ -77,6 +82,7 @@ class SpotifySetupView: SetupBaseView {
         view.addSubview(fieldLabel)
         view.addSubview(spotifyButton)
         view.addSubview(skipButton)
+        view.addSubview(webView)
         
         spotifyButton.addTarget(self, action: #selector(connectSpotify), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
@@ -110,12 +116,16 @@ class SpotifySetupView: SetupBaseView {
     @objc private func connectSpotify() {
         // TODO: connect to the user's account on Spotify
         SpotifyAuthenticationManager.shared.authenticate { success in
-                 if success {
-                     self.fetchSpotifyUserID()
-                 } else {
-                     self.showError("Failed to connect to Spotify. Please try again.")
-                 }
-             }
+            if success {
+                print("Authentication initiated successfully.")
+                if let authURL = SpotifyAuthenticationManager.shared.getAuthorizationURL() {
+                    let request = URLRequest(url: authURL)
+                    self.webView.load(request)
+                }
+            } else {
+                print("Failed to initiate authentication.")
+            }
+        }
     }
     
     // - MARK: FetchSpotifyUserID
