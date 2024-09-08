@@ -7,6 +7,7 @@
 
 import UIKit
 import Gifu
+import SafariServices
 
 class SpotifySetupView: SetupBaseView {
     
@@ -108,6 +109,53 @@ class SpotifySetupView: SetupBaseView {
     // - MARK: ConnectSpotify
     @objc private func connectSpotify() {
         // TODO: connect to the user's account on Spotify
+        SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
+             DispatchQueue.main.async {
+                 if success {
+                     // Authentication was successful, now get the user's Spotify ID
+                     self?.fetchSpotifyUserID()
+                 } else {
+                     // Handle failure, show an alert or message
+                     self?.showError("Failed to connect to Spotify. Please try again.")
+                 }
+             }
+         }
+    }
+    
+    // - MARK: FetchSpotifyUserID
+    private func fetchSpotifyUserID() {
+        guard let token = SpotifyAuthenticationManager.shared.accessToken else {
+            showError("Spotify access token is missing.")
+            return
+        }
+        
+        let url = URL(string: "https://api.spotify.com/v1/me")!
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil,
+                  let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                  let userID = json["id"] as? String else {
+                DispatchQueue.main.async {
+                    self?.showError("Failed to retrieve Spotify user ID.")
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                print("Spotify User ID: \(userID)")
+                self?.navigateToNextView(viewController: MusicSetupView())
+            }
+        }
+        task.resume()
+    }
+
+    // - MARK: ShowError
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     // - MARK: HandleSkip
