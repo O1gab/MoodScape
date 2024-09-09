@@ -75,6 +75,7 @@
 		76DAE58B2C891DD700F631F1 /* ImagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE58A2C891DD700F631F1 /* ImagePreviewViewController.swift */; };
 		76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */; };
 		76EF46132C8B43F900758AA6 /* GroqAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EF46122C8B43F900758AA6 /* GroqAPIClient.swift */; };
+		76EF46182C8FAE9500758AA6 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EF46172C8FAE9500758AA6 /* KeychainService.swift */; };
 		76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */; };
 		76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B492C7BCA7D00B65B72 /* ImageCache.swift */; };
 		CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */; };
@@ -152,6 +153,7 @@
 		76DAE58A2C891DD700F631F1 /* ImagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewViewController.swift; sourceTree = "<group>"; };
 		76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		76EF46122C8B43F900758AA6 /* GroqAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroqAPIClient.swift; sourceTree = "<group>"; };
+		76EF46172C8FAE9500758AA6 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSetupViewController.swift; sourceTree = "<group>"; };
 		76F31B492C7BCA7D00B65B72 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		7A27C3F833B9F95DF63F4D42 /* Pods-MoodScape.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.release.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.release.xcconfig"; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 		76EF46102C8B38CA00758AA6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				76EF46162C8FAE8700758AA6 /* Keychain */,
 				76EF46112C8B399B00758AA6 /* GroqAPI */,
 				766485772C6ED6C700AA050A /* SpotifyAPI */,
 			);
@@ -450,6 +453,14 @@
 				76EF46122C8B43F900758AA6 /* GroqAPIClient.swift */,
 			);
 			path = GroqAPI;
+			sourceTree = "<group>";
+		};
+		76EF46162C8FAE8700758AA6 /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				76EF46172C8FAE9500758AA6 /* KeychainService.swift */,
+			);
+			path = Keychain;
 			sourceTree = "<group>";
 		};
 		BC465058499E8DE89A17D7BE /* Pods */ = {
@@ -604,6 +615,7 @@
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
 				7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */,
 				76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */,
+				76EF46182C8FAE9500758AA6 /* KeychainService.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
 				766485622C6C474F00AA050A /* StatsViewController.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,

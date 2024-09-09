@@ -13,5 +13,6 @@ target 'MoodScape' do
   pod 'Firebase/Database'
   pod 'Firebase/Firestore'
   pod 'Alamofire'
+  pod 'SwiftKeychainWrapper', '3.4.0'
 
 end
