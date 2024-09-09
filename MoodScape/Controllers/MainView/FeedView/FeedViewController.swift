@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
+    // MARK: - Properties
     private var scrollView: UIScrollView!
     private var contentView: UIView!
     
@@ -20,8 +21,11 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     private var songCollectionView: UICollectionView!
     private var topWeeklySongs: [Song] = []
     
-    private var recommendedSongsCollectionView: UICollectionView!
-    private var recommendedSongs: [Song] = []
+    private var firstRecommendedSongsCollectionView: UICollectionView!
+    private var firstRecommendedSongs: [Song] = []
+    
+    private var secondRecommendedSongsCollectionView: UICollectionView!
+    private var secondRecommendedSongs: [Song] = []
     
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -109,7 +113,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return button
     }()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -119,7 +123,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         fetchRecommendedSongs()
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -142,6 +146,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         setupAlbumCollectionView()
         setupSongCollectionView()
         setupRecommendedSongsCollectionView()
+        setupSecondRecommendedSongsCollectionView()
     }
     
     // - MARK: SetupConstraints
@@ -181,11 +186,16 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             recommendationsLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             
-            recommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 5),
-            recommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            recommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            recommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 400),
-            recommendedSongsCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -200),
+            firstRecommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: -45),
+            firstRecommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            firstRecommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            firstRecommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 300),
+            
+            secondRecommendedSongsCollectionView.topAnchor.constraint(equalTo: firstRecommendedSongsCollectionView.bottomAnchor, constant: -50),
+            secondRecommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            secondRecommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            secondRecommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 300),
+            
             
             infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 40),
             infoButton.centerYAnchor.constraint(equalTo: recommendationsLabel.centerYAnchor),
@@ -198,14 +208,15 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             infoMessage.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -8),
             infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
             
-            exploreButton.topAnchor.constraint(equalTo: recommendedSongsCollectionView.bottomAnchor, constant: 70),
+            exploreButton.topAnchor.constraint(equalTo: secondRecommendedSongsCollectionView.bottomAnchor, constant: 170),
             exploreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             exploreButton.widthAnchor.constraint(equalToConstant: 180),
-            exploreButton.heightAnchor.constraint(equalToConstant: 50)
+            exploreButton.heightAnchor.constraint(equalToConstant: 50),
+            exploreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100)
         ])
     }
     
-    // - MARK: SetupAlbumCollectionView
+    // MARK: - SetupAlbumCollectionView
     private func setupAlbumCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -242,36 +253,43 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // - MARK: SetupRecommendedSongsCollectionView (You may also like)
     private func setupRecommendedSongsCollectionView() {
-        recommendedSongsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        recommendedSongsCollectionView.backgroundColor = .clear
-        recommendedSongsCollectionView.showsHorizontalScrollIndicator = false
-        recommendedSongsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        recommendedSongsCollectionView.register(SongViewCell.self, forCellWithReuseIdentifier: "SongViewCell")
-        recommendedSongsCollectionView.dataSource = self
-        recommendedSongsCollectionView.delegate = self
-        setupTwoColumnLayout(for: recommendedSongsCollectionView)
-        contentView.addSubview(recommendedSongsCollectionView)
-    }
-    
-    // - MARK: SetupTwoColumnLayout
-    private func setupTwoColumnLayout(for collectionView: UICollectionView) {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         
-        let itemWidth: CGFloat = 130
-        let itemHeight: CGFloat = 130
-        let itemSpacing: CGFloat = 10
-        let rowSpacing: CGFloat = 10
+        // Create the collection view with the specified layout
+        firstRecommendedSongsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        firstRecommendedSongsCollectionView.backgroundColor = .clear
+        firstRecommendedSongsCollectionView.showsHorizontalScrollIndicator = false
+        firstRecommendedSongsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Register your custom cell
+        firstRecommendedSongsCollectionView.register(SongViewCell.self, forCellWithReuseIdentifier: "SongViewCell")
+        firstRecommendedSongsCollectionView.dataSource = self
+        firstRecommendedSongsCollectionView.delegate = self
+        
+        // Add collection view to the contentView
+        contentView.addSubview(firstRecommendedSongsCollectionView)
+    }
+    
+    private func setupSecondRecommendedSongsCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
 
-        layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
-        layout.minimumInteritemSpacing = itemSpacing
-        layout.minimumLineSpacing = rowSpacing
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        secondRecommendedSongsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        secondRecommendedSongsCollectionView.backgroundColor = .clear
+        secondRecommendedSongsCollectionView.showsHorizontalScrollIndicator = false
+        secondRecommendedSongsCollectionView.translatesAutoresizingMaskIntoConstraints = false
 
-        collectionView.collectionViewLayout = layout
+        // Register the cell class for the second collection view
+        secondRecommendedSongsCollectionView.register(SongViewCell.self, forCellWithReuseIdentifier: "SecondSongViewCell")
+        secondRecommendedSongsCollectionView.dataSource = self
+        secondRecommendedSongsCollectionView.delegate = self
 
-        collectionView.setNeedsLayout()
-        collectionView.layoutIfNeeded()
+        contentView.addSubview(secondRecommendedSongsCollectionView)
     }
     
     // - MARK: FetchAlbums (recently published popular albums)
@@ -354,9 +372,12 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             }
             
             group.notify(queue: .main) {
-                // Randomly select 20 songs
-                self?.recommendedSongs = Array(allSongs.shuffled().prefix(20))
-                self?.recommendedSongsCollectionView.reloadData()
+                // Randomly select 30 songs
+                let shuffledSongs = Array(allSongs.shuffled().prefix(30))
+                self?.firstRecommendedSongs = Array(shuffledSongs.shuffled().prefix(15))
+                self?.secondRecommendedSongs = Array(shuffledSongs.dropFirst(15))
+                self?.firstRecommendedSongsCollectionView.reloadData()
+                self?.secondRecommendedSongsCollectionView.reloadData()
             }
         }
     }
@@ -379,7 +400,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
-    // - MARK: InfoButtonTapped
+    // MARK: - InfoButtonTapped
     @objc private func infoButtonTapped() {
         self.infoMessage.isHidden = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
@@ -387,6 +408,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
+    // - MARK: HandleExplore
     @objc private func handleExplore() {
         let favoritesView = FavoritesViewController()
         favoritesView.modalPresentationStyle = .fullScreen
@@ -400,14 +422,16 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         present(alert, animated: true, completion: nil)
     }
     
-    // - MARK: UICollectionViewDataSource
+    // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == albumCollectionView {
             return albums.count
         } else if collectionView == songCollectionView {
             return topWeeklySongs.count
-        } else if collectionView == recommendedSongsCollectionView {
-            return recommendedSongs.count
+        } else if collectionView == firstRecommendedSongsCollectionView {
+            return firstRecommendedSongs.count
+        } else if collectionView == secondRecommendedSongsCollectionView {
+            return secondRecommendedSongs.count
         }
         return 0
     }
@@ -436,24 +460,33 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             return cell
 
         // RECOMMENDED SONGS COLLECTIONS VIEW
-        } else if collectionView == recommendedSongsCollectionView {
+        } else if collectionView == firstRecommendedSongsCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SongViewCell", for: indexPath) as! SongViewCell
-            let song = recommendedSongs[indexPath.item]
+            let song = firstRecommendedSongs[indexPath.item]
+            cell.configure(with: song)
+            return cell
+        } else if collectionView == secondRecommendedSongsCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SecondSongViewCell", for: indexPath) as! SongViewCell
+            let song = secondRecommendedSongs[indexPath.item]
             cell.configure(with: song)
             return cell
         }
+        
         return UICollectionViewCell()
     }
         
     // - MARK: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // "Recently"
         if collectionView == albumCollectionView {
             return CGSize(width: 110, height: 190)
             
-        } else if collectionView == recommendedSongsCollectionView {
-            return CGSize(width: 130, height: 130)
+        // "You may also like"
+        }  else if collectionView == firstRecommendedSongsCollectionView || collectionView == secondRecommendedSongsCollectionView {
+            return CGSize(width: 150, height: 150) // Adjust height as necessary
         }
         
+        // "Top songs this week"
         return CGSize(width: collectionView.bounds.width - 20, height: 80)
     }
     
@@ -470,8 +503,12 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                 let safariView = SFSafariViewController(url: url)
                 present(safariView, animated: true, completion: nil)
             }
-        } else if collectionView == recommendedSongsCollectionView {
-            let selectedSong = recommendedSongs[indexPath.item]
+        } else if collectionView == firstRecommendedSongsCollectionView {
+            let selectedSong = firstRecommendedSongs[indexPath.item]
+            let detailView = SongDetailsViewController(song: selectedSong)
+            present(detailView, animated: true, completion: nil)
+        } else if collectionView == secondRecommendedSongsCollectionView {
+            let selectedSong = secondRecommendedSongs[indexPath.item]
             let detailView = SongDetailsViewController(song: selectedSong)
             present(detailView, animated: true, completion: nil)
         }
