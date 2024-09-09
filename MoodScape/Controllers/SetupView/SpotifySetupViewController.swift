@@ -12,6 +12,7 @@ import WebKit
 
 class SpotifySetupView: SetupBaseView {
     
+    // MARK: - Properties
     private let gifGradient: GIFImageView = {
         let gifBackground = GIFImageView()
         gifBackground.animate(withGIFNamed: "green_gradient")
@@ -56,13 +57,14 @@ class SpotifySetupView: SetupBaseView {
     
     private var webView: WKWebView!
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
         
         webView = WKWebView(frame: view.bounds)
+        view.addSubview(webView)
     }
     
     // - MARK: ViewDidAppear
@@ -76,13 +78,12 @@ class SpotifySetupView: SetupBaseView {
         }
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(gifGradient)
         view.addSubview(fieldLabel)
         view.addSubview(spotifyButton)
         view.addSubview(skipButton)
-        view.addSubview(webView)
         
         spotifyButton.addTarget(self, action: #selector(connectSpotify), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
@@ -112,7 +113,7 @@ class SpotifySetupView: SetupBaseView {
         ])
     }
  
-    // - MARK: ConnectSpotify
+    // MARK: - ConnectSpotify
     @objc private func connectSpotify() {
         // TODO: connect to the user's account on Spotify
         SpotifyAuthenticationManager.shared.authenticate { success in
@@ -189,7 +190,7 @@ class SpotifySetupView: SetupBaseView {
         present(alert, animated: true, completion: nil)
     }
     
-    // - MARK: HandleSkip
+    // MARK: - HandleSkip
     @objc private func handleSkip() {
         navigateToNextView(viewController: MusicSetupView())
     }

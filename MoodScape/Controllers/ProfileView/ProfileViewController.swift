@@ -12,6 +12,7 @@ import FirebaseFirestore
 
 class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    // MARK: - Properties
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -204,10 +205,10 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         let button = UIButton(type: .system)
         button.setTitle("Share your profile", for: .normal)
         button.backgroundColor  = .clear
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         button.tintColor = .white
         button.layer.cornerRadius = 25
-        button.layer.borderWidth = 4
+        button.layer.borderWidth = 3
         button.layer.borderColor = UIColor.white.cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -217,10 +218,10 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         let button = UIButton(type: .system)
         button.setTitle("Edit profile", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 21, weight: .bold)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         button.backgroundColor = .clear
         button.layer.cornerRadius = 25
-        button.layer.borderWidth = 4
+        button.layer.borderWidth = 3
         button.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -237,7 +238,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     private let favoritesManager = FavoritesManager()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         startLoading()
@@ -253,7 +254,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         stopLoading()
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(scrollView)
         view.addSubview(settingsButton)
@@ -344,19 +345,19 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             
             editButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
             editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            editButton.widthAnchor.constraint(equalToConstant: 250),
+            editButton.widthAnchor.constraint(equalToConstant: 200),
             editButton.heightAnchor.constraint(equalToConstant: 50),
             
             shareButton.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 20),
             shareButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            shareButton.widthAnchor.constraint(equalToConstant: 250),
+            shareButton.widthAnchor.constraint(equalToConstant: 200),
             shareButton.heightAnchor.constraint(equalToConstant: 50),
             
             shareButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
-    // - MARK: DetermineGreeting
+    // MARK: - DetermineGreeting
     private func determineGreeting() {
         guard let userId = Auth.auth().currentUser?.uid else {
             // TODO: ERROR HANDLING
@@ -576,7 +577,14 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
-    // - MARK: HandleInlineBarButtonTap
+    // - MARK: ShowError
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: - HandleInlineBarButtonTap
     @objc private func handleInlineBarButtonTap(_ sender: UIButton) {
         let viewController: UIViewController
         
@@ -635,14 +643,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         present(favoritesView, animated: true, completion: nil)
     }
     
-    // - MARK: ShowError
-    private func showError(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
-    
-    // - MARK: UICollectionViewDataSource
+    // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return selectedArtists.count
     }
