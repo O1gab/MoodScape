@@ -68,9 +68,9 @@ class SongDetailsViewController: UIViewController {
         label.textColor = .systemGreen
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.minimumScaleFactor = 0.5
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -218,6 +218,7 @@ class SongDetailsViewController: UIViewController {
             songName.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 10),
             songName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             songName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 20),
+            songName.heightAnchor.constraint(lessThanOrEqualToConstant: 200),
             
             releaseDateLabel.topAnchor.constraint(equalTo: songName.bottomAnchor, constant: 10),
             releaseDateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),

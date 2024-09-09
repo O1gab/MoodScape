@@ -208,7 +208,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             infoMessage.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -8),
             infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
             
-            exploreButton.topAnchor.constraint(equalTo: secondRecommendedSongsCollectionView.bottomAnchor, constant: 170),
+            exploreButton.topAnchor.constraint(equalTo: secondRecommendedSongsCollectionView.bottomAnchor, constant: 100),
             exploreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             exploreButton.widthAnchor.constraint(equalToConstant: 180),
             exploreButton.heightAnchor.constraint(equalToConstant: 50),
