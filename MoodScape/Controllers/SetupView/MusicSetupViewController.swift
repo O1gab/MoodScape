@@ -71,7 +71,7 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         return button
     }()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         genreCollectionView.delegate = self
@@ -93,7 +93,7 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         }
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         appLabel.alpha = 0
         view.addSubview(gifGradient)
@@ -128,7 +128,7 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         ])
     }
     
-    // - MARK: HandleSubmit
+    // MARK: - HandleSubmit
     @objc private func handleSubmit() {
         if selectedGenres.isEmpty {
             let alert = UIAlertController(title: "No Genre Selected",
@@ -181,7 +181,7 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         return cell
     }
         
-    // MARK: - CollectionView Delegate
+    // MARK: CollectionView Delegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let genre = genres[indexPath.item]
         if let index = selectedGenres.firstIndex(of: genre) {

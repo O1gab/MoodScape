@@ -376,7 +376,6 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             }
             
             if let name = document.data()?["name"] as? String {
-                print("fetched name: \(name)")
                 DispatchQueue.main.async {
                     let hour = Calendar.current.component(.hour, from: Date())
                     var greeting = ""

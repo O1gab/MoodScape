@@ -85,7 +85,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         animateShow()
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(contentView)
         contentView.addSubview(emotionsCollectionView)
@@ -119,7 +119,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         ])
     }
     
-    // - MARK: ClosePopUp
+    // MARK: - ClosePopUp
     @objc private func closePopUp() {
         animateHide()
     }
@@ -168,12 +168,13 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                   "playlist": [
                     {
                       "artist": "string",
-                      "song": "string"
+                      "song": "string",
+                      "id": "string"
                     }
                   ]
                 }
 
-                Provide the complete JSON object with 20 songs, ensuring all artist and song fields are filled.
+                Provide the complete JSON object with 20 songs, ensuring all artist and song fields including song id taken from Spotify are filled.
                 """
             
             // Step 2: Send the prompt to the Groq API
@@ -193,9 +194,25 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
         //dismiss(animated: true, completion: nil)
     }
+    func generatePlaylistBasedOnMood(songList: String) {
+        guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
+            // If access token is nil, authenticate the user
+            SpotifyAuthenticationManager.shared.authenticateUser { success in
+                if success {
+                    // After authentication, call processGroqResponse
+                    self.processGroqResponse(songList)
+                } else {
+                    self.showError("Failed to authenticate with Spotify")
+                }
+            }
+            return
+        }
+        
+    }
     
     private func processGroqResponse(_ songList: String) {
         // Step 3: Parse the Groq response and fetch artist IDs for the songs
+        generatePlaylistBasedOnMood(songList: songList)
         let songs = parseSongList(songList)
         print(songs)
         var fetchedSongs: [Song] = []
@@ -218,10 +235,63 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         group.notify(queue: .main) { [weak self] in
-            print(fetchedSongs.count)
+            // Generate a playlist on Spotify
             
-            // TODO: Generate playlist on Spotify
-            print(fetchedSongs)
+            guard let self = self, let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
+                self?.showError("Failed to authenticate with Spotify")
+                return
+            }
+            SpotifyAPIManager.shared.fetchSpotifyUserID(accessToken: accessToken) { userID in
+                guard let userID = userID else {
+                    self.showError("Failed to fetch Spotify user ID")
+                    return
+                }
+                
+                let playlistName = "MoodScape Playlist - testing"
+                SpotifyAPIManager.shared.createPlaylist(userId: userID, playlistName: playlistName, accessToken: accessToken) { playlistID in
+                    guard let playlistID = playlistID else {
+                        self.showError("Failed to create playlist on Spotify")
+                        return
+                    }
+                    // Step 2b: Add songs to the created playlist
+                    addSongsToPlaylist(playlistID: playlistID, songs: fetchedSongs, accessToken: accessToken)
+                }
+            }
+        }
+        
+    func addSongsToPlaylist(playlistID: String, songs: [Song], accessToken: String) {
+            let uris = songs.map { song in
+                "spotify:track:\(song.id)" // Assuming `spotifyID` was fetched for each song
+            }
+            
+            let urlString = "https://api.spotify.com/v1/playlists/\(playlistID)/tracks"
+            guard let url = URL(string: urlString) else {
+                showError("Invalid URL for adding tracks")
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let body: [String: Any] = [
+                "uris": uris
+            ]
+            
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Error adding tracks: \(error.localizedDescription)")
+                    self.showError("Failed to add tracks to Spotify playlist")
+                    return
+                }
+                
+                print("Successfully added tracks to playlist")
+            }
+            
+            task.resume()
         }
     }
     
@@ -263,10 +333,11 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                     // Iterate over each song in the playlist
                     for songData in playlist {
                         if let artist = songData["artist"] as? String,
-                           let songName = songData["song"] as? String {
+                           let songName = songData["song"] as? String,
+                           let id = songData["id"] as? String {
                             
                             // Create a Song object and append it to the list
-                            let song = Song(name: songName, artist: artist, duration: "N/A", spotifyUrl: "N/A", releaseDate: "N/A", imageUrl: nil)
+                            let song = Song(name: songName, id: id, artist: artist, duration: "N/A", spotifyUrl: "N/A", releaseDate: "N/A", imageUrl: nil)
                             parsedSongs.append(song)
                         } else {
                             print("Error: Missing artist or song in playlist entry.")
