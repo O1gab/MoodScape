@@ -182,7 +182,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 switch result {
                 case .success(let songList):
                     // Parse the song list and process each artist
-                    self?.processGroqResponse(songList)
+                    self?.generatePlaylistBasedOnMood(songList: songList)
                     print("SUCCESS WITH PROMPT")
                     print(songList)
                     
@@ -207,12 +207,11 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             }
             return
         }
-        
+        processGroqResponse(songList)
     }
     
     private func processGroqResponse(_ songList: String) {
         // Step 3: Parse the Groq response and fetch artist IDs for the songs
-        generatePlaylistBasedOnMood(songList: songList)
         let songs = parseSongList(songList)
         print(songs)
         var fetchedSongs: [Song] = []
