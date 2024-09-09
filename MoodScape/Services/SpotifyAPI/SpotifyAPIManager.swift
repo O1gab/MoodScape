@@ -92,7 +92,7 @@ class SpotifyAPIManager {
                     return nil
                 }
                 let duration = self.formatDuration(durationMs: durationMs)
-                return Song(name: name, artist: artist, duration: duration, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: "", imageUrl: imageURLString)
+                return Song(name: name, id: "", artist: artist, duration: duration, spotifyUrl: spotifyUrl["spotify"]!, releaseDate: "", imageUrl: imageURLString)
             }
             completion(songs)
         }
@@ -130,8 +130,10 @@ class SpotifyAPIManager {
                 let songs = response.items.compactMap { item -> Song? in
                     guard let track = item.track else { return nil }
                     let artistName = track.artists.first?.name ?? "Unknown Artist"
+                    let id = ""
                     return Song(
                         name: track.name,
+                        id: id,
                         artist: artistName,
                         duration: "0",
                         spotifyUrl: track.external_urls["spotify"] ?? "",
@@ -372,7 +374,7 @@ class SpotifyAPIManager {
                             print("Error parsing track item: \(item)")
                             return nil
                         }
-                        return Song(name: name, artist: artistName, duration: "", spotifyUrl: "", releaseDate: releaseDate, imageUrl: imageURLString)
+                        return Song(name: name, id: id, artist: artistName, duration: "", spotifyUrl: "", releaseDate: releaseDate, imageUrl: imageURLString)
                     }
                     completion(tracks)
                 } else {
@@ -444,6 +446,102 @@ class SpotifyAPIManager {
                 completion(nil)
             }
         }
+        task.resume()
+    }
+    
+    // MARK: - CreatePlaylist (class SpotifyAPIManager)
+    func createPlaylist(userId: String, playlistName: String, accessToken: String, completion: @escaping (String?) -> Void) {
+        guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
+            completion(nil)
+            return
+        }
+        
+        let urlString = "https://api.spotify.com/v1/users/\(userId)/playlists"
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: Any] = [
+            "name": playlistName,
+            "description": "Playlist created from app",
+            "public": false // Change to true if you want the playlist to be public
+        ]
+        
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error creating playlist: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data else {
+                print("No data returned for creating playlist")
+                completion(nil)
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let playlistId = json["id"] as? String {
+                    completion(playlistId)
+                } else {
+                    print("Error parsing JSON for playlist creation")
+                    completion(nil)
+                }
+            } catch {
+                print("Error parsing JSON for playlist creation: \(error.localizedDescription)")
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchSpotifyUserID(accessToken: String, completion: @escaping (String?) -> Void) {
+        let urlString = "https://api.spotify.com/v1/me"
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error fetching user ID: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+
+            guard let data = data else {
+                print("No data returned for user ID")
+                completion(nil)
+                return
+            }
+
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let userID = json["id"] as? String {
+                    completion(userID)
+                } else {
+                    print("Error parsing JSON for user ID")
+                    completion(nil)
+                }
+            } catch {
+                print("Error parsing JSON for user ID: \(error.localizedDescription)")
+                completion(nil)
+            }
+        }
+
         task.resume()
     }
     

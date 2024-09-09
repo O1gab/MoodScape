@@ -9,6 +9,7 @@ import Foundation
 
 struct Song: Codable {
     let name: String
+    let id: String
     let artist: String
     let duration: String
     let spotifyUrl: String
