@@ -10,6 +10,7 @@ import Gifu
 
 class FavoritesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    // MARK: - Properties
     private let gifBackground: GIFImageView = {
         let gifBackground = GIFImageView()
         gifBackground.animate(withGIFNamed: "gradient_skyline_blinking_stars")
@@ -116,7 +117,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
     private var favoriteSongs: [Song] = []
     private let favoritesManager = FavoritesManager()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -131,7 +132,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         fetchFavorites()
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
@@ -174,7 +175,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
             topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             topLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
             
-            albumsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 30),
+            albumsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 50),
             albumsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             albumsLabel.bottomAnchor.constraint(equalTo: albumsLabel.topAnchor, constant: 30),
             
@@ -202,7 +203,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         ])
     }
     
-    // - MARK: FetchFavorites
+    // MARK: - FetchFavorites
     private func fetchFavorites() {
         favoriteAlbums = favoritesManager.getFavoriteAlbums()
         favoriteSongs = favoritesManager.getFavoriteSongs()
@@ -220,7 +221,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         songsCollectionView.reloadData()
     }
     
-    // - MARK: HandleSongRemoved
+    // MARK: - HandleSongRemoved
     @objc private func handleSongRemoved(_ notification: Notification) {
         if let removedSong = notification.userInfo?["song"] as? Song {
             if let index = favoriteSongs.firstIndex(where: { $0.name == removedSong.name && $0.artist == removedSong.artist }) {
@@ -245,7 +246,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         dismiss(animated: true, completion: nil)
     }
     
-    // MARK: UICollectionViewDataSource
+    // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == albumsCollectionView {
             return favoriteAlbums.count
@@ -301,7 +302,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         }
     }
     
-    // - MARK: Deinit
+    // MARK: - Deinit
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
