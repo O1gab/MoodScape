@@ -10,7 +10,7 @@ import Gifu
 import SafariServices
 import WebKit
 
-class SpotifySetupView: SetupBaseView {
+class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
     
     // MARK: - Properties
     private let gifGradient: GIFImageView = {
@@ -54,7 +54,7 @@ class SpotifySetupView: SetupBaseView {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
+
     private var webView: WKWebView!
     
     // MARK: - ViewDidLoad
@@ -62,12 +62,8 @@ class SpotifySetupView: SetupBaseView {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        
-        webView = WKWebView(frame: view.bounds)
-        view.addSubview(webView)
     }
     
-    // - MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
@@ -115,27 +111,36 @@ class SpotifySetupView: SetupBaseView {
  
     // MARK: - ConnectSpotify
     @objc private func connectSpotify() {
-        // TODO: connect to the user's account on Spotify
-        SpotifyAuthenticationManager.shared.authenticate { success in
-            if success {
-                print("Authentication initiated successfully.")
-                if let authURL = SpotifyAuthenticationManager.shared.getAuthorizationURL() {
-                    let request = URLRequest(url: authURL)
-                    self.webView.load(request)
-                }
-            } else {
-                print("Failed to initiate authentication.")
+        print("Connect to Spotify button tapped.")
+        let authView = SpotifyAuthController()
+        
+        authView.completionHandler = { [weak self] success in
+            DispatchQueue.main.async {
+                self?.handleSignIn(success: success)
             }
         }
+        authView.modalPresentationStyle = .fullScreen
+        present(authView, animated: true)
     }
     
-    // - MARK: FetchSpotifyUserID
+    private func handleSignIn(success: Bool) {
+        // TODO: Log user in
+        guard success else {
+            showError("Something went wrong when signing in")
+            return
+        }
+        let mainView = MainTabBarController()
+        mainView.modalPresentationStyle = .fullScreen
+        present(mainView, animated: true)
+    }
+
+    // MARK: - FetchSpotifyUserID
     private func fetchSpotifyUserID() {
         guard let token = SpotifyAuthenticationManager.shared.accessToken else {
             showError("Spotify access token is missing.")
             return
         }
-        
+
         let url = URL(string: "https://api.spotify.com/v1/me")!
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -148,24 +153,18 @@ class SpotifySetupView: SetupBaseView {
                 }
                 return
             }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("Invalid response")
+
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                print("HTTP Error: \(String(describing: (response as? HTTPURLResponse)?.statusCode))")
                 DispatchQueue.main.async {
                     self?.showError("Failed to retrieve Spotify user ID.")
                 }
                 return
             }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("HTTP Error: \(httpResponse.statusCode)")
-                DispatchQueue.main.async {
-                    self?.showError("Failed to retrieve Spotify user ID. Status code: \(httpResponse.statusCode)")
-                }
-                return
-            }
-            
-            guard let data = data, let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+
+            guard let data = data,
+                  let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                   let userID = json["id"] as? String else {
                 print("Error parsing JSON or missing user ID")
                 DispatchQueue.main.async {
@@ -173,7 +172,7 @@ class SpotifySetupView: SetupBaseView {
                 }
                 return
             }
-            
+
             DispatchQueue.main.async {
                 print("Spotify User ID: \(userID)")
                 // Store or use the user ID as needed
@@ -193,5 +192,9 @@ class SpotifySetupView: SetupBaseView {
     // MARK: - HandleSkip
     @objc private func handleSkip() {
         navigateToNextView(viewController: MusicSetupView())
+    }
+    
+    @objc private func didAuthenticateWithSpotify() {
+        fetchSpotifyUserID()
     }
 }
