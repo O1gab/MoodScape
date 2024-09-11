@@ -60,6 +60,11 @@
 		76AAD3272C72241A00CBE3D8 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */; };
 		76AAD3292C72263500CBE3D8 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3282C72263500CBE3D8 /* ColorExtensions.swift */; };
 		76AAD3302C72A8A600CBE3D8 /* EmotionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD32F2C72A8A600CBE3D8 /* EmotionCell.swift */; };
+		76B004BB2C90574600563DE7 /* SpotifyiOS.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76B004B92C9056E000563DE7 /* SpotifyiOS.xcframework */; };
+		76B004BC2C90574600563DE7 /* SpotifyiOS.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 76B004B92C9056E000563DE7 /* SpotifyiOS.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		76B004C12C91EDBF00563DE7 /* SpotifyAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B004C02C91EDBF00563DE7 /* SpotifyAuthController.swift */; };
+		76B004C32C91EF8500563DE7 /* SpotifyAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B004C22C91EF8500563DE7 /* SpotifyAuth.swift */; };
+		76B004C52C92048F00563DE7 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B004C42C92048F00563DE7 /* AuthResponse.swift */; };
 		76B645B82C7BFF8100ADC097 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B645B72C7BFF8100ADC097 /* Song.swift */; };
 		76B869A22C67B3A9002866B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A12C67B3A9002866B9 /* AppDelegate.swift */; };
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
@@ -75,11 +80,24 @@
 		76DAE58B2C891DD700F631F1 /* ImagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE58A2C891DD700F631F1 /* ImagePreviewViewController.swift */; };
 		76E0C2702C6F9D7300DDA56B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */; };
 		76EF46132C8B43F900758AA6 /* GroqAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EF46122C8B43F900758AA6 /* GroqAPIClient.swift */; };
-		76EF46182C8FAE9500758AA6 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EF46172C8FAE9500758AA6 /* KeychainService.swift */; };
 		76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */; };
 		76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76F31B492C7BCA7D00B65B72 /* ImageCache.swift */; };
 		CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		76B004BD2C90574600563DE7 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				76B004BC2C90574600563DE7 /* SpotifyiOS.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7616BD742C7E33800083D227 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
@@ -136,6 +154,11 @@
 		76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
 		76AAD3282C72263500CBE3D8 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		76AAD32F2C72A8A600CBE3D8 /* EmotionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCell.swift; sourceTree = "<group>"; };
+		76B004B42C90509700563DE7 /* MoodScape-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MoodScape-Bridging-Header.h"; sourceTree = "<group>"; };
+		76B004B92C9056E000563DE7 /* SpotifyiOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SpotifyiOS.xcframework; sourceTree = "<group>"; };
+		76B004C02C91EDBF00563DE7 /* SpotifyAuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuthController.swift; sourceTree = "<group>"; };
+		76B004C22C91EF8500563DE7 /* SpotifyAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyAuth.swift; sourceTree = "<group>"; };
+		76B004C42C92048F00563DE7 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		76B645B72C7BFF8100ADC097 /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		76B8699E2C67B3A9002866B9 /* MoodScape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodScape.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76B869A12C67B3A9002866B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -153,7 +176,6 @@
 		76DAE58A2C891DD700F631F1 /* ImagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewViewController.swift; sourceTree = "<group>"; };
 		76E0C26F2C6F9D7300DDA56B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		76EF46122C8B43F900758AA6 /* GroqAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroqAPIClient.swift; sourceTree = "<group>"; };
-		76EF46172C8FAE9500758AA6 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndSetupViewController.swift; sourceTree = "<group>"; };
 		76F31B492C7BCA7D00B65B72 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		7A27C3F833B9F95DF63F4D42 /* Pods-MoodScape.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.release.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.release.xcconfig"; sourceTree = "<group>"; };
@@ -166,6 +188,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76B004BB2C90574600563DE7 /* SpotifyiOS.xcframework in Frameworks */,
 				CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,6 +199,7 @@
 		3B12F5DC2349B3EFB01D1828 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				76B004B92C9056E000563DE7 /* SpotifyiOS.xcframework */,
 				766485502C6B898500AA050A /* FirebaseAuth.framework */,
 				934198394D6E1E25CC7E5A5C /* Pods_MoodScape.framework */,
 			);
@@ -286,6 +310,8 @@
 			children = (
 				766485782C6ED6E700AA050A /* SpotifyAuthenticationManager.swift */,
 				7664857A2C6ED79D00AA050A /* SpotifyAPIManager.swift */,
+				76B004C02C91EDBF00563DE7 /* SpotifyAuthController.swift */,
+				76B004C22C91EF8500563DE7 /* SpotifyAuth.swift */,
 			);
 			path = SpotifyAPI;
 			sourceTree = "<group>";
@@ -424,6 +450,7 @@
 				768536CC2C7A896800C35FF8 /* Genre.swift */,
 				768536D32C7AA8DC00C35FF8 /* Artist.swift */,
 				76B645B72C7BFF8100ADC097 /* Song.swift */,
+				76B004C42C92048F00563DE7 /* AuthResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -440,9 +467,9 @@
 		76EF46102C8B38CA00758AA6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				76EF46162C8FAE8700758AA6 /* Keychain */,
 				76EF46112C8B399B00758AA6 /* GroqAPI */,
 				766485772C6ED6C700AA050A /* SpotifyAPI */,
+				76B004B42C90509700563DE7 /* MoodScape-Bridging-Header.h */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -453,14 +480,6 @@
 				76EF46122C8B43F900758AA6 /* GroqAPIClient.swift */,
 			);
 			path = GroqAPI;
-			sourceTree = "<group>";
-		};
-		76EF46162C8FAE8700758AA6 /* Keychain */ = {
-			isa = PBXGroup;
-			children = (
-				76EF46172C8FAE9500758AA6 /* KeychainService.swift */,
-			);
-			path = Keychain;
 			sourceTree = "<group>";
 		};
 		BC465058499E8DE89A17D7BE /* Pods */ = {
@@ -484,6 +503,7 @@
 				76B8699B2C67B3A9002866B9 /* Frameworks */,
 				76B8699C2C67B3A9002866B9 /* Resources */,
 				7B6082A80D57BE33B76B1E4D /* [CP] Embed Pods Frameworks */,
+				76B004BD2C90574600563DE7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -506,6 +526,7 @@
 				TargetAttributes = {
 					76B8699D2C67B3A9002866B9 = {
 						CreatedOnToolsVersion = 14.3.1;
+						LastSwiftMigration = 1430;
 					};
 				};
 			};
@@ -608,14 +629,15 @@
 				76AAD3302C72A8A600CBE3D8 /* EmotionCell.swift in Sources */,
 				766FD1532C81554700D9ACF6 /* RegistrationViewController.swift in Sources */,
 				761EDA062C8A0A26008A07DB /* GradientCircleView.swift in Sources */,
+				76B004C52C92048F00563DE7 /* AuthResponse.swift in Sources */,
 				7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */,
 				766FD14F2C7F837700D9ACF6 /* WelcomeView.swift in Sources */,
 				76AAD3292C72263500CBE3D8 /* ColorExtensions.swift in Sources */,
 				7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */,
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
 				7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */,
+				76B004C12C91EDBF00563DE7 /* SpotifyAuthController.swift in Sources */,
 				76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */,
-				76EF46182C8FAE9500758AA6 /* KeychainService.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
 				766485622C6C474F00AA050A /* StatsViewController.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
@@ -647,6 +669,7 @@
 				766485762C6ED52D00AA050A /* Album.swift in Sources */,
 				766485792C6ED6E700AA050A /* SpotifyAuthenticationManager.swift in Sources */,
 				76B645B82C7BFF8100ADC097 /* Song.swift in Sources */,
+				76B004C32C91EF8500563DE7 /* SpotifyAuth.swift in Sources */,
 				76DAE58B2C891DD700F631F1 /* ImagePreviewViewController.swift in Sources */,
 				76401AD52C76B4530035C7FA /* ContactView.swift in Sources */,
 				766FD1552C836EBE00D9ACF6 /* newLogin.swift in Sources */,
@@ -781,6 +804,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X5NCF7XSCG;
@@ -797,12 +821,77 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-l\"c++\"",
+					"-l\"icucore\"",
+					"-l\"z\"",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"FirebaseAppCheckInterop\"",
+					"-framework",
+					"\"FirebaseAuth\"",
+					"-framework",
+					"\"FirebaseAuthInterop\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseCoreExtension\"",
+					"-framework",
+					"\"FirebaseCoreInternal\"",
+					"-framework",
+					"\"FirebaseDatabase\"",
+					"-framework",
+					"\"FirebaseFirestore\"",
+					"-framework",
+					"\"FirebaseFirestoreInternal\"",
+					"-framework",
+					"\"FirebaseSharedSwift\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"GTMSessionFetcher\"",
+					"-framework",
+					"\"Gifu\"",
+					"-framework",
+					"\"GoogleUtilities\"",
+					"-framework",
+					"\"RecaptchaInterop\"",
+					"-framework",
+					"\"SafariServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"absl\"",
+					"-framework",
+					"\"grpc\"",
+					"-framework",
+					"\"grpcpp\"",
+					"-framework",
+					"\"leveldb\"",
+					"-framework",
+					"\"nanopb\"",
+					"-framework",
+					"\"openssl_grpc\"",
+					"-weak_framework",
+					"\"FirebaseFirestoreInternal\"",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = o1gab.MoodScape;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MoodScape/Services/MoodScape-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -814,6 +903,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X5NCF7XSCG;
@@ -830,12 +920,76 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-l\"c++\"",
+					"-l\"icucore\"",
+					"-l\"z\"",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"FirebaseAppCheckInterop\"",
+					"-framework",
+					"\"FirebaseAuth\"",
+					"-framework",
+					"\"FirebaseAuthInterop\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseCoreExtension\"",
+					"-framework",
+					"\"FirebaseCoreInternal\"",
+					"-framework",
+					"\"FirebaseDatabase\"",
+					"-framework",
+					"\"FirebaseFirestore\"",
+					"-framework",
+					"\"FirebaseFirestoreInternal\"",
+					"-framework",
+					"\"FirebaseSharedSwift\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"GTMSessionFetcher\"",
+					"-framework",
+					"\"Gifu\"",
+					"-framework",
+					"\"GoogleUtilities\"",
+					"-framework",
+					"\"RecaptchaInterop\"",
+					"-framework",
+					"\"SafariServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"absl\"",
+					"-framework",
+					"\"grpc\"",
+					"-framework",
+					"\"grpcpp\"",
+					"-framework",
+					"\"leveldb\"",
+					"-framework",
+					"\"nanopb\"",
+					"-framework",
+					"\"openssl_grpc\"",
+					"-weak_framework",
+					"\"FirebaseFirestoreInternal\"",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = o1gab.MoodScape;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "MoodScape/Services/MoodScape-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
