@@ -32,7 +32,7 @@ final class SpotifyAuth {
         return accessToken != nil
     }
     
-    private var accessToken: String? {
+    var accessToken: String? {
         return UserDefaults.standard.string(forKey: "access_token")
     }
     

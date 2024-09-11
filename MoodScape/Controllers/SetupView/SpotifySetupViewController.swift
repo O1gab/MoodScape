@@ -57,7 +57,7 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
 
     private var webView: WKWebView!
     
-    private var userId: String
+    public var userId: String = ""
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
