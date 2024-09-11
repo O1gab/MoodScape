@@ -57,6 +57,8 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
 
     private var webView: WKWebView!
     
+    private var userId: String
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,57 +131,17 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
             showError("Something went wrong when signing in")
             return
         }
-        let mainView = MainTabBarController()
-        mainView.modalPresentationStyle = .fullScreen
-        present(mainView, animated: true)
-    }
-
-    // MARK: - FetchSpotifyUserID
-    private func fetchSpotifyUserID() {
-        guard let token = SpotifyAuthenticationManager.shared.accessToken else {
-            showError("Spotify access token is missing.")
-            return
-        }
-
-        let url = URL(string: "https://api.spotify.com/v1/me")!
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
-        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            if let error = error {
-                print("Error fetching user ID: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self?.showError("Failed to retrieve Spotify user ID.")
-                }
-                return
-            }
-
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                print("HTTP Error: \(String(describing: (response as? HTTPURLResponse)?.statusCode))")
-                DispatchQueue.main.async {
-                    self?.showError("Failed to retrieve Spotify user ID.")
-                }
-                return
-            }
-
-            guard let data = data,
-                  let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                  let userID = json["id"] as? String else {
-                print("Error parsing JSON or missing user ID")
-                DispatchQueue.main.async {
-                    self?.showError("Failed to retrieve Spotify user ID.")
-                }
-                return
-            }
-
-            DispatchQueue.main.async {
-                print("Spotify User ID: \(userID)")
-                // Store or use the user ID as needed
-                self?.navigateToNextView(viewController: MusicSetupView())
+        // Debug
+        SpotifyAuth.shared.fetchCurrentUserProfile { result in
+            switch result {
+            case .success(let userProfile):
+                print("User ID: \(userProfile.id)")
+                self.userId = userProfile.id
+            case .failure(let error):
+                self.showError("Failed to fetch userID!")
             }
         }
-        task.resume()
+        self.navigateToNextView(viewController: MusicSetupView())
     }
 
     // - MARK: ShowError
@@ -192,9 +154,5 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
     // MARK: - HandleSkip
     @objc private func handleSkip() {
         navigateToNextView(viewController: MusicSetupView())
-    }
-    
-    @objc private func didAuthenticateWithSpotify() {
-        fetchSpotifyUserID()
     }
 }

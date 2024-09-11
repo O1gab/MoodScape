@@ -504,47 +504,6 @@ class SpotifyAPIManager {
         task.resume()
     }
     
-    func fetchSpotifyUserID(accessToken: String, completion: @escaping (String?) -> Void) {
-        let urlString = "https://api.spotify.com/v1/me"
-        guard let url = URL(string: urlString) else {
-            completion(nil)
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error fetching user ID: \(error.localizedDescription)")
-                completion(nil)
-                return
-            }
-
-            guard let data = data else {
-                print("No data returned for user ID")
-                completion(nil)
-                return
-            }
-
-            do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                   let userID = json["id"] as? String {
-                    completion(userID)
-                } else {
-                    print("Error parsing JSON for user ID")
-                    completion(nil)
-                }
-            } catch {
-                print("Error parsing JSON for user ID: \(error.localizedDescription)")
-                completion(nil)
-            }
-        }
-
-        task.resume()
-    }
-    
     // - MARK: FormatDuration
     private func formatDuration(durationMs: Int) -> String {
         let minutes = durationMs / 60000

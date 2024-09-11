@@ -7,6 +7,7 @@
 
 import Foundation
 
+// Backend of the SpotifyAuthController
 final class SpotifyAuth {
     static let shared = SpotifyAuth()
     
@@ -161,5 +162,30 @@ final class SpotifyAuth {
             UserDefaults.standard.setValue(refresh_token, forKey: "refresh_token")
         }
         UserDefaults.standard.setValue(Date().addingTimeInterval(TimeInterval(result.expires_in)), forKey: "expirationDate")
+    }
+    
+    public func fetchCurrentUserProfile(completion: @escaping (Result<SpotifyUser, Error>) -> Void) {
+        guard let accessToken = accessToken else {
+            return
+        }
+        
+        let url = URL(string: "https://api.spotify.com/v1/me")
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+            guard let data = data, error == nil else {
+                completion(.failure(error ?? NSError(domain: "No Data", code: -1, userInfo: nil)))
+                return
+            }
+            do {
+                let userProfile = try JSONDecoder().decode(SpotifyUser.self, from: data)
+                completion(.success(userProfile))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        task.resume()
     }
 }
