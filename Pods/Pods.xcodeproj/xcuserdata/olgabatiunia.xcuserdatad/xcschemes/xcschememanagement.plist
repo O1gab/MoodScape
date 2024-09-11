@@ -144,11 +144,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SwiftKeychainWrapper.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>abseil-xcprivacy.xcscheme</key>
 		<dict>
 			<key>isShown</key>

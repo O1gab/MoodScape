@@ -1332,7 +1332,6 @@ PODS:
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
   - RecaptchaInterop (100.0.0)
-  - SwiftKeychainWrapper (3.4.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -1340,7 +1339,6 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Firestore
   - Gifu
-  - SwiftKeychainWrapper (= 3.4.0)
 
 SPEC REPOS:
   trunk:
@@ -1366,7 +1364,6 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - RecaptchaInterop
-    - SwiftKeychainWrapper
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
@@ -1391,8 +1388,7 @@ SPEC CHECKSUMS:
   leveldb-library: e8eadf9008a61f9e1dde3978c086d2b6d9b9dc28
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
 
-PODFILE CHECKSUM: 4ae0e6085b31464830f075fbe7582686b2e8d267
+PODFILE CHECKSUM: d9f2ac31c23035a07c24dd6443ea9030373bbc08
 
 COCOAPODS: 1.15.2
