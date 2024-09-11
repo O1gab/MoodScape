@@ -182,9 +182,8 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 switch result {
                 case .success(let songList):
                     // Parse the song list and process each artist
-                    self?.generatePlaylistBasedOnMood(songList: songList)
                     print("SUCCESS WITH PROMPT")
-                    print(songList)
+                    self?.processGroqResponse(songList)
                     
                 case .failure(let error):
                     print("Error sending prompt: \(error.localizedDescription)")
@@ -193,21 +192,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             }
         }
         //dismiss(animated: true, completion: nil)
-    }
-    func generatePlaylistBasedOnMood(songList: String) {
-        guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
-            // If access token is nil, authenticate the user
-            SpotifyAuthenticationManager.shared.authenticateUser { success in
-                if success {
-                    // After authentication, call processGroqResponse
-                    self.processGroqResponse(songList)
-                } else {
-                    self.showError("Failed to authenticate with Spotify")
-                }
-            }
-            return
-        }
-        processGroqResponse(songList)
     }
     
     private func processGroqResponse(_ songList: String) {
@@ -231,32 +215,47 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 print("we just added: \(song) by \(song.artist)") // DEBUG
                 group.leave()
             }
+            
+            SpotifyAPIManager.shared.searchForTrack(artist: song.artist, song: song.name) {_ in
+                print("find")
+            }
         }
         
         group.notify(queue: .main) { [weak self] in
-            // Generate a playlist on Spotify
+            // TODO: Generate a playlist on Spotify
             
-            guard let self = self, let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
-                self?.showError("Failed to authenticate with Spotify")
-                return
-            }
-            SpotifyAPIManager.shared.fetchSpotifyUserID(accessToken: accessToken) { userID in
-                guard let userID = userID else {
-                    self.showError("Failed to fetch Spotify user ID")
+            SpotifyAPIManager.shared.createPlaylist(name: "MoodScape Playlist") { playlistID in
+                guard let playlistID = playlistID else {
+                    self?.showError("Failed to create Spotify playlist")
                     return
                 }
                 
-                let playlistName = "MoodScape Playlist - testing"
-                SpotifyAPIManager.shared.createPlaylist(userId: userID, playlistName: playlistName, accessToken: accessToken) { playlistID in
-                    guard let playlistID = playlistID else {
-                        self.showError("Failed to create playlist on Spotify")
-                        return
+                // Step 2: Add tracks to the playlist
+                /*SpotifyAPIManager.shared.addTracksToPlaylist(playlistID: playlistID, trackURIs: trackURIs) { success in
+                    if success {
+                        print("Playlist created and songs added successfully!")
+                        // Optionally, display a success message or transition the user to the playlist in the app
+                    } else {
+                        self?.showError("Failed to add songs to playlist")
                     }
-                    // Step 2b: Add songs to the created playlist
-                    addSongsToPlaylist(playlistID: playlistID, songs: fetchedSongs, accessToken: accessToken)
-                }
+                 */
+                
+                /*
+                 SpotifyAuth.shared.fetchCurrentUserProfile { userID in
+                 DispatchQueue.main.async {
+                 guard let userID = userID else {
+                 self.showError("Failed to fetch Spotify user ID")
+                 return
+                 }
+                 }
+                 */
+                
             }
         }
+            
+        }
+    
+    
         
     func addSongsToPlaylist(playlistID: String, songs: [Song], accessToken: String) {
             let uris = songs.map { song in
@@ -291,7 +290,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             }
             
             task.resume()
-        }
     }
     
     // - MARK: ExtractJSON
