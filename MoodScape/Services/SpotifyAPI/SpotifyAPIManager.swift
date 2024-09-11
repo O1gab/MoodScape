@@ -449,55 +449,131 @@ class SpotifyAPIManager {
         task.resume()
     }
     
-    // MARK: - CreatePlaylist (class SpotifyAPIManager)
-    func createPlaylist(userId: String, playlistName: String, accessToken: String, completion: @escaping (String?) -> Void) {
-        guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
+    func createPlaylist(name: String, completion: @escaping (String?) -> Void) {
+        guard let accessToken = SpotifyAuth.shared.accessToken else {
+            print("No access token available")
             completion(nil)
             return
         }
         
-        let urlString = "https://api.spotify.com/v1/users/\(userId)/playlists"
+        // Define the API endpoint
+        let url = URL(string: "https://api.spotify.com/v1/me/playlists")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        let jsonBody: [String: Any] = [
+            "name": name,
+            "description": "Playlist generated based on your selected emotions and artists",
+            "public": false
+        ]
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: .prettyPrinted)
+            request.httpBody = jsonData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            // Send the request to create a playlist
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {
+                    print("Failed to create playlist: \(error?.localizedDescription ?? "Unknown error")")
+                    completion(nil)
+                    return
+                }
+                // Log the raw data for debugging
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("Raw API Response: \(jsonString)")
+                }
+                
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let playlistID = json["id"] as? String {
+                        completion(playlistID) // Return the playlist ID
+                    } else {
+                        print("Failed to parse playlist creation response")
+                        completion(nil)
+                    }
+                } catch {
+                    print("Error creating playlist: \(error.localizedDescription)")
+                    completion(nil)
+                }
+            }
+            task.resume()
+        } catch {
+            print("Error serializing playlist data: \(error.localizedDescription)")
+            completion(nil)
+        }
+    }
+    
+    func addTracksToPlaylist(playlistID: String, trackURIs: [String], completion: @escaping (Bool) -> Void) {
+        guard let accessToken = SpotifyAuth.shared.accessToken else {
+            print("No access token available")
+            completion(false)
+            return
+        }
+        
+        let url = URL(string: "https://api.spotify.com/v1/playlists/\(playlistID)/tracks")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        let jsonBody: [String: Any] = ["uris": trackURIs]
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: .prettyPrinted)
+            request.httpBody = jsonData
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard data != nil, error == nil else {
+                    print("Failed to add tracks: \(error?.localizedDescription ?? "Unknown error")")
+                    completion(false)
+                    return
+                }
+                completion(true)
+            }
+            task.resume()
+        } catch {
+            print("Error serializing track data: \(error.localizedDescription)")
+            completion(false)
+        }
+    }
+
+    func searchForTrack(artist: String, song: String, completion: @escaping (String?) -> Void) {
+        guard let accessToken = SpotifyAuth.shared.accessToken else {
+            print("No access token available")
+            completion(nil)
+            return
+        }
+        
+        
+        let query = "\(song) artist:\(artist)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let urlString = "https://api.spotify.com/v1/search?q=\(query)&type=track&limit=1"
         guard let url = URL(string: urlString) else {
             completion(nil)
             return
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = "GET"
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let body: [String: Any] = [
-            "name": playlistName,
-            "description": "Playlist created from app",
-            "public": false // Change to true if you want the playlist to be public
-        ]
-        
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error creating playlist: \(error.localizedDescription)")
-                completion(nil)
-                return
-            }
-            
-            guard let data = data else {
-                print("No data returned for creating playlist")
+            guard let data = data, error == nil else {
+                print("Failed to search for track: \(error?.localizedDescription ?? "Unknown error")")
                 completion(nil)
                 return
             }
             
             do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                   let playlistId = json["id"] as? String {
-                    completion(playlistId)
-                } else {
-                    print("Error parsing JSON for playlist creation")
-                    completion(nil)
-                }
+                let result = try JSONDecoder().decode(SpotifyPlaylistResponse.self, from: data)
+                let trackID = result.items.first?.track?.external_urls["spotify"]
+                print("success with the SEARCH")
+                completion(trackID)
             } catch {
-                print("Error parsing JSON for playlist creation: \(error.localizedDescription)")
+                print("Error parsing search result: \(error.localizedDescription)")
                 completion(nil)
             }
         }
