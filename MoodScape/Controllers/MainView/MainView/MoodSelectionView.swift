@@ -215,9 +215,12 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 print("we just added: \(song) by \(song.artist)") // DEBUG
                 group.leave()
             }
+            var foundSongs: [Song] = []
             
-            SpotifyAPIManager.shared.searchForTrack(artist: song.artist, song: song.name) {_ in
-                print("find")
+            SpotifyAPIManager.shared.searchForTrack(artist: song.artist, song: song.name) { track in
+                if let track = track {
+                    foundSongs.append(track)
+                }
             }
         }
         
