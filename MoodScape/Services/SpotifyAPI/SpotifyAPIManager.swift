@@ -470,41 +470,49 @@ class SpotifyAPIManager {
         ]
         
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: .prettyPrinted)
-            request.httpBody = jsonData
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            // Send the request to create a playlist
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data, error == nil else {
-                    print("Failed to create playlist: \(error?.localizedDescription ?? "Unknown error")")
-                    completion(nil)
-                    return
-                }
-                // Log the raw data for debugging
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("Raw API Response: \(jsonString)")
-                }
-                
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                       let playlistID = json["id"] as? String {
-                        completion(playlistID) // Return the playlist ID
-                    } else {
-                        print("Failed to parse playlist creation response")
-                        completion(nil)
-                    }
-                } catch {
-                    print("Error creating playlist: \(error.localizedDescription)")
-                    completion(nil)
-                }
-            }
-            task.resume()
-        } catch {
-            print("Error serializing playlist data: \(error.localizedDescription)")
-            completion(nil)
-        }
-    }
+             let jsonData = try JSONSerialization.data(withJSONObject: jsonBody, options: .prettyPrinted)
+             request.httpBody = jsonData
+             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+             
+             // Send the request to create a playlist
+             let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                 guard let data = data, error == nil else {
+                     print("Failed to create playlist: \(error?.localizedDescription ?? "Unknown error")")
+                     completion(nil)
+                     return
+                 }
+                 
+                 // Log the raw response for debugging
+                 if let jsonString = String(data: data, encoding: .utf8) {
+                     print("Raw API Response: \(jsonString)")
+                 }
+                 
+                 // Check for insufficient scope error
+                 if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 403 {
+                     print("Insufficient scope for creating a playlist. Check OAuth scopes.")
+                     completion(nil)
+                     return
+                 }
+                 
+                 do {
+                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                        let playlistID = json["id"] as? String {
+                         completion(playlistID) // Return the playlist ID
+                     } else {
+                         print("Failed to parse playlist creation response")
+                         completion(nil)
+                     }
+                 } catch {
+                     print("Error parsing playlist creation response: \(error.localizedDescription)")
+                     completion(nil)
+                 }
+             }
+             task.resume()
+         } catch {
+             print("Error serializing playlist data: \(error.localizedDescription)")
+             completion(nil)
+         }
+     }
     
     func addTracksToPlaylist(playlistID: String, trackURIs: [String], completion: @escaping (Bool) -> Void) {
         guard let accessToken = SpotifyAuth.shared.accessToken else {
