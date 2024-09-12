@@ -541,7 +541,7 @@ class SpotifyAPIManager {
         }
     }
 
-    func searchForTrack(artist: String, song: String, completion: @escaping (String?) -> Void) {
+    func searchForTrack(artist: String, song: String, completion: @escaping (Song?) -> Void) {
         guard let accessToken = SpotifyAuth.shared.accessToken else {
             print("No access token available")
             completion(nil)
@@ -568,10 +568,31 @@ class SpotifyAPIManager {
             }
             
             do {
-                let result = try JSONDecoder().decode(SpotifyPlaylistResponse.self, from: data)
-                let trackID = result.items.first?.track?.external_urls["spotify"]
-                print("success with the SEARCH")
-                completion(trackID)
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                         let tracks = json["tracks"] as? [String: Any],
+                         let items = tracks["items"] as? [[String: Any]],
+                   let firstItem = items.first {
+                    
+                    // Extract song details
+                    if let name = firstItem["name"] as? String,
+                       let id = firstItem["id"] as? String,
+                       let artists = firstItem["artists"] as? [[String: Any]],
+                       let artist = artists.first?["name"] as? String,
+                       let duration = firstItem["duration_ms"] as? Int,
+                       let externalUrls = firstItem["external_urls"] as? [String: String],
+                       let spotifyUrl = externalUrls["spotify"],
+                       let album = firstItem["album"] as? [String: Any],
+                       let releaseDate = album["release_date"] as? String,
+                       let images = album["images"] as? [[String: Any]],
+                       let imageUrl = images.first?["url"] as? String {
+                        
+                        // Create a Song object
+                        let song = Song(name: name, id: id, artist: artist, duration: "", spotifyUrl: spotifyUrl, releaseDate: releaseDate, imageUrl: imageUrl)
+                        completion(song)
+                    } else {
+                        completion(nil)
+                    }
+                }
             } catch {
                 print("Error parsing search result: \(error.localizedDescription)")
                 completion(nil)
