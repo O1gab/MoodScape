@@ -137,11 +137,17 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
             case .success(let userProfile):
                 print("User ID: \(userProfile.id)")
                 self.userId = userProfile.id
+                self.saveUserId()
             case .failure(let error):
                 self.showError("Failed to fetch userID!")
             }
         }
         self.navigateToNextView(viewController: MusicSetupView())
+    }
+    
+    // - MARK: SaveUserId
+    private func saveUserId() {
+        UserDefaults.standard.setValue(userId, forKey: "user_id")
     }
 
     // - MARK: ShowError
