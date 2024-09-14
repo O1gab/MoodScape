@@ -553,7 +553,7 @@ class SpotifyAPIManager {
             return
         }
         
-        
+        // Build the search query
         let query = "\(song) artist:\(artist)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let urlString = "https://api.spotify.com/v1/search?q=\(query)&type=track&limit=1"
         guard let url = URL(string: urlString) else {
@@ -574,9 +574,12 @@ class SpotifyAPIManager {
             
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                         let tracks = json["tracks"] as? [String: Any],
-                         let items = tracks["items"] as? [[String: Any]],
+                   let tracks = json["tracks"] as? [String: Any],
+                   let items = tracks["items"] as? [[String: Any]],
                    let firstItem = items.first {
+                    
+                    // Log the full first item to debug
+                    print("First track item: \(firstItem)")
                     
                     // Extract song details
                     if let name = firstItem["name"] as? String,
@@ -585,18 +588,26 @@ class SpotifyAPIManager {
                        let artist = artists.first?["name"] as? String,
                        let duration = firstItem["duration_ms"] as? Int,
                        let externalUrls = firstItem["external_urls"] as? [String: String],
-                       let spotifyUrl = externalUrls["spotify"],
-                       let album = firstItem["album"] as? [String: Any],
-                       let releaseDate = album["release_date"] as? String,
-                       let images = album["images"] as? [[String: Any]],
-                       let imageUrl = images.first?["url"] as? String {
+                       let spotifyUrl = externalUrls["spotify"] {
+                        
+                        // Ensure spotifyUrl is correctly assigned and not "N/A"
+                        print("Extracted Spotify URL: \(spotifyUrl)")
+                        
+                        let album = firstItem["album"] as? [String: Any]
+                        let releaseDate = album?["release_date"] as? String ?? "N/A"
+                        let images = album?["images"] as? [[String: Any]]
+                        let imageUrl = images?.first?["url"] as? String
                         
                         // Create a Song object
-                        let song = Song(name: name, id: id, artist: artist, duration: "", spotifyUrl: spotifyUrl, releaseDate: releaseDate, imageUrl: imageUrl)
+                        let song = Song(name: name, id: id, artist: artist, duration: "\(duration / 1000) seconds", spotifyUrl: spotifyUrl, releaseDate: releaseDate, imageUrl: imageUrl)
                         completion(song)
                     } else {
+                        print("Failed to extract all song details")
                         completion(nil)
                     }
+                } else {
+                    print("No tracks found for query")
+                    completion(nil)
                 }
             } catch {
                 print("Error parsing search result: \(error.localizedDescription)")
