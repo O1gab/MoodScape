@@ -199,64 +199,55 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         let songs = parseSongList(songList)
         print(songs)
         var fetchedSongs: [Song] = []
+        var trackURIs: [String] = []
         let group = DispatchGroup()
         
         for song in songs {
-            group.enter()
+            group.enter()  // Enter the group before starting the async task
             
-            SpotifyAPIManager.shared.fetchArtistID(for: song.artist) { artistID in
-                guard let artistID = artistID else {
-                    print("Failed to fetch artist ID for \(song.artist)")
-                    group.leave()
-                    return
-                }
-                
-                fetchedSongs.append(song)
-                print("we just added: \(song) by \(song.artist)") // DEBUG
-                group.leave()
-            }
-            var foundSongs: [Song] = []
-            
+            // Fetch the song details
             SpotifyAPIManager.shared.searchForTrack(artist: song.artist, song: song.name) { track in
                 if let track = track {
-                    foundSongs.append(track)
+                    // Append to fetchedSongs and trackURIs arrays
+                    fetchedSongs.append(track)  // Use the found track instead of the initial one
+                    trackURIs.append("spotify:track:\(track.id)")  // Append track URI
+                    
+                    print("we just added: \(track) by \(track.artist)")  // DEBUG
+                } else {
+                    print("Track not found for \(song.name) by \(song.artist)")
                 }
+                group.leave()  // Leave the group after the async call is done
             }
         }
         
         group.notify(queue: .main) { [weak self] in
-            // TODO: Generate a playlist on Spotify
+            // Playlist creation logic
+            guard let userID = UserDefaults.standard.string(forKey: "user_id") else {
+                self?.showError("Failed to fetch UserID")
+                return
+            }
+            print("user id was fetched!")
             
-            SpotifyAPIManager.shared.createPlaylist(name: "MoodScape Playlist") { playlistID in
+            // Create the playlist on Spotify
+            SpotifyAPIManager.shared.createPlaylist(name: "MoodScape Playlist", userId: userID) { playlistID in
                 guard let playlistID = playlistID else {
                     self?.showError("Failed to create Spotify playlist")
                     return
                 }
+                print("a new playlist was created!")
                 
-                // Step 2: Add tracks to the playlist
-                /*SpotifyAPIManager.shared.addTracksToPlaylist(playlistID: playlistID, trackURIs: trackURIs) { success in
+                // Add tracks to the newly created playlist
+                SpotifyAPIManager.shared.addTracksToPlaylist(playlistID: playlistID, trackURIs: trackURIs) { success in
                     if success {
                         print("Playlist created and songs added successfully!")
                         // Optionally, display a success message or transition the user to the playlist in the app
                     } else {
                         self?.showError("Failed to add songs to playlist")
                     }
-                 */
-                
-                /*
-                 SpotifyAuth.shared.fetchCurrentUserProfile { userID in
-                 DispatchQueue.main.async {
-                 guard let userID = userID else {
-                 self.showError("Failed to fetch Spotify user ID")
-                 return
-                 }
-                 }
-                 */
-                
+                }
             }
         }
-            
-        }
+    }
     
     
         
