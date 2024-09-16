@@ -25,6 +25,7 @@
 		764FDE352C697C230060A428 /* StartBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE342C697C230060A428 /* StartBaseView.swift */; };
 		764FDE382C6983040060A428 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764FDE372C6983040060A428 /* LoginViewController.swift */; };
 		764FDE3C2C6989730060A428 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 764FDE3B2C6989730060A428 /* Main.storyboard */; };
+		765E1EED2C98C92E0010D6B6 /* NewPlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765E1EEC2C98C92E0010D6B6 /* NewPlaylistView.swift */; };
 		766485482C6A13AD00AA050A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485472C6A13AD00AA050A /* ProfileViewController.swift */; };
 		7664854D2C6A1AAF00AA050A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7664854C2C6A1AAF00AA050A /* GoogleService-Info.plist */; };
 		7664854F2C6AD34000AA050A /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7664854E2C6AD34000AA050A /* View.xib */; };
@@ -119,6 +120,7 @@
 		764FDE342C697C230060A428 /* StartBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartBaseView.swift; sourceTree = "<group>"; };
 		764FDE372C6983040060A428 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		764FDE3B2C6989730060A428 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		765E1EEC2C98C92E0010D6B6 /* NewPlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaylistView.swift; sourceTree = "<group>"; };
 		766485472C6A13AD00AA050A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		7664854C2C6A1AAF00AA050A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7664854E2C6AD34000AA050A /* View.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 				7664855F2C6C471D00AA050A /* MainViewController.swift */,
 				7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */,
 				76AAD32F2C72A8A600CBE3D8 /* EmotionCell.swift */,
+				765E1EEC2C98C92E0010D6B6 /* NewPlaylistView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -643,6 +646,7 @@
 				76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
 				766485622C6C474F00AA050A /* StatsViewController.swift in Sources */,
+				765E1EED2C98C92E0010D6B6 /* NewPlaylistView.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
 				76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */,
 				764E2A322C788ACE00785104 /* ImageSetupViewController.swift in Sources */,
