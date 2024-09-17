@@ -283,6 +283,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                             
                             let newPlaylist = NewPlaylistView()
                             newPlaylist.playlistURL = playlistURL
+                            newPlaylist.name = name
                             newPlaylist.onCloseButtonTapped = { [weak self] in
                                 self?.handleCloseButtonTapped()
                             }

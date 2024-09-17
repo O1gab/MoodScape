@@ -11,6 +11,8 @@ class NewPlaylistView: UIViewController {
     
     var playlistURL: URL?
     
+    var name: String?
+    
     private let contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .lightGray.withAlphaComponent(0.9)
@@ -50,6 +52,16 @@ class NewPlaylistView: UIViewController {
         let confettiView = ConfettiView()
         confettiView.translatesAutoresizingMaskIntoConstraints = false
         return confettiView
+    }()
+    
+    private let playlistName: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
 
     private let openSpotifyButton: UIButton = {
@@ -99,12 +111,14 @@ class NewPlaylistView: UIViewController {
     
     // MARK: - SetupView
     private func setupView() {
+        playlistName.text = name
         view.addSubview(contentView)
         view.addSubview(confettiView)
         contentView.addSubview(closeButton)
         contentView.addSubview(messageLabel)
         contentView.addSubview(imageView)
         contentView.addSubview(playlistDate)
+        contentView.addSubview(playlistName)
         contentView.addSubview(openSpotifyButton)
         contentView.addSubview(spotifyLogo)
         
@@ -119,7 +133,7 @@ class NewPlaylistView: UIViewController {
             
             messageLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor, constant: 10),
             messageLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 10),
-            messageLabel.widthAnchor.constraint(equalToConstant: 300),
+            messageLabel.widthAnchor.constraint(equalToConstant: 270),
             
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 90),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -129,8 +143,14 @@ class NewPlaylistView: UIViewController {
             playlistDate.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 10),
             playlistDate.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 10),
             
+            playlistName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+            playlistName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playlistName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            playlistName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10),
+            playlistName.bottomAnchor.constraint(equalTo: openSpotifyButton.topAnchor, constant: -5),
+            
             openSpotifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            openSpotifyButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 70),
+            openSpotifyButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 100),
             openSpotifyButton.widthAnchor.constraint(equalToConstant: 200),
             openSpotifyButton.heightAnchor.constraint(equalToConstant: 55),
             
@@ -153,6 +173,40 @@ class NewPlaylistView: UIViewController {
     func configure(with color: UIColor, date: String) {
         imageView.backgroundColor = color
         playlistDate.text = date
+        animateBackgroundGradient(from: color, to: color.complementaryColor())
+    }
+    
+    // - MARK: AnimateBackgroundGradient
+    private func animateBackgroundGradient(from dominantColor: UIColor, to complementaryColor: UIColor) {
+        var adjustedDominantColor = dominantColor
+        var adjustedComplementaryColor = complementaryColor
+        
+        if dominantColor.isTooSimilar(to: complementaryColor) {
+            adjustedDominantColor = dominantColor.darker(by: 20)
+            adjustedComplementaryColor = complementaryColor.lighter(by: 20)
+        }
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [adjustedDominantColor.cgColor, adjustedComplementaryColor.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.frame = self.contentView.bounds
+        gradientLayer.cornerRadius = self.contentView.layer.cornerRadius
+        gradientLayer.name = "backgroundGradient"
+        
+        if let oldGradientLayer = self.contentView.layer.sublayers?.first(where: { $0.name == "backgroundGradient" }) {
+            oldGradientLayer.removeFromSuperlayer()
+        }
+        
+        self.contentView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        let animation = CABasicAnimation(keyPath: "colors")
+        animation.fromValue = [adjustedDominantColor.cgColor, adjustedComplementaryColor.cgColor]
+        animation.toValue = [adjustedComplementaryColor.cgColor, adjustedDominantColor.cgColor]
+        animation.duration = 7.0
+        animation.autoreverses = true
+        animation.repeatCount = .infinity
+        gradientLayer.add(animation, forKey: nil)
     }
     
     // MARK: - ClosePopUp
