@@ -263,14 +263,19 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 // Add tracks to the newly created playlist
                 SpotifyAPIManager.shared.addTracksToPlaylist(playlistID: playlistID, trackURIs: trackURIs) { success in
                     if success {
-                        print("Playlist created and songs added successfully!")
-                        /*
-                        let newPlaylist = NewPlaylistView()
-                        self?.colorPlaylist(newPlaylist: newPlaylist)
-                        self?.view.addSubview(newPlaylist)
-                         */
+                        DispatchQueue.main.async {
+                            print("Playlist created and songs added successfully!")
+                            
+                            let newPlaylist = NewPlaylistView()
+                            self?.colorPlaylist(newPlaylist: newPlaylist)
+                            newPlaylist.modalPresentationStyle = .overCurrentContext
+                            newPlaylist.modalTransitionStyle = .crossDissolve
+                            self?.present(newPlaylist, animated: true, completion: nil)
+                        }
                     } else {
-                        self?.showError("Failed to add songs to playlist")
+                        DispatchQueue.main.async {
+                            self?.showError("Failed to add songs to playlist")
+                        }
                     }
                 }
             }
