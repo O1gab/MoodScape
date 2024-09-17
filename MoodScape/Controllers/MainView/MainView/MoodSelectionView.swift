@@ -171,6 +171,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: - SaveEmotions
     @objc private func saveEmotions() {
+        let selected = formattedSelectedEmotions()
         fetchSelectedArtists { [weak self] artistNames in
             guard let self = self, let artistNames = artistNames, !artistNames.isEmpty else {
                 self?.showError("Failed to fetch artist names or no artists selected")
@@ -180,11 +181,11 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             let prompt = """
                 Generate a JSON object representing a playlist based on the following criteria:
 
-                1. User's current emotions: \(selectedEmotions)
+                1. User's current emotions: \(selected)
                 2. User's selected artists: \(selectedArtists)
 
                 Guidelines:
-                - Create a playlist of exactly 25 songs.
+                - Create a playlist of exactly 35 songs.
                 - Each song should match the user's selected mood(s).
                 - Lyrics should correlate with the mood/vibe.
                 - Include songs from artists similar to the user's preferences.
@@ -390,7 +391,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     
     // - MARK: ParseSongList
     private func parseSongList(_ jsonResponse: String) -> [Song] {
-       // TODO: IMPLEMENT THE PARSING
         var parsedSongs: [Song] = []
         
         let corrected = extractJSON(from: jsonResponse)!
