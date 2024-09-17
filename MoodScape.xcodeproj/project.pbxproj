@@ -48,6 +48,7 @@
 		766FD1512C81390100D9ACF6 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD1502C81390100D9ACF6 /* UILabelExtensions.swift */; };
 		766FD1532C81554700D9ACF6 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD1522C81554700D9ACF6 /* RegistrationViewController.swift */; };
 		766FD1552C836EBE00D9ACF6 /* newLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD1542C836EBE00D9ACF6 /* newLogin.swift */; };
+		7678E1942C99F3C4008A24D5 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1932C99F3C4008A24D5 /* ConfettiView.swift */; };
 		768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 768536C82C7A84A000C35FF8 /* green_gradient.gif */; };
 		768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CA2C7A893000C35FF8 /* GenreCell.swift */; };
 		768536CD2C7A896800C35FF8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CC2C7A896800C35FF8 /* Genre.swift */; };
@@ -144,6 +145,7 @@
 		766FD1502C81390100D9ACF6 /* UILabelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		766FD1522C81554700D9ACF6 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		766FD1542C836EBE00D9ACF6 /* newLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newLogin.swift; sourceTree = "<group>"; };
+		7678E1932C99F3C4008A24D5 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		768536C82C7A84A000C35FF8 /* green_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = green_gradient.gif; sourceTree = "<group>"; };
 		768536CA2C7A893000C35FF8 /* GenreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCell.swift; sourceTree = "<group>"; };
 		768536CC2C7A896800C35FF8 /* Genre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 				7664857C2C6EF3C200AA050A /* MoodSelectionView.swift */,
 				76AAD32F2C72A8A600CBE3D8 /* EmotionCell.swift */,
 				765E1EEC2C98C92E0010D6B6 /* NewPlaylistView.swift */,
+				7678E1932C99F3C4008A24D5 /* ConfettiView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -621,6 +624,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7678E1942C99F3C4008A24D5 /* ConfettiView.swift in Sources */,
 				764FDE382C6983040060A428 /* LoginViewController.swift in Sources */,
 				764E2A382C7939EE00785104 /* MusicSetupViewController.swift in Sources */,
 				766FD1512C81390100D9ACF6 /* UILabelExtensions.swift in Sources */,
