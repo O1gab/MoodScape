@@ -72,11 +72,22 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupConstraints()
-        
-        emotionsCollectionView.delegate = self
-        emotionsCollectionView.dataSource = self
+        checkSpotifyToken { success in
+            if success {
+                DispatchQueue.main.async {
+                    self.setupView()
+                    self.setupConstraints()
+                    
+                    self.emotionsCollectionView.delegate = self
+                    self.emotionsCollectionView.dataSource = self
+                }
+            }
+            else {
+                DispatchQueue.main.async {
+                    self.showError("Failed to refresh Spotify token")
+                }
+            }
+        }
     }
     
     // - MARK: ViewWillAppear
@@ -119,9 +130,22 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         ])
     }
     
-    // MARK: - ClosePopUp
-    @objc private func closePopUp() {
-        animateHide()
+    // - MARK: - CheckSpotifyToken
+    private func checkSpotifyToken(completion: @escaping (Bool) -> Void) {
+        if SpotifyAuth.shared.shouldRefreshToken {
+            SpotifyAuth.shared.refreshAccessToken { success in
+                if success {
+                    print("Spotify access token refreshed successfully")
+                    completion(true)
+                } else {
+                    print("Failed to refresh Spotify access token")
+                    completion(false)
+                }
+            }
+        } else {
+            // No refreshing needed
+            completion(true)
+        }
     }
     
     private func fetchSelectedArtists(completion: @escaping ([String]?) -> Void) {
@@ -141,7 +165,9 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    
     @objc private func saveEmotions() {
+       
         fetchSelectedArtists { [weak self] artistNames in
             guard let self = self, let artistNames = artistNames, !artistNames.isEmpty else {
                 self?.showError("Failed to fetch artist names or no artists selected")
@@ -226,7 +252,8 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             print("user id was fetched!")
             
             // Create the playlist on Spotify
-            SpotifyAPIManager.shared.createPlaylist(name: "MoodScape Playlist", userId: userID) { playlistID in
+            let name = "\(Date.now): \(String(describing: self?.selectedEmotions))"
+            SpotifyAPIManager.shared.createPlaylist(name: name, userId: userID) { playlistID in
                 guard let playlistID = playlistID else {
                     self?.showError("Failed to create Spotify playlist")
                     return
@@ -237,9 +264,11 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 SpotifyAPIManager.shared.addTracksToPlaylist(playlistID: playlistID, trackURIs: trackURIs) { success in
                     if success {
                         print("Playlist created and songs added successfully!")
+                        /*
                         let newPlaylist = NewPlaylistView()
                         self?.colorPlaylist(newPlaylist: newPlaylist)
                         self?.view.addSubview(newPlaylist)
+                         */
                     } else {
                         self?.showError("Failed to add songs to playlist")
                     }
@@ -248,6 +277,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    // MARK: ColorPlaylist
     func colorPlaylist(newPlaylist: NewPlaylistView) {
         let prompt = "Generate a pastel color based on the following emotions: \(selectedEmotions). The color should reflect the mood associated with these emotions. Return the color as an object with red, green, and blue (RGB) values. Only provide the RGB values generated as JSONObject"
         
@@ -266,6 +296,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    // MARK: AddSongsToPlaylist
     func addSongsToPlaylist(playlistID: String, songs: [Song], accessToken: String) {
             let uris = songs.map { song in
                 "spotify:track:\(song.id)" // Assuming `spotifyID` was fetched for each song
@@ -357,6 +388,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         return parsedSongs
     }
     
+    // MARK: ParseGroqColorResponse
     func parseGroqColorResponse(_ jsonResponse: String) -> UIColor? {
         guard let corrected = extractJSON(from: jsonResponse) else {
             return UIColor.black
@@ -397,7 +429,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     }
 
     
-    // - MARK: AnimateShow
+    // MARK: - AnimateShow
     private func animateShow() {
         contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
         UIView.animate(withDuration: 0.3, animations: {
@@ -405,7 +437,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         })
     }
     
-    // - MARK: AnimateHide
+    // MARK: AnimateHide
     private func animateHide() {
         UIView.animate(withDuration: 0.3, animations: {
             self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
@@ -414,14 +446,19 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    // - MARK: ShowError
+    // MARK: ShowError
     private func showError(_ message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     
-    // - MARK: UICollectionViewDataSource
+    // MARK: - ClosePopUp
+    @objc private func closePopUp() {
+        animateHide()
+    }
+    
+    // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return emotions.count
     }
