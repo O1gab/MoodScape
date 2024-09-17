@@ -82,9 +82,11 @@ class NewPlaylistView: UIViewController {
     // MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        animateShow()
+        self.animateShow()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.messageLabel.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "Here's the playlist that reflects your current mood. Enjoy! :)", typingSpeed: 0.05) {}
+            self?.messageLabel.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "Here's the playlist that reflects your current mood. Enjoy! :)", typingSpeed: 0.05) {
+                self?.confettiView.alpha = 0
+            }
         }
     }
     

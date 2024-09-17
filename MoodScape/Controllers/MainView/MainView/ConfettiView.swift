@@ -11,6 +11,7 @@ class ConfettiView: UIView, CAAnimationDelegate {
     private var emitterLayer: CAEmitterLayer?
 
     func startConfettiAnimation() {
+        emitterLayer?.removeFromSuperlayer()
         emitterLayer = CAEmitterLayer()
         emitterLayer?.emitterPosition = CGPoint(x: self.bounds.width / 2, y: 0)
         emitterLayer?.emitterShape = .line
@@ -29,7 +30,7 @@ class ConfettiView: UIView, CAAnimationDelegate {
         let fadeOutAnimation = CABasicAnimation(keyPath: "opacity")
         fadeOutAnimation.fromValue = 1.0
         fadeOutAnimation.toValue = 0.0
-        fadeOutAnimation.duration = 5.0
+        fadeOutAnimation.duration = 7.0
         fadeOutAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
         
         let groupAnimation = CAAnimationGroup()
@@ -43,6 +44,7 @@ class ConfettiView: UIView, CAAnimationDelegate {
         // Remove emitterLayer after animation
         DispatchQueue.main.asyncAfter(deadline: .now() + 7.0) {
             self.emitterLayer?.removeFromSuperlayer()
+            self.emitterLayer = nil
         }
     }
 
@@ -50,7 +52,7 @@ class ConfettiView: UIView, CAAnimationDelegate {
         let cell = CAEmitterCell()
         cell.contents = circleImage(color: color).cgImage
         cell.birthRate = 100
-        cell.lifetime = 5.0
+        cell.lifetime = 7.0
         cell.velocity = 200
         cell.velocityRange = 50
         cell.emissionRange = .pi
