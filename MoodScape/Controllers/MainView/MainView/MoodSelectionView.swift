@@ -69,6 +69,8 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         return button
     }()
     
+    private var blurEffectView: UIVisualEffectView?
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -214,7 +216,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 }
             }
         }
-        //dismiss(animated: true, completion: nil)
     }
     
     private func processGroqResponse(_ songList: String) {
@@ -266,7 +267,12 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                         DispatchQueue.main.async {
                             print("Playlist created and songs added successfully!")
                             
+                            self?.addBlurEffect()
+                            
                             let newPlaylist = NewPlaylistView()
+                            newPlaylist.onCloseButtonTapped = { [weak self] in
+                                self?.handleCloseButtonTapped()
+                            }
                             self?.colorPlaylist(newPlaylist: newPlaylist)
                             newPlaylist.modalPresentationStyle = .overCurrentContext
                             newPlaylist.modalTransitionStyle = .crossDissolve
@@ -291,12 +297,21 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             case .success(let response):
                 guard let color = self?.parseGroqColorResponse(response) else {
                     let color = UIColor.black
-                    newPlaylist.configure(with: color, date: Date())
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd/MM/yyyy"
+                    newPlaylist.configure(with: color, date: dateFormatter.string(from: Date()))
                     return
                 }
-                newPlaylist.configure(with: color, date: Date())
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd/MM/yyyy"
+                newPlaylist.configure(with: color, date: dateFormatter.string(from: Date()))
+                return
             case .failure(_):
-                break
+                let color = UIColor.black
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd/MM/yyyy"
+                newPlaylist.configure(with: color, date: dateFormatter.string(from: Date()))
+                return
             }
         }
     }
@@ -433,7 +448,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         
     }
 
-    
     // MARK: - AnimateShow
     private func animateShow() {
         contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
@@ -456,6 +470,27 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: AddBlurEffect
+    private func addBlurEffect() {
+        let blurEffect = UIBlurEffect(style: .dark)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView?.frame = self.view.bounds
+        blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.view.addSubview(blurEffectView!)
+    }
+    
+    // MARK: HandleCloseButtonTapped
+    private func handleCloseButtonTapped() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.blurEffectView?.alpha = 0.0
+        }, completion: { _ in
+            self.blurEffectView?.removeFromSuperview()
+            self.dismiss(animated: true) {
+                self.dismiss(animated: true) {}
+            }
+        })
     }
     
     // MARK: - ClosePopUp

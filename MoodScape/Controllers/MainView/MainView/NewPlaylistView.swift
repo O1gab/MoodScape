@@ -76,6 +76,8 @@ class NewPlaylistView: UIViewController {
         return button
     }()
     
+    var onCloseButtonTapped: (() -> Void)?
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,7 +174,7 @@ class NewPlaylistView: UIViewController {
         UIView.animate(withDuration: 0.3, animations: {
             self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
         }) { _ in
-            self.dismiss(animated: false, completion: nil)
+            self.onCloseButtonTapped?()
         }
     }
     
