@@ -71,10 +71,9 @@ class NewPlaylistView: UIView {
         }
 
         // Configure with playlist image
-    func configure(with imageURL: String) {
-        if let url = URL(string: imageURL) {
-            imageView.loadImage(from: url)
-        }
+    func configure(with color: UIColor, date: Date) {
+        imageView.backgroundColor = color
+        
         //confettiView.startConfettiAnimation()
     }
 }
