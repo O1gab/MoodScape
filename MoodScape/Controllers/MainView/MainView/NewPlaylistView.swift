@@ -9,6 +9,8 @@ import UIKit
 
 class NewPlaylistView: UIViewController {
     
+    var playlistURL: URL?
+    
     private let contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .lightGray.withAlphaComponent(0.9)
@@ -181,5 +183,7 @@ class NewPlaylistView: UIViewController {
     // MARK: OpenSpotify
     @objc private func openSpotify() {
         // TODO: implement this
+        guard let url = playlistURL else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 }

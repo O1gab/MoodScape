@@ -10,6 +10,7 @@ import FirebaseFirestore
 
 class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    // MARK: - Properties
     let groqClient = GroqAPIClient()
     
     private let contentView: UIView = {
@@ -71,7 +72,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     
     private var blurEffectView: UIVisualEffectView?
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         checkSpotifyToken { success in
@@ -92,7 +93,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    // - MARK: ViewWillAppear
+    // MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animateShow()
@@ -106,7 +107,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         contentView.addSubview(closeButton)
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveEmotions), for: .touchUpInside)
@@ -150,6 +151,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    // MARK: FetchSelectedArtists
     private func fetchSelectedArtists(completion: @escaping ([String]?) -> Void) {
         let db = Firestore.firestore()
         let userId = Auth.auth().currentUser?.uid
@@ -167,9 +169,8 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    
+    // MARK: - SaveEmotions
     @objc private func saveEmotions() {
-       
         fetchSelectedArtists { [weak self] artistNames in
             guard let self = self, let artistNames = artistNames, !artistNames.isEmpty else {
                 self?.showError("Failed to fetch artist names or no artists selected")
@@ -218,6 +219,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
+    // MARK: ProcessGroqResponse
     private func processGroqResponse(_ songList: String) {
         // Step 3: Parse the Groq response and fetch artist IDs for the songs
         let songs = parseSongList(songList)
@@ -264,6 +266,11 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                     self?.showError("Failed to create Spotify playlist")
                     return
                 }
+                let playlistURLString = "https://open.spotify.com/playlist/\(playlistID)"
+                guard let playlistURL = URL(string: playlistURLString) else {
+                    self?.showError("Invalid playlist URL")
+                    return
+                }
                 print("a new playlist was created!")
                 
                 // Add tracks to the newly created playlist
@@ -275,6 +282,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                             self?.addBlurEffect()
                             
                             let newPlaylist = NewPlaylistView()
+                            newPlaylist.playlistURL = playlistURL
                             newPlaylist.onCloseButtonTapped = { [weak self] in
                                 self?.handleCloseButtonTapped()
                             }
@@ -295,11 +303,19 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     
     // MARK: ColorPlaylist
     func colorPlaylist(newPlaylist: NewPlaylistView) {
-        let prompt = "Generate a pastel color based on the following emotions: \(selectedEmotions). The color should reflect the mood associated with these emotions. Return the color as an object with red, green, and blue (RGB) values. Only provide the RGB values generated as JSONObject"
-        
+        let selected = formattedSelectedEmotions()
+        let prompt = """
+        Generate a pastel color based on the following emotions: \(selected). The color should reflect the mood associated with these emotions. Return the color as an object with red, green, and blue (RGB) values. Only provide the RGB values generated as JSONObject with the following structure:
+            {
+                "r": 0  to 255,
+                "g": 0 to 255,
+                "b": 0 to 255
+            }
+        """
         groqClient.sendPrompt(prompt) { [weak self] result in
             switch result {
             case .success(let response):
+                print(response)
                 guard let color = self?.parseGroqColorResponse(response) else {
                     let color = UIColor.black
                     let dateFormatter = DateFormatter()
