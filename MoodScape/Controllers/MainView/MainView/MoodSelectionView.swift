@@ -253,15 +253,14 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 self?.showError("Failed to fetch UserID")
                 return
             }
-            print("user id was fetched!")
             
             // Create the playlist on Spotify
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd/MM/yyyy"
             let date = dateFormatter.string(from: Date())
             let selected = self!.formattedSelectedEmotions()
-            print(selected)
             let name = "\(selected) - \(date)"
+            
             SpotifyAPIManager.shared.createPlaylist(name: name, userId: userID) { playlistID in
                 guard let playlistID = playlistID else {
                     self?.showError("Failed to create Spotify playlist")
@@ -287,7 +286,21 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                             newPlaylist.onCloseButtonTapped = { [weak self] in
                                 self?.handleCloseButtonTapped()
                             }
-                            self?.colorPlaylist(newPlaylist: newPlaylist)
+                            self?.colorPlaylist { color in
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "dd/MM/yyyy"
+                                newPlaylist.configure(with: color, date: dateFormatter.string(from: Date()))
+                                
+                                let playlist = Playlist(
+                                    id: playlistID,
+                                    name: name,
+                                    color: color,
+                                    date: dateFormatter.string(from: Date()),
+                                    emotions: selected.components(separatedBy: ", "),
+                                    spotifyURL: playlistURL
+                                )
+                                print(playlist)
+                            }
                             newPlaylist.modalPresentationStyle = .overCurrentContext
                             newPlaylist.modalTransitionStyle = .crossDissolve
                             self?.present(newPlaylist, animated: true, completion: nil)
@@ -303,37 +316,28 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     // MARK: ColorPlaylist
-    func colorPlaylist(newPlaylist: NewPlaylistView) {
+    func colorPlaylist(completion: @escaping (UIColor) -> Void) {
         let selected = formattedSelectedEmotions()
         let prompt = """
         Generate a pastel color based on the following emotions: \(selected). The color should reflect the mood associated with these emotions. Return the color as an object with red, green, and blue (RGB) values. Only provide the RGB values generated as JSONObject with the following structure:
             {
-                "r": 0  to 255,
+                "r": 0 to 255,
                 "g": 0 to 255,
                 "b": 0 to 255
             }
         """
+        
         groqClient.sendPrompt(prompt) { [weak self] result in
             switch result {
             case .success(let response):
                 print(response)
-                guard let color = self?.parseGroqColorResponse(response) else {
-                    let color = UIColor.black
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "dd/MM/yyyy"
-                    newPlaylist.configure(with: color, date: dateFormatter.string(from: Date()))
-                    return
+                if let color = self?.parseGroqColorResponse(response) {
+                    completion(color)
+                } else {
+                    completion(UIColor.black)
                 }
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "dd/MM/yyyy"
-                newPlaylist.configure(with: color, date: dateFormatter.string(from: Date()))
-                return
             case .failure(_):
-                let color = UIColor.black
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "dd/MM/yyyy"
-                newPlaylist.configure(with: color, date: dateFormatter.string(from: Date()))
-                return
+                completion(UIColor.black)
             }
         }
     }
@@ -454,12 +458,10 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                     )
                     return color
                 } else {
-                    let newPlaylist = NewPlaylistView()
-                    colorPlaylist(newPlaylist: newPlaylist)
+                    parseGroqColorResponse(jsonResponse)
                 }
             } else {
-                let newPlaylist = NewPlaylistView()
-                colorPlaylist(newPlaylist: newPlaylist)
+                parseGroqColorResponse(jsonResponse)
             }
         } catch {
             print("Error parsing JSON data: \(error.localizedDescription)")
