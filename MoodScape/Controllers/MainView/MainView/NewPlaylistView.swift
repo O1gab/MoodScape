@@ -17,6 +17,16 @@ class NewPlaylistView: UIViewController {
         return view
     }()
     
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let imageView: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .darkGray
@@ -31,8 +41,11 @@ class NewPlaylistView: UIViewController {
         return label
     }()
 
-    // Confetti animation view
-    private let confettiView = ConfettiView()
+    private let confettiView: ConfettiView = {
+        let confettiView = ConfettiView()
+        confettiView.translatesAutoresizingMaskIntoConstraints = false
+        return confettiView
+    }()
 
     private let openSpotifyButton: UIButton = {
         let button = UIButton(type: .system)
@@ -70,6 +83,9 @@ class NewPlaylistView: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animateShow()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.messageLabel.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "Here's the playlist that reflects your current mood. Enjoy! :)", typingSpeed: 0.05) {}
+        }
     }
     
     // MARK: - SetupView
@@ -77,12 +93,10 @@ class NewPlaylistView: UIViewController {
         view.addSubview(contentView)
         view.addSubview(confettiView)
         contentView.addSubview(closeButton)
+        contentView.addSubview(messageLabel)
         contentView.addSubview(imageView)
         contentView.addSubview(openSpotifyButton)
         contentView.addSubview(spotifyLogo)
-        
-        
-        confettiView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -92,6 +106,10 @@ class NewPlaylistView: UIViewController {
             
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             closeButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            messageLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor, constant: 5),
+            messageLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 10),
+            messageLabel.widthAnchor.constraint(equalToConstant: 300),
             
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 100),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -109,6 +127,7 @@ class NewPlaylistView: UIViewController {
             spotifyLogo.widthAnchor.constraint(equalToConstant: 100),
             
             confettiView.topAnchor.constraint(equalTo: view.topAnchor),
+            confettiView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             confettiView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             confettiView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             confettiView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -137,7 +156,7 @@ class NewPlaylistView: UIViewController {
     // MARK: - AnimateShow
     private func animateShow() {
         contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
-        UIView.animate(withDuration: 0.5, animations: {
+        UIView.animate(withDuration: 0.7, animations: {
             self.contentView.transform = .identity
             self.confettiView.startConfettiAnimation()
         })
