@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ConfettiView: UIView {
+class ConfettiView: UIView, CAAnimationDelegate {
     private var emitterLayer: CAEmitterLayer?
 
     func startConfettiAnimation() {
@@ -24,11 +24,31 @@ class ConfettiView: UIView {
         
         emitterLayer?.emitterCells = confettiCells
         self.layer.addSublayer(emitterLayer!)
+        
+        // Animation setup
+        let fadeOutAnimation = CABasicAnimation(keyPath: "opacity")
+        fadeOutAnimation.fromValue = 1.0
+        fadeOutAnimation.toValue = 0.0
+        fadeOutAnimation.duration = 5.0
+        fadeOutAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        
+        let groupAnimation = CAAnimationGroup()
+        groupAnimation.animations = [fadeOutAnimation]
+        groupAnimation.duration = 7.0
+        groupAnimation.delegate = self
+        
+        // Start animations
+        emitterLayer?.add(groupAnimation, forKey: "confettiAnimation")
+        
+        // Remove emitterLayer after animation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 7.0) {
+            self.emitterLayer?.removeFromSuperlayer()
+        }
     }
 
     private func makeConfettiCell(color: UIColor) -> CAEmitterCell {
         let cell = CAEmitterCell()
-        cell.contents = circleImage(color: color).cgImage // Use a circle shape as confetti
+        cell.contents = circleImage(color: color).cgImage
         cell.birthRate = 100
         cell.lifetime = 5.0
         cell.velocity = 200
