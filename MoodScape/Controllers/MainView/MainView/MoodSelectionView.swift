@@ -155,7 +155,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 2. User's selected artists: \(selectedArtists)
 
                 Guidelines:
-                - Create a playlist of exactly 20 songs.
+                - Create a playlist of exactly 25 songs.
                 - Each song should match the user's selected mood(s).
                 - Lyrics should correlate with the mood/vibe.
                 - Include songs from artists similar to the user's preferences.
@@ -173,7 +173,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                   ]
                 }
 
-                Provide the complete JSON object with 20 songs, ensuring all artist and song fields including song id taken from Spotify are filled.
+                Provide the complete JSON object with 25 songs, ensuring all artist and song fields including song id taken from Spotify are filled.
                 """
             
             // Step 2: Send the prompt to the Groq API
