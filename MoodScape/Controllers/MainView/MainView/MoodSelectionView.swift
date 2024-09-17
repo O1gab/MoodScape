@@ -142,7 +142,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
     }
     
     @objc private func saveEmotions() {
-        // TODO: Save selected emotions and generate a playlist based on the selection
         fetchSelectedArtists { [weak self] artistNames in
             guard let self = self, let artistNames = artistNames, !artistNames.isEmpty else {
                 self?.showError("Failed to fetch artist names or no artists selected")
@@ -181,8 +180,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             groqClient.sendPrompt(prompt) { [weak self] result in
                 switch result {
                 case .success(let songList):
-                    // Parse the song list and process each artist
-                    print("SUCCESS WITH PROMPT")
                     self?.processGroqResponse(songList)
                     
                 case .failure(let error):
@@ -203,25 +200,25 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         let group = DispatchGroup()
         
         for song in songs {
-            group.enter()  // Enter the group before starting the async task
+            group.enter()
             
             // Fetch the song details
             SpotifyAPIManager.shared.searchForTrack(artist: song.artist, song: song.name) { track in
                 if let track = track {
-                    // Append to fetchedSongs and trackURIs arrays
-                    fetchedSongs.append(track)  // Use the found track instead of the initial one
-                    trackURIs.append("spotify:track:\(track.id)")  // Append track URI
+                    
+                    fetchedSongs.append(track)
+                    trackURIs.append("spotify:track:\(track.id)")
                     
                     print("we just added: \(track) by \(track.artist)")  // DEBUG
                 } else {
                     print("Track not found for \(song.name) by \(song.artist)")
                 }
-                group.leave()  // Leave the group after the async call is done
+                group.leave()
             }
         }
         
         group.notify(queue: .main) { [weak self] in
-            // Playlist creation logic
+            
             guard let userID = UserDefaults.standard.string(forKey: "user_id") else {
                 self?.showError("Failed to fetch UserID")
                 return
@@ -243,8 +240,6 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                         let newPlaylist = NewPlaylistView()
                         self?.colorPlaylist(newPlaylist: newPlaylist)
                         self?.view.addSubview(newPlaylist)
-                        
-                        // Optionally, display a success message or transition the user to the playlist in the app
                     } else {
                         self?.showError("Failed to add songs to playlist")
                     }
@@ -261,8 +256,10 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             case .success(let response):
                 guard let color = self?.parseGroqColorResponse(response) else {
                     let color = UIColor.black
+                    newPlaylist.configure(with: color, date: Date())
+                    return
                 }
-                newPlaylist.configure(with: color, date: Date.now)
+                newPlaylist.configure(with: color, date: Date())
             case .failure(_):
                 break
             }
@@ -326,26 +323,21 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         
         let corrected = extractJSON(from: jsonResponse)!
         
-        // Convert the JSON response string into Data
         guard let jsonData = corrected.data(using: .utf8) else {
             print("Error: Unable to convert string to Data. String might not be properly encoded.")
             return []
         }
         
         do {
-            // Parse the JSON data into a dictionary
             if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
                 
-                // Check if "playlist" exists and is an array
                 if let playlist = json["playlist"] as? [[String: Any]] {
                     
-                    // Iterate over each song in the playlist
                     for songData in playlist {
                         if let artist = songData["artist"] as? String,
                            let songName = songData["song"] as? String,
                            let id = songData["id"] as? String {
                             
-                            // Create a Song object and append it to the list
                             let song = Song(name: songName, id: id, artist: artist, duration: "N/A", spotifyUrl: "N/A", releaseDate: "N/A", imageUrl: nil)
                             parsedSongs.append(song)
                         } else {
@@ -377,12 +369,10 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         do {
             if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
                 
-                // Check for RGB keys
                 if let r = json["r"] as? Int,
                    let g = json["g"] as? Int,
                    let b = json["b"] as? Int {
                     
-                    // Convert the RGB values into UIColor
                     let color = UIColor(
                         red: CGFloat(r) / 255.0,
                         green: CGFloat(g) / 255.0,
@@ -391,10 +381,12 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                     )
                     return color
                 } else {
-                    colorPlaylist()
+                    let newPlaylist = NewPlaylistView()
+                    colorPlaylist(newPlaylist: newPlaylist)
                 }
             } else {
-                colorPlaylist()
+                let newPlaylist = NewPlaylistView()
+                colorPlaylist(newPlaylist: newPlaylist)
             }
         } catch {
             print("Error parsing JSON data: \(error.localizedDescription)")
