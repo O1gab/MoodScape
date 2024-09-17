@@ -253,7 +253,12 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             print("user id was fetched!")
             
             // Create the playlist on Spotify
-            let name = "\(Date.now): \(String(describing: self?.selectedEmotions))"
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yyyy"
+            let date = dateFormatter.string(from: Date())
+            let selected = self!.formattedSelectedEmotions()
+            print(selected)
+            let name = "\(selected) - \(date)"
             SpotifyAPIManager.shared.createPlaylist(name: name, userId: userID) { playlistID in
                 guard let playlistID = playlistID else {
                     self?.showError("Failed to create Spotify playlist")
@@ -445,7 +450,15 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
         
         return nil
+    }
+    
+    private func formattedSelectedEmotions() -> String {
+        let selectedEmotionNames: [String] = selectedEmotions.compactMap { indexPath in
+            guard indexPath.row >= 0 && indexPath.row < emotions.count else { return nil }
+            return emotions[indexPath.row].lowercased()
+        }
         
+        return selectedEmotionNames.joined(separator: ", ")
     }
 
     // MARK: - AnimateShow
