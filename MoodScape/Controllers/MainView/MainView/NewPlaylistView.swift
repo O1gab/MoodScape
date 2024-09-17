@@ -59,7 +59,7 @@ class NewPlaylistView: UIViewController {
     }()
 
     private let spotifyLogo: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "Spotify_Logo"))
+        let imageView = UIImageView(image: UIImage(named: "Spotify_Icon"))
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -113,7 +113,7 @@ class NewPlaylistView: UIViewController {
             messageLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 10),
             messageLabel.widthAnchor.constraint(equalToConstant: 300),
             
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 100),
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 90),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 250),
             imageView.heightAnchor.constraint(equalToConstant: 250),
@@ -123,10 +123,10 @@ class NewPlaylistView: UIViewController {
             openSpotifyButton.widthAnchor.constraint(equalToConstant: 200),
             openSpotifyButton.heightAnchor.constraint(equalToConstant: 55),
             
-            spotifyLogo.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
-            spotifyLogo.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
+            spotifyLogo.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+            spotifyLogo.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 0),
+            spotifyLogo.widthAnchor.constraint(equalToConstant: 50),
             spotifyLogo.heightAnchor.constraint(equalToConstant: 50),
-            spotifyLogo.widthAnchor.constraint(equalToConstant: 100),
             
             confettiView.topAnchor.constraint(equalTo: view.topAnchor),
             confettiView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
