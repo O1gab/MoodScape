@@ -51,6 +51,8 @@
 		7678E1942C99F3C4008A24D5 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1932C99F3C4008A24D5 /* ConfettiView.swift */; };
 		7678E1962C9A2BF5008A24D5 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1952C9A2BF5008A24D5 /* Playlist.swift */; };
 		7678E1992C9A2CD0008A24D5 /* PlaylistStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1982C9A2CD0008A24D5 /* PlaylistStorage.swift */; };
+		7678E19B2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E19A2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift */; };
+		7678E19E2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E19D2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift */; };
 		768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 768536C82C7A84A000C35FF8 /* green_gradient.gif */; };
 		768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CA2C7A893000C35FF8 /* GenreCell.swift */; };
 		768536CD2C7A896800C35FF8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CC2C7A896800C35FF8 /* Genre.swift */; };
@@ -150,6 +152,8 @@
 		7678E1932C99F3C4008A24D5 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		7678E1952C9A2BF5008A24D5 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		7678E1982C9A2CD0008A24D5 /* PlaylistStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistStorage.swift; sourceTree = "<group>"; };
+		7678E19A2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedPlaylistsViewController.swift; sourceTree = "<group>"; };
+		7678E19D2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedPlaylistCell.swift; sourceTree = "<group>"; };
 		768536C82C7A84A000C35FF8 /* green_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = green_gradient.gif; sourceTree = "<group>"; };
 		768536CA2C7A893000C35FF8 /* GenreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCell.swift; sourceTree = "<group>"; };
 		768536CC2C7A896800C35FF8 /* Genre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
@@ -326,12 +330,13 @@
 			path = SpotifyAPI;
 			sourceTree = "<group>";
 		};
-		7678E1972C9A2CB0008A24D5 /* PlaylistManager */ = {
+		7678E19C2C9A34A2008A24D5 /* PlaylistsView */ = {
 			isa = PBXGroup;
 			children = (
+				7678E19A2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift */,
 				7678E1982C9A2CD0008A24D5 /* PlaylistStorage.swift */,
 			);
-			path = PlaylistManager;
+			path = PlaylistsView;
 			sourceTree = "<group>";
 		};
 		768536CE2C7A8B9000C35FF8 /* UICollectionViewItems */ = {
@@ -342,6 +347,7 @@
 				7616BD7C2C7E81B00083D227 /* SongViewCell.swift */,
 				7628AAC72C8642E80021433F /* PreferencesCell.swift */,
 				76DAE5862C874A3A00F631F1 /* FavoritesCell.swift */,
+				7678E19D2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift */,
 			);
 			path = UICollectionViewItems;
 			sourceTree = "<group>";
@@ -446,6 +452,7 @@
 		76B869B62C67B3D3002866B9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7678E19C2C9A34A2008A24D5 /* PlaylistsView */,
 				76DAE5852C87458900F631F1 /* FavoritesView */,
 				764E2A2C2C78221700785104 /* SetupView */,
 				76AAD3222C7206A500CBE3D8 /* SettingsView */,
@@ -489,7 +496,6 @@
 		76EF46102C8B38CA00758AA6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				7678E1972C9A2CB0008A24D5 /* PlaylistManager */,
 				76EF46112C8B399B00758AA6 /* GroqAPI */,
 				766485772C6ED6C700AA050A /* SpotifyAPI */,
 				76B004B42C90509700563DE7 /* MoodScape-Bridging-Header.h */,
@@ -640,6 +646,7 @@
 			files = (
 				7678E1942C99F3C4008A24D5 /* ConfettiView.swift in Sources */,
 				764FDE382C6983040060A428 /* LoginViewController.swift in Sources */,
+				7678E19B2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift in Sources */,
 				764E2A382C7939EE00785104 /* MusicSetupViewController.swift in Sources */,
 				766FD1512C81390100D9ACF6 /* UILabelExtensions.swift in Sources */,
 				76976C9B2C74238A00D44DD3 /* SongCollectionView.swift in Sources */,
@@ -654,6 +661,7 @@
 				76AAD3302C72A8A600CBE3D8 /* EmotionCell.swift in Sources */,
 				766FD1532C81554700D9ACF6 /* RegistrationViewController.swift in Sources */,
 				761EDA062C8A0A26008A07DB /* GradientCircleView.swift in Sources */,
+				7678E19E2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift in Sources */,
 				76B004C52C92048F00563DE7 /* AuthResponse.swift in Sources */,
 				7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */,
 				766FD14F2C7F837700D9ACF6 /* WelcomeView.swift in Sources */,
