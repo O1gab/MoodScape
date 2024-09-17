@@ -45,7 +45,7 @@ final class SpotifyAuth {
         return UserDefaults.standard.object(forKey: "expirationDate") as? Date
     }
     
-    private var shouldRefreshToken: Bool {
+    var shouldRefreshToken: Bool {
         guard let expirationDate = tokenExpirationDate else {
             return false
         }
@@ -54,6 +54,7 @@ final class SpotifyAuth {
         return currentDate.addingTimeInterval(fiveMinutes) >= expirationDate
     }
     
+    // MARK: - ExchangeCodeForToken
     public func exchangeCodeForToken(code: String, completion: @escaping ((Bool) -> Void)) {
         // Get token
         guard let url = URL(string: Constants.tokenAPIURL) else {
@@ -112,7 +113,6 @@ final class SpotifyAuth {
             return
         }
         
-        // Refresh token
         guard let url = URL(string: Constants.tokenAPIURL) else {
             return
         }
@@ -154,7 +154,6 @@ final class SpotifyAuth {
             }
         }
         task.resume()
-
     }
     
     private func cacheToken(result: AuthResponse) {
