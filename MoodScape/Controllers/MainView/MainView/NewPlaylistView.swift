@@ -31,7 +31,7 @@ class NewPlaylistView: UIViewController {
         return label
     }()
     
-    private let imageView: UIImageView = {
+    private let colorView: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .darkGray
         view.layer.cornerRadius = 25
@@ -116,11 +116,15 @@ class NewPlaylistView: UIViewController {
         view.addSubview(confettiView)
         contentView.addSubview(closeButton)
         contentView.addSubview(messageLabel)
-        contentView.addSubview(imageView)
+        contentView.addSubview(colorView)
         contentView.addSubview(playlistDate)
         contentView.addSubview(playlistName)
         contentView.addSubview(openSpotifyButton)
         contentView.addSubview(spotifyLogo)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openSpotify))
+        colorView.isUserInteractionEnabled = true
+        colorView.addGestureRecognizer(tapGesture)
         
         NSLayoutConstraint.activate([
             contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -135,27 +139,27 @@ class NewPlaylistView: UIViewController {
             messageLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 10),
             messageLabel.widthAnchor.constraint(equalToConstant: 270),
             
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 90),
-            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 250),
-            imageView.heightAnchor.constraint(equalToConstant: 250),
+            colorView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 90),
+            colorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            colorView.widthAnchor.constraint(equalToConstant: 250),
+            colorView.heightAnchor.constraint(equalToConstant: 250),
             
-            playlistDate.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 10),
-            playlistDate.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 10),
+            playlistDate.topAnchor.constraint(equalTo: colorView.topAnchor, constant: 10),
+            playlistDate.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 10),
             
-            playlistName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
+            playlistName.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 10),
             playlistName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playlistName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             playlistName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10),
             playlistName.bottomAnchor.constraint(equalTo: openSpotifyButton.topAnchor, constant: -5),
             
             openSpotifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            openSpotifyButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 100),
+            openSpotifyButton.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 100),
             openSpotifyButton.widthAnchor.constraint(equalToConstant: 200),
             openSpotifyButton.heightAnchor.constraint(equalToConstant: 55),
             
-            spotifyLogo.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10),
-            spotifyLogo.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 0),
+            spotifyLogo.bottomAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 10),
+            spotifyLogo.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: 0),
             spotifyLogo.widthAnchor.constraint(equalToConstant: 50),
             spotifyLogo.heightAnchor.constraint(equalToConstant: 50),
             
@@ -171,7 +175,7 @@ class NewPlaylistView: UIViewController {
     }
 
     func configure(with color: UIColor, date: String) {
-        imageView.backgroundColor = color
+        colorView.backgroundColor = color
         playlistDate.text = date
         animateBackgroundGradient(from: color, to: color.complementaryColor())
     }
