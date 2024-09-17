@@ -240,6 +240,10 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 SpotifyAPIManager.shared.addTracksToPlaylist(playlistID: playlistID, trackURIs: trackURIs) { success in
                     if success {
                         print("Playlist created and songs added successfully!")
+                        let newPlaylist = NewPlaylistView()
+                        self?.colorPlaylist(newPlaylist: newPlaylist)
+                        self?.view.addSubview(newPlaylist)
+                        
                         // Optionally, display a success message or transition the user to the playlist in the app
                     } else {
                         self?.showError("Failed to add songs to playlist")
@@ -249,8 +253,22 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         }
     }
     
-    
+    func colorPlaylist(newPlaylist: NewPlaylistView) {
+        let prompt = "Generate a pastel color based on the following emotions: \(selectedEmotions). The color should reflect the mood associated with these emotions. Return the color as an object with red, green, and blue (RGB) values. Only provide the RGB values generated as JSONObject"
         
+        groqClient.sendPrompt(prompt) { [weak self] result in
+            switch result {
+            case .success(let response):
+                guard let color = self?.parseGroqColorResponse(response) else {
+                    let color = UIColor.black
+                }
+                newPlaylist.configure(with: color, date: Date.now)
+            case .failure(_):
+                break
+            }
+        }
+    }
+    
     func addSongsToPlaylist(playlistID: String, songs: [Song], accessToken: String) {
             let uris = songs.map { song in
                 "spotify:track:\(song.id)" // Assuming `spotifyID` was fetched for each song
@@ -346,6 +364,46 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         
         return parsedSongs
     }
+    
+    func parseGroqColorResponse(_ jsonResponse: String) -> UIColor? {
+        guard let corrected = extractJSON(from: jsonResponse) else {
+            return UIColor.black
+        }
+        
+        guard let jsonData = corrected.data(using: .utf8) else {
+            return UIColor.black
+        }
+        
+        do {
+            if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                
+                // Check for RGB keys
+                if let r = json["r"] as? Int,
+                   let g = json["g"] as? Int,
+                   let b = json["b"] as? Int {
+                    
+                    // Convert the RGB values into UIColor
+                    let color = UIColor(
+                        red: CGFloat(r) / 255.0,
+                        green: CGFloat(g) / 255.0,
+                        blue: CGFloat(b) / 255.0,
+                        alpha: 1.0
+                    )
+                    return color
+                } else {
+                    colorPlaylist()
+                }
+            } else {
+                colorPlaylist()
+            }
+        } catch {
+            print("Error parsing JSON data: \(error.localizedDescription)")
+        }
+        
+        return nil
+        
+    }
+
     
     // - MARK: AnimateShow
     private func animateShow() {
