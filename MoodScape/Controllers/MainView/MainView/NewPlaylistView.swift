@@ -38,6 +38,9 @@ class NewPlaylistView: UIViewController {
     private let playlistDate: UILabel = {
         let label = UILabel()
         label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 22, weight: .heavy)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -97,6 +100,7 @@ class NewPlaylistView: UIViewController {
         contentView.addSubview(closeButton)
         contentView.addSubview(messageLabel)
         contentView.addSubview(imageView)
+        contentView.addSubview(playlistDate)
         contentView.addSubview(openSpotifyButton)
         contentView.addSubview(spotifyLogo)
         
@@ -109,7 +113,7 @@ class NewPlaylistView: UIViewController {
             closeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             closeButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
-            messageLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor, constant: 5),
+            messageLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor, constant: 10),
             messageLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 10),
             messageLabel.widthAnchor.constraint(equalToConstant: 300),
             
@@ -118,8 +122,11 @@ class NewPlaylistView: UIViewController {
             imageView.widthAnchor.constraint(equalToConstant: 250),
             imageView.heightAnchor.constraint(equalToConstant: 250),
             
+            playlistDate.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 10),
+            playlistDate.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 10),
+            
             openSpotifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            openSpotifyButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 100),
+            openSpotifyButton.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 70),
             openSpotifyButton.widthAnchor.constraint(equalToConstant: 200),
             openSpotifyButton.heightAnchor.constraint(equalToConstant: 55),
             
@@ -136,18 +143,12 @@ class NewPlaylistView: UIViewController {
              
         ])
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
-        openSpotifyButton.addTarget(self, action: #selector(openSpotifyTapped), for: .touchUpInside)
+        openSpotifyButton.addTarget(self, action: #selector(openSpotify), for: .touchUpInside)
     }
 
-        @objc private func openSpotifyTapped() {
-            // TODO: implement this
-        }
-
-        // Configure with playlist image
-    func configure(with color: UIColor, date: Date) {
+    func configure(with color: UIColor, date: String) {
         imageView.backgroundColor = color
-        
-        //confettiView.startConfettiAnimation()
+        playlistDate.text = date
     }
     
     // MARK: - ClosePopUp
@@ -160,8 +161,10 @@ class NewPlaylistView: UIViewController {
         contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
         UIView.animate(withDuration: 0.7, animations: {
             self.contentView.transform = .identity
-            self.confettiView.startConfettiAnimation()
         })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.confettiView.startConfettiAnimation()
+        }
     }
     
     // MARK: AnimateHide
@@ -172,17 +175,9 @@ class NewPlaylistView: UIViewController {
             self.dismiss(animated: false, completion: nil)
         }
     }
-}
-
-    // Helper method for loading image from URL
-extension UIImageView {
-    func loadImage(from url: URL) {
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    self.image = image
-                }
-            }
-        }
+    
+    // MARK: OpenSpotify
+    @objc private func openSpotify() {
+        // TODO: implement this
     }
 }
