@@ -96,10 +96,17 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
             topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             topLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 75),
             
+            // Collection view
             collectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 10),
-            collectionView.heightAnchor.constraint(equalToConstant: 300)
+            collectionView.heightAnchor.constraint(equalToConstant: 300),
+            
+            // Calendar
+            calendar.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 40),
+            calendar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            calendar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            calendar.heightAnchor.constraint(equalToConstant: 300)
         ])
     }
     
