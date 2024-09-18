@@ -29,7 +29,7 @@ class PlaylistStorage {
         return [
             "id": playlist.id,
             "name": playlist.name,
-            "color": playlist.color,
+            "color": try? NSKeyedArchiver.archivedData(withRootObject: playlist.color, requiringSecureCoding: false),
             "date": playlist.date,
             "emotions": playlist.emotions,
             "spotifyURL": playlist.spotifyURL.absoluteString
@@ -39,7 +39,8 @@ class PlaylistStorage {
     private func dictionaryToPlaylist(_ dict: [String: Any]) -> Playlist? {
         guard let id = dict["id"] as? String,
               let name = dict["name"] as? String,
-              let color = dict["color"] as? UIColor,
+              let colorData = dict["color"] as? Data,
+              let color = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(colorData) as? UIColor,
               let date = dict["date"] as? String,
               let emotions = dict["emotions"] as? [String],
               let spotifyURLString = dict["spotifyURL"] as? String,

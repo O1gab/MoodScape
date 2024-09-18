@@ -300,7 +300,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                                     emotions: selected.components(separatedBy: ", "),
                                     spotifyURL: playlistURL
                                 )
-                                print(playlist)
+                                PlaylistStorage().savePlaylist(playlist)
                             }
                             newPlaylist.modalPresentationStyle = .overCurrentContext
                             newPlaylist.modalTransitionStyle = .crossDissolve
