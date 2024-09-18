@@ -7,6 +7,7 @@
 
 import UIKit
 import Gifu
+import FSCalendar
 
 class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     

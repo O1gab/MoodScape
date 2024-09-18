@@ -53,6 +53,7 @@
 		7678E1992C9A2CD0008A24D5 /* PlaylistStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1982C9A2CD0008A24D5 /* PlaylistStorage.swift */; };
 		7678E19B2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E19A2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift */; };
 		7678E19E2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E19D2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift */; };
+		7678E1E62C9B81A7008A24D5 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7678E1E52C9B81A7008A24D5 /* FSCalendar */; };
 		768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */ = {isa = PBXBuildFile; fileRef = 768536C82C7A84A000C35FF8 /* green_gradient.gif */; };
 		768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CA2C7A893000C35FF8 /* GenreCell.swift */; };
 		768536CD2C7A896800C35FF8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536CC2C7A896800C35FF8 /* Genre.swift */; };
@@ -203,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				76B004BB2C90574600563DE7 /* SpotifyiOS.xcframework in Frameworks */,
+				7678E1E62C9B81A7008A24D5 /* FSCalendar in Frameworks */,
 				CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,6 +541,9 @@
 			dependencies = (
 			);
 			name = MoodScape;
+			packageProductDependencies = (
+				7678E1E52C9B81A7008A24D5 /* FSCalendar */,
+			);
 			productName = MoodScape;
 			productReference = 76B8699E2C67B3A9002866B9 /* MoodScape.app */;
 			productType = "com.apple.product-type.application";
@@ -568,6 +573,9 @@
 				Base,
 			);
 			mainGroup = 76B869952C67B3A9002866B9;
+			packageReferences = (
+				7678E1E42C9B81A7008A24D5 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+			);
 			productRefGroup = 76B8699F2C67B3A9002866B9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1053,6 +1061,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7678E1E42C9B81A7008A24D5 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7678E1E52C9B81A7008A24D5 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7678E1E42C9B81A7008A24D5 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 76B869962C67B3A9002866B9 /* Project object */;
 }
