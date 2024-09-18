@@ -33,12 +33,21 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
     
     private let topLabel: UILabel = {
         let topLabel = UILabel()
-        topLabel.text = "Recently"
+        topLabel.text = "Your Mood Journal"
         topLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         topLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         topLabel.textAlignment = .left
         topLabel.translatesAutoresizingMaskIntoConstraints = false
         return topLabel
+    }()
+    
+    private let backButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "arrow.left"), for: .normal)
+        button.tintColor = .white
+        button.imageView?.contentMode = .scaleAspectFit
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     // MARK: - ViewDidLoad
@@ -55,8 +64,11 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
         view.sendSubviewToBack(gifBackground)
         view.addSubview(gifGradient)
         
+        view.addSubview(backButton)
         view.addSubview(topLabel)
         setupCollectionView()
+        
+        backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
     }
     
     // MARK: SetupConstraints
@@ -72,8 +84,14 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
             gifGradient.topAnchor.constraint(equalTo: view.topAnchor),
             gifGradient.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            topLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+            // Back button
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            
+            // "Your Mood Journal"
+            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            topLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 75),
             
             collectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
@@ -101,6 +119,11 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
     private func loadPlaylists() {
         playlists = PlaylistStorage().fetchPlaylists()
         collectionView.reloadData()
+    }
+    
+    // MARK: HandleBack
+    @objc private func handleBack() {
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK: UICollectionView DataSource
