@@ -143,4 +143,10 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 150, height: 150)
     }
+    
+    // MARK: Open URL when a cell is tapped
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let playlist = playlists[indexPath.item]
+        UIApplication.shared.open(playlist.spotifyURL, options: [:], completionHandler: nil)
+    }
 }
