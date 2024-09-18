@@ -9,10 +9,11 @@ import UIKit
 import Gifu
 import FSCalendar
 
-class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FSCalendarDelegate, FSCalendarDataSource {
     
     private var playlists: [Playlist] = []
     private var collectionView: UICollectionView!
+    private var calendar: FSCalendar!
     
     // MARK: - Properties
     private let gifBackground: GIFImageView = {
@@ -68,6 +69,7 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
         view.addSubview(backButton)
         view.addSubview(topLabel)
         setupCollectionView()
+        setupCalendar()
         
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
     }
@@ -117,6 +119,19 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
         view.addSubview(collectionView)
     }
     
+    // MARK: - SetupCalendar
+     private func setupCalendar() {
+         calendar = FSCalendar(frame: .zero)
+         calendar.translatesAutoresizingMaskIntoConstraints = false
+         calendar.delegate = self
+         calendar.dataSource = self
+         calendar.appearance.headerTitleColor = UIColor.white
+         calendar.appearance.weekdayTextColor = UIColor.white
+         calendar.appearance.selectionColor = UIColor.clear
+         view.addSubview(calendar)
+     }
+    
+    // MARK: - LoadPlaylists
     private func loadPlaylists() {
         playlists = PlaylistStorage().fetchPlaylists()
         collectionView.reloadData()
@@ -127,7 +142,7 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
         dismiss(animated: true, completion: nil)
     }
     
-    // MARK: UICollectionView DataSource
+    // MARK: - UICollectionView DataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return playlists.count
     }
@@ -149,5 +164,31 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let playlist = playlists[indexPath.item]
         UIApplication.shared.open(playlist.spotifyURL, options: [:], completionHandler: nil)
+    }
+    
+    // MARK: - FSCalendarDataSource
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        let playlistDates = playlists.map { $0.date } // Dates of created playlists
+        let currentDateString = dateFormatter.string(from: date)
+        
+        return playlistDates.contains(currentDateString) ? 1 : 0
+    }
+
+    // MARK: FSCalendarDelegateAppearance
+    func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        let playlistDates = playlists.map { $0.date }
+        let currentDateString = dateFormatter.string(from: date)
+        
+        if let playlist = playlists.first(where: { $0.date == currentDateString }) {
+            return playlist.color
+        }
+        
+        return nil
     }
 }
