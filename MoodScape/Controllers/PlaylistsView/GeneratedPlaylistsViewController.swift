@@ -132,9 +132,13 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
          calendar.translatesAutoresizingMaskIntoConstraints = false
          calendar.delegate = self
          calendar.dataSource = self
+         calendar.appearance.titleFont = UIFont.boldSystemFont(ofSize: 16)
+         calendar.appearance.headerTitleFont = UIFont.boldSystemFont(ofSize: 18)
+         calendar.appearance.weekdayFont = UIFont.boldSystemFont(ofSize: 14)
          calendar.appearance.headerTitleColor = UIColor.white
          calendar.appearance.weekdayTextColor = UIColor.white
          calendar.appearance.selectionColor = UIColor.clear
+         calendar.appearance.todayColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
          view.addSubview(calendar)
      }
     
@@ -178,10 +182,22 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
         
-        let playlistDates = playlists.map { $0.date } // Dates of created playlists
+        let playlistDates = playlists.map { $0.date }
         let currentDateString = dateFormatter.string(from: date)
         
         return playlistDates.contains(currentDateString) ? 1 : 0
+    }
+    
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        let selectedDateString = dateFormatter.string(from: date)
+        let playlistsForDate = playlists.filter { $0.date == selectedDateString }
+        
+        if !playlistsForDate.isEmpty {
+            showPlaylists(for: playlistsForDate, date: selectedDateString)
+        }
     }
 
     // MARK: FSCalendarDelegateAppearance
@@ -192,10 +208,16 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
         let playlistDates = playlists.map { $0.date }
         let currentDateString = dateFormatter.string(from: date)
         
-        if let playlist = playlists.first(where: { $0.date == currentDateString }) {
-            return playlist.color
+        if let playlist = playlists.first(where: { $0.date == dateFormatter.string(from: date) }) {
+            return playlist.color // dot color matching playlist color
         }
-        
-        return nil
+        return UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+    }
+    
+    private func showPlaylists(for playlists: [Playlist], date: String) {
+        let playlistViewController = PlaylistsForDateViewController()
+        playlistViewController.playlists = playlists
+        playlistViewController.selectedDate = date
+        present(playlistViewController, animated: true, completion: nil)
     }
 }
