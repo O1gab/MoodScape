@@ -9,7 +9,7 @@ import UIKit
 import Gifu
 import FSCalendar
 
-class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FSCalendarDelegate, FSCalendarDataSource {
+class MoodJournalViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FSCalendarDelegate, FSCalendarDataSource {
     
     private var playlists: [Playlist] = []
     private var collectionView: UICollectionView!
@@ -50,6 +50,16 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
         button.imageView?.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    private let calendarLabel: UILabel = {
+        let topLabel = UILabel()
+        topLabel.text = "History"
+        topLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        topLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        topLabel.textAlignment = .left
+        topLabel.translatesAutoresizingMaskIntoConstraints = false
+        return topLabel
     }()
     
     // MARK: - ViewDidLoad
@@ -102,8 +112,12 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 10),
             collectionView.heightAnchor.constraint(equalToConstant: 300),
             
+            // Calendar label
+            calendarLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
+            calendarLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
             // Calendar
-            calendar.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 40),
+            calendar.topAnchor.constraint(equalTo: calendarLabel.bottomAnchor, constant: 20),
             calendar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             calendar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             calendar.heightAnchor.constraint(equalToConstant: 300)
@@ -140,6 +154,7 @@ class GeneratedPlaylistsViewController: UIViewController, UICollectionViewDataSo
          calendar.appearance.selectionColor = UIColor.clear
          calendar.appearance.todayColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
          view.addSubview(calendar)
+         view.addSubview(calendarLabel)
      }
     
     // MARK: - LoadPlaylists

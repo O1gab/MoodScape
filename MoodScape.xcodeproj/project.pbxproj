@@ -51,7 +51,7 @@
 		7678E1942C99F3C4008A24D5 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1932C99F3C4008A24D5 /* ConfettiView.swift */; };
 		7678E1962C9A2BF5008A24D5 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1952C9A2BF5008A24D5 /* Playlist.swift */; };
 		7678E1992C9A2CD0008A24D5 /* PlaylistStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1982C9A2CD0008A24D5 /* PlaylistStorage.swift */; };
-		7678E19B2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E19A2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift */; };
+		7678E19B2C9A3462008A24D5 /* MoodJournalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E19A2C9A3462008A24D5 /* MoodJournalViewController.swift */; };
 		7678E19E2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E19D2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift */; };
 		7678E1E62C9B81A7008A24D5 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7678E1E52C9B81A7008A24D5 /* FSCalendar */; };
 		7678E1E82C9BAF08008A24D5 /* PlaylistsForDateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1E72C9BAF08008A24D5 /* PlaylistsForDateViewController.swift */; };
@@ -154,7 +154,7 @@
 		7678E1932C99F3C4008A24D5 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		7678E1952C9A2BF5008A24D5 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		7678E1982C9A2CD0008A24D5 /* PlaylistStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistStorage.swift; sourceTree = "<group>"; };
-		7678E19A2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedPlaylistsViewController.swift; sourceTree = "<group>"; };
+		7678E19A2C9A3462008A24D5 /* MoodJournalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodJournalViewController.swift; sourceTree = "<group>"; };
 		7678E19D2C9A34E1008A24D5 /* GeneratedPlaylistCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedPlaylistCell.swift; sourceTree = "<group>"; };
 		7678E1E72C9BAF08008A24D5 /* PlaylistsForDateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsForDateViewController.swift; sourceTree = "<group>"; };
 		768536C82C7A84A000C35FF8 /* green_gradient.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = green_gradient.gif; sourceTree = "<group>"; };
@@ -337,7 +337,7 @@
 		7678E19C2C9A34A2008A24D5 /* PlaylistsView */ = {
 			isa = PBXGroup;
 			children = (
-				7678E19A2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift */,
+				7678E19A2C9A3462008A24D5 /* MoodJournalViewController.swift */,
 				7678E1982C9A2CD0008A24D5 /* PlaylistStorage.swift */,
 				7678E1E72C9BAF08008A24D5 /* PlaylistsForDateViewController.swift */,
 			);
@@ -657,7 +657,7 @@
 			files = (
 				7678E1942C99F3C4008A24D5 /* ConfettiView.swift in Sources */,
 				764FDE382C6983040060A428 /* LoginViewController.swift in Sources */,
-				7678E19B2C9A3462008A24D5 /* GeneratedPlaylistsViewController.swift in Sources */,
+				7678E19B2C9A3462008A24D5 /* MoodJournalViewController.swift in Sources */,
 				764E2A382C7939EE00785104 /* MusicSetupViewController.swift in Sources */,
 				766FD1512C81390100D9ACF6 /* UILabelExtensions.swift in Sources */,
 				76976C9B2C74238A00D44DD3 /* SongCollectionView.swift in Sources */,
