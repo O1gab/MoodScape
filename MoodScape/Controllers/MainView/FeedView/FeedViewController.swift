@@ -410,7 +410,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // - MARK: HandleExplore
     @objc private func handleExplore() {
-        let favoritesView = FavoritesViewController()
+        let favoritesView = MoodJournalViewController()
         favoritesView.modalPresentationStyle = .fullScreen
         self.present(favoritesView, animated: true)
     }
