@@ -82,6 +82,9 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
         setupCalendar()
         
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        view.addGestureRecognizer(panGesture)
     }
     
     // MARK: SetupConstraints
@@ -166,6 +169,29 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
     // MARK: HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: Handle Pan Gesture
+    @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: view)
+        
+        switch gesture.state {
+        case .changed:
+            if translation.y > 0 {
+                view.frame.origin.y = translation.y // Move the view down as you scroll
+            }
+        case .ended:
+            if translation.y > 100 { // If swiped down enough, dismiss
+                dismiss(animated: true, completion: nil)
+            } else {
+                // Reset position if not swiped enough
+                UIView.animate(withDuration: 0.3) {
+                    self.view.frame.origin.y = 0
+                }
+            }
+        default:
+            break
+        }
     }
     
     // MARK: - UICollectionView DataSource
