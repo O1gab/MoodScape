@@ -10,6 +10,10 @@ import FirebaseAuth
 
 class MainViewController: MainBaseView {
     
+    // MARK: - Properties
+    private let gestureThreshold: CGFloat = 500 // Threshold for hard scroll
+    private var panGesture: UIPanGestureRecognizer!
+    
     private let greetingLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
@@ -63,6 +67,7 @@ class MainViewController: MainBaseView {
         super.viewDidLoad()
         determineGreeting()
         setupView()
+        setupGesture()
     }
     
     // - MARK: SetupLayout
@@ -136,6 +141,28 @@ class MainViewController: MainBaseView {
                 }
             } else {
                 self?.greetingLabel.text = "Good to see you here"
+            }
+        }
+    }
+    
+    // MARK: - Setup Gesture
+    private func setupGesture() {
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleVerticalSwipe(_:)))
+        view.addGestureRecognizer(panGesture)
+    }
+    
+    // MARK: - Handle Gesture
+    @objc func handleVerticalSwipe(_ gesture: UIPanGestureRecognizer) {
+        let velocity = gesture.velocity(in: view)
+        let translation = gesture.translation(in: view)
+        
+        // Detect if the user has swiped down hard enough
+        if gesture.state == .ended {
+            if velocity.y < -gestureThreshold && translation.y < -100 {
+                let moodJournalView = MoodJournalViewController()
+                moodJournalView.modalPresentationStyle = .overFullScreen
+                moodJournalView.modalTransitionStyle = .crossDissolve
+                present(moodJournalView, animated: true, completion: nil)
             }
         }
     }
