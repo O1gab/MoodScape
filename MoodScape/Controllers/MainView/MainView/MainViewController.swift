@@ -34,7 +34,14 @@ class MainViewController: MainBaseView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-        
+    
+    private let gradientCircleView: GradientCircleView = {
+        let view = GradientCircleView()
+        view.alpha = 0.9
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let addMoodButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 50, weight: .medium))
@@ -74,6 +81,7 @@ class MainViewController: MainBaseView {
     private func setupView() {
         view.addSubview(greetingLabel)
         view.addSubview(topLabel)
+        view.addSubview(gradientCircleView)
         view.addSubview(addMoodButton)
         addMoodButton.addTarget(self, action: #selector(handleAddMood), for: .touchUpInside)
         view.addSubview(addMoodLabel)
@@ -88,6 +96,11 @@ class MainViewController: MainBaseView {
             // Top label constraints
             topLabel.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
             topLabel.leadingAnchor.constraint(equalTo: greetingLabel.leadingAnchor),
+            
+            gradientCircleView.centerXAnchor.constraint(equalTo: addMoodButton.centerXAnchor),
+            gradientCircleView.centerYAnchor.constraint(equalTo: addMoodButton.centerYAnchor),
+            gradientCircleView.widthAnchor.constraint(equalToConstant: 150),
+            gradientCircleView.heightAnchor.constraint(equalTo: addMoodButton.widthAnchor),
             
             // "Add Mood" Button constraints
             addMoodButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
