@@ -163,19 +163,21 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return label
     }()
     
-    private let bioLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.numberOfLines = 0
-        label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        label.backgroundColor = UIColor(white: 1, alpha: 0.05)
-        label.layer.cornerRadius = 12
-        label.layer.masksToBounds = true
-        label.layer.borderColor = UIColor.white.cgColor
-        label.layer.borderWidth = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let bioTextView: UITextView = {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.font =  UIFont.systemFont(ofSize: 18, weight: .medium)
+        textView.textColor = .black
+        textView.isEditable = false
+        textView.backgroundColor = UIColor(white: 1, alpha: 0.05)
+        textView.layer.cornerRadius = 12
+        textView.layer.masksToBounds = true
+        textView.layer.borderWidth = 2
+        textView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        textView.textAlignment = .left
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        textView.isScrollEnabled = true
+        return textView
     }()
     
     private let registrationDate: UILabel = {
@@ -266,7 +268,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         contentView.addSubview(usernameLabel)
         contentView.addSubview(inlineBarStackView)
         contentView.addSubview(greetingLabel)
-        contentView.addSubview(bioLabel)
+        contentView.addSubview(bioTextView)
         contentView.addSubview(preferencesLabel)
         contentView.addSubview(registrationDate)
         contentView.addSubview(shareButton)
@@ -326,12 +328,12 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             greetingLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 30),
             greetingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
-            bioLabel.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
-            bioLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            bioLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            bioLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 80), // Height for the bio box
+            bioTextView.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
+            bioTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            bioTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            bioTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80), // Height for the bio box
             
-            registrationDate.topAnchor.constraint(equalTo: bioLabel.bottomAnchor, constant: 20),
+            registrationDate.topAnchor.constraint(equalTo: bioTextView.bottomAnchor, constant: 20),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             registrationDate.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
@@ -463,9 +465,9 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
                     }
                     
                     if let bio = data?["bio"] as? String {
-                        self.bioLabel.text = bio
+                        self.bioTextView.text = bio
                     } else {
-                        self.bioLabel.text = "Set up your bio :)"
+                        self.bioTextView.text = "Set up your bio :)"
                     }
                 }
             } else {
