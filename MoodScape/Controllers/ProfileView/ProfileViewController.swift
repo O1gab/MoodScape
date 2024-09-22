@@ -408,10 +408,15 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         let albumsCount = FavoritesManager.getFavoriteAlbums(favoritesManager)().count
         let totalFavorites = songsCount + albumsCount
         
-        // Assuming the first subview in `inlineBarStackView` is the favorites stack view
         if let favoritesStackView = inlineBarStackView.arrangedSubviews.first as? UIStackView,
            let favoritesCountLabel = favoritesStackView.arrangedSubviews.first as? UILabel {
             favoritesCountLabel.text = "\(totalFavorites)"
+        }
+        
+        if let searchesStackView = inlineBarStackView.arrangedSubviews[1] as? UIStackView,
+            let searchesCountLabel = searchesStackView.arrangedSubviews.first as? UILabel {
+            let playlistsCount = PlaylistStorage().fetchPlaylists().count
+            searchesCountLabel.text = "\(playlistsCount)"
         }
     }
     
@@ -591,9 +596,9 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         
         switch sender.tag {
         case 0:
-            viewController = FavoritesViewController() // FAVOURITES
+            viewController = FavoritesViewController() // Favorites
         case 1:
-            viewController = MainTabBarController() // SEARCHES
+            viewController = MoodJournalViewController() // Mood Journal
         case 2:
             viewController = MainTabBarController() // FRIENDS
         default:
