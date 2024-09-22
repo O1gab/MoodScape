@@ -111,7 +111,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         searchesCountLabel.textAlignment = .center
         
         let searchesButton = UIButton(type: .system)
-        searchesButton.setTitle("Searches", for: .normal)
+        searchesButton.setTitle("Moods", for: .normal)
         searchesButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         searchesButton.tag = 1
         searchesButton.setTitleColor(.white, for: .normal)
