@@ -33,7 +33,6 @@
 		7664855C2C6C447E00AA050A /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664855B2C6C447E00AA050A /* MainTabBarController.swift */; };
 		7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664855D2C6C46A700AA050A /* SocialViewController.swift */; };
 		766485602C6C471D00AA050A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664855F2C6C471D00AA050A /* MainViewController.swift */; };
-		766485622C6C474F00AA050A /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485612C6C474F00AA050A /* StatsViewController.swift */; };
 		766485642C6C479800AA050A /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485632C6C479800AA050A /* FeedViewController.swift */; };
 		766485662C6C490400AA050A /* MainBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485652C6C490400AA050A /* MainBaseView.swift */; };
 		766485682C6E4EFB00AA050A /* ProfileSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485672C6E4EFB00AA050A /* ProfileSetupViewController.swift */; };
@@ -136,7 +135,6 @@
 		7664855B2C6C447E00AA050A /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		7664855D2C6C46A700AA050A /* SocialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialViewController.swift; sourceTree = "<group>"; };
 		7664855F2C6C471D00AA050A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		766485612C6C474F00AA050A /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		766485632C6C479800AA050A /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		766485652C6C490400AA050A /* MainBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainBaseView.swift; sourceTree = "<group>"; };
 		766485672C6E4EFB00AA050A /* ProfileSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupViewController.swift; sourceTree = "<group>"; };
@@ -308,7 +306,6 @@
 				7616BD7A2C7E7B4C0083D227 /* SocialView */,
 				76AAD32A2C729DD000CBE3D8 /* MainView */,
 				76AAD3232C721A0C00CBE3D8 /* FeedView */,
-				766485612C6C474F00AA050A /* StatsViewController.swift */,
 				7616BD742C7E33800083D227 /* CustomTabBar.swift */,
 			);
 			path = MainView;
@@ -683,7 +680,6 @@
 				76B004C12C91EDBF00563DE7 /* SpotifyAuthController.swift in Sources */,
 				76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
-				766485622C6C474F00AA050A /* StatsViewController.swift in Sources */,
 				765E1EED2C98C92E0010D6B6 /* NewPlaylistView.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
 				76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */,
