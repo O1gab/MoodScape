@@ -113,6 +113,51 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return button
     }()
     
+    private let tabBar: UIStackView = {
+        let favoritesLabel = UILabel()
+        favoritesLabel.text = "Favorites"
+        favoritesLabel.textAlignment = .center
+        favoritesLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        favoritesLabel.backgroundColor = .clear
+        favoritesLabel.layer.cornerRadius = 20
+        favoritesLabel.layer.borderWidth = 2
+        favoritesLabel.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
+        favoritesLabel.clipsToBounds = true
+        favoritesLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        favoritesLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let moodJournalLabel = UILabel()
+        moodJournalLabel.text = "Mood Journal"
+        moodJournalLabel.textAlignment = .center
+        moodJournalLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        moodJournalLabel.backgroundColor = .clear
+        moodJournalLabel.layer.cornerRadius = 20
+        moodJournalLabel.layer.borderWidth = 2
+        moodJournalLabel.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
+        moodJournalLabel.clipsToBounds = true
+        moodJournalLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        moodJournalLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let stackView = UIStackView(arrangedSubviews: [favoritesLabel, moodJournalLabel])
+        stackView.axis = .horizontal
+        stackView.spacing = 16
+        stackView.distribution = .fillEqually
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.backgroundColor = .white.withAlphaComponent(0.05)
+        stackView.layer.cornerRadius = 20
+        
+        favoritesLabel.isUserInteractionEnabled = true
+        moodJournalLabel.isUserInteractionEnabled = true
+        
+        let favoritesTapGesture = UITapGestureRecognizer(target: self, action: #selector(navigateToFavorites))
+        favoritesLabel.addGestureRecognizer(favoritesTapGesture)
+        
+        let moodJournalTapGesture = UITapGestureRecognizer(target: self, action: #selector(navigateToMoodJournal))
+        moodJournalLabel.addGestureRecognizer(moodJournalTapGesture)
+        
+        return stackView
+    }()
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,6 +178,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
+        contentView.addSubview(tabBar)
         contentView.addSubview(topLabel)
         contentView.addSubview(topSongsLabel)
         contentView.addSubview(loadingIndicator)
@@ -163,8 +209,13 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
+            tabBar.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            tabBar.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            tabBar.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            tabBar.heightAnchor.constraint(equalToConstant: 40),
+            
             // "Recently"
-            topLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            topLabel.topAnchor.constraint(equalTo: tabBar.bottomAnchor, constant: 20),
             topLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             albumCollectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
@@ -400,6 +451,13 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
+    // MARK: ShowError
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     // MARK: - InfoButtonTapped
     @objc private func infoButtonTapped() {
         self.infoMessage.isHidden = false
@@ -414,12 +472,19 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         favoritesView.modalPresentationStyle = .fullScreen
         self.present(favoritesView, animated: true)
     }
+    
+    // MARK: NavigateToFavorites
+    @objc private func navigateToFavorites() {
+        let favoritesViewController = FavoritesViewController()
+        favoritesViewController.modalPresentationStyle = .fullScreen
+        present(favoritesViewController, animated: true)
+    }
 
-    // MARK: ShowError
-    private func showError(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
+    // MARK: NavigateToMoodJournal
+    @objc private func navigateToMoodJournal() {
+        let moodJournalViewController = MoodJournalViewController()
+        moodJournalViewController.modalPresentationStyle = .fullScreen
+        present(moodJournalViewController, animated: true)
     }
     
     // MARK: - UICollectionViewDataSource
