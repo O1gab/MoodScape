@@ -9,6 +9,7 @@ import UIKit
 
 class NewPlaylistView: UIViewController {
     
+    // MARK: - Properties
     var playlistURL: URL?
     
     var name: String?
@@ -174,13 +175,14 @@ class NewPlaylistView: UIViewController {
         openSpotifyButton.addTarget(self, action: #selector(openSpotify), for: .touchUpInside)
     }
 
+    // MARK: - Configure
     func configure(with color: UIColor, date: String) {
         colorView.backgroundColor = color
         playlistDate.text = date
         animateBackgroundGradient(from: color, to: color.complementaryColor())
     }
     
-    // - MARK: AnimateBackgroundGradient
+    // MARK: - AnimateBackgroundGradient
     private func animateBackgroundGradient(from dominantColor: UIColor, to complementaryColor: UIColor) {
         var adjustedDominantColor = dominantColor
         var adjustedComplementaryColor = complementaryColor
@@ -238,7 +240,7 @@ class NewPlaylistView: UIViewController {
         }
     }
     
-    // MARK: OpenSpotify
+    // MARK: - OpenSpotify
     @objc private func openSpotify() {
         // TODO: implement this
         guard let url = playlistURL else { return }

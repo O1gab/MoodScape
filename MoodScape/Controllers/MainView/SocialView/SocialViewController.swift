@@ -10,6 +10,7 @@ import FirebaseFirestore
 
 class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
+    // MARK: - Properties
     private var allUsers: [User] = []
     private var filteredUsers: [User] = []
     
@@ -61,7 +62,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         return button
     }()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -71,12 +72,12 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         fetchAllUsers()
     }
     
-    // - MARK: ViewWillAppear
+    // MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         searchBar.delegate = self
         searchBar.target(forAction: #selector(searchBarSearchButtonClicked), withSender: .none)
@@ -88,7 +89,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         addFriendsButton.addTarget(self, action: #selector(addFriendsButtonTapped), for: .touchUpInside)
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             friendsLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -113,6 +114,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         ])
     }
     
+    // MARK: - FetchFriends
     private func fetchFriends() {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("User not logged in")
@@ -144,6 +146,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         }
     }
     
+    // MARK: - FetchAllUsers
     private func fetchAllUsers() {
         let db = Firestore.firestore()
         db.collection("users").getDocuments { [weak self] (querySnapshot, error) in
@@ -155,14 +158,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         }
     }
     
-    // - MARK: SetupTableView
-    private func setupTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "userCell")
-    }
-    
-    // - MARK: FetchFriends
+    // - MARK: AddFriend
     private func addFriend(user: User) {
         guard let currentUserId = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
@@ -189,15 +185,17 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         }
     }
     
+    // MARK: - AddFriendsButtonTapped Method
     @objc private func addFriendsButtonTapped() {
         searchBar.becomeFirstResponder()
     }
     
+    // MARK: - SearchBarSearchButtonClicked
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
           searchBar.resignFirstResponder()
       }
     
-    // UISearchBarDelegate Method
+    // MARK: UISearchBarDelegate
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
             filteredUsers = allUsers
@@ -207,7 +205,14 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         tableView.reloadData()
     }
     
-    // UITableViewDataSource Methods
+    // MARK: - SetupTableView
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "userCell")
+    }
+    
+    // MARK: UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredUsers.count
     }
@@ -220,7 +225,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         return cell
     }
     
-    // UITableViewDelegate Method
+    // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = filteredUsers[indexPath.row]
         addFriend(user: user)

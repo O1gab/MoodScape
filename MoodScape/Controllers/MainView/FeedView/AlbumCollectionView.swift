@@ -8,6 +8,7 @@ import UIKit
 
 class AlbumCollectionViewCell: UICollectionViewCell {
     
+    // MARK: Properties
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -17,19 +18,19 @@ class AlbumCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    // - MARK: Initializer
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
     
-    // - MARK: Initializer
+    // MARK: Initializer
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         contentView.addSubview(imageView)
         contentView.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
@@ -44,7 +45,7 @@ class AlbumCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    // - MARK: Configure
+    // MARK: - Configure
     func configure(with image: UIImage?) {
         imageView.image = image
     }

@@ -127,7 +127,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         friendsStackView.translatesAutoresizingMaskIntoConstraints = false
 
         let friendsCountLabel = UILabel()
-        friendsCountLabel.text = "0" // Placeholder for actual number
+        friendsCountLabel.text = "0"
         friendsCountLabel.textColor = .white
         friendsCountLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         friendsCountLabel.textAlignment = .center
@@ -402,7 +402,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
-    // - MARK: SetupLabels
+    // MARK: - SetupLabels
     private func setupLabels() {
         let songsCount = FavoritesManager.getFavoriteSongs(favoritesManager)().count
         let albumsCount = FavoritesManager.getFavoriteAlbums(favoritesManager)().count
@@ -420,7 +420,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
-    // - MARK: SetupCollectionView
+    // MARK: SetupCollectionView
     private func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -437,7 +437,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         contentView.addSubview(collectionView)
     }
     
-    // - MARK: FetchData
+    // MARK: - FetchData
     private func fetchData() {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("User not logged in")
@@ -481,6 +481,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
+    // MARK: - FetchSelectedArtists
     private func fetchSelectedArtists(completion: @escaping ([String]?) -> Void) {
         let db = Firestore.firestore()
         let userId = Auth.auth().currentUser?.uid
@@ -498,7 +499,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
-    // - MARK: FetchArtists (Your preferences)
+    // MARK: FetchArtists (Your preferences)
     private func fetchArtists() {
         // Step 1: Fetch selected artist names
          fetchSelectedArtists { [weak self] artistNames in
@@ -556,7 +557,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
          }
     }
     
-    // - MARK: AttributedText
+    // MARK: - AttributedText
     private func attributedText(staticText: String, dynamicText: String, staticColor: UIColor, dynamicColor: UIColor) -> NSAttributedString {
         let staticFont = UIFont.systemFont(ofSize: 18, weight: .bold)
         let dynamicFont = UIFont.systemFont(ofSize: 18, weight: .medium)
@@ -574,7 +575,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return attributedString
     }
     
-    // - MARK: LoadProfileImage
+    // MARK: LoadProfileImage
     private func loadProfileImage() {
         if let imageData = UserDefaults.standard.data(forKey: "profileImage") {
             profileImage.image = UIImage(data: imageData)
@@ -583,7 +584,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
-    // - MARK: ShowError
+    // MARK: ShowError
     private func showError(_ message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

@@ -8,8 +8,11 @@
 import UIKit
 
 class ConfettiView: UIView, CAAnimationDelegate {
+    
+    // MARK: - Properties
     private var emitterLayer: CAEmitterLayer?
 
+    // MARK: - StartConfettiAnimation
     func startConfettiAnimation() {
         emitterLayer?.removeFromSuperlayer()
         emitterLayer = CAEmitterLayer()
@@ -26,7 +29,6 @@ class ConfettiView: UIView, CAAnimationDelegate {
         emitterLayer?.emitterCells = confettiCells
         self.layer.addSublayer(emitterLayer!)
         
-        // Animation setup
         let fadeOutAnimation = CABasicAnimation(keyPath: "opacity")
         fadeOutAnimation.fromValue = 1.0
         fadeOutAnimation.toValue = 0.0
@@ -38,16 +40,15 @@ class ConfettiView: UIView, CAAnimationDelegate {
         groupAnimation.duration = 7.0
         groupAnimation.delegate = self
         
-        // Start animations
         emitterLayer?.add(groupAnimation, forKey: "confettiAnimation")
         
-        // Remove emitterLayer after animation
         DispatchQueue.main.asyncAfter(deadline: .now() + 7.0) {
             self.emitterLayer?.removeFromSuperlayer()
             self.emitterLayer = nil
         }
     }
 
+    // MARK: - MakeConfettiCell
     private func makeConfettiCell(color: UIColor) -> CAEmitterCell {
         let cell = CAEmitterCell()
         cell.contents = circleImage(color: color).cgImage
@@ -62,7 +63,7 @@ class ConfettiView: UIView, CAAnimationDelegate {
         return cell
     }
 
-    // Helper to create a small circle UIImage
+    // MARK: - CircleImage
     private func circleImage(color: UIColor) -> UIImage {
         let diameter: CGFloat = 10.0
         let size = CGSize(width: diameter, height: diameter)

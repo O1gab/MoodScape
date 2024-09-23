@@ -8,6 +8,8 @@
 import UIKit
 
 class SongViewCell: UICollectionViewCell {
+    
+    // MARK: - Properties
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -60,7 +62,7 @@ class SongViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // - MARK: Configure
+    // MARK: - Configure
     func configure(with song: Song) {
         imageView.image = nil
         if let url = URL(string: song.imageUrl ?? "") {

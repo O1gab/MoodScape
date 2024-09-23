@@ -9,6 +9,7 @@ import SafariServices
 
 class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    // MARK: - Properties
     private var album: Album
     
     private var isSelected: Bool = false
@@ -138,16 +139,18 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         return tableView
     }()
     
+    // MARK: - Init
     init(album: Album) {
         self.album = album
         super.init(nibName: nil, bundle: nil)
     }
     
+    // MARK: Init
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -157,14 +160,14 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         topSongsTableView.delegate = self
     }
     
-    // - MARK: ViewWillAppear
+    // MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureWithAlbum()
         checkFavorites()
     }
     
-    // - MARK: ViewDidLayoutSubviews
+    // MARK: ViewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -177,7 +180,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         )
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -213,7 +216,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         albumImageView.isUserInteractionEnabled = true
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -276,6 +279,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         ])
     }
     
+    // MARK: - CheckFavorites
     private func checkFavorites() {
         if FavoritesManager.shared.isFavoriteAlbum(album) {
             self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
@@ -284,12 +288,12 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    // - MARK: ClosePopUp
+    // MARK: - ClosePopUp
     @objc func closePopUp() {
         animateHide()
     }
     
-    // - MARK: AnimateShow
+    // MARK: AnimateShow
     func animateShow() {
         contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
         UIView.animate(withDuration: 0.3, animations: {
@@ -297,7 +301,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         })
     }
     
-    // - MARK: AnimateHide
+    // MARK: AnimateHide
     func animateHide() {
         UIView.animate(withDuration: 0.3, animations: {
             self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
@@ -306,7 +310,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    // - MARK: OpenInSpotify
+    // MARK: OpenInSpotify
     @objc private func openInSpotify() {
         if let url = URL(string: album.spotifyUrl) {
             let safariVC = SFSafariViewController(url: url)
@@ -314,7 +318,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    // - MARK: ConfigureWithAlbum
+    // MARK: - ConfigureWithAlbum
     private func configureWithAlbum() {
         if let url = URL(string: album.imageUrl) {
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -341,6 +345,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         topSongsTableView.reloadData()
     }
     
+    // MARK: - AnimateElements
     private func animateElements() {
         UIView.animate(withDuration: 0.5, animations: {
             self.releaseDateLabel.alpha = 1
@@ -397,7 +402,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         gradientLayer.add(animation, forKey: nil)
     }
     
-    // - MARK: ToggleFavorite
+    // MARK: - ToggleFavorite
     @objc private func favoriteButtonTapped(_ sender: UIButton) {
         if FavoritesManager.shared.isFavoriteAlbum(album) {
             FavoritesManager.shared.removeFavoriteAlbum(album)
@@ -417,13 +422,13 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    // - MARK: ShareAlbum
+    // MARK: ShareAlbum
     @objc private func shareAlbum() {
         let activityViewController = UIActivityViewController(activityItems: [album.spotifyUrl], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
     }
     
-    // - MARK: UITableViewDataSource
+    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return album.topSongs.count
     }
@@ -443,7 +448,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
-    // - MARK: UITableViewDelegate
+    // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let song = album.topSongs[indexPath.row]
         

@@ -9,6 +9,7 @@ import UIKit
 
 class ImagePreviewViewController: UIViewController {
 
+    // MARK: - Properties
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -19,12 +20,14 @@ class ImagePreviewViewController: UIViewController {
     
     var image: UIImage?
 
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         setupView()
     }
 
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(imageView)
         imageView.image = image
@@ -35,12 +38,11 @@ class ImagePreviewViewController: UIViewController {
             imageView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 300),
             imageView.heightAnchor.constraint(equalTo: view.heightAnchor, constant: 300)
         ])
-        
-        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissView))
         view.addGestureRecognizer(tapGestureRecognizer)
     }
     
+    // MARK: - DismissView
     @objc private func dismissView() {
         dismiss(animated: true, completion: nil)
     }

@@ -408,14 +408,14 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
-    // - MARK: HandleExplore
+    // MARK: HandleExplore
     @objc private func handleExplore() {
         let favoritesView = MoodJournalViewController()
         favoritesView.modalPresentationStyle = .fullScreen
         self.present(favoritesView, animated: true)
     }
 
-    // - MARK: ShowError
+    // MARK: ShowError
     private func showError(_ message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

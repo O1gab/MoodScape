@@ -11,7 +11,7 @@ import FirebaseAuth
 class MainViewController: MainBaseView {
     
     // MARK: - Properties
-    private let gestureThreshold: CGFloat = 500 // Threshold for hard scroll
+    private let gestureThreshold: CGFloat = 500
     private var panGesture: UIPanGestureRecognizer!
     
     private let greetingLabel: UILabel = {

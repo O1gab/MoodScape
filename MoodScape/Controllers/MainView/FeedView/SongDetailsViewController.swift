@@ -10,6 +10,7 @@ import SafariServices
 
 class SongDetailsViewController: UIViewController {
     
+    // MARK: - Properties
     private var song: Song
     
     private var scrollView: UIScrollView = {
@@ -117,32 +118,32 @@ class SongDetailsViewController: UIViewController {
         return button
     }()
     
-    // - MARK: Initializer
+    // MARK: - Initializer
     init(song: Song) {
         self.song = song
         super.init(nibName: nil, bundle: nil)
     }
     
-    // - MARK: Initializer
+    // MARK: Initializer
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
     }
     
-    // - MARK: ViewWillAppear
+    // MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureWithSong()
         checkFavorites()
     }
     
-    // - MARK: ViewDidLayoutSubviews
+    // MARK: ViewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -155,7 +156,7 @@ class SongDetailsViewController: UIViewController {
         )
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -240,6 +241,7 @@ class SongDetailsViewController: UIViewController {
         ])
     }
     
+    // MARK: - CheckFavorites
     private func checkFavorites() {
         if FavoritesManager.shared.isFavoriteSong(song) {
             self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
@@ -248,12 +250,12 @@ class SongDetailsViewController: UIViewController {
         }
     }
     
-    // - MARK: ClosePopUp
+    // MARK: ClosePopUp
     @objc func closePopUp() {
         animateHide()
     }
     
-    // - MARK: AnimateShow
+    // MARK: AnimateShow
     func animateShow() {
         contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
         UIView.animate(withDuration: 0.3, animations: {
@@ -261,7 +263,7 @@ class SongDetailsViewController: UIViewController {
         })
     }
     
-    // - MARK: AnimateHide
+    // MARK: AnimateHide
     func animateHide() {
         UIView.animate(withDuration: 0.3, animations: {
             self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
@@ -270,7 +272,7 @@ class SongDetailsViewController: UIViewController {
         }
     }
     
-    // - MARK: AnimateElements
+    // MARK: AnimateElements
     private func animateElements() {
         UIView.animate(withDuration: 0.5, animations: {
             self.releaseDateLabel.alpha = 1
@@ -281,7 +283,7 @@ class SongDetailsViewController: UIViewController {
         }
     }
     
-    // - MARK: OpenInSpotify
+    // MARK: - OpenInSpotify
     @objc private func openInSpotify() {
         if let url = URL(string: song.spotifyUrl) {
             let safariVC = SFSafariViewController(url: url)
@@ -289,7 +291,7 @@ class SongDetailsViewController: UIViewController {
         }
     }
     
-    // - MARK: ConfigureWithSong
+    // MARK: - ConfigureWithSong
     private func configureWithSong() {
         if let url = URL(string: song.imageUrl ?? "") {
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -313,7 +315,7 @@ class SongDetailsViewController: UIViewController {
         animateElements()
     }
     
-    // - MARK: AnimateBackgroundGradient
+    // MARK: AnimateBackgroundGradient
     private func animateBackgroundGradient(from dominantColor: UIColor, to complementaryColor: UIColor) {
         var adjustedDominantColor = dominantColor
         var adjustedComplementaryColor = complementaryColor
@@ -347,7 +349,7 @@ class SongDetailsViewController: UIViewController {
         gradientLayer.add(animation, forKey: nil)
     }
     
-    // - MARK: ToggleFavorite
+    // MARK: - ToggleFavorite
     @objc private func toggleFavorite() {
         if FavoritesManager.shared.isFavoriteSong(song) {
             FavoritesManager.shared.removeFavoriteSong(song)
@@ -366,7 +368,7 @@ class SongDetailsViewController: UIViewController {
         }
     }
     
-    // - MARK: ShareAlbum
+    // MARK: ShareAlbum
     @objc private func shareAlbum() {
         let activityViewController = UIActivityViewController(activityItems: [song.spotifyUrl], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)

@@ -12,6 +12,7 @@ import FirebaseFirestore
 
 class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
 
+    // MARK: - Properties
     private let topLabel: UILabel = {
         let topLabel = UILabel()
         topLabel.text = "Set up your profile"
@@ -131,21 +132,21 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         return button
     }()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
     }
     
-    // - MARK: ViewWillAppear
+    // MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchExistingData()
         loadProfileImage()
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         backButton.isHidden = true
         
@@ -174,7 +175,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         bioField.delegate = self
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -223,7 +224,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         ])
     }
     
-    // - MARK: FetchExistingData
+    // MARK: - FetchExistingData
     private func fetchExistingData() {
         guard let user = Auth.auth().currentUser else { return }
            
@@ -241,14 +242,14 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         }
     }
     
-    // - MARK: editPreferences
+    // MARK: - EditPreferences
     @objc private func editPreferences() {
         let musicSetupView = MusicSetupView()
         musicSetupView.modalPresentationStyle = .fullScreen
         self.present(musicSetupView, animated: true)
     }
     
-    // - MARK: HandleSave
+    // MARK: HandleSave
     @objc private func handleSave() {
         // BIO CHECK
         let bioText = bioField.text ?? ""
@@ -285,7 +286,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         present(imagePicker, animated: true, completion: nil)
     }
 
-    // - MARK: UITextViewDelegate - Character Count and Placeholder Handling
+    // MARK: - UITextViewDelegate
     func textViewDidChange(_ textView: UITextView) {
         let maxLength = 200
         let currentText = textView.text ?? ""
@@ -300,7 +301,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         }
     }
     
-    // Prevent user from entering more than 200 characters
+    // MARK: TextView
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let currentText = textView.text ?? ""
         guard let stringRange = Range(range, in: currentText) else { return false }
@@ -309,6 +310,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         return updatedText.count <= 200
     }
     
+    // MARK: TextViewDidBeginEditing
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == .gray {
             textView.text = nil
@@ -316,6 +318,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         }
     }
     
+    // MARK: TextViewDidEndEditing
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = "Set up your description (max. 200 chars)"
@@ -323,7 +326,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         }
     }
     
-    // - MARK: HandleSkip
+    // MARK: - HandleSkip
     @objc private func handleSkip() {
         self.dismiss(animated: true, completion: nil)
     }
@@ -336,6 +339,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         )
     }
     
+    // MARK: - ImagePickerController
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
             profileImage.image = selectedImage
@@ -344,14 +348,14 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         dismiss(animated: true, completion: nil)
     }
     
-    // - MARK: SaveProfileImage
+    // MARK: SaveProfileImage
     private func saveProfileImage(image: UIImage) {
         if let imageData = image.jpegData(compressionQuality: 0.8) {
             UserDefaults.standard.set(imageData, forKey: "profileImage")
         }
     }
     
-    // - MARK: LoadProfileImage
+    // MARK: LoadProfileImage
     private func loadProfileImage() {
         if let imageData = UserDefaults.standard.data(forKey: "profileImage") {
             profileImage.image = UIImage(data: imageData)

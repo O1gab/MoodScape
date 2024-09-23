@@ -10,6 +10,7 @@ import SafariServices
 
 class SongCardCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
@@ -34,7 +35,7 @@ class SongCardCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    // - MARK: Initialization
+    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -62,7 +63,7 @@ class SongCardCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    // - MARK: Initialization
+    // MARK: Initialization
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
@@ -90,7 +91,7 @@ class SongCardCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    // - MARK: Configure
+    // MARK: - Configure
     func configure(with song: Song) {
         titleLabel.text = song.name
         artistLabel.text = song.artist
