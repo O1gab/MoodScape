@@ -114,46 +114,39 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     }()
     
     private let tabBar: UIStackView = {
-        let favoritesLabel = UILabel()
-        favoritesLabel.text = "Favorites"
-        favoritesLabel.textAlignment = .center
-        favoritesLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        favoritesLabel.backgroundColor = .clear
-        favoritesLabel.layer.cornerRadius = 20
-        favoritesLabel.layer.borderWidth = 2
-        favoritesLabel.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
-        favoritesLabel.clipsToBounds = true
-        favoritesLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        favoritesLabel.translatesAutoresizingMaskIntoConstraints = false
+        let favorites = UIButton(type: .system)
+        favorites.setTitle("Favorites", for: .normal)
+        favorites.titleLabel?.textAlignment = .center
+        favorites.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), for: .normal)
+        favorites.backgroundColor = .clear
+        favorites.layer.cornerRadius = 20
+        favorites.layer.borderWidth = 2
+        favorites.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
+        favorites.clipsToBounds = true
+        favorites.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        favorites.translatesAutoresizingMaskIntoConstraints = false
+        favorites.addTarget(self, action: #selector(navigateToFavorites), for: .touchUpInside)
         
-        let moodJournalLabel = UILabel()
-        moodJournalLabel.text = "Mood Journal"
-        moodJournalLabel.textAlignment = .center
-        moodJournalLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        moodJournalLabel.backgroundColor = .clear
-        moodJournalLabel.layer.cornerRadius = 20
-        moodJournalLabel.layer.borderWidth = 2
-        moodJournalLabel.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
-        moodJournalLabel.clipsToBounds = true
-        moodJournalLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        moodJournalLabel.translatesAutoresizingMaskIntoConstraints = false
+        let moodJournal = UIButton(type: .system)
+        moodJournal.setTitle("Mood Journal", for: .normal)
+        moodJournal.titleLabel?.textAlignment = .center
+        moodJournal.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), for: .normal)
+        moodJournal.backgroundColor = .clear
+        moodJournal.layer.cornerRadius = 20
+        moodJournal.layer.borderWidth = 2
+        moodJournal.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
+        moodJournal.clipsToBounds = true
+        moodJournal.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        moodJournal.translatesAutoresizingMaskIntoConstraints = false
+        moodJournal.addTarget(self, action: #selector(navigateToMoodJournal), for: .touchUpInside)
         
-        let stackView = UIStackView(arrangedSubviews: [favoritesLabel, moodJournalLabel])
+        let stackView = UIStackView(arrangedSubviews: [favorites, moodJournal])
         stackView.axis = .horizontal
         stackView.spacing = 16
         stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.backgroundColor = .white.withAlphaComponent(0.05)
         stackView.layer.cornerRadius = 20
-        
-        favoritesLabel.isUserInteractionEnabled = true
-        moodJournalLabel.isUserInteractionEnabled = true
-        
-        let favoritesTapGesture = UITapGestureRecognizer(target: self, action: #selector(navigateToFavorites))
-        favoritesLabel.addGestureRecognizer(favoritesTapGesture)
-        
-        let moodJournalTapGesture = UITapGestureRecognizer(target: self, action: #selector(navigateToMoodJournal))
-        moodJournalLabel.addGestureRecognizer(moodJournalTapGesture)
         
         return stackView
     }()
@@ -335,7 +328,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         secondRecommendedSongsCollectionView.showsHorizontalScrollIndicator = false
         secondRecommendedSongsCollectionView.translatesAutoresizingMaskIntoConstraints = false
 
-        // Register the cell class for the second collection view
         secondRecommendedSongsCollectionView.register(SongViewCell.self, forCellWithReuseIdentifier: "SecondSongViewCell")
         secondRecommendedSongsCollectionView.dataSource = self
         secondRecommendedSongsCollectionView.delegate = self
@@ -423,7 +415,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             }
             
             group.notify(queue: .main) {
-                // Randomly select 30 songs
                 let shuffledSongs = Array(allSongs.shuffled().prefix(30))
                 self?.firstRecommendedSongs = Array(shuffledSongs.shuffled().prefix(15))
                 self?.secondRecommendedSongs = Array(shuffledSongs.dropFirst(15))
@@ -477,14 +468,14 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     @objc private func navigateToFavorites() {
         let favoritesViewController = FavoritesViewController()
         favoritesViewController.modalPresentationStyle = .fullScreen
-        present(favoritesViewController, animated: true)
+        self.present(favoritesViewController, animated: true)
     }
 
     // MARK: NavigateToMoodJournal
     @objc private func navigateToMoodJournal() {
         let moodJournalViewController = MoodJournalViewController()
         moodJournalViewController.modalPresentationStyle = .fullScreen
-        present(moodJournalViewController, animated: true)
+        self.present(moodJournalViewController, animated: true)
     }
     
     // MARK: - UICollectionViewDataSource
