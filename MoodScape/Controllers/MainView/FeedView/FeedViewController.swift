@@ -416,7 +416,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             
             group.notify(queue: .main) {
                 let shuffledSongs = Array(allSongs.shuffled().prefix(30))
-                self?.firstRecommendedSongs = Array(shuffledSongs.shuffled().prefix(15))
+                self?.firstRecommendedSongs = Array(shuffledSongs.prefix(15))
                 self?.secondRecommendedSongs = Array(shuffledSongs.dropFirst(15))
                 self?.firstRecommendedSongsCollectionView.reloadData()
                 self?.secondRecommendedSongsCollectionView.reloadData()
