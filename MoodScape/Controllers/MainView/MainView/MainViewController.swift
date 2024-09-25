@@ -69,12 +69,17 @@ class MainViewController: MainBaseView {
         return view
     }()
     
+    // Preloading
+    private var moodSelectionView: MoodSelectionView?
+    private var moodJournalView: MoodJournalViewController?
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         determineGreeting()
         setupView()
         setupGesture()
+        preloadViewControllers()
     }
     
     // - MARK: SetupLayout
@@ -158,10 +163,16 @@ class MainViewController: MainBaseView {
         }
     }
     
-    // MARK: - Setup Gesture
+    // MARK: - SetupGesture
     private func setupGesture() {
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(handleVerticalSwipe(_:)))
         view.addGestureRecognizer(panGesture)
+    }
+    
+    // MARK: PreloadViewControllers
+    private func preloadViewControllers() {
+        moodSelectionView = MoodSelectionView()
+        moodJournalView = MoodJournalViewController()
     }
     
     // MARK: - Handle Gesture
