@@ -62,6 +62,17 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
         return topLabel
     }()
     
+    private let noPlaylistsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No playlists generated yet"
+        label.textColor = UIColor.lightGray
+        label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
+        label.textAlignment = .center
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,6 +89,7 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
         
         view.addSubview(backButton)
         view.addSubview(topLabel)
+        view.addSubview(noPlaylistsLabel)
         setupCollectionView()
         setupCalendar()
         
@@ -109,6 +121,8 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
             topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             topLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 75),
             
+            noPlaylistsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 40),
+            noPlaylistsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             // Collection view
             collectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
@@ -164,6 +178,7 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
     private func loadPlaylists() {
         playlists = PlaylistStorage().fetchPlaylists()
         collectionView.reloadData()
+        noPlaylistsLabel.isHidden = !playlists.isEmpty
     }
     
     // MARK: HandleBack
