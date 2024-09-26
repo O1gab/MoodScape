@@ -93,7 +93,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private let spotifyButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Open in Spotify", for: .normal)
+        button.setTitle("Open on Spotify", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
