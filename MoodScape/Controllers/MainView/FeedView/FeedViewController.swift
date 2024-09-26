@@ -161,6 +161,12 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         fetchRecommendedSongs()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        infoButton.layoutIfNeeded()
+        infoMessage.layoutIfNeeded()
+    }
+    
     // MARK: - SetupView
     private func setupView() {
         scrollView = UIScrollView()
@@ -492,7 +498,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return 0
     }
     
-    // - MARK: CollectionView
+    // MARK: CollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // ALBUM COLLECTION VIEW
         if collectionView == albumCollectionView {
