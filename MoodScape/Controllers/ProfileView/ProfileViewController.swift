@@ -127,7 +127,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         friendsStackView.translatesAutoresizingMaskIntoConstraints = false
 
         let friendsCountLabel = UILabel()
-        friendsCountLabel.text = "0"
+        friendsCountLabel.text = "-"
         friendsCountLabel.textColor = .white
         friendsCountLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         friendsCountLabel.textAlignment = .center
@@ -240,6 +240,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     private let favoritesManager = FavoritesManager()
     
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -285,6 +286,11 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         if let favouritesStackView = inlineBarStackView.arrangedSubviews.first as? UIStackView,
            let favouritesButton = favouritesStackView.arrangedSubviews.last as? UIButton {
             favouritesButton.addTarget(self, action: #selector(openFavoritesView), for: .touchUpInside)
+        }
+        
+        if let searchesStackView = inlineBarStackView.arrangedSubviews[1] as? UIStackView,
+            let moodButton = searchesStackView.arrangedSubviews.last as? UIButton {
+            moodButton.addTarget(self, action: #selector(openMoodJournal), for: .touchUpInside)
         }
         
         setupCollectionView()
@@ -648,6 +654,12 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         let favoritesView = FavoritesViewController()
         favoritesView.modalPresentationStyle = .fullScreen
         present(favoritesView, animated: true, completion: nil)
+    }
+    
+    @objc private func openMoodJournal() {
+        let moodJournal = MoodJournalViewController()
+        moodJournal.modalPresentationStyle = .fullScreen
+        present(moodJournal, animated: true)
     }
     
     // MARK: - UICollectionViewDataSource
