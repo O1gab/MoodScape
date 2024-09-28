@@ -8,6 +8,8 @@
 import Foundation
 
 class GeneratedPlaylistCell: UICollectionViewCell {
+    
+    // MARK: - Properties
     private let colorView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 25
@@ -21,15 +23,12 @@ class GeneratedPlaylistCell: UICollectionViewCell {
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textColor = .white
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    func configure(with playlist: Playlist) {
-        colorView.backgroundColor = playlist.color
-        titleLabel.text = playlist.name
-    }
-    
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -48,7 +47,14 @@ class GeneratedPlaylistCell: UICollectionViewCell {
         ])
     }
     
+    // MARK: Init
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Configure
+    func configure(with playlist: Playlist) {
+        colorView.backgroundColor = playlist.color
+        titleLabel.text = playlist.name
     }
 }
