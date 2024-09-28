@@ -9,6 +9,7 @@ import Gifu
 
 class StartViewController: StartBaseView {
 
+    // MARK: - Properties
     private let introLabel: GradientLabel = {
         let label = GradientLabel()
         label.text = "Let your emotions set the playlist."
@@ -75,15 +76,27 @@ class StartViewController: StartBaseView {
         return label
     }()
     
-    // - MARK: ViewDidLoad
+    private var registrationView: RegistrationViewController?
+    private var loginView: newLogin?
+    
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        preloadViews()
         setupView()
         setupConstraints()
         appearingAnimation()
     }
     
-    // - MARK: SetupView
+    // MARK: - PreloadViews
+    private func preloadViews() {
+        registrationView = RegistrationViewController()
+        registrationView?.loadViewIfNeeded()
+        loginView = newLogin()
+        loginView?.loadViewIfNeeded()
+    }
+    
+    // MARK: SetupView
     private func setupView() {
         view.addSubview(introLabel)
         view.addSubview(instructions)
@@ -96,7 +109,7 @@ class StartViewController: StartBaseView {
         loginLabel.addGestureRecognizer(tapGesture)
     }
 
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             introLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
@@ -116,8 +129,22 @@ class StartViewController: StartBaseView {
             loginLabel.trailingAnchor.constraint(equalTo: registerButton.trailingAnchor, constant: -20)
         ])
     }
+
+    // MARK: - HandleRegister
+    @objc private func handleRegister() {
+        guard let registrationView = registrationView else { return }
+        registrationView.modalPresentationStyle = .fullScreen
+        present(registrationView, animated: true)
+    }
+
+    // MARK: HandleLogin
+    @objc private func handleLogin() {
+        guard let loginView = loginView else { return }
+        loginView.modalPresentationStyle = .fullScreen
+        present(loginView, animated: true)
+    }
     
-    // - MARK: AppearingAnimation
+    // MARK: - AppearingAnimation
     private func appearingAnimation() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             UIView.animate(withDuration: 1.5) {
@@ -130,19 +157,5 @@ class StartViewController: StartBaseView {
             
             self?.instructions.startTypingAnimation(label: self?.instructions ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {}
         }
-    }
-
-    // - MARK: HandleRegister
-    @objc private func handleRegister() {
-        let registrationView = RegistrationViewController()
-        registrationView.modalPresentationStyle = .fullScreen
-        present(registrationView, animated: true, completion: nil)
-    }
-
-    // - MARK: HandleLogin
-    @objc private func handleLogin() {
-        let loginView = newLogin()
-        loginView.modalPresentationStyle = .fullScreen
-        present(loginView, animated: true, completion: nil)
     }
 }
