@@ -79,7 +79,6 @@ class RegistrationViewController: StartBaseView {
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.font = UIFont.systemFont(ofSize: 21, weight: .bold)
         label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textAlignment = .left
@@ -193,6 +192,7 @@ class RegistrationViewController: StartBaseView {
                 currentQuestionIndex+=1
                 proceedToNextQuestion()
             }
+            showErrorMessage("Invalid password format. Password must contain letters and numbers")
             return
         }
         proceedToNextQuestion()
@@ -250,6 +250,11 @@ class RegistrationViewController: StartBaseView {
     private func passwordCheck() -> Bool {
         // letters and numeric Values, minimum 8 characters
         let password = textField.text
+        
+        if password?.count ?? 0 < 8 {
+            showErrorMessage("Password must contain at least 8 characters")
+            return false
+        }
         
         let passwordRegEx = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"
         let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
