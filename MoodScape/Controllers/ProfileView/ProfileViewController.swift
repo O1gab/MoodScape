@@ -167,7 +167,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.font =  UIFont.systemFont(ofSize: 18, weight: .medium)
-        textView.textColor = .black
+        textView.textColor = .white
         textView.isEditable = false
         textView.backgroundColor = UIColor(white: 1, alpha: 0.05)
         textView.layer.cornerRadius = 12
