@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 class newLogin: StartBaseView {
     
+    // MARK: - Properties
     private let backButton: UIButton = {
         let backButton = UIButton(type: .custom)
         backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
@@ -103,7 +104,7 @@ class newLogin: StartBaseView {
         return notificationMessage
     }()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -116,15 +117,16 @@ class newLogin: StartBaseView {
         view.addGestureRecognizer(tapGesture)
     }
 
+    // MARK: Deinit
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
-    // - MARK: ViewDidAppear
+    // MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.usernameLabel.startTypingAnimation(label: self?.usernameLabel ?? UILabel(), text: "Enter your email or username here", typingSpeed: 0.05) {
+            self?.usernameLabel.startTypingAnimation(label: self?.usernameLabel ?? UILabel(), text: "Enter your email here", typingSpeed: 0.05) {
                 UIView.animate(withDuration: 2.0) {
                     self?.usernameField.alpha = 1.0
                 }
@@ -143,7 +145,7 @@ class newLogin: StartBaseView {
         }
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(usernameLabel)
         view.addSubview(usernameField)
@@ -164,7 +166,7 @@ class newLogin: StartBaseView {
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -199,7 +201,7 @@ class newLogin: StartBaseView {
         ])
     }
     
-    // - MARK: HandleSubmit
+    // MARK: - HandleSubmit
     @objc private func handleLogin() {
         // TODO: IMPLEMENT
         guard let username = usernameField.text, !username.isEmpty else {
@@ -249,12 +251,9 @@ class newLogin: StartBaseView {
                 }
             }
         }
-        
-        // LOGIN WITH USERNAME
-        
     }
                     
-    // - MARK: CheckFirstUsage
+    // MARK: - CheckFirstUsage
     private func checkFirstUsage(completion: @escaping (Bool) -> Void) {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("User is not logged in.")
@@ -282,7 +281,7 @@ class newLogin: StartBaseView {
         }
     }
     
-    // - MARK: ShowErrorMessage
+    // MARK: - ShowErrorMessage
     private func showErrorMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.isHidden = false
@@ -292,26 +291,26 @@ class newLogin: StartBaseView {
         }
     }
     
-    // - MARK: ShowSuccessMessage -> DELETE LATER!
+    // MARK: ShowSuccessMessage -> DELETE LATER!
     private func showSuccessMessage(_ message: String) {
         notificationMessage.text = message
         notificationMessage.textColor = .green
         notificationMessage.isHidden = false
     }
     
-    // - MARK: TogglePasswordVisibility
+    // MARK: - TogglePasswordVisibility
     @objc func togglePasswordVisibility() {
         passwordField.isSecureTextEntry.toggle()
         let imageName = passwordField.isSecureTextEntry ? "eye.slash" : "eye"
         passwordField.eyeButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
     
-    // - MARK: HandleBack
+    // MARK: HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
     }
     
-    // - MARK: KeyboardWillShow
+    // MARK: - KeyboardWillShow
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
@@ -320,14 +319,14 @@ class newLogin: StartBaseView {
         }
     }
 
-    // - MARK: KeyboardWillHide
+    // MARK: KeyboardWillHide
     @objc func keyboardWillHide(notification: NSNotification) {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
         }
     }
     
-    // - MARK: DismissKeyboard
+    // MARK: DismissKeyboard
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
