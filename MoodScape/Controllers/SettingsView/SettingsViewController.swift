@@ -28,7 +28,7 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
         return tableView
     }()
     
-    private let settingsOptions = ["Change Password", "Notification Preferences", "Help & Support", "Contact us", "Log Out"]
+    private let settingsOptions = ["Change Password", "Help & Support", "Contact us", "Log Out"]
     
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
     
@@ -98,16 +98,15 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
         switch selectedOption {
             case "Change Password":
                 print("TODO")
-
-            case "Notification Preferences":
-                print("TODO")
             
             case "Help & Support":
-                print("TODO")
+                let contactView = ContactViewController()
+                contactView.modalPresentationStyle = .fullScreen
+                self.present(contactView, animated: true, completion: nil)
             
             case "Contact us":
                 let contactView = ContactViewController()
-                contactView.modalPresentationStyle = .automatic
+                contactView.modalPresentationStyle = .fullScreen
                 self.present(contactView, animated: true, completion: nil)
             
             case "Log Out":
