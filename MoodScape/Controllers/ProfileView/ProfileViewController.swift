@@ -240,12 +240,17 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     private let favoritesManager = FavoritesManager()
     
+    private var moodJournal: MoodJournalViewController?
+    private var favoritesView: FavoritesViewController?
+    private var settingsView: SettingsViewController?
+    private var profileSetupView: ProfileSetupViewController?
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         startLoading()
         
+        preloadViews()
         setupView()
         setupConstraints()
         determineGreeting()
@@ -255,6 +260,17 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         fetchArtists()
         
         stopLoading()
+    }
+    
+    private func preloadViews() {
+        moodJournal = MoodJournalViewController()
+        moodJournal?.loadViewIfNeeded()
+        favoritesView = FavoritesViewController()
+        favoritesView?.loadViewIfNeeded()
+        settingsView = SettingsViewController()
+        settingsView?.loadViewIfNeeded()
+        profileSetupView = ProfileSetupViewController()
+        profileSetupView?.loadViewIfNeeded()
     }
     
     // MARK: - SetupView
@@ -581,6 +597,21 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return attributedString
     }
     
+    // MARK: ShowError
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: - ProfileImageTapped
+    @objc private func profileImageTapped() {
+        let imagePreview = ImagePreviewViewController()
+        imagePreview.image = profileImage.image
+        imagePreview.modalPresentationStyle = .overCurrentContext
+        present(imagePreview, animated: true, completion: nil)
+    }
+    
     // MARK: LoadProfileImage
     private func loadProfileImage() {
         if let imageData = UserDefaults.standard.data(forKey: "profileImage") {
@@ -590,56 +621,21 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
     }
     
-    // MARK: ShowError
-    private func showError(_ message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
-    
-    // MARK: - HandleInlineBarButtonTap
-    @objc private func handleInlineBarButtonTap(_ sender: UIButton) {
-        let viewController: UIViewController
-        
-        switch sender.tag {
-        case 0:
-            viewController = FavoritesViewController() // Favorites
-        case 1:
-            viewController = MoodJournalViewController() // Mood Journal
-        case 2:
-            viewController = MainTabBarController() // FRIENDS
-        default:
-            return
-        }
-        
-        viewController.modalPresentationStyle = .fullScreen
-        present(viewController, animated: true, completion: nil)
-    }
-    
-    // MARK: ProfileImageTapped
-    @objc private func profileImageTapped() {
-        let imagePreview = ImagePreviewViewController()
-        imagePreview.image = profileImage.image
-        imagePreview.modalPresentationStyle = .overCurrentContext
-        present(imagePreview, animated: true, completion: nil)
-    }
-    
-    // - MARK: HandleSettings
+    // MARK: - HandleSettings
     @objc private func handleSettings() {
-        let settingsView = SettingsViewController()
-        settingsView.modalTransitionStyle = .crossDissolve
+        guard let settingsView = settingsView else { return }
         settingsView.modalPresentationStyle = .fullScreen
-        self.present(settingsView, animated: true, completion: nil)
+        self.present(settingsView, animated: true)
     }
     
-    // - MARK: HandleEdit
+    // MARK: HandleEdit
     @objc private func handleEdit() {
-        let profileSetupView = ProfileSetupViewController()
+        guard let profileSetupView = profileSetupView else { return }
         profileSetupView.modalPresentationStyle = .overCurrentContext
-        self.present(profileSetupView, animated: true, completion: nil)
+        self.present(profileSetupView, animated: true)
     }
     
-    // - MARK: HandleShare
+    // MARK: HandleShare
     @objc private func handleShare() {
         guard let username = usernameLabel.text else { return }
         // TODO: REPLACE WITH ACTUAL APPSTORE LINK
@@ -649,15 +645,16 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         present(activityViewController, animated: true, completion: nil)
     }
     
-    // - MARK: OpenFavoritesView
+    // MARK: - OpenFavoritesView
     @objc private func openFavoritesView() {
-        let favoritesView = FavoritesViewController()
+        guard let favoritesView = favoritesView else { return }
         favoritesView.modalPresentationStyle = .fullScreen
-        present(favoritesView, animated: true, completion: nil)
+        present(favoritesView, animated: true)
     }
     
+    // MARK: OpenMoodJournal
     @objc private func openMoodJournal() {
-        let moodJournal = MoodJournalViewController()
+        guard let moodJournal = moodJournal else { return }
         moodJournal.modalPresentationStyle = .fullScreen
         present(moodJournal, animated: true)
     }
