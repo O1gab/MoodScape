@@ -7,6 +7,8 @@
 import UIKit
 
 class PlaylistStorage {
+    
+    // MARK: - Properties
     private let storageKey = "storedPlaylists"
 
     func savePlaylist(_ playlist: Playlist) {

@@ -231,7 +231,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         }
     }
     
-    // - MARK: HandleAlbumRemoved
+    // MARK: HandleAlbumRemoved
     @objc private func handleAlbumRemoved(_ notification: Notification) {
         if let removedAlbum = notification.userInfo?["album"] as? Album {
             if let index = favoriteAlbums.firstIndex(where: { $0.name == removedAlbum.name && $0.artist == removedAlbum.artist }) {
@@ -241,7 +241,7 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
         }
     }
     
-    // - MARK: HandleBack
+    // MARK: HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
     }

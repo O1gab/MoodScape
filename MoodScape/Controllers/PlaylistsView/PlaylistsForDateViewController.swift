@@ -43,13 +43,13 @@ class PlaylistsForDateViewController: UIViewController, UICollectionViewDelegate
         layout.itemSize = CGSize(width: 150, height: 200)
         layout.minimumLineSpacing = 15
         layout.minimumInteritemSpacing = 10
-        layout.scrollDirection = .vertical // Ensure vertical scrolling
+        layout.scrollDirection = .vertical
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.alwaysBounceVertical = true // Enable vertical bounce and scrolling
+        collectionView.alwaysBounceVertical = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(GeneratedPlaylistCell.self, forCellWithReuseIdentifier: "GeneratedPlaylistCell")
         view.addSubview(collectionView)
