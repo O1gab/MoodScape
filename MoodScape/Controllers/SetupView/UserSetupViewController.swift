@@ -14,7 +14,7 @@ import FirebaseFirestore
 class UserSetupView: SetupBaseView {
 
     private var currentQuestionIndex = 0
-    private let questions = ["Enter your name:", "Share your bio here (max. 200 chars):"]
+    private let questions = ["Enter your name:"]
     private let firestoreKeys = ["name", "location"]
     private var userData: [String: String] = [:]
     

@@ -472,7 +472,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
                     if let bio = data?["bio"] as? String {
                         self.bioTextView.text = bio
                     } else {
-                        self.bioTextView.text = "Set up your bio :)"
+                        self.bioTextView.text = "Set up your bio."
                     }
                 }
             } else {
