@@ -21,7 +21,7 @@ final class SpotifyAuth {
     }
     
     public var signInURL: URL? {
-        let scopes = "user-read-private playlist-modify-public playlist-modify-private"
+        let scopes = "user-read-private playlist-modify-private"
         let redirectURI = "moodscape://spotify-login"
         let base = "https://accounts.spotify.com/authorize"
         let encodedScopes = scopes.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
