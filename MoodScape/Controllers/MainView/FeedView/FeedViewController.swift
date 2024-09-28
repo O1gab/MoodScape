@@ -152,6 +152,8 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     }()
     
     private var mainView: MainViewController?
+    private var moodJournal: MoodJournalViewController?
+    private var favoritesView: FavoritesViewController?
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -176,6 +178,10 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     private func preloadViews() {
         mainView = MainViewController()
         mainView?.loadViewIfNeeded()
+        moodJournal = MoodJournalViewController()
+        moodJournal?.loadViewIfNeeded()
+        favoritesView = FavoritesViewController()
+        favoritesView?.loadViewIfNeeded()
     }
     
     // MARK: SetupView
@@ -472,6 +478,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
+    // TODO: FIX THAT!!!
     // MARK: HandleExplore
     @objc private func handleExplore() {
         let favoritesView = MoodJournalViewController()
@@ -481,16 +488,16 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // MARK: NavigateToFavorites
     @objc private func navigateToFavorites() {
-        let favoritesViewController = FavoritesViewController()
-        favoritesViewController.modalPresentationStyle = .fullScreen
-        self.present(favoritesViewController, animated: true)
+        guard let favoritesView = favoritesView else { return }
+        favoritesView.modalPresentationStyle = .fullScreen
+        self.present(favoritesView, animated: true)
     }
 
     // MARK: NavigateToMoodJournal
     @objc private func navigateToMoodJournal() {
-        let moodJournalViewController = MoodJournalViewController()
-        moodJournalViewController.modalPresentationStyle = .fullScreen
-        self.present(moodJournalViewController, animated: true)
+        guard let moodJournal = moodJournal else { return }
+        moodJournal.modalPresentationStyle = .fullScreen
+        self.present(moodJournal, animated: true)
     }
     
     // MARK: - UICollectionViewDataSource
