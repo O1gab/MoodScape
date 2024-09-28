@@ -151,14 +151,19 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return stackView
     }()
     
+    private var mainView: MainViewController?
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadingIndicator.startAnimating()
+        preloadViews()
         setupView()
         setupConstraints()
         fetchAlbums()
         fetchTopSongs()
         fetchRecommendedSongs()
+        loadingIndicator.stopAnimating()
     }
     
     override func viewDidLayoutSubviews() {
@@ -167,7 +172,13 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         infoMessage.layoutIfNeeded()
     }
     
-    // MARK: - SetupView
+    // MARK: - PreloadViews
+    private func preloadViews() {
+        mainView = MainViewController()
+        mainView?.loadViewIfNeeded()
+    }
+    
+    // MARK: SetupView
     private func setupView() {
         scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -194,7 +205,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         setupSecondRecommendedSongsCollectionView()
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -282,7 +293,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView.addSubview(albumCollectionView)
     }
     
-    // - MARK: SetupSongCollectionView (Top songs this week)
+    // MARK: - SetupSongCollectionView (Top songs this week)
     private func setupSongCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -301,28 +312,26 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView.addSubview(songCollectionView)
     }
     
-    // - MARK: SetupRecommendedSongsCollectionView (You may also like)
+    // MARK: - SetupRecommendedSongsCollectionView (You may also like)
     private func setupRecommendedSongsCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
         
-        // Create the collection view with the specified layout
         firstRecommendedSongsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         firstRecommendedSongsCollectionView.backgroundColor = .clear
         firstRecommendedSongsCollectionView.showsHorizontalScrollIndicator = false
         firstRecommendedSongsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        // Register your custom cell
         firstRecommendedSongsCollectionView.register(SongViewCell.self, forCellWithReuseIdentifier: "SongViewCell")
         firstRecommendedSongsCollectionView.dataSource = self
         firstRecommendedSongsCollectionView.delegate = self
         
-        // Add collection view to the contentView
         contentView.addSubview(firstRecommendedSongsCollectionView)
     }
     
+    // MARK: - SetupSecondRecommendedSongsCollectionView (You may also like)
     private func setupSecondRecommendedSongsCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -341,7 +350,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         contentView.addSubview(secondRecommendedSongsCollectionView)
     }
     
-    // - MARK: FetchAlbums (recently published popular albums)
+    // MARK: - FetchAlbums (recently published popular albums)
     private func fetchAlbums() {
         loadingIndicator.startAnimating()
         SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
@@ -366,7 +375,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
-    // - MARK: FetchTopSongs (5 best songs on this week)
+    // MARK: FetchTopSongs (5 best songs on this week)
     private func fetchTopSongs() {
         loadingIndicator.startAnimating()
         SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
@@ -391,7 +400,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
-    // - MARK: FetchRecommendedSongs (you may also like)
+    // MARK: FetchRecommendedSongs (you may also like)
     private func fetchRecommendedSongs() {
         fetchSelectedArtists { [weak self] artistNames in
             guard let artistNames = artistNames, !artistNames.isEmpty else {
@@ -430,7 +439,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
-    // - MARK: FetchSelectedArtists
+    // MARK: FetchSelectedArtists
     private func fetchSelectedArtists(completion: @escaping ([String]?) -> Void) {
         let db = Firestore.firestore()
         let userId = Auth.auth().currentUser?.uid
@@ -448,7 +457,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
-    // MARK: ShowError
+    // MARK: - ShowError
     private func showError(_ message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -537,7 +546,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return UICollectionViewCell()
     }
         
-    // - MARK: UICollectionViewDelegateFlowLayout
+    // MARK: UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // "Recently"
         if collectionView == albumCollectionView {
@@ -552,7 +561,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return CGSize(width: collectionView.bounds.width - 20, height: 80)
     }
     
-    // - MARK: UICollectionViewDelegate
+    // MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == albumCollectionView {
             let selectedAlbum = albums[indexPath.item]

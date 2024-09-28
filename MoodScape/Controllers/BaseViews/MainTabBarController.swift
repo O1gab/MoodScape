@@ -25,21 +25,17 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     private var targetViewController: UIViewController?
     private var originalViewPosition: CGPoint?
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
         self.viewControllers = [firstViewController, secondViewController, thirdViewController]
         
-        // preloading
-        _ = firstViewController.view
-        _ = secondViewController.view
-        _ = thirdViewController.view
-        
+        preloadViews()
         setupView()
     }
     
-    // - MARK: ViewDidLayoutSubviews
+    // MARK: ViewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var tabBarFrame = tabBar.frame
@@ -49,7 +45,14 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         updateMainButtonPosition()
     }
     
-    // - MARK: SetupView
+    // MARK: - PreloadViews
+    private func preloadViews() {
+        _ = firstViewController.view
+        _ = secondViewController.view
+        _ = thirdViewController.view
+    }
+    
+    // MARK: SetupView
     private func setupView() {
         firstViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "safari.fill"), tag: 0)
         thirdViewController.tabBarItem = UITabBarItem(title: "Social", image: UIImage(systemName: "person.3"), tag: 2)
@@ -64,7 +67,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
           view.addGestureRecognizer(panGesture)
     }
     
-    // - MARK: UpdateMainButtonPosition
+    // MARK: UpdateMainButtonPosition
     func updateMainButtonPosition() {
         let buttonSize: CGFloat = 50
         mainButton.frame.size = CGSize(width: buttonSize, height: buttonSize)
@@ -74,12 +77,12 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         )
     }
     
-    // - MARK: MainButtonTapped
+    // MARK: MainButtonTapped
     @objc func mainButtonTapped() {
         selectedIndex = 1
     }
     
-    // - MARK: HandlePan
+    // MARK: HandlePan
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
         let velocity = gesture.velocity(in: view)
@@ -109,7 +112,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
     }
 
-    // - MARK: AnimatePanTransition
+    // MARK: . AnimatePanTransition
     private func animatePanTransition(to nextIndex: Int, translation: CGFloat) {
         guard let fromView = selectedViewController?.view else { return }
         guard let toView = viewControllers?[nextIndex].view else { return }
@@ -128,7 +131,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         toView.frame.origin.x = newToViewPosition
     }
 
-    // - MARK: FinishPanTransition
+    // MARK: FinishPanTransition
     private func finishPanTransition(shouldComplete: Bool) {
         guard let fromView = selectedViewController?.view else { return }
         guard let toView = targetViewController?.view else { return }
