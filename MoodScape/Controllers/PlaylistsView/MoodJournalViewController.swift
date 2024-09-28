@@ -11,11 +11,11 @@ import FSCalendar
 
 class MoodJournalViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FSCalendarDelegate, FSCalendarDataSource {
     
+    // MARK: - Properties
     private var playlists: [Playlist] = []
     private var collectionView: UICollectionView!
     private var calendar: FSCalendar!
     
-    // MARK: - Properties
     private let gifBackground: GIFImageView = {
         let gifBackground = GIFImageView()
         gifBackground.animate(withGIFNamed: "gradient_skyline_blinking_stars")
@@ -181,7 +181,16 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
         noPlaylistsLabel.isHidden = !playlists.isEmpty
     }
     
-    // MARK: HandleBack
+    // MARK: ShowPlaylists
+    private func showPlaylists(for playlists: [Playlist], date: String) {
+        let playlistViewController = PlaylistsForDateViewController()
+        playlistViewController.playlists = playlists
+        playlistViewController.selectedDate = date
+        playlistViewController.loadViewIfNeeded()
+        present(playlistViewController, animated: true)
+    }
+    
+    // MARK: - HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
     }
@@ -268,12 +277,5 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
             return playlist.color // dot color matching playlist color
         }
         return UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-    }
-    
-    private func showPlaylists(for playlists: [Playlist], date: String) {
-        let playlistViewController = PlaylistsForDateViewController()
-        playlistViewController.playlists = playlists
-        playlistViewController.selectedDate = date
-        present(playlistViewController, animated: true, completion: nil)
     }
 }
