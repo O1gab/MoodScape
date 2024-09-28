@@ -10,6 +10,7 @@ import Gifu
 
 class SetupBaseView: UIViewController {
     
+    // MARK: - Properties
     private let gradientLayer = CAGradientLayer()
     
     private let gifBackground: GIFImageView = {
@@ -41,7 +42,7 @@ class SetupBaseView: UIViewController {
     
     var timer: Timer?
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientBackground()
@@ -50,14 +51,14 @@ class SetupBaseView: UIViewController {
         setupConstraints()
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(appLabel)
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -70,7 +71,7 @@ class SetupBaseView: UIViewController {
         ])
     }
     
-    // - MARK: SetupGradientBackground
+    // MARK: - SetupGradientBackground
     private func setupGradientBackground() {
         let baseColor = UIColor(red: 35/255.0, green: 35/255.0, blue: 35/255.0, alpha: 0.5).cgColor
         let darkColor = UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 0.5).cgColor
@@ -84,7 +85,7 @@ class SetupBaseView: UIViewController {
         view.layer.insertSublayer(gradientLayer, at: 0)
     }
     
-    // - MARK: AnimateGradient
+    // MARK: AnimateGradient
     private func animateGradient() {
         let animation = CABasicAnimation(keyPath: "colors")
         animation.fromValue = [UIColor(red: 70/255.0, green: 70/255.0, blue: 70/255.0, alpha: 0.35).cgColor,
@@ -101,7 +102,7 @@ class SetupBaseView: UIViewController {
         gradientLayer.add(animation, forKey: "gradientAnimation")
     }
     
-    // - MARK: StartTypingAnimation
+    // MARK: - StartTypingAnimation
     func startTypingAnimation(label: UILabel, text: String, typingSpeed: TimeInterval, completion: @escaping () -> Void) {
         let fullText = text
         label.text = ""
@@ -121,7 +122,7 @@ class SetupBaseView: UIViewController {
         }
     }
     
-    // - MARK: StartErasingAnimation
+    // MARK: StartErasingAnimation
     func startErasingAnimation(label: UILabel, typingSpeed: TimeInterval, completion: @escaping () -> Void) {
         guard let text = label.text, !text.isEmpty else {
             completion()
@@ -143,14 +144,14 @@ class SetupBaseView: UIViewController {
         }
     }
     
-    // - MARK: RevealButton
+    // MARK: - RevealButton
     func revealButton(button: UIButton) {
         UIView.animate(withDuration: 1.5) {
             button.alpha = 1
         }
     }
     
-    // - MARK: NavigateToNextView
+    // MARK: - NavigateToNextView
     func navigateToNextView(viewController: UIViewController) {
         viewController.modalPresentationStyle = .fullScreen
         let transition = CATransition()

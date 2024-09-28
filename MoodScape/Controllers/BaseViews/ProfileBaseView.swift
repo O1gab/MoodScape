@@ -9,6 +9,7 @@ import Gifu
 
 class ProfileBaseView: UIViewController {
     
+    // MARK: - Properties
     private let gifBackground: GIFImageView = {
         let gifImageView = GIFImageView()
         gifImageView.animate(withGIFNamed: "gradient_skyline_blinking_stars")
@@ -37,14 +38,14 @@ class ProfileBaseView: UIViewController {
     
     let activityIndicator = UIActivityIndicatorView(style: .large)
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
@@ -54,7 +55,7 @@ class ProfileBaseView: UIViewController {
         backButton.addTarget(self, action: #selector(handleBack), for: .touchUpInside)
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -72,12 +73,12 @@ class ProfileBaseView: UIViewController {
         ])
     }
     
-    // - MARK: HandleBack
+    // MARK: - HandleBack
     @objc private func handleBack() {
         dismiss(animated: true, completion: nil)
     }
     
-    // - MARK: StartLoading
+    // MARK: - StartLoading
     func startLoading() {
         view.addSubview(activityIndicator)
         NSLayoutConstraint.activate([
@@ -87,7 +88,7 @@ class ProfileBaseView: UIViewController {
         activityIndicator.startAnimating()
     }
 
-    // - MARK: StopLoading
+    // MARK: StopLoading
     func stopLoading() {
         activityIndicator.stopAnimating()
         activityIndicator.removeFromSuperview()

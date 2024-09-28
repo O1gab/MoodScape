@@ -9,6 +9,7 @@ import Gifu
 
 class StartBaseView: UIViewController {
     
+    // MARK: - Properties
     private let gifBackground: GIFImageView = {
         let gifBackground = GIFImageView()
         gifBackground.animate(withGIFNamed: "gradient_skyline_blinking_stars")
@@ -36,14 +37,14 @@ class StartBaseView: UIViewController {
         return label
     }()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
@@ -51,7 +52,7 @@ class StartBaseView: UIViewController {
         view.addSubview(appLabel)
     }
 
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             gifBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
