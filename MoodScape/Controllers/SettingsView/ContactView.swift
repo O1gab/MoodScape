@@ -6,12 +6,11 @@
 //
 
 import UIKit
-import MessageUI // For sending emails
+import MessageUI
 
 class ContactViewController: ProfileBaseView, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
-    
     private let contactLabel: UILabel = {
         let settingsLabel = UILabel()
         settingsLabel.text = "Contact"
@@ -39,6 +38,7 @@ class ContactViewController: ProfileBaseView, MFMailComposeViewControllerDelegat
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.layer.cornerRadius = 25
+        button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -50,6 +50,7 @@ class ContactViewController: ProfileBaseView, MFMailComposeViewControllerDelegat
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.layer.cornerRadius = 25
+        button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -84,7 +85,16 @@ class ContactViewController: ProfileBaseView, MFMailComposeViewControllerDelegat
     // MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        messageLabel.startTypingAnimation(label: messageLabel, text: "You can contact our support at support@moodscape.io or provide feedback at feedback@moodscape.io.", typingSpeed: 0.05) {}
+        DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+            self?.messageLabel.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "You can contact our support at support@moodscape.io or provide feedback at feedback@moodscape.io.", typingSpeed: 0.05) {
+                DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+                    UIView.animate(withDuration: 3.0) {
+                        self?.emailButton.alpha = 1.0
+                        self?.feedbackButton.alpha = 1.0
+                    }
+                }
+            }
+        }
     }
     
     // MARK: - SetupView
@@ -114,16 +124,16 @@ class ContactViewController: ProfileBaseView, MFMailComposeViewControllerDelegat
             messageLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
             emailButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
-            emailButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
+            emailButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             emailButton.widthAnchor.constraint(equalToConstant: 200),
             emailButton.heightAnchor.constraint(equalToConstant: 50),
             
-            feedbackButton.topAnchor.constraint(equalTo: emailButton.bottomAnchor, constant: 20),
-            feedbackButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            feedbackButton.topAnchor.constraint(equalTo: emailButton.bottomAnchor, constant: 30),
+            feedbackButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             feedbackButton.widthAnchor.constraint(equalToConstant: 200),
             feedbackButton.heightAnchor.constraint(equalToConstant: 50),
             
-            versionLabel.bottomAnchor.constraint(equalTo: appLabel.bottomAnchor, constant: 10),
+            versionLabel.bottomAnchor.constraint(equalTo: appLabel.bottomAnchor, constant: 15),
             versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
@@ -133,7 +143,7 @@ class ContactViewController: ProfileBaseView, MFMailComposeViewControllerDelegat
         if MFMailComposeViewController.canSendMail() {
             let mailComposeVC = MFMailComposeViewController()
             mailComposeVC.mailComposeDelegate = self
-            mailComposeVC.setToRecipients(["support@moodscape.io"]) // Replace with your support email
+            mailComposeVC.setToRecipients(["support@moodscape.io"]) // TODO: Replace with your support email
             mailComposeVC.setSubject("Support Request")
             mailComposeVC.setMessageBody("Hello, I need help with...", isHTML: false)
             
