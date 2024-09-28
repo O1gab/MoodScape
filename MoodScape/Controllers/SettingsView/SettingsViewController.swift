@@ -42,16 +42,28 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
         return label
     }()
     
-    // - MARK: ViewDidLoad
+    private var contactView: ContactViewController?
+    private var startView: StartViewController?
+    
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        preloadViews()
         setupView()
         setupConstraints()
         settingsTableView.delegate = self
         settingsTableView.dataSource = self
     }
     
-    // - MARK: SetupView
+    // MARK: - PreloadViews
+    private func preloadViews() {
+        contactView = ContactViewController()
+        contactView?.loadViewIfNeeded()
+        startView = StartViewController()
+        startView?.loadViewIfNeeded()
+    }
+    
+    // MARK: SetupView
     private func setupView() {
         view.addSubview(settingsLabel)
         view.addSubview(label)
@@ -60,7 +72,7 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
         settingsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "SettingsCell")
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             settingsLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
@@ -76,7 +88,7 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
         ])
     }
     
-    // MARK: UITableViewDataSource
+    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return settingsOptions.count
     }
@@ -92,7 +104,6 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
     
     // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            // Handle selection
         let selectedOption = settingsOptions[indexPath.row]
         
         switch selectedOption {
@@ -100,20 +111,20 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
                 print("TODO")
             
             case "Help & Support":
-                let contactView = ContactViewController()
+                guard let contactView = contactView else { return }
                 contactView.modalPresentationStyle = .fullScreen
-                self.present(contactView, animated: true, completion: nil)
+                self.present(contactView, animated: true)
             
             case "Contact us":
-                let contactView = ContactViewController()
+                guard let contactView = contactView else { return }
                 contactView.modalPresentationStyle = .fullScreen
-                self.present(contactView, animated: true, completion: nil)
+                self.present(contactView, animated: true)
             
             case "Log Out":
                 loadingIndicator.startAnimating()
                 do {
                     try Auth.auth().signOut()
-                    let startView = StartViewController()
+                    guard let startView = startView else { return }
                     startView.modalPresentationStyle = .overCurrentContext
                     self.present(startView, animated: false) {
                         self.loadingIndicator.stopAnimating()
