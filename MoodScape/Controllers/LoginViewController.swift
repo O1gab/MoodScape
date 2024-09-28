@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 class LoginViewController: StartBaseView {
     
+    // MARK: - Properties
     private let fieldLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -88,16 +89,28 @@ class LoginViewController: StartBaseView {
         return notificationMessage
     }()
     
+    private var startSetupView: StartSetupView?
+    private var mainView: MainTabBarController?
+    
     // - MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupForm()
+        preloadViews()
+        setupView()
         setupConstraints()
         startText()
     }
     
-    // - MARK: SetupForm
-    private func setupForm() {
+    // MARK: - PreloadViews
+    private func preloadViews() {
+        startSetupView = StartSetupView()
+        startSetupView?.loadViewIfNeeded()
+        mainView = MainTabBarController()
+        mainView?.loadViewIfNeeded()
+    }
+    
+    // MARK: SetupForm
+    private func setupView() {
         view.addSubview(fieldLabel)
         
         setPlaceholder(textField: input, placeholder: "Enter your email or username", color: .systemGray)
@@ -115,7 +128,7 @@ class LoginViewController: StartBaseView {
         view.addSubview(notificationMessage)
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -146,14 +159,7 @@ class LoginViewController: StartBaseView {
         ])
     }
     
-    // - MARK: StartText
-    private func startText() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Please enter your email or username and your password", typingSpeed: 0.05){}
-        }
-    }
-    
-    // - MARK: HandleLogin
+    // MARK: - HandleLogin
     @objc private func handleLogin() {
         guard let email = input.text, !email.isEmpty else {
             showErrorMessage("Email or username field is empty")
@@ -208,17 +214,17 @@ class LoginViewController: StartBaseView {
         }
     }
 
-    // - MARK: HandleSuccessfulLogin
+    // MARK: HandleSuccessfulLogin
     private func handleSuccessfulLogin(for user: FirebaseAuth.User) {
         if user.isEmailVerified {
             self.showSuccessMessage("Login successful")
             self.checkFirstUsage { isFirstUsage in
                 if isFirstUsage {
-                    let startSetup = StartSetupView()
+                    guard let startSetup = self.startSetupView else { return }
                     startSetup.modalPresentationStyle = .fullScreen
-                    self.present(startSetup, animated: true, completion: nil)
+                    self.present(startSetup, animated: true)
                 } else {
-                    let mainView = MainTabBarController()
+                    guard let mainView = self.mainView else { return }
                     mainView.modalPresentationStyle = .fullScreen
                     self.present(mainView, animated: true)
                 }
@@ -233,33 +239,7 @@ class LoginViewController: StartBaseView {
         }
     }
     
-    // - MARK: HandleBack
-    @objc private func handleBack() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    // - MARK: ShowErrorMessage
-    private func showErrorMessage(_ message: String) {
-        notificationMessage.text = message
-        notificationMessage.isHidden = false
-    }
-    
-    // - MARK: ShowSuccessMessage
-    private func showSuccessMessage(_ message: String) {
-        notificationMessage.text = message
-        notificationMessage.textColor = .green
-        notificationMessage.isHidden = false
-    }
-    
-    // - MARK: SetPlaceholder
-    private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
-        textField.attributedPlaceholder = NSAttributedString(
-            string: placeholder,
-            attributes: [NSAttributedString.Key.foregroundColor: color]
-        )
-    }
-    
-    // - MARK: CheckFirstUsage (fix it)
+    // MARK: CheckFirstUsage (fix it)
     func checkFirstUsage(completion: @escaping (Bool) -> Void) {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("User is not logged in.")
@@ -285,5 +265,38 @@ class LoginViewController: StartBaseView {
                 completion(false)
             }
         }
+    }
+    
+    // MARK: - HandleBack
+    @objc private func handleBack() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - StartText
+    private func startText() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Please enter your email or username and your password", typingSpeed: 0.05){}
+        }
+    }
+    
+    // MARK: - ShowErrorMessage
+    private func showErrorMessage(_ message: String) {
+        notificationMessage.text = message
+        notificationMessage.isHidden = false
+    }
+    
+    // MARK: ShowSuccessMessage
+    private func showSuccessMessage(_ message: String) {
+        notificationMessage.text = message
+        notificationMessage.textColor = .green
+        notificationMessage.isHidden = false
+    }
+    
+    // MARK: SetPlaceholder
+    private func setPlaceholder(textField: UITextField, placeholder: String, color: UIColor) {
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [NSAttributedString.Key.foregroundColor: color]
+        )
     }
 }

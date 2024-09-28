@@ -96,14 +96,17 @@ class RegistrationViewController: StartBaseView {
         return eyeButton
     }()
     
-    // - MARK: ViewDidLoad
+    private var startView: StartViewController?
+    
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        preloadViews()
         setupView()
         setupConstraints()
     }
     
-    // - MARK: ViewDidAppear
+    // MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
@@ -115,8 +118,14 @@ class RegistrationViewController: StartBaseView {
             }
         }
     }
-  
-    // - MARK: SetupView
+    
+    // MARK: - PreloadViews
+    private func preloadViews() {
+        startView = StartViewController()
+        startView?.loadViewIfNeeded()
+    }
+    
+    // MARK: SetupView
     private func setupView() {
         view.addSubview(fieldLabel)
         view.addSubview(textField)
@@ -302,11 +311,11 @@ class RegistrationViewController: StartBaseView {
             } else {
                 self?.showSuccessMessage("Verification email sent. Please check your email.")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                    let startView = StartViewController()
+                    guard let startView = self?.startView else { return }
                     self?.dismiss(animated: true) {
                         if let sceneDelegate = UIApplication.shared.connectedScenes
                             .first?.delegate as? SceneDelegate {
-                                let startView = StartViewController()
+                                guard let startView = self?.startView else { return }
                                 sceneDelegate.window?.rootViewController = startView
                                 sceneDelegate.window?.makeKeyAndVisible()
                         }

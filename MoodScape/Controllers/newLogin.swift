@@ -104,9 +104,13 @@ class newLogin: StartBaseView {
         return notificationMessage
     }()
     
+    private var startSetup: StartSetupView?
+    private var mainView: MainTabBarController?
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        preloadViews()
         setupView()
         setupConstraints()
         
@@ -145,7 +149,14 @@ class newLogin: StartBaseView {
         }
     }
     
-    // MARK: - SetupView
+    private func preloadViews() {
+        startSetup = StartSetupView()
+        startSetup?.loadViewIfNeeded()
+        mainView = MainTabBarController()
+        mainView?.loadViewIfNeeded()
+    }
+    
+    // MARK: SetupView
     private func setupView() {
         view.addSubview(usernameLabel)
         view.addSubview(usernameField)
@@ -229,15 +240,15 @@ class newLogin: StartBaseView {
                         print("is first usage: \(isFirstUsage)")
                         if isFirstUsage {
                             DispatchQueue.main.async {
-                            let startSetup = StartSetupView()
-                            startSetup.modalPresentationStyle = .fullScreen
-                            self?.present(startSetup, animated: true, completion: nil)
+                                guard let startSetup = self?.startSetup else { return }
+                                startSetup.modalPresentationStyle = .fullScreen
+                                self?.present(startSetup, animated: true)
                             }
                         } else {
                             DispatchQueue.main.async {
-                                let mainView = MainTabBarController()
+                                guard let mainView = self?.mainView else { return }
                                 mainView.modalPresentationStyle = .fullScreen
-                                self?.present(mainView, animated: true, completion: nil)
+                                self?.present(mainView, animated: true)
                             }
                         }
                     }
