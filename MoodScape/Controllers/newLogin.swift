@@ -218,7 +218,7 @@ class newLogin: StartBaseView {
             // Login with email
             Auth.auth().signIn(withEmail: username, password: password) { [weak self] authResult, error in
                 guard let user = authResult?.user, error == nil else {
-                    self?.showErrorMessage(error?.localizedDescription ?? "Failed to login")
+                    self?.showErrorMessage("Wrong password or email")
                     return
                 }
                 if user.isEmailVerified {

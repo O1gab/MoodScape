@@ -192,7 +192,7 @@ class RegistrationViewController: StartBaseView {
                 currentQuestionIndex+=1
                 proceedToNextQuestion()
             }
-            showErrorMessage("Invalid password format. Password must contain letters and numbers")
+            showErrorMessage("Invalid password format. Password must contain letters and numbers and be at least 8 characters long.")
             return
         }
         proceedToNextQuestion()
