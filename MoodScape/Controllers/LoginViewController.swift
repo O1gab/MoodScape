@@ -9,7 +9,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseFirestore
 
-class LoginViewController: StartBaseView {
+class LoginViewControllerOld: StartBaseView {
     
     // MARK: - Properties
     private let fieldLabel: UILabel = {

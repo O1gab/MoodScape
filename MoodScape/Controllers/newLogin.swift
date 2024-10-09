@@ -9,7 +9,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class newLogin: StartBaseView {
+class LoginViewController: StartBaseView {
     
     // MARK: - Properties
     private let backButton: UIButton = {
@@ -76,7 +76,7 @@ class newLogin: StartBaseView {
         eyeButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
         eyeButton.tintColor = .white
         eyeButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        eyeButton.addTarget(newLogin.self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        eyeButton.addTarget(LoginViewController.self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         eyeButton.alpha = 0
         return eyeButton
     }()

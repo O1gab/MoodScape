@@ -77,7 +77,7 @@ class StartViewController: StartBaseView {
     }()
     
     private var registrationView: RegistrationViewController?
-    private var loginView: newLogin?
+    private var loginView: LoginViewController?
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -92,7 +92,7 @@ class StartViewController: StartBaseView {
     private func preloadViews() {
         registrationView = RegistrationViewController()
         registrationView?.loadViewIfNeeded()
-        loginView = newLogin()
+        loginView = LoginViewController()
         loginView?.loadViewIfNeeded()
     }
     
