@@ -92,7 +92,7 @@ class LoginViewControllerOld: StartBaseView {
     private var startSetupView: StartSetupView?
     private var mainView: MainTabBarController?
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         preloadViews()

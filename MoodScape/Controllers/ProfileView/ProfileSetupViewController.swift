@@ -220,7 +220,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
                 
             skipButton.topAnchor.constraint(equalTo: submitButton.bottomAnchor, constant: 10),
             skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        
         ])
     }
     
@@ -278,7 +277,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         }
     }
     
-    // - MARK: Change Profile Image
+    // MARK: Change Profile Image
     @objc private func changeProfileImageTapped() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self

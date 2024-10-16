@@ -10,6 +10,7 @@ import Gifu
 
 class WelcomeView: StartBaseView {
 
+    // MARK: - Properties
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -29,14 +30,14 @@ class WelcomeView: StartBaseView {
         return gifBackground
     }()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
     }
     
-    // - MARK: ViewDidAppear
+    // MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
@@ -70,13 +71,13 @@ class WelcomeView: StartBaseView {
          */
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(welcomeGradient)
         view.addSubview(messageLabel)
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             welcomeGradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
