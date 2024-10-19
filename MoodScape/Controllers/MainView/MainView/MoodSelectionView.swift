@@ -513,6 +513,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         self.view.addSubview(blurEffectView!)
     }
     
+    
     // MARK: HandleCloseButtonTapped
     private func handleCloseButtonTapped() {
         UIView.animate(withDuration: 0.3, animations: {
