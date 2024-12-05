@@ -20,8 +20,8 @@ class LaunchViewController: StartBaseView {
         return name
     }()
     
-    private lazy var startView: StartViewController = {
-        let viewController = StartViewController()
+    private lazy var authView: AuthViewController = {
+        let viewController = AuthViewController()
         viewController.loadViewIfNeeded()  // Preload the view when first accessed
         return viewController
     }()
@@ -65,9 +65,9 @@ class LaunchViewController: StartBaseView {
     // MARK: - CheckAuthentication
     private func checkAuthentication() {
         if Auth.auth().currentUser == nil {
-            startView.modalTransitionStyle = .crossDissolve
-            startView.modalPresentationStyle = .fullScreen
-            self.present(startView, animated: true, completion: nil)
+            authView.modalTransitionStyle = .crossDissolve
+            authView.modalPresentationStyle = .fullScreen
+            self.present(authView, animated: true, completion: nil)
         
          } else {
             mainView.modalTransitionStyle = .crossDissolve

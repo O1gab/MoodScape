@@ -78,7 +78,7 @@
 		76B869A42C67B3A9002866B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869A32C67B3A9002866B9 /* SceneDelegate.swift */; };
 		76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76B869AA2C67B3AA002866B9 /* Assets.xcassets */; };
 		76B869BD2C67B8D3002866B9 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */; };
-		76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* StartViewController.swift */; };
+		76B869BF2C67B93C002866B9 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B869BE2C67B93C002866B9 /* AuthViewController.swift */; };
 		76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */; };
 		76BF876F2C85422D00C50E28 /* SongDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BF876E2C85422D00C50E28 /* SongDetailsViewController.swift */; };
 		76DAE5822C873FF400F631F1 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */; };
@@ -181,7 +181,7 @@
 		76B869AA2C67B3AA002866B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		76B869AF2C67B3AA002866B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
-		76B869BE2C67B93C002866B9 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		76B869BE2C67B93C002866B9 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gradient_skyline_blinking_stars.gif; sourceTree = "<group>"; };
 		76BF876E2C85422D00C50E28 /* SongDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailsViewController.swift; sourceTree = "<group>"; };
 		76DAE5812C873FF400F631F1 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 		7624E6532C7ED4AE004EA785 /* LaunchViews */ = {
 			isa = PBXGroup;
 			children = (
-				76B869BE2C67B93C002866B9 /* StartViewController.swift */,
+				76B869BE2C67B93C002866B9 /* AuthViewController.swift */,
 				76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */,
 			);
 			path = LaunchViews;
@@ -703,7 +703,7 @@
 				7664855C2C6C447E00AA050A /* MainTabBarController.swift in Sources */,
 				76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */,
 				76BF876F2C85422D00C50E28 /* SongDetailsViewController.swift in Sources */,
-				76B869BF2C67B93C002866B9 /* StartViewController.swift in Sources */,
+				76B869BF2C67B93C002866B9 /* AuthViewController.swift in Sources */,
 				7678E1E82C9BAF08008A24D5 /* PlaylistsForDateViewController.swift in Sources */,
 				768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */,
 				76DAE5872C874A3A00F631F1 /* FavoritesCell.swift in Sources */,

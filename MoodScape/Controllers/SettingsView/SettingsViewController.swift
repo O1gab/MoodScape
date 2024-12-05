@@ -43,7 +43,7 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
     }()
     
     private var contactView: ContactViewController?
-    private var startView: StartViewController?
+    private var authView: AuthViewController?
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -59,8 +59,8 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
     private func preloadViews() {
         contactView = ContactViewController()
         contactView?.loadViewIfNeeded()
-        startView = StartViewController()
-        startView?.loadViewIfNeeded()
+        authView = AuthViewController()
+        authView?.loadViewIfNeeded()
     }
     
     // MARK: SetupView
@@ -124,9 +124,9 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
                 loadingIndicator.startAnimating()
                 do {
                     try Auth.auth().signOut()
-                    guard let startView = startView else { return }
-                    startView.modalPresentationStyle = .overCurrentContext
-                    self.present(startView, animated: false) {
+                    guard let authView = authView else { return }
+                    authView.modalPresentationStyle = .overCurrentContext
+                    self.present(authView, animated: false) {
                         self.loadingIndicator.stopAnimating()
                     }
                 } catch let signOutError as NSError {

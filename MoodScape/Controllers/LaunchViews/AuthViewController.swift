@@ -7,7 +7,7 @@
 import UIKit
 import Gifu
 
-class StartViewController: StartBaseView {
+class AuthViewController: StartBaseView {
 
     // MARK: - Properties
     private let introLabel: GradientLabel = {

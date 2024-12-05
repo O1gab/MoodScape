@@ -96,7 +96,7 @@ class RegistrationViewController: StartBaseView {
         return eyeButton
     }()
     
-    private var startView: StartViewController?
+    private var authView: AuthViewController?
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -121,8 +121,8 @@ class RegistrationViewController: StartBaseView {
     
     // MARK: - PreloadViews
     private func preloadViews() {
-        startView = StartViewController()
-        startView?.loadViewIfNeeded()
+        authView = AuthViewController()
+        authView?.loadViewIfNeeded()
     }
     
     // MARK: SetupView
@@ -311,12 +311,11 @@ class RegistrationViewController: StartBaseView {
             } else {
                 self?.showSuccessMessage("Verification email sent. Please check your email.")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                    guard let startView = self?.startView else { return }
                     self?.dismiss(animated: true) {
                         if let sceneDelegate = UIApplication.shared.connectedScenes
                             .first?.delegate as? SceneDelegate {
-                                guard let startView = self?.startView else { return }
-                                sceneDelegate.window?.rootViewController = startView
+                                guard let authView = self?.authView else { return }
+                                sceneDelegate.window?.rootViewController = authView
                                 sceneDelegate.window?.makeKeyAndVisible()
                         }
                     }
