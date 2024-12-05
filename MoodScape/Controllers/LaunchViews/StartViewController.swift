@@ -46,8 +46,8 @@ class StartViewController: StartBaseView {
         button.setTitle("Get Started", for: .normal)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        button.layer.cornerRadius = 25
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -57,7 +57,7 @@ class StartViewController: StartBaseView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont.systemFont(ofSize: 18)
         label.textColor = .white
         
         let fullText = "Already user? Log in"
@@ -76,24 +76,24 @@ class StartViewController: StartBaseView {
         return label
     }()
     
-    private var registrationView: RegistrationViewController?
-    private var loginView: LoginViewController?
+    private lazy var registrationView: RegistrationViewController = {
+        let viewController = RegistrationViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
+    private lazy var loginView: LoginViewController = {
+        let viewController = LoginViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        preloadViews()
         setupView()
         setupConstraints()
         appearingAnimation()
-    }
-    
-    // MARK: - PreloadViews
-    private func preloadViews() {
-        registrationView = RegistrationViewController()
-        registrationView?.loadViewIfNeeded()
-        loginView = LoginViewController()
-        loginView?.loadViewIfNeeded()
     }
     
     // MARK: SetupView
@@ -114,7 +114,7 @@ class StartViewController: StartBaseView {
         NSLayoutConstraint.activate([
             introLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
             introLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            introLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 20),
+            introLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
             instructions.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 380),
             instructions.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -132,14 +132,12 @@ class StartViewController: StartBaseView {
 
     // MARK: - HandleRegister
     @objc private func handleRegister() {
-        guard let registrationView = registrationView else { return }
         registrationView.modalPresentationStyle = .fullScreen
         present(registrationView, animated: true)
     }
 
     // MARK: HandleLogin
     @objc private func handleLogin() {
-        guard let loginView = loginView else { return }
         loginView.modalPresentationStyle = .fullScreen
         present(loginView, animated: true)
     }

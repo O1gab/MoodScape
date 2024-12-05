@@ -20,13 +20,21 @@ class LaunchViewController: StartBaseView {
         return name
     }()
     
-    private var startView: StartViewController?
-    private var mainView: MainTabBarController?
+    private lazy var startView: StartViewController = {
+        let viewController = StartViewController()
+        viewController.loadViewIfNeeded()  // Preload the view when first accessed
+        return viewController
+    }()
+    
+    private lazy var mainView: MainTabBarController = {
+        let viewController = MainTabBarController()
+        viewController.loadViewIfNeeded()  // Preload the view when first accessed
+        return viewController
+    }()
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        preloadViews()
         setupView()
         setupConstraints()
     }
@@ -38,14 +46,6 @@ class LaunchViewController: StartBaseView {
             self.animateName()
             self.checkAuthentication()
         }
-    }
-    
-    // MARK: - PreloadViews
-    private func preloadViews() {
-        startView = StartViewController()
-        startView?.loadViewIfNeeded()
-        mainView = MainTabBarController()
-        mainView?.loadViewIfNeeded()
     }
     
     // MARK: SetupView
@@ -65,13 +65,11 @@ class LaunchViewController: StartBaseView {
     // MARK: - CheckAuthentication
     private func checkAuthentication() {
         if Auth.auth().currentUser == nil {
-            guard let startView = startView else { return }
             startView.modalTransitionStyle = .crossDissolve
             startView.modalPresentationStyle = .fullScreen
             self.present(startView, animated: true, completion: nil)
         
          } else {
-            guard let mainView = mainView else { return }
             mainView.modalTransitionStyle = .crossDissolve
             mainView.modalPresentationStyle = .fullScreen
             self.present(mainView, animated: true, completion: nil)
