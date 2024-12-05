@@ -7,6 +7,7 @@
 
 import UIKit
 import Gifu
+import Firebase
 
 class WelcomeView: StartBaseView {
 
@@ -30,6 +31,24 @@ class WelcomeView: StartBaseView {
         return gifBackground
     }()
     
+    private lazy var authView: AuthViewController = {
+        let viewController = AuthViewController()
+        viewController.modalPresentationStyle = .fullScreen
+        return viewController
+    }()
+
+    private lazy var startSetup: StartSetupView = {
+        let viewController = StartSetupView()
+        viewController.modalPresentationStyle = .fullScreen
+        return viewController
+    }()
+
+    private lazy var mainView: MainTabBarController = {
+        let viewController = MainTabBarController()
+        viewController.modalPresentationStyle = .fullScreen
+        return viewController
+    }()
+
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +67,9 @@ class WelcomeView: StartBaseView {
             func showNextWord() {
                 guard currentIndex < words.count else {
                     // Transition to the next view after the phrase is fully displayed
-                   
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        self?.checkAuth()
+                    }
                     return
                 }
 
@@ -56,19 +77,13 @@ class WelcomeView: StartBaseView {
                 self?.messageLabel.text = String(word)
                 
                 currentIndex += 1
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     showNextWord()
                 }
             }
             
             showNextWord()
         }
-        /*
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.messageLabel.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "We are so happy what you joined us!", typingSpeed: 0.05) { // !!! change the font size back to 24
-            }
-        }
-         */
     }
     
     // MARK: - SetupView
@@ -92,19 +107,43 @@ class WelcomeView: StartBaseView {
         ])
     }
 
-    // - MARK: TransitionToNextView
-    private func transitionToNextView() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            let nextViewController = UserSetupView()
+    // MARK: - TransitionToNextView
+    private func transitionToNextView(nextViewController: UIViewController) {
+        DispatchQueue.main.async { [weak self] in
             nextViewController.modalPresentationStyle = .fullScreen
+            
             let transition = CATransition()
             transition.duration = 0.5
-            transition.type = .push
-            transition.subtype = .fromRight
+            transition.type = .fade
             transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             
-            self.view.window?.layer.add(transition, forKey: kCATransition)
-            self.present(nextViewController, animated: false, completion: nil)
+            self?.view.window?.layer.add(transition, forKey: kCATransition)
+            self?.present(nextViewController, animated: false)
+        }
+    }
+
+    // MARK: - CheckAuth
+    private func checkAuth() {
+        if let userId = Auth.auth().currentUser?.uid {
+            let db = Firestore.firestore()
+            db.collection("users").document(userId).getDocument { [weak self] (document, error) in
+                if let document = document, document.exists {
+                    let firstUsage = document.data()?["firstUsage"] as? Bool ?? true
+                    
+                    if firstUsage {
+                        // First time user, show auth flow
+                        self?.transitionToNextView(nextViewController: self!.startSetup)
+                        // Returning user, show main app
+                        self?.transitionToNextView(nextViewController: self!.mainView)
+                    }
+                } else {
+                    // Error or document doesn't exist, show auth flow
+                    self?.transitionToNextView(nextViewController: self!.authView)
+                }
+            }
+        } else {
+            // No authenticated user, show auth flow
+            self.transitionToNextView(nextViewController: authView)
         }
     }
 }
