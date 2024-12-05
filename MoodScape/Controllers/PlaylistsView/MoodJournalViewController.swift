@@ -130,7 +130,7 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
             collectionView.heightAnchor.constraint(equalToConstant: 300),
             
             // Calendar label
-            calendarLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
+            calendarLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 40),
             calendarLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
             // Calendar

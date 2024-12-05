@@ -231,7 +231,7 @@ class SongDetailsViewController: UIViewController {
             
             spotifyButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
             spotifyButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            spotifyButton.widthAnchor.constraint(equalToConstant: 160),
+            spotifyButton.widthAnchor.constraint(equalToConstant: 180),
             spotifyButton.heightAnchor.constraint(equalToConstant: 60),
             
             shareButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),

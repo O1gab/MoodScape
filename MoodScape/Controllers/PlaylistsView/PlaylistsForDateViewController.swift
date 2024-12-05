@@ -16,7 +16,7 @@ class PlaylistsForDateViewController: UIViewController, UICollectionViewDelegate
     
     private let topLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +58,7 @@ class PlaylistsForDateViewController: UIViewController, UICollectionViewDelegate
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             // Top Label "Your mood on ..."
-            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             topLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             

@@ -35,11 +35,11 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
     private let spotifyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Connect to Spotify", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
         button.backgroundColor = .white.withAlphaComponent(0.5)
         button.backgroundColor = .white
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -48,7 +48,7 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
     private let skipButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Skip", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         button.setTitleColor(UIColor(red: 181/255, green: 23/255, blue: 23/255, alpha: 1.0), for: .normal)
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -97,12 +97,13 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
             
             fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 270),
             fieldLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
+            fieldLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            fieldLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             
             spotifyButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 350),
             spotifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             spotifyButton.widthAnchor.constraint(equalToConstant: 210),
-            spotifyButton.heightAnchor.constraint(equalToConstant: 50),
+            spotifyButton.heightAnchor.constraint(equalToConstant: 60),
             
             skipButton.topAnchor.constraint(equalTo: spotifyButton.bottomAnchor, constant: 20),
             skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
