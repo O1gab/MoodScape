@@ -151,15 +151,26 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return stackView
     }()
     
-    private var mainView: MainViewController?
-    private var moodJournal: MoodJournalViewController?
-    private var favoritesView: FavoritesViewController?
+    private lazy var mainView: MainViewController = {
+        let viewController = MainViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    private lazy var moodJournal: MoodJournalViewController = {
+        let viewController = MoodJournalViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    private lazy var favoritesView: FavoritesViewController = {
+        let viewController = FavoritesViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         loadingIndicator.startAnimating()
-        preloadViews()
         setupView()
         setupConstraints()
         fetchAlbums()
@@ -172,16 +183,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         super.viewDidLayoutSubviews()
         infoButton.layoutIfNeeded()
         infoMessage.layoutIfNeeded()
-    }
-    
-    // MARK: - PreloadViews
-    private func preloadViews() {
-        mainView = MainViewController()
-        mainView?.loadViewIfNeeded()
-        moodJournal = MoodJournalViewController()
-        moodJournal?.loadViewIfNeeded()
-        favoritesView = FavoritesViewController()
-        favoritesView?.loadViewIfNeeded()
     }
     
     // MARK: SetupView
@@ -488,14 +489,12 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // MARK: NavigateToFavorites
     @objc private func navigateToFavorites() {
-        guard let favoritesView = favoritesView else { return }
         favoritesView.modalPresentationStyle = .fullScreen
         self.present(favoritesView, animated: true)
     }
 
     // MARK: NavigateToMoodJournal
     @objc private func navigateToMoodJournal() {
-        guard let moodJournal = moodJournal else { return }
         moodJournal.modalPresentationStyle = .fullScreen
         self.present(moodJournal, animated: true)
     }

@@ -36,24 +36,21 @@ class MainBaseView: UIViewController {
         return profileButton
     }()
     
-    private var profileView: ProfileViewController?
+    private lazy var profileView: ProfileViewController = {
+        let viewController = ProfileViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        preloadViews()
         setupView()
         setupProfileButton()
         setupConstraints()
     }
     
-    // MARK: - PreloadViews
-    private func preloadViews() {
-        profileView = ProfileViewController()
-        profileView?.loadViewIfNeeded()
-    }
-    
-    // MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(gifBackground)
         view.sendSubviewToBack(gifBackground)
@@ -95,7 +92,6 @@ class MainBaseView: UIViewController {
     
     // MARK: ProfileTapped
     @objc private func profileTapped() {
-        guard let profileView = profileView else { return }
         profileView.modalTransitionStyle = .flipHorizontal
         profileView.modalPresentationStyle = .fullScreen
         self.present(profileView, animated: true, completion: nil)
