@@ -42,28 +42,28 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
         return label
     }()
     
-    private var contactView: ContactViewController?
-    private var authView: AuthViewController?
+    private lazy var contactView: ContactViewController = {
+        let viewController = ContactViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
+    private lazy var authView: AuthViewController = {
+        let viewController = AuthViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        preloadViews()
         setupView()
         setupConstraints()
         settingsTableView.delegate = self
         settingsTableView.dataSource = self
     }
     
-    // MARK: - PreloadViews
-    private func preloadViews() {
-        contactView = ContactViewController()
-        contactView?.loadViewIfNeeded()
-        authView = AuthViewController()
-        authView?.loadViewIfNeeded()
-    }
-    
-    // MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(settingsLabel)
         view.addSubview(label)
@@ -111,12 +111,10 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
                 print("TODO")
             
             case "Help & Support":
-                guard let contactView = contactView else { return }
                 contactView.modalPresentationStyle = .fullScreen
                 self.present(contactView, animated: true)
             
             case "Contact us":
-                guard let contactView = contactView else { return }
                 contactView.modalPresentationStyle = .fullScreen
                 self.present(contactView, animated: true)
             
@@ -124,7 +122,6 @@ class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewD
                 loadingIndicator.startAnimating()
                 do {
                     try Auth.auth().signOut()
-                    guard let authView = authView else { return }
                     authView.modalPresentationStyle = .overCurrentContext
                     self.present(authView, animated: false) {
                         self.loadingIndicator.stopAnimating()
