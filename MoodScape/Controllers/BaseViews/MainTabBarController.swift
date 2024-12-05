@@ -8,9 +8,23 @@ import UIKit
 
 class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     
-    private let firstViewController = FeedViewController()
-    private let secondViewController = MainViewController()
-    private let thirdViewController = SocialViewController()
+    private let firstViewController: FeedViewController = {
+        let viewController = FeedViewController()
+        viewController.viewDidLoad()
+        return viewController
+    }()
+    
+    private let secondViewController: MainViewController = {
+        let viewController = MainViewController()
+        viewController.viewDidLoad()
+        return viewController
+    }()
+    
+    private let thirdViewController: SocialViewController = {
+        let viewController = SocialViewController()
+        viewController.viewDidLoad()
+        return viewController
+    }()
 
     private let mainButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -21,9 +35,11 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         return button
     }()
     
-    private var initialTouchPoint: CGPoint = CGPoint(x: 0, y: 0)
     private var targetViewController: UIViewController?
     private var originalViewPosition: CGPoint?
+    
+    private var interactiveTransition: UIPercentDrivenInteractiveTransition?
+    private let transitionDuration: TimeInterval = 0.25
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
@@ -31,8 +47,8 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         self.delegate = self
         self.viewControllers = [firstViewController, secondViewController, thirdViewController]
         
-        preloadViews()
         setupView()
+        setupTransitions()
     }
     
     // MARK: ViewDidLayoutSubviews
@@ -45,14 +61,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         updateMainButtonPosition()
     }
     
-    // MARK: - PreloadViews
-    private func preloadViews() {
-        _ = firstViewController.view
-        _ = secondViewController.view
-        _ = thirdViewController.view
-    }
-    
-    // MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         firstViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "safari.fill"), tag: 0)
         thirdViewController.tabBarItem = UITabBarItem(title: "Social", image: UIImage(systemName: "person.3"), tag: 2)
@@ -61,10 +70,6 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         mainButton.center = CGPoint(x: tabBar.center.x, y: tabBar.frame.origin.y)
         mainButton.addTarget(self, action: #selector(mainButtonTapped), for: .touchUpInside)
         view.addSubview(mainButton)
-        
-        // - MARK: SWIPE GESTURES
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
-          view.addGestureRecognizer(panGesture)
     }
     
     // MARK: UpdateMainButtonPosition
@@ -82,35 +87,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         selectedIndex = 1
     }
     
-    // MARK: HandlePan
-    @objc func handlePan(gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: view)
-        let velocity = gesture.velocity(in: view)
 
-        switch gesture.state {
-        case .began:
-            initialTouchPoint = gesture.location(in: view)
-        case .changed:
-            guard let currentIndex = viewControllers?.firstIndex(of: selectedViewController!) else { return }
-            var nextIndex = currentIndex
-            
-            if translation.x < 0 { // Swiping left
-                nextIndex = min(currentIndex + 1, (viewControllers?.count ?? 1) - 1)
-            } else if translation.x > 0 { // Swiping right
-                nextIndex = max(currentIndex - 1, 0)
-            }
-
-            guard nextIndex != currentIndex else { return }
-            animatePanTransition(to: nextIndex, translation: translation.x)
-            
-        case .ended, .cancelled:
-            let shouldComplete = abs(translation.x) > view.bounds.width / 2 || abs(velocity.x) > 500
-            finishPanTransition(shouldComplete: shouldComplete)
-            
-        default:
-            break
-        }
-    }
 
     // MARK: . AnimatePanTransition
     private func animatePanTransition(to nextIndex: Int, translation: CGFloat) {
@@ -157,5 +134,123 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
                 self.targetViewController = nil
             }
         }
+    }
+    
+    private func setupTransitions() {
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = .fade
+        transition.subtype = .fromRight
+        view.layer.add(transition, forKey: nil)
+    }
+    
+    @objc private func handleEdgeSwipe(_ gesture: UIScreenEdgePanGestureRecognizer) {
+        let translation = gesture.translation(in: gesture.view)
+        let progress = abs(translation.x / view.bounds.width)
+        
+        switch gesture.state {
+        case .began:
+            interactiveTransition = UIPercentDrivenInteractiveTransition()
+            interactiveTransition?.completionCurve = .easeInOut
+            
+            let nextIndex = gesture.edges == .left ? 
+                min(selectedIndex + 1, (viewControllers?.count ?? 1) - 1) :
+                max(selectedIndex - 1, 0)
+            
+            selectedIndex = nextIndex
+            
+        case .changed:
+            interactiveTransition?.update(progress)
+            
+        case .cancelled:
+            interactiveTransition?.cancel()
+            interactiveTransition = nil
+            
+        case .ended:
+            if progress > 0.5 {
+                interactiveTransition?.finish()
+            } else {
+                interactiveTransition?.cancel()
+            }
+            interactiveTransition = nil
+            
+        default:
+            break
+        }
+    }
+    
+    @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: gesture.view)
+        let progress = abs(translation.x / view.bounds.width)
+        let velocity = gesture.velocity(in: view)
+        
+        switch gesture.state {
+        case .began:
+            interactiveTransition = UIPercentDrivenInteractiveTransition()
+            interactiveTransition?.completionCurve = .easeInOut
+            
+        case .changed:
+            let nextIndex = translation.x < 0 ?
+                min(selectedIndex + 1, (viewControllers?.count ?? 1) - 1) :
+                max(selectedIndex - 1, 0)
+            
+            if nextIndex != selectedIndex {
+                selectedIndex = nextIndex
+            }
+            
+            interactiveTransition?.update(progress)
+            
+        case .cancelled, .ended:
+            let shouldComplete = abs(velocity.x) > 500 || progress > 0.5
+            
+            if shouldComplete {
+                interactiveTransition?.finish()
+                UIView.animate(withDuration: 0.2) {
+                    self.view.transform = .identity
+                }
+            } else {
+                interactiveTransition?.cancel()
+                UIView.animate(withDuration: 0.2) {
+                    self.view.transform = .identity
+                }
+            }
+            interactiveTransition = nil
+            
+        default:
+            break
+        }
+    }
+    
+    // UITabBarControllerDelegate method
+    func tabBarController(_ tabBarController: UITabBarController, animationControllerForTransitionFrom fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return TabTransitionAnimator(duration: transitionDuration)
+    }
+}
+
+// Add this custom transition animator
+class TabTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+    private let duration: TimeInterval
+    
+    init(duration: TimeInterval) {
+        self.duration = duration
+        super.init()
+    }
+    
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return duration
+    }
+    
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let toView = transitionContext.view(forKey: .to) else { return }
+        
+        let containerView = transitionContext.containerView
+        toView.alpha = 0
+        containerView.addSubview(toView)
+        
+        UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: {
+            toView.alpha = 1
+        }, completion: { _ in
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+        })
     }
 }

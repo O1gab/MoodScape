@@ -133,13 +133,13 @@ class AuthViewController: StartBaseView {
     // MARK: - HandleRegister
     @objc private func handleRegister() {
         registrationView.modalPresentationStyle = .fullScreen
-        present(registrationView, animated: true)
+        present(registrationView, animated: false)
     }
 
     // MARK: HandleLogin
     @objc private func handleLogin() {
         loginView.modalPresentationStyle = .fullScreen
-        present(loginView, animated: true)
+        present(loginView, animated: false)
     }
     
     // MARK: - AppearingAnimation
