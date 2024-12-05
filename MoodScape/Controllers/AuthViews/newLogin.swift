@@ -87,7 +87,7 @@ class LoginViewController: StartBaseView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
         button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
         button.backgroundColor = .white.withAlphaComponent(0.5)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -188,7 +188,7 @@ class LoginViewController: StartBaseView {
             usernameLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             usernameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
-            usernameField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 260),
+            usernameField.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
             usernameField.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor),
             usernameField.widthAnchor.constraint(equalToConstant: 300),
             usernameField.heightAnchor.constraint(equalToConstant: 60),
@@ -196,15 +196,15 @@ class LoginViewController: StartBaseView {
             passwordLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 370),
             passwordLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
-            passwordField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 15),
+            passwordField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 20),
             passwordField.trailingAnchor.constraint(equalTo: passwordLabel.trailingAnchor),
             passwordField.widthAnchor.constraint(equalToConstant: 300),
             passwordField.heightAnchor.constraint(equalToConstant: 60),
 
             loginButton.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 50),
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loginButton.widthAnchor.constraint(equalToConstant: 120),
-            loginButton.heightAnchor.constraint(equalToConstant: 50),
+            loginButton.widthAnchor.constraint(equalToConstant: 150),
+            loginButton.heightAnchor.constraint(equalToConstant: 60),
             
             notificationMessage.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 40),
             notificationMessage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -227,7 +227,6 @@ class LoginViewController: StartBaseView {
         
         // LOGIN WITH EMAIL
         if ((usernameField.text?.contains("@")) != nil) {
-            // Login with email
             Auth.auth().signIn(withEmail: username, password: password) { [weak self] authResult, error in
                 guard let user = authResult?.user, error == nil else {
                     self?.showErrorMessage("Wrong password or email")

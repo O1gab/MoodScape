@@ -155,7 +155,7 @@ class RegistrationViewController: StartBaseView {
 
             submitButton.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 30),
             submitButton.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 10),
-            submitButton.widthAnchor.constraint(equalToConstant: 120),
+            submitButton.widthAnchor.constraint(equalToConstant: 150),
             submitButton.heightAnchor.constraint(equalToConstant: 60),
             
             notificationMessage.topAnchor.constraint(equalTo: submitButton.topAnchor),
