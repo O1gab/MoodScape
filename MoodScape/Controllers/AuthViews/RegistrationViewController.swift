@@ -54,7 +54,7 @@ class RegistrationViewController: StartBaseView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
         button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
         button.backgroundColor = .white.withAlphaComponent(0.5)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -96,12 +96,15 @@ class RegistrationViewController: StartBaseView {
         return eyeButton
     }()
     
-    private var authView: AuthViewController?
+    private lazy var authView: AuthViewController = {
+        let viewController = AuthViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        preloadViews()
         setupView()
         setupConstraints()
     }
@@ -117,12 +120,6 @@ class RegistrationViewController: StartBaseView {
                 }
             }
         }
-    }
-    
-    // MARK: - PreloadViews
-    private func preloadViews() {
-        authView = AuthViewController()
-        authView?.loadViewIfNeeded()
     }
     
     // MARK: SetupView
@@ -144,20 +141,22 @@ class RegistrationViewController: StartBaseView {
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            backButton.widthAnchor.constraint(equalToConstant: 50),
+            backButton.heightAnchor.constraint(equalToConstant: 50),
             
             fieldLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 250),
             fieldLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            fieldLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
+            fieldLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
             textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 290),
-            textField.leftAnchor.constraint(equalTo: fieldLabel.leftAnchor),
+            textField.leadingAnchor.constraint(equalTo: fieldLabel.leadingAnchor),
             textField.widthAnchor.constraint(equalToConstant: 300),
             textField.heightAnchor.constraint(equalToConstant: 60),
 
             submitButton.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 30),
             submitButton.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 10),
             submitButton.widthAnchor.constraint(equalToConstant: 120),
-            submitButton.heightAnchor.constraint(equalToConstant: 50),
+            submitButton.heightAnchor.constraint(equalToConstant: 60),
             
             notificationMessage.topAnchor.constraint(equalTo: submitButton.topAnchor),
             notificationMessage.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor),
@@ -167,7 +166,7 @@ class RegistrationViewController: StartBaseView {
             
             successMessage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 230),
             successMessage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            successMessage.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
+            successMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 15),
             successMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
         ])
     }
@@ -337,6 +336,8 @@ class RegistrationViewController: StartBaseView {
             user.sendEmailVerification { error in
                 if let error = error {
                     completion(error)
+                    self.currentQuestionIndex = 0
+                    self.proceedToNextQuestion()
                     return
                 }
                 self.notificationMessage.text = ""

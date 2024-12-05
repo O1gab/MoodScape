@@ -122,8 +122,8 @@ class AuthViewController: StartBaseView {
 
             registerButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 450),
             registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            registerButton.widthAnchor.constraint(equalToConstant: 300),
-            registerButton.heightAnchor.constraint(equalToConstant: 55),
+            registerButton.widthAnchor.constraint(equalToConstant: 320),
+            registerButton.heightAnchor.constraint(equalToConstant: 60),
             
             loginLabel.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 20),
             loginLabel.trailingAnchor.constraint(equalTo: registerButton.trailingAnchor, constant: -20)

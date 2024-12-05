@@ -246,7 +246,6 @@
 		7624E6532C7ED4AE004EA785 /* LaunchViews */ = {
 			isa = PBXGroup;
 			children = (
-				76B869BE2C67B93C002866B9 /* AuthViewController.swift */,
 				76B869BC2C67B8D3002866B9 /* LaunchViewController.swift */,
 			);
 			path = LaunchViews;
@@ -264,6 +263,16 @@
 				76F31B472C7B8C1400B65B72 /* EndSetupViewController.swift */,
 			);
 			path = SetupView;
+			sourceTree = "<group>";
+		};
+		765F27822D0207730050F4C0 /* AuthViews */ = {
+			isa = PBXGroup;
+			children = (
+				76B869BE2C67B93C002866B9 /* AuthViewController.swift */,
+				766FD1542C836EBE00D9ACF6 /* newLogin.swift */,
+				766FD1522C81554700D9ACF6 /* RegistrationViewController.swift */,
+			);
+			path = AuthViews;
 			sourceTree = "<group>";
 		};
 		766485462C6A127A00AA050A /* BaseViews */ = {
@@ -454,6 +463,7 @@
 		76B869B62C67B3D3002866B9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				765F27822D0207730050F4C0 /* AuthViews */,
 				7678E19C2C9A34A2008A24D5 /* PlaylistsView */,
 				76DAE5852C87458900F631F1 /* FavoritesView */,
 				764E2A2C2C78221700785104 /* SetupView */,
@@ -465,8 +475,6 @@
 				764FDE372C6983040060A428 /* LoginViewController.swift */,
 				7664854E2C6AD34000AA050A /* View.xib */,
 				766FD14E2C7F837700D9ACF6 /* WelcomeView.swift */,
-				766FD1542C836EBE00D9ACF6 /* newLogin.swift */,
-				766FD1522C81554700D9ACF6 /* RegistrationViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

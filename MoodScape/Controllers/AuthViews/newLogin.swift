@@ -104,13 +104,21 @@ class LoginViewController: StartBaseView {
         return notificationMessage
     }()
     
-    private var startSetup: StartSetupView?
-    private var mainView: MainTabBarController?
+    private lazy var startSetup: StartSetupView = {
+        let viewController = StartSetupView()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
+    private lazy var mainView: MainTabBarController = {
+        let viewController = MainTabBarController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        preloadViews()
         setupView()
         setupConstraints()
         
@@ -149,13 +157,6 @@ class LoginViewController: StartBaseView {
         }
     }
     
-    private func preloadViews() {
-        startSetup = StartSetupView()
-        startSetup?.loadViewIfNeeded()
-        mainView = MainTabBarController()
-        mainView?.loadViewIfNeeded()
-    }
-    
     // MARK: SetupView
     private func setupView() {
         view.addSubview(usernameLabel)
@@ -185,18 +186,18 @@ class LoginViewController: StartBaseView {
             
             usernameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 220),
             usernameLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            usernameLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 15),
+            usernameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
             usernameField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 260),
-            usernameField.leftAnchor.constraint(equalTo: usernameLabel.leftAnchor),
+            usernameField.leadingAnchor.constraint(equalTo: usernameLabel.leadingAnchor),
             usernameField.widthAnchor.constraint(equalToConstant: 300),
             usernameField.heightAnchor.constraint(equalToConstant: 60),
             
             passwordLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 370),
-            passwordLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -15),
+            passwordLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
             passwordField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 15),
-            passwordField.rightAnchor.constraint(equalTo: passwordLabel.rightAnchor),
+            passwordField.trailingAnchor.constraint(equalTo: passwordLabel.trailingAnchor),
             passwordField.widthAnchor.constraint(equalToConstant: 300),
             passwordField.heightAnchor.constraint(equalToConstant: 60),
 
