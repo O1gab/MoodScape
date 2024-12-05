@@ -61,18 +61,20 @@ class MainViewController: MainBaseView {
         return label
     }()
     
-    private let bottomInfoView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-        view.layer.cornerRadius = 20
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     private lazy var moodSelectionView: MoodSelectionView = {
         let viewController = MoodSelectionView()
         viewController.loadViewIfNeeded()
         return viewController
+    }()
+    
+    private let bottomLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Drag down to see your mood journal"
+        label.textColor = .white.withAlphaComponent(0.5)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private lazy var moodJournalView: MoodJournalViewController = {
@@ -96,8 +98,8 @@ class MainViewController: MainBaseView {
         view.addSubview(gradientCircleView)
         view.addSubview(addMoodButton)
         addMoodButton.addTarget(self, action: #selector(handleAddMood), for: .touchUpInside)
+        view.addSubview(bottomLabel)
         view.addSubview(addMoodLabel)
-        view.addSubview(bottomInfoView)
             
         NSLayoutConstraint.activate([
             // Greeting Label constraints
@@ -105,7 +107,7 @@ class MainViewController: MainBaseView {
             greetingLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             greetingLabel.widthAnchor.constraint(equalToConstant: 250),
             
-            // Top label constraints
+            // Top label
             topLabel.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
             topLabel.leadingAnchor.constraint(equalTo: greetingLabel.leadingAnchor),
             
@@ -114,15 +116,21 @@ class MainViewController: MainBaseView {
             gradientCircleView.widthAnchor.constraint(equalToConstant: 150),
             gradientCircleView.heightAnchor.constraint(equalTo: addMoodButton.widthAnchor),
             
-            // "Add Mood" Button constraints
+            // "Add Mood" Button
             addMoodButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             addMoodButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
             addMoodButton.widthAnchor.constraint(equalToConstant: 70),
             addMoodButton.heightAnchor.constraint(equalToConstant: 70),
                 
-            // "Add Mood" Label constraints (below the button)
+            // "Add Mood" Label
             addMoodLabel.topAnchor.constraint(equalTo: addMoodButton.bottomAnchor, constant: 3),
-            addMoodLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            addMoodLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            // "Drag Down" Label
+            bottomLabel.topAnchor.constraint(equalTo: addMoodLabel.bottomAnchor, constant: 200),
+            bottomLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            bottomLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
     }
     
