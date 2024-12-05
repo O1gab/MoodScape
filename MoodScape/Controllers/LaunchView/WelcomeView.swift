@@ -125,25 +125,23 @@ class WelcomeView: StartBaseView {
     // MARK: - CheckAuth
     private func checkAuth() {
         if let userId = Auth.auth().currentUser?.uid {
+            // User is authenticated, check firstUsage in Firestore
             let db = Firestore.firestore()
             db.collection("users").document(userId).getDocument { [weak self] (document, error) in
                 if let document = document, document.exists {
                     let firstUsage = document.data()?["firstUsage"] as? Bool ?? true
                     
                     if firstUsage {
-                        // First time user, show auth flow
-                        self?.transitionToNextView(nextViewController: self!.startSetup)
-                        // Returning user, show main app
-                        self?.transitionToNextView(nextViewController: self!.mainView)
+                        self?.transitionToNextView(nextViewController: self?.startSetup ?? StartSetupView())
+                    } else {
+                        self?.transitionToNextView(nextViewController: self?.mainView ?? MainTabBarController())
                     }
                 } else {
-                    // Error or document doesn't exist, show auth flow
-                    self?.transitionToNextView(nextViewController: self!.authView)
+                    self?.transitionToNextView(nextViewController: self?.authView ?? AuthViewController())
                 }
             }
         } else {
-            // No authenticated user, show auth flow
-            self.transitionToNextView(nextViewController: authView)
+            transitionToNextView(nextViewController: authView)
         }
     }
 }
