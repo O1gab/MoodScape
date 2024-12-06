@@ -249,68 +249,77 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         
         group.notify(queue: .main) { [weak self] in
             
-            guard let userID = UserDefaults.standard.string(forKey: "user_id") else {
-                self?.showError("Failed to fetch UserID")
-                return
-            }
-            
-            // Create the playlist on Spotify
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd/MM/yyyy"
-            let date = dateFormatter.string(from: Date())
-            let selected = self!.formattedSelectedEmotions()
-            let name = "\(selected) - \(date)"
-            
-            SpotifyAPIManager.shared.createPlaylist(name: name, userId: userID) { playlistID in
-                guard let playlistID = playlistID else {
-                    self?.showError("Failed to create Spotify playlist")
-                    return
-                }
-                let playlistURLString = "https://open.spotify.com/playlist/\(playlistID)"
-                guard let playlistURL = URL(string: playlistURLString) else {
-                    self?.showError("Invalid playlist URL")
-                    return
-                }
-                print("a new playlist was created!")
-                
-                // Add tracks to the newly created playlist
-                SpotifyAPIManager.shared.addTracksToPlaylist(playlistID: playlistID, trackURIs: trackURIs) { success in
-                    if success {
-                        DispatchQueue.main.async {
-                            print("Playlist created and songs added successfully!")
-                            
-                            self?.addBlurEffect()
-                            
-                            let newPlaylist = NewPlaylistView()
-                            newPlaylist.playlistURL = playlistURL
-                            newPlaylist.name = name
-                            newPlaylist.onCloseButtonTapped = { [weak self] in
-                                self?.handleCloseButtonTapped()
-                            }
-                            self?.colorPlaylist { color in
-                                let dateFormatter = DateFormatter()
-                                dateFormatter.dateFormat = "dd/MM/yyyy"
-                                newPlaylist.configure(with: color, date: dateFormatter.string(from: Date()))
+        let db = Firestore.firestore()
+        let userId = Auth.auth().currentUser?.uid
+        let userDocRef = db.collection("users").document(userId ?? "")
+        
+        userDocRef.getDocument { [weak self] (document, error) in
+            if let document = document, document.exists {
+                if let spotifyID = document.data()?["spotify_id"] as? String {
+                    // Create the playlist on Spotify
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd/MM/yyyy"
+                    let date = dateFormatter.string(from: Date())
+                    let selected = self!.formattedSelectedEmotions()
+                    let name = "\(selected) - \(date)"
+                    
+                    SpotifyAPIManager.shared.createPlaylist(name: name, userId: spotifyID) { playlistID in
+                        guard let playlistID = playlistID else {
+                            self?.showError("Failed to create Spotify playlist")
+                            return
+                        }
+                        let playlistURLString = "https://open.spotify.com/playlist/\(playlistID)"
+                        guard let playlistURL = URL(string: playlistURLString) else {
+                            self?.showError("Invalid playlist URL")
+                            return
+                        }
+                        print("a new playlist was created!")
+
+                        // Add tracks to the newly created playlist
+                        SpotifyAPIManager.shared.addTracksToPlaylist(playlistID: playlistID, trackURIs: trackURIs) { success in
+                            if success {
+                                DispatchQueue.main.async {
+                                    print("Playlist created and songs added successfully!")
                                 
-                                let playlist = Playlist(
-                                    id: playlistID,
-                                    name: name,
-                                    color: color,
-                                    date: dateFormatter.string(from: Date()),
-                                    emotions: selected.components(separatedBy: ", "),
-                                    spotifyURL: playlistURL
-                                )
-                                PlaylistStorage().savePlaylist(playlist)
+                                    self?.addBlurEffect()
+
+                                    let newPlaylist = NewPlaylistView()
+                                    newPlaylist.playlistURL = playlistURL
+                                    newPlaylist.name = name
+                                    newPlaylist.onCloseButtonTapped = { [weak self] in
+                                        self?.handleCloseButtonTapped()
+                                    }
+                                    self?.colorPlaylist { color in
+                                        let dateFormatter = DateFormatter()
+                                        dateFormatter.dateFormat = "dd/MM/yyyy"
+                                        newPlaylist.configure(with: color, date: dateFormatter.string(from: Date()))
+                                        
+                                        let playlist = Playlist(
+                                            id: playlistID,
+                                            name: name,
+                                            color: color,
+                                            date: dateFormatter.string(from: Date()),
+                                            emotions: selected.components(separatedBy: ", "),
+                                            spotifyURL: playlistURL
+                                        )
+                                        PlaylistStorage().savePlaylist(playlist)
+                                    }
+                                    newPlaylist.modalPresentationStyle = .overCurrentContext
+                                    newPlaylist.modalTransitionStyle = .crossDissolve
+                                    self?.present(newPlaylist, animated: true, completion: nil)
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    self?.showError("Failed to add songs to playlist")
+                                    }
+                                }
                             }
-                            newPlaylist.modalPresentationStyle = .overCurrentContext
-                            newPlaylist.modalTransitionStyle = .crossDissolve
-                            self?.present(newPlaylist, animated: true, completion: nil)
                         }
                     } else {
-                        DispatchQueue.main.async {
-                            self?.showError("Failed to add songs to playlist")
-                        }
+                        self?.showError("Failed to fetch Spotify ID")
                     }
+                } else {
+                    self?.showError("Failed to fetch user document")
                 }
             }
         }
@@ -375,8 +384,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
                 
                 print("Successfully added tracks to playlist")
             }
-            
-            task.resume()
+        task.resume()
     }
     
     // - MARK: ExtractJSON

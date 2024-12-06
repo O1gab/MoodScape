@@ -9,6 +9,8 @@ import UIKit
 import Gifu
 import SafariServices
 import WebKit
+import FirebaseAuth
+import FirebaseFirestore
 
 class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
     
@@ -151,7 +153,26 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
     
     // - MARK: SaveUserId
     private func saveUserId() {
-        UserDefaults.standard.setValue(userId, forKey: "user_id")
+        // Save Spotify ID to UserDefaults TODO: MAYBE DELETE
+        UserDefaults.standard.setValue(userId, forKey: "spotify_id")
+        
+        // Ensure the user is authenticated and get the Firebase UID
+        guard let firebaseUID = Auth.auth().currentUser?.uid else {
+            print("User is not authenticated with Firebase.")
+            return
+        }
+        
+        // Save Spotify ID to Firebase under the Firebase UID
+        let db = Firestore.firestore()
+        let userRef = db.collection("users").document(firebaseUID)
+        
+        userRef.setData(["spotify_id": userId], merge: true) { error in
+            if let error = error {
+                print("Error saving Spotify ID to Firebase: \(error.localizedDescription)")
+            } else {
+                print("Spotify ID successfully saved to Firebase.")
+            }
+        }
     }
 
     // - MARK: ShowError
