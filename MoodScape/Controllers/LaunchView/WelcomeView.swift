@@ -59,15 +59,15 @@ class WelcomeView: StartBaseView {
     // MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            let phrase = "Let your emotions define the playlist."
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) { [weak self] in
+            let phrase = "Let your emotions set the playlist."
             let words = phrase.split(separator: " ")
             var currentIndex = 0
 
             func showNextWord() {
                 guard currentIndex < words.count else {
                     // Transition to the next view after the phrase is fully displayed
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                         self?.checkAuth()
                     }
                     return
@@ -77,7 +77,7 @@ class WelcomeView: StartBaseView {
                 self?.messageLabel.text = String(word)
                 
                 currentIndex += 1
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     showNextWord()
                 }
             }
