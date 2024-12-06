@@ -29,7 +29,7 @@ class MainBaseView: UIViewController {
     }()
 
     let profileButton: UIButton = {
-        let profileButton = UIButton(type: .custom)
+        let profileButton = UIButton(type: .system)
         profileButton.layer.cornerRadius = 25
         profileButton.clipsToBounds = true
         profileButton.imageView?.contentMode = .scaleAspectFill

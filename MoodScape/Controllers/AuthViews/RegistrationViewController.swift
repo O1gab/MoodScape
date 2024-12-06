@@ -16,7 +16,7 @@ class RegistrationViewController: StartBaseView {
     private var userData: [String: String] = [:]
     
     private let backButton: UIButton = {
-        let backButton = UIButton(type: .custom)
+        let backButton = UIButton(type: .system)
         backButton.setImage(UIImage(systemName: "arrow.left"), for: .normal)
         backButton.tintColor = .white
         backButton.imageView?.contentMode = .scaleAspectFit
