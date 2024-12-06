@@ -13,7 +13,7 @@ class AuthViewController: StartBaseView {
     private let introLabel: GradientLabel = {
         let label = GradientLabel()
         label.text = "Let your emotions set the playlist."
-        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 36, weight: .bold)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
@@ -41,9 +41,55 @@ class AuthViewController: StartBaseView {
         return label
     }()
     
+    private let googleButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.title = "Continue with Google"
+        configuration.image = UIImage(named: "google-icon")
+        configuration.baseForegroundColor = .white
+        configuration.baseBackgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        
+        configuration.imagePadding = 10
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: -20, bottom: 0, trailing: 0)
+        configuration.imagePlacement = .leading
+        configuration.cornerStyle = .capsule
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            return outgoing
+        }
+
+        let button = UIButton(configuration: configuration, primaryAction: nil)
+        button.alpha = 0
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let appleButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.title = "Continue with Apple"
+        configuration.image = UIImage(named: "apple-icon")
+        configuration.baseForegroundColor = .white
+        configuration.baseBackgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        
+        configuration.imagePadding = 10
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: -30, bottom: 0, trailing: 0)
+        configuration.imagePlacement = .leading
+        configuration.cornerStyle = .capsule
+        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            return outgoing
+        }
+
+        let button = UIButton(configuration: configuration, primaryAction: nil)
+        button.alpha = 0
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private let registerButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Get Started", for: .normal)
+        button.setTitle("Sign up with Email", for: .normal)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -101,6 +147,8 @@ class AuthViewController: StartBaseView {
         view.addSubview(introLabel)
         view.addSubview(instructions)
         
+        view.addSubview(googleButton)
+        view.addSubview(appleButton)
         registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         view.addSubview(registerButton)
         
@@ -112,15 +160,25 @@ class AuthViewController: StartBaseView {
     // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            introLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            introLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 110),
             introLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             introLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
-            instructions.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 380),
+            instructions.topAnchor.constraint(equalTo: introLabel.bottomAnchor, constant: 160),
             instructions.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             instructions.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            
+            googleButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 435),
+            googleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            googleButton.widthAnchor.constraint(equalToConstant: 320),
+            googleButton.heightAnchor.constraint(equalToConstant: 60),
+            
+            appleButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor, constant: 20),
+            appleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            appleButton.widthAnchor.constraint(equalToConstant: 320),
+            appleButton.heightAnchor.constraint(equalToConstant: 60),
 
-            registerButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 450),
+            registerButton.topAnchor.constraint(equalTo: appleButton.bottomAnchor, constant: 20),
             registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             registerButton.widthAnchor.constraint(equalToConstant: 320),
             registerButton.heightAnchor.constraint(equalToConstant: 60),
@@ -149,6 +207,8 @@ class AuthViewController: StartBaseView {
                 self?.introLabel.alpha = 1
             }
             UIView.animate(withDuration: 2.5) {
+                self?.googleButton.alpha = 1
+                self?.appleButton.alpha = 1
                 self?.registerButton.alpha = 1
                 self?.loginLabel.alpha = 1
             }
