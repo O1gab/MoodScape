@@ -43,7 +43,7 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
         button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
         button.backgroundColor = .white.withAlphaComponent(0.5)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -125,12 +125,12 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
             skipButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 80),
             skipButton.leadingAnchor.constraint(equalTo: fieldLabel.leadingAnchor),
             skipButton.widthAnchor.constraint(equalToConstant: 120),
-            skipButton.heightAnchor.constraint(equalToConstant: 50),
+            skipButton.heightAnchor.constraint(equalToConstant: 60),
             
             submitButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 80),
             submitButton.leadingAnchor.constraint(equalTo: skipButton.trailingAnchor, constant: 45),
-            submitButton.widthAnchor.constraint(equalToConstant: 120),
-            submitButton.heightAnchor.constraint(equalToConstant: 50)
+            submitButton.widthAnchor.constraint(equalToConstant: 150),
+            submitButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     

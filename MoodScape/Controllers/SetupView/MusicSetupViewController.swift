@@ -65,7 +65,7 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
         button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
         button.backgroundColor = .white.withAlphaComponent(0.5)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -124,7 +124,7 @@ class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewD
             submitButton.topAnchor.constraint(equalTo: genreCollectionView.bottomAnchor, constant: 20),
             submitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             submitButton.widthAnchor.constraint(equalToConstant: 210),
-            submitButton.heightAnchor.constraint(equalToConstant: 50)
+            submitButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     

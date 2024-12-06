@@ -12,6 +12,9 @@ import WebKit
 
 class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
     
+    /*
+     TODO: A USER CANNOT SKIP THIS SETTING
+     */
     // MARK: - Properties
     private let gifGradient: GIFImageView = {
         let gifBackground = GIFImageView()
@@ -108,7 +111,7 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
             skipButton.topAnchor.constraint(equalTo: spotifyButton.bottomAnchor, constant: 20),
             skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             skipButton.widthAnchor.constraint(equalToConstant: 120),
-            skipButton.heightAnchor.constraint(equalToConstant: 50)
+            skipButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
  

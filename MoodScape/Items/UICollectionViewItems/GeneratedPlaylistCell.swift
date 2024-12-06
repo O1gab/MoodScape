@@ -43,7 +43,7 @@ class GeneratedPlaylistCell: UICollectionViewCell {
             
             titleLabel.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
     
