@@ -52,8 +52,8 @@ class RegistrationViewController: StartBaseView {
         let button = UIButton(type: .system)
         button.setTitle("Submit", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
-        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
-        button.backgroundColor = .white.withAlphaComponent(0.5)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -113,7 +113,7 @@ class RegistrationViewController: StartBaseView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: self?.questions[self?.currentQuestionIndex ?? 0] ?? "", typingSpeed: 0.05) {
+            self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: self?.questions[self?.currentQuestionIndex ?? 0] ?? "", typingSpeed: 0.04) {
                 UIView.animate(withDuration: 2.0) {
                     self?.textField.alpha = 1.0
                     self?.submitButton.alpha = 1.0
@@ -277,7 +277,7 @@ class RegistrationViewController: StartBaseView {
     
     // - MARK: ProceedToNextQuestion
     private func proceedToNextQuestion() {
-        self.fieldLabel.startErasingAnimation(label: fieldLabel, typingSpeed: 0.05) { [weak self] in
+        self.fieldLabel.startErasingAnimation(label: fieldLabel, typingSpeed: 0.02) { [weak self] in
             self?.textField.text = ""
             
             if self?.currentQuestionIndex == 2 {
@@ -290,7 +290,7 @@ class RegistrationViewController: StartBaseView {
             }
             if self?.currentQuestionIndex ?? 0 < self?.questions.count ?? 0 {
                 let nextQuestion = self?.questions[self?.currentQuestionIndex ?? 0] ?? ""
-                self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: 0.05) {}
+                self?.fieldLabel.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: 0.04) {}
             } else {
                 self?.handleRegistration()
             }

@@ -85,8 +85,8 @@ class LoginViewController: StartBaseView {
         let button = UIButton(type: .system)
         button.setTitle("Submit", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
-        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
-        button.backgroundColor = .white.withAlphaComponent(0.5)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -138,16 +138,16 @@ class LoginViewController: StartBaseView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.usernameLabel.startTypingAnimation(label: self?.usernameLabel ?? UILabel(), text: "Enter your email here", typingSpeed: 0.05) {
+            self?.usernameLabel.startTypingAnimation(label: self?.usernameLabel ?? UILabel(), text: "Enter your email here", typingSpeed: 0.04) {
                 UIView.animate(withDuration: 2.0) {
                     self?.usernameField.alpha = 1.0
                 }
                 
-                self?.passwordLabel.startTypingAnimation(label: self?.passwordLabel ?? UILabel(), text: "Enter your password here", typingSpeed: 0.05) {
+                self?.passwordLabel.startTypingAnimation(label: self?.passwordLabel ?? UILabel(), text: "Enter your password here", typingSpeed: 0.04) {
                     UIView.animate(withDuration: 2.0) {
                         self?.passwordField.alpha = 1.0
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                         UIView.animate(withDuration: 2.0) {
                             self?.loginButton.alpha = 1.0
                         }
