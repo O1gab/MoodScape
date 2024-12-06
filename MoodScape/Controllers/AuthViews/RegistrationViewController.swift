@@ -310,14 +310,7 @@ class RegistrationViewController: StartBaseView {
             } else {
                 self?.showSuccessMessage("Verification email sent. Please check your email.")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                    self?.dismiss(animated: true) {
-                        if let sceneDelegate = UIApplication.shared.connectedScenes
-                            .first?.delegate as? SceneDelegate {
-                                guard let authView = self?.authView else { return }
-                                sceneDelegate.window?.rootViewController = authView
-                                sceneDelegate.window?.makeKeyAndVisible()
-                        }
-                    }
+                    self?.dismiss(animated: true)
                 }
             }
         }
