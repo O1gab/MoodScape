@@ -57,7 +57,7 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        button.layer.cornerRadius = 15
+        button.layer.cornerRadius = 25
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -125,10 +125,10 @@ class MoodSelectionView: UIViewController, UICollectionViewDelegate, UICollectio
             emotionsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             emotionsCollectionView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 20),
             emotionsCollectionView.bottomAnchor.constraint(equalTo: saveButton.topAnchor, constant: -20),
-                    
-            saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            saveButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            saveButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
+            
+            saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            saveButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor),
+            saveButton.widthAnchor.constraint(equalToConstant: 200),
             saveButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
