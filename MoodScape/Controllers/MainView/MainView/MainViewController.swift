@@ -192,7 +192,6 @@ class MainViewController: MainBaseView {
         // Detect if the user has swiped down hard enough
         if gesture.state == .ended {
             if velocity.y < -gestureThreshold && translation.y < -100 {
-                let moodJournalView = MoodJournalViewController()
                 moodJournalView.modalPresentationStyle = .overFullScreen
                 moodJournalView.modalTransitionStyle = .crossDissolve
                 present(moodJournalView, animated: true, completion: nil)
