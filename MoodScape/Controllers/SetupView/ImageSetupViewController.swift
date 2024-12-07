@@ -41,8 +41,8 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
         let button = UIButton(type: .system)
         button.setTitle("Submit", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
-        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
-        button.backgroundColor = .white.withAlphaComponent(0.5)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -92,7 +92,7 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Select your profile's future image", typingSpeed: 0.05) {
+            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Select your profile's future image", typingSpeed: 0.04) {
                 self?.revealButton(button: self?.submitButton ?? UIButton())
                 self?.revealButton(button: self?.skipButton ?? UIButton())
             }
