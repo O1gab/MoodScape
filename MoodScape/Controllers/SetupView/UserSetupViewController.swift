@@ -54,8 +54,8 @@ class UserSetupView: SetupBaseView {
         let button = UIButton(type: .system)
         button.setTitle("Submit", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
-        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
-        button.backgroundColor = .white.withAlphaComponent(0.5)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -83,7 +83,7 @@ class UserSetupView: SetupBaseView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: self?.questions[self?.currentQuestionIndex ?? 0] ?? "", typingSpeed: 0.05) {
+            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: self?.questions[self?.currentQuestionIndex ?? 0] ?? "", typingSpeed: 0.04) {
                     DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
                         UIView.animate(withDuration: 2.0) {
                             self?.textField.alpha = 1.0
@@ -129,6 +129,7 @@ class UserSetupView: SetupBaseView {
             
             submitButton.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 30),
             submitButton.leadingAnchor.constraint(equalTo: skipButton.trailingAnchor, constant: 45),
+            submitButton.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
             submitButton.widthAnchor.constraint(equalToConstant: 150),
             submitButton.heightAnchor.constraint(equalToConstant: 60)
         ])
@@ -184,7 +185,7 @@ class UserSetupView: SetupBaseView {
 
     // MARK: - ProceedToNextQuestion
     private func proceedToNextQuestion() {
-        startErasingAnimation(label: fieldLabel, typingSpeed: 0.045) { [weak self] in
+        startErasingAnimation(label: fieldLabel, typingSpeed: 0.02) { [weak self] in
             self?.textField.text = ""
             self?.currentQuestionIndex += 1
             
@@ -198,9 +199,11 @@ class UserSetupView: SetupBaseView {
             
             if self?.currentQuestionIndex ?? 0 < self?.questions.count ?? 0 {
                 let nextQuestion = self?.questions[self?.currentQuestionIndex ?? 0] ?? ""
-                self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: 0.05) {}
+                self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: nextQuestion, typingSpeed: 0.04) {}
             } else {
-                self?.navigateToNextView(viewController: ImageSetupView())
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                    self?.navigateToNextView(viewController: ImageSetupView())
+                }
             }
         }
     }
