@@ -393,11 +393,14 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                 }
                 return
             }
-            SpotifyAPIManager.shared.fetchWeeklyTopSongs { songs in
+            
+            SpotifyAPIManager.shared.fetchWeeklyTopSongs { [weak self] songs in
                 DispatchQueue.main.async {
+                    
                     self?.loadingIndicator.stopAnimating()
                     if let songs = songs {
                         self?.topWeeklySongs = Array(songs.prefix(5))
+                        print("Fetched \(songs.count) songs") // Debug print
                         self?.songCollectionView.reloadData()
                     } else {
                         self?.showError("Failed to fetch top songs")
