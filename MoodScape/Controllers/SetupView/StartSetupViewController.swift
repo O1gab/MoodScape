@@ -31,17 +31,17 @@ class StartSetupView: SetupBaseView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            self?.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "We are so happy that you joined us!", typingSpeed: 0.05) {
+            self?.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "We are so happy that you joined us!", typingSpeed: 0.04) {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    self?.startErasingAnimation(label: self?.messageLabel ?? UILabel(), typingSpeed: 0.045) {
+                    self?.startErasingAnimation(label: self?.messageLabel ?? UILabel(), typingSpeed: 0.02) {
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
                             self?.messageLabel.text = ""
-                            self?.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "Now we would like to know you better :) Please, configure your profile", typingSpeed: 0.05) {
+                            self?.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "Now we would like to know you better :) Please, configure your profile", typingSpeed: 0.04) {
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                                    self?.startErasingAnimation(label: self?.messageLabel ?? UILabel(), typingSpeed: 0.045) {
+                                    self?.startErasingAnimation(label: self?.messageLabel ?? UILabel(), typingSpeed: 0.02) {
                                         self?.transitionToNextView()
                                     }
                                 }
