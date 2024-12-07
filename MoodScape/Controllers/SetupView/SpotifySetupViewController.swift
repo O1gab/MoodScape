@@ -41,9 +41,8 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
         let button = UIButton(type: .system)
         button.setTitle("Connect to Spotify", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        button.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.9), for: .normal)
-        button.backgroundColor = .white.withAlphaComponent(0.5)
-        button.backgroundColor = .white
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 30
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +73,7 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Please, connect your account to Spotify", typingSpeed: 0.05) {
+            self?.startTypingAnimation(label: self?.fieldLabel ?? UILabel(), text: "Please, connect your account to Spotify", typingSpeed: 0.04) {
                 self?.revealButton(button: self?.spotifyButton ?? UIButton())
                 self?.revealButton(button: self?.skipButton ?? UIButton())
             }
