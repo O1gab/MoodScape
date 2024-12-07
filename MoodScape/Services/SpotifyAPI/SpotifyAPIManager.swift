@@ -101,53 +101,69 @@ class SpotifyAPIManager {
     
     // - MARK: FetchWeeklyTopSongs
     func fetchWeeklyTopSongs(completion: @escaping ([Song]?) -> Void) {
-        guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
-            completion([])
+        guard let accessToken = SpotifyAuth.shared.accessToken else {
+            print("No access token available")
+            completion(nil)
             return
         }
         
         guard let url = URL(string: "https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M/tracks") else {
-            completion(nil)
-            return
-        }
-        var request = URLRequest(url: url)
-        
-        
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        request.httpMethod = "GET"
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print("Failed to fetch songs: \(error?.localizedDescription ?? "Unknown error")")
                 completion(nil)
                 return
             }
             
-            do {
-                let jsonDecoder = JSONDecoder()
-                let response = try jsonDecoder.decode(SpotifyPlaylistResponse.self, from: data)
-                
-                let songs = response.items.compactMap { item -> Song? in
-                    guard let track = item.track else { return nil }
-                    let artistName = track.artists.first?.name ?? "Unknown Artist"
-                    let id = ""
-                    return Song(
-                        name: track.name,
-                        id: id,
-                        artist: artistName,
-                        duration: "0",
-                        spotifyUrl: track.external_urls["spotify"] ?? "",
-                        releaseDate: "",
-                        imageUrl: ""
-                    )
+            var request = URLRequest(url: url)
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            request.httpMethod = "GET"
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                // Print HTTP status code for debugging
+                if let httpResponse = response as? HTTPURLResponse {
+                    print("HTTP Status Code: \(httpResponse.statusCode)")
                 }
-                completion(songs)
-            } catch {
-                print("Failed to parse JSON: \(error.localizedDescription)")
-                completion(nil)
+                
+                guard let data = data, error == nil else {
+                    print("Failed to fetch songs: \(error?.localizedDescription ?? "Unknown error")")
+                    completion(nil)
+                    return
+                }
+                
+                // Print raw response data for debugging
+                if let rawResponse = String(data: data, encoding: .utf8) {
+                    print("Raw Response: \(rawResponse)")
+                }
+                
+                do {
+                    // First try to parse as dictionary to check structure
+                    if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        print("JSON Structure: \(jsonObject.keys)")
+                    }
+                    
+                    let jsonDecoder = JSONDecoder()
+                    let response = try jsonDecoder.decode(SpotifyPlaylistResponse.self, from: data)
+                    
+                    let songs = response.items.compactMap { item -> Song? in
+                        guard let track = item.track else { return nil }
+                        let artistName = track.artists.first?.name ?? "Unknown Artist"
+                        
+                        return Song(
+                            name: track.name,
+                            id: "", // You might want to add id to SpotifyTrack struct
+                            artist: artistName,
+                            duration: "0",
+                            spotifyUrl: track.external_urls["spotify"] ?? "",
+                            releaseDate: "",
+                            imageUrl: ""
+                        )
+                    }
+                    completion(songs)
+                } catch {
+                    print("Failed to parse JSON: \(error)")
+                    print("Decoding Error Details: \(error.localizedDescription)")
+                    completion(nil)
+                }
             }
-        }
-        task.resume()
+            task.resume()
     }
     
     // - MARK: FetchArtistsByGenre (used during registration)
