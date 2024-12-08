@@ -11,6 +11,7 @@
 		7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7616BD762C7E33AF0083D227 /* custom_tabbar.png */; };
 		7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD7C2C7E81B00083D227 /* SongViewCell.swift */; };
 		761EDA062C8A0A26008A07DB /* GradientCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761EDA052C8A0A26008A07DB /* GradientCircleView.swift */; };
+		762226BB2D0614D600BE7AE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 762226BA2D0614D600BE7AE2 /* GoogleService-Info.plist */; };
 		7628AAC42C860D780021433F /* Spotify_Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7628AAC32C860D780021433F /* Spotify_Logo.png */; };
 		7628AAC62C860FAC0021433F /* Spotify_Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7628AAC52C860FAB0021433F /* Spotify_Icon.png */; };
 		7628AAC82C8642E80021433F /* PreferencesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7628AAC72C8642E80021433F /* PreferencesCell.swift */; };
@@ -27,7 +28,6 @@
 		764FDE3C2C6989730060A428 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 764FDE3B2C6989730060A428 /* Main.storyboard */; };
 		765E1EED2C98C92E0010D6B6 /* NewPlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765E1EEC2C98C92E0010D6B6 /* NewPlaylistView.swift */; };
 		766485482C6A13AD00AA050A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485472C6A13AD00AA050A /* ProfileViewController.swift */; };
-		7664854D2C6A1AAF00AA050A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7664854C2C6A1AAF00AA050A /* GoogleService-Info.plist */; };
 		7664854F2C6AD34000AA050A /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7664854E2C6AD34000AA050A /* View.xib */; };
 		766485572C6B98CB00AA050A /* ValidationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766485562C6B98CB00AA050A /* ValidationExtensions.swift */; };
 		7664855C2C6C447E00AA050A /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7664855B2C6C447E00AA050A /* MainTabBarController.swift */; };
@@ -62,6 +62,8 @@
 		768536D42C7AA8DC00C35FF8 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768536D32C7AA8DC00C35FF8 /* Artist.swift */; };
 		76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76976C942C7401AE00D44DD3 /* SongCell.swift */; };
 		76976C9B2C74238A00D44DD3 /* SongCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76976C9A2C74238A00D44DD3 /* SongCollectionView.swift */; };
+		76A864B72D050E800022C4FD /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 76A864B62D050E800022C4FD /* GoogleSignIn */; };
+		76A864B92D050E800022C4FD /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 76A864B82D050E800022C4FD /* GoogleSignInSwift */; };
 		76AAD3202C70F5EE00CBE3D8 /* ProfileBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD31F2C70F5EE00CBE3D8 /* ProfileBaseView.swift */; };
 		76AAD3252C721C0300CBE3D8 /* AlbumDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3242C721C0300CBE3D8 /* AlbumDetailsViewController.swift */; };
 		76AAD3272C72241A00CBE3D8 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AAD3262C72241A00CBE3D8 /* ImageExtensions.swift */; };
@@ -111,6 +113,7 @@
 		7616BD762C7E33AF0083D227 /* custom_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom_tabbar.png; sourceTree = "<group>"; };
 		7616BD7C2C7E81B00083D227 /* SongViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongViewCell.swift; sourceTree = "<group>"; };
 		761EDA052C8A0A26008A07DB /* GradientCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientCircleView.swift; sourceTree = "<group>"; };
+		762226BA2D0614D600BE7AE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7628AAC32C860D780021433F /* Spotify_Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotify_Logo.png; sourceTree = "<group>"; };
 		7628AAC52C860FAB0021433F /* Spotify_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotify_Icon.png; sourceTree = "<group>"; };
 		7628AAC72C8642E80021433F /* PreferencesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesCell.swift; sourceTree = "<group>"; };
@@ -127,7 +130,6 @@
 		764FDE3B2C6989730060A428 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		765E1EEC2C98C92E0010D6B6 /* NewPlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaylistView.swift; sourceTree = "<group>"; };
 		766485472C6A13AD00AA050A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		7664854C2C6A1AAF00AA050A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7664854E2C6AD34000AA050A /* View.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
 		766485502C6B898500AA050A /* FirebaseAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		766485562C6B98CB00AA050A /* ValidationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationExtensions.swift; sourceTree = "<group>"; };
@@ -201,7 +203,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76A864B92D050E800022C4FD /* GoogleSignInSwift in Frameworks */,
 				76B004BB2C90574600563DE7 /* SpotifyiOS.xcframework in Frameworks */,
+				76A864B72D050E800022C4FD /* GoogleSignIn in Frameworks */,
 				7678E1E62C9B81A7008A24D5 /* FSCalendar in Frameworks */,
 				CE050D9F852DA1814AF749C4 /* Pods_MoodScape.framework in Frameworks */,
 			);
@@ -451,7 +455,7 @@
 		76B869B52C67B3B4002866B9 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				7664854C2C6A1AAF00AA050A /* GoogleService-Info.plist */,
+				762226BA2D0614D600BE7AE2 /* GoogleService-Info.plist */,
 				76B869A12C67B3A9002866B9 /* AppDelegate.swift */,
 				76B869A32C67B3A9002866B9 /* SceneDelegate.swift */,
 			);
@@ -548,6 +552,8 @@
 			name = MoodScape;
 			packageProductDependencies = (
 				7678E1E52C9B81A7008A24D5 /* FSCalendar */,
+				76A864B62D050E800022C4FD /* GoogleSignIn */,
+				76A864B82D050E800022C4FD /* GoogleSignInSwift */,
 			);
 			productName = MoodScape;
 			productReference = 76B8699E2C67B3A9002866B9 /* MoodScape.app */;
@@ -580,6 +586,7 @@
 			mainGroup = 76B869952C67B3A9002866B9;
 			packageReferences = (
 				7678E1E42C9B81A7008A24D5 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				76A864B52D050E800022C4FD /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 76B8699F2C67B3A9002866B9 /* Products */;
 			projectDirPath = "";
@@ -601,8 +608,8 @@
 				7664854F2C6AD34000AA050A /* View.xib in Resources */,
 				7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */,
 				768536C92C7A84A000C35FF8 /* green_gradient.gif in Resources */,
-				7664854D2C6A1AAF00AA050A /* GoogleService-Info.plist in Resources */,
 				76B869CD2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif in Resources */,
+				762226BB2D0614D600BE7AE2 /* GoogleService-Info.plist in Resources */,
 				76B869AB2C67B3AA002866B9 /* Assets.xcassets in Resources */,
 				76DAE5892C889C1200F631F1 /* welcome_gradient.gif in Resources */,
 			);
@@ -1075,6 +1082,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		76A864B52D050E800022C4FD /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1082,6 +1097,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7678E1E42C9B81A7008A24D5 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		76A864B62D050E800022C4FD /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76A864B52D050E800022C4FD /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		76A864B82D050E800022C4FD /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76A864B52D050E800022C4FD /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
