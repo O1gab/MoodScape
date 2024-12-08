@@ -9,6 +9,7 @@ import Gifu
 import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
+import FirebaseFirestore
 
 class AuthViewController: StartBaseView {
 
@@ -217,10 +218,9 @@ class AuthViewController: StartBaseView {
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
         
-        // Start the sign in flow!
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
-            guard error == nil else {
-                print("Error during Google sign-in: \(error?.localizedDescription ?? "Unknown error")")
+            if let error = error {
+                print("Error during Google sign-in: \(error.localizedDescription)")
                 return
             }
             
@@ -243,6 +243,22 @@ class AuthViewController: StartBaseView {
                 if let isNewUser = authResult?.additionalUserInfo?.isNewUser, isNewUser {
                     // Start account creation process for new user
                     print("New user signed in with Google")
+                    let db = Firestore.firestore()
+                    if let user = authResult?.user {
+                        let userData: [String: Any] = [
+                            "email": user.email ?? "",
+                            "username": user.displayName ?? "",
+                            "registrationDate": Timestamp(date: Date()),
+                            "firstUsage": true
+                        ]
+                        db.collection("users").document(user.uid).setData(userData) { error in
+                            if let error = error {
+                                print("Error saving user data: \(error.localizedDescription)")
+                            } else {
+                                print("User data successfully saved!")
+                            }
+                        }
+                    }
                     // Navigate to account creation view or handle new user setup
                     self.startSetupView.modalPresentationStyle = .fullScreen
                     self.present(self.startSetupView, animated: true)
