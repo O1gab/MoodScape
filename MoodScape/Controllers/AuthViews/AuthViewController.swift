@@ -6,6 +6,9 @@
 
 import UIKit
 import Gifu
+import FirebaseCore
+import FirebaseAuth
+import GoogleSignIn
 
 class AuthViewController: StartBaseView {
 
@@ -61,6 +64,7 @@ class AuthViewController: StartBaseView {
         let button = UIButton(configuration: configuration, primaryAction: nil)
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(signInWithGoogle), for: .touchUpInside)
         return button
     }()
     
@@ -134,6 +138,18 @@ class AuthViewController: StartBaseView {
         return viewController
     }()
     
+    private lazy var mainView: MainTabBarController = {
+        let viewController = MainTabBarController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
+    private lazy var startSetupView: StartSetupView = {
+        let viewController = StartSetupView()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -192,6 +208,54 @@ class AuthViewController: StartBaseView {
     @objc private func handleRegister() {
         registrationView.modalPresentationStyle = .fullScreen
         present(registrationView, animated: false)
+    }
+    
+    @objc private func signInWithGoogle() {
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        // Create Google Sign In configuration object.
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+        
+        // Start the sign in flow!
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
+            guard error == nil else {
+                print("Error during Google sign-in: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            guard let user = result?.user,
+                  let idToken = user.idToken?.tokenString else {
+                print("Error retrieving Google user or token")
+                return
+            }
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                           accessToken: user.accessToken.tokenString)
+            
+            Auth.auth().signIn(with: credential) { authResult, error in
+                if let error = error {
+                    print("Firebase sign-in error: \(error.localizedDescription)")
+                    return
+                }
+                
+                // Check if the user is new
+                if let isNewUser = authResult?.additionalUserInfo?.isNewUser, isNewUser {
+                    // Start account creation process for new user
+                    print("New user signed in with Google")
+                    // Navigate to account creation view or handle new user setup
+                    self.startSetupView.modalPresentationStyle = .fullScreen
+                    self.present(self.startSetupView, animated: true)
+                } else {
+                    // Existing user logged in
+                    print("Existing user logged in with Google")
+                    // Navigate to the main app view or handle existing user login
+                    self.mainView.modalPresentationStyle = .fullScreen
+                    self.present(self.mainView, animated: true)
+                    
+                }
+            }
+        }
     }
 
     // MARK: HandleLogin
