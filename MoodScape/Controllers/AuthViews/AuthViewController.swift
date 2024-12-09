@@ -10,8 +10,9 @@ import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
 import FirebaseFirestore
+import AuthenticationServices
 
-class AuthViewController: StartBaseView {
+class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
 
     // MARK: - Properties
     private let introLabel: GradientLabel = {
@@ -89,6 +90,7 @@ class AuthViewController: StartBaseView {
         let button = UIButton(configuration: configuration, primaryAction: nil)
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(handleAppleSignIn), for: .touchUpInside)
         return button
     }()
     
@@ -295,5 +297,67 @@ class AuthViewController: StartBaseView {
             
             self?.instructions.startTypingAnimation(label: self?.instructions ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {}
         }
+    }
+
+    @objc private func handleAppleSignIn() {
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        AppleSignInManager.shared.requestAppleAuthorization(request)
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+
+    // MARK: - ASAuthorizationControllerDelegate
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            Task {
+                do {
+                    let authResult = try await AuthManager.shared.appleAuth(appleIDCredential, nonce: AppleSignInManager.nonce)
+                    if let isNewUser = authResult?.additionalUserInfo?.isNewUser, isNewUser {
+                        print("New user signed in with Apple")
+                        // Handle new user setup
+                        let db = Firestore.firestore()
+                        if let user = authResult?.user {
+                            let userData: [String: Any] = [
+                                "email": user.email ?? "",
+                                "username": user.displayName ?? "",
+                                "registrationDate": Timestamp(date: Date()),
+                                "firstUsage": true
+                            ]
+                            db.collection("users").document(user.uid).setData(userData) { error in
+                                if let error = error {
+                                    print("Error saving user data: \(error.localizedDescription)")
+                                } else {
+                                    print("User data successfully saved!")
+                                }
+                            }
+                        }
+                        // Navigate to account creation view or handle new user setup
+                        self.startSetupView.modalPresentationStyle = .fullScreen
+                        self.present(self.startSetupView, animated: true)
+                        
+                    } else {
+                        print("Existing user logged in with Apple")
+                        // Handle existing user login
+                        // Navigate to the main app view or handle existing user login
+                        self.mainView.modalPresentationStyle = .fullScreen
+                        self.present(self.mainView, animated: true)
+                    }
+                } catch {
+                    print("Error during Apple sign-in: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print("Apple sign-in failed: \(error.localizedDescription)")
+    }
+
+    // MARK: - ASAuthorizationControllerPresentationContextProviding
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
     }
 }
