@@ -12,6 +12,8 @@
 		7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD7C2C7E81B00083D227 /* SongViewCell.swift */; };
 		761EDA062C8A0A26008A07DB /* GradientCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761EDA052C8A0A26008A07DB /* GradientCircleView.swift */; };
 		762226BB2D0614D600BE7AE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 762226BA2D0614D600BE7AE2 /* GoogleService-Info.plist */; };
+		762226BF2D0729E500BE7AE2 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762226BE2D0729E200BE7AE2 /* AuthManager.swift */; };
+		762226C12D072A5E00BE7AE2 /* AppleSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762226C02D072A5B00BE7AE2 /* AppleSignInManager.swift */; };
 		7628AAC42C860D780021433F /* Spotify_Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7628AAC32C860D780021433F /* Spotify_Logo.png */; };
 		7628AAC62C860FAC0021433F /* Spotify_Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7628AAC52C860FAB0021433F /* Spotify_Icon.png */; };
 		7628AAC82C8642E80021433F /* PreferencesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7628AAC72C8642E80021433F /* PreferencesCell.swift */; };
@@ -114,6 +116,9 @@
 		7616BD7C2C7E81B00083D227 /* SongViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongViewCell.swift; sourceTree = "<group>"; };
 		761EDA052C8A0A26008A07DB /* GradientCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientCircleView.swift; sourceTree = "<group>"; };
 		762226BA2D0614D600BE7AE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		762226BC2D07293200BE7AE2 /* MoodScape.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MoodScape.entitlements; sourceTree = "<group>"; };
+		762226BE2D0729E200BE7AE2 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		762226C02D072A5B00BE7AE2 /* AppleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInManager.swift; sourceTree = "<group>"; };
 		7628AAC32C860D780021433F /* Spotify_Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotify_Logo.png; sourceTree = "<group>"; };
 		7628AAC52C860FAB0021433F /* Spotify_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotify_Icon.png; sourceTree = "<group>"; };
 		7628AAC72C8642E80021433F /* PreferencesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesCell.swift; sourceTree = "<group>"; };
@@ -243,6 +248,15 @@
 				76B869CC2C67CDFC002866B9 /* gradient_skyline_blinking_stars.gif */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		762226BD2D0729CA00BE7AE2 /* Auth Manager */ = {
+			isa = PBXGroup;
+			children = (
+				762226C02D072A5B00BE7AE2 /* AppleSignInManager.swift */,
+				762226BE2D0729E200BE7AE2 /* AuthManager.swift */,
+			);
+			path = "Auth Manager";
 			sourceTree = "<group>";
 		};
 		7624E6532C7ED4AE004EA785 /* LaunchView */ = {
@@ -438,6 +452,7 @@
 		76B869A02C67B3A9002866B9 /* MoodScape */ = {
 			isa = PBXGroup;
 			children = (
+				762226BC2D07293200BE7AE2 /* MoodScape.entitlements */,
 				76EF46102C8B38CA00758AA6 /* Services */,
 				76B869B52C67B3B4002866B9 /* App */,
 				7664856D2C6EB8AF00AA050A /* Items */,
@@ -507,6 +522,7 @@
 		76EF46102C8B38CA00758AA6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				762226BD2D0729CA00BE7AE2 /* Auth Manager */,
 				76EF46112C8B399B00758AA6 /* GroqAPI */,
 				766485772C6ED6C700AA050A /* SpotifyAPI */,
 				76B004B42C90509700563DE7 /* MoodScape-Bridging-Header.h */,
@@ -686,6 +702,7 @@
 				7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */,
 				766FD14F2C7F837700D9ACF6 /* WelcomeView.swift in Sources */,
 				76AAD3292C72263500CBE3D8 /* ColorExtensions.swift in Sources */,
+				762226C12D072A5E00BE7AE2 /* AppleSignInManager.swift in Sources */,
 				7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */,
 				7664856A2C6E6E5600AA050A /* ButtonExtensions.swift in Sources */,
 				7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */,
@@ -693,6 +710,7 @@
 				76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
 				765E1EED2C98C92E0010D6B6 /* NewPlaylistView.swift in Sources */,
+				762226BF2D0729E500BE7AE2 /* AuthManager.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
 				76F31B4A2C7BCA7D00B65B72 /* ImageCache.swift in Sources */,
 				764E2A322C788ACE00785104 /* ImageSetupViewController.swift in Sources */,
@@ -860,6 +878,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MoodScape/MoodScape.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X5NCF7XSCG;
@@ -959,6 +978,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = MoodScape/MoodScape.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X5NCF7XSCG;
