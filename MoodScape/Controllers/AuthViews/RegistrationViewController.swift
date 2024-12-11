@@ -162,7 +162,6 @@ class RegistrationViewController: StartBaseView {
             notificationMessage.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor),
             notificationMessage.leadingAnchor.constraint(equalTo: submitButton.trailingAnchor, constant: 5),
             notificationMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            notificationMessage.heightAnchor.constraint(equalToConstant: 350),
             
             successMessage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 230),
             successMessage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
