@@ -15,6 +15,7 @@ extension UILabel {
         let fullText = text
         label.text = ""
         
+        
         var index = 0
         timer = Timer.scheduledTimer(withTimeInterval: typingSpeed, repeats: true) { [weak self] timer in
             guard let self = self else { return }
