@@ -213,10 +213,10 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
         present(registrationView, animated: false)
     }
     
+    // MARK: - SignInWithGoogle
     @objc private func signInWithGoogle() {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         
-        // Create Google Sign In configuration object.
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
         
@@ -243,7 +243,7 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
                 
                 // Check if the user is new
                 if let isNewUser = authResult?.additionalUserInfo?.isNewUser, isNewUser {
-                    // Start account creation process for new user
+                    // New user
                     print("New user signed in with Google")
                     let db = Firestore.firestore()
                     if let user = authResult?.user {
@@ -261,22 +261,20 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
                             }
                         }
                     }
-                    // Navigate to account creation view or handle new user setup
+                    // No account
                     self.startSetupView.modalPresentationStyle = .fullScreen
                     self.present(self.startSetupView, animated: true)
                 } else {
-                    // Existing user logged in
+                    // Existing user
                     print("Existing user logged in with Google")
-                    // Navigate to the main app view or handle existing user login
                     self.mainView.modalPresentationStyle = .fullScreen
                     self.present(self.mainView, animated: true)
-                    
                 }
             }
         }
     }
 
-    // MARK: HandleLogin
+    // MARK: - HandleLogin
     @objc private func handleLogin() {
         loginView.modalPresentationStyle = .fullScreen
         present(loginView, animated: false)
@@ -299,6 +297,7 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
         }
     }
 
+    // MARK: - HandleAppleSignIn
     @objc private func handleAppleSignIn() {
         let request = ASAuthorizationAppleIDProvider().createRequest()
         AppleSignInManager.shared.requestAppleAuthorization(request)
@@ -340,8 +339,6 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
                         
                     } else {
                         print("Existing user logged in with Apple")
-                        // Handle existing user login
-                        // Navigate to the main app view or handle existing user login
                         self.mainView.modalPresentationStyle = .fullScreen
                         self.present(self.mainView, animated: true)
                     }
