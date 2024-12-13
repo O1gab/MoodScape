@@ -490,16 +490,27 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         self.present(favoritesView, animated: true)
     }
     
-    // MARK: NavigateToFavorites
+    // MARK: - NavigateToFavorites
     @objc private func navigateToFavorites() {
         favoritesView.modalPresentationStyle = .fullScreen
-        self.present(favoritesView, animated: true)
+        favoritesView.view.alpha = 0
+        
+        present(favoritesView, animated: false) { [weak self] in
+            UIView.animate(withDuration: 0.2) {
+                self?.favoritesView.view.alpha = 1
+            }
+        }
     }
 
-    // MARK: NavigateToMoodJournal
+    // MARK: - NavigateToMoodJournal
     @objc private func navigateToMoodJournal() {
         moodJournal.modalPresentationStyle = .fullScreen
-        self.present(moodJournal, animated: true)
+        moodJournal.view.alpha = 0
+        self.present(moodJournal, animated: false) { [weak self] in
+            UIView.animate(withDuration: 0.2) {
+                self?.moodJournal.view.alpha = 1
+            }
+        }
     }
     
     // MARK: - UICollectionViewDataSource
