@@ -238,19 +238,42 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return button
     }()
     
+    private lazy var mainView: MainViewController = {
+        let viewController = MainViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
     private let favoritesManager = FavoritesManager()
     
-    private var moodJournal: MoodJournalViewController?
-    private var favoritesView: FavoritesViewController?
-    private var settingsView: SettingsViewController?
-    private var profileSetupView: ProfileSetupViewController?
+    private lazy var moodJournal: MoodJournalViewController = {
+        let viewController = MoodJournalViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
+    private lazy var favoritesView: FavoritesViewController = {
+        let viewController = FavoritesViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
+    private lazy var settingsView: SettingsViewController = {
+        let viewController = SettingsViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
+    private lazy var profileSetupView: ProfileSetupViewController = {
+        let viewController = ProfileSetupViewController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
     
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         startLoading()
-        
-        preloadViews()
         setupView()
         setupConstraints()
         determineGreeting()
@@ -260,17 +283,6 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         fetchArtists()
         
         stopLoading()
-    }
-    
-    private func preloadViews() {
-        moodJournal = MoodJournalViewController()
-        moodJournal?.loadViewIfNeeded()
-        favoritesView = FavoritesViewController()
-        favoritesView?.loadViewIfNeeded()
-        settingsView = SettingsViewController()
-        settingsView?.loadViewIfNeeded()
-        profileSetupView = ProfileSetupViewController()
-        profileSetupView?.loadViewIfNeeded()
     }
     
     // MARK: - SetupView
@@ -623,14 +635,12 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     // MARK: - HandleSettings
     @objc private func handleSettings() {
-        guard let settingsView = settingsView else { return }
         settingsView.modalPresentationStyle = .fullScreen
         self.present(settingsView, animated: true)
     }
     
     // MARK: HandleEdit
     @objc private func handleEdit() {
-        guard let profileSetupView = profileSetupView else { return }
         profileSetupView.modalPresentationStyle = .overCurrentContext
         self.present(profileSetupView, animated: true)
     }
@@ -647,14 +657,12 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     // MARK: - OpenFavoritesView
     @objc private func openFavoritesView() {
-        guard let favoritesView = favoritesView else { return }
         favoritesView.modalPresentationStyle = .fullScreen
         present(favoritesView, animated: true)
     }
     
     // MARK: OpenMoodJournal
     @objc private func openMoodJournal() {
-        guard let moodJournal = moodJournal else { return }
         moodJournal.modalPresentationStyle = .fullScreen
         present(moodJournal, animated: true)
     }
