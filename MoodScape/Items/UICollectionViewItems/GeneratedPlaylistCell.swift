@@ -55,6 +55,12 @@ class GeneratedPlaylistCell: UICollectionViewCell {
     // MARK: - Configure
     func configure(with playlist: Playlist) {
         colorView.backgroundColor = playlist.color
-        titleLabel.text = playlist.name
+        
+        let maxLength = 40
+        let truncatedName = playlist.name.count > maxLength ?
+            String(playlist.name.prefix(maxLength)) + "..." : 
+            playlist.name
+        
+        titleLabel.text = truncatedName
     }
 }

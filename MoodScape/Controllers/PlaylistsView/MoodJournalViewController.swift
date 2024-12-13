@@ -123,6 +123,7 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
             
             noPlaylistsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 40),
             noPlaylistsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
             // Collection view
             collectionView.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: -25),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
@@ -130,7 +131,7 @@ class MoodJournalViewController: UIViewController, UICollectionViewDataSource, U
             collectionView.heightAnchor.constraint(equalToConstant: 300),
             
             // Calendar label
-            calendarLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 65),
+            calendarLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 50),
             calendarLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             
             // Calendar
