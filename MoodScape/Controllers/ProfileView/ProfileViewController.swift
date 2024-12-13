@@ -153,16 +153,6 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return stackView
     }()
     
-    private let greetingLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        label.textAlignment = .left
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     private let bioTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -276,7 +266,6 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         startLoading()
         setupView()
         setupConstraints()
-        determineGreeting()
         setupLabels()
         loadProfileImage()
         fetchData()
@@ -296,7 +285,6 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         contentView.addSubview(profileImage)
         contentView.addSubview(usernameLabel)
         contentView.addSubview(inlineBarStackView)
-        contentView.addSubview(greetingLabel)
         contentView.addSubview(bioTextView)
         contentView.addSubview(preferencesLabel)
         contentView.addSubview(registrationDate)
@@ -359,13 +347,10 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             inlineBarStackView.heightAnchor.constraint(equalToConstant: 70),
             
-            greetingLabel.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 30),
-            greetingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            
-            bioTextView.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 20),
+            bioTextView.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
             bioTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             bioTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            bioTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80), // Height for the bio box
+            bioTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80),
             
             registrationDate.topAnchor.constraint(equalTo: bioTextView.bottomAnchor, constant: 20),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -391,49 +376,6 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             
             shareButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
-    }
-    
-    // MARK: - DetermineGreeting
-    private func determineGreeting() {
-        guard let userId = Auth.auth().currentUser?.uid else {
-            // TODO: ERROR HANDLING
-            return
-        }
-        let db = Firestore.firestore()
-        db.collection("users").document(userId).getDocument { [weak self] (document, error) in
-            if let error = error {
-                print("Error fetching user document: \(error)")
-                return
-            }
-            
-            guard let document = document, document.exists else {
-                print("User document does not exist")
-                return
-            }
-            
-            if let name = document.data()?["name"] as? String {
-                DispatchQueue.main.async {
-                    let hour = Calendar.current.component(.hour, from: Date())
-                    var greeting = ""
-                    
-                switch hour {
-                    case 5..<12:
-                        greeting = "Good Morning"
-                    case 12..<17:
-                        greeting = "Hello"
-                    case 17..<21:
-                        greeting = "Good Afternoon"
-                    case 21..<24, 0..<5:
-                        greeting = "Good Night"
-                    default:
-                        greeting = "Hello"
-                }
-                    self?.greetingLabel.text = "\(greeting), \(name)"
-                }
-            } else {
-                self?.greetingLabel.text = "Good to see you here"
-            }
-        }
     }
     
     // MARK: - SetupLabels
