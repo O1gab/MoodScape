@@ -173,11 +173,10 @@ class FavoritesViewController: UIViewController, UICollectionViewDataSource, UIC
             // "Favorites"
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             topLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            topLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            topLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 75),
             
-            albumsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 50),
+            albumsLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 25),
             albumsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            albumsLabel.bottomAnchor.constraint(equalTo: albumsLabel.topAnchor, constant: 30),
             
             // Albums
             albumsCollectionView.topAnchor.constraint(equalTo: albumsLabel.bottomAnchor, constant: 10),
