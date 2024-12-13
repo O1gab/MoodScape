@@ -156,11 +156,13 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         viewController.loadViewIfNeeded()
         return viewController
     }()
+    
     private lazy var moodJournal: MoodJournalViewController = {
         let viewController = MoodJournalViewController()
         viewController.loadViewIfNeeded()
         return viewController
     }()
+    
     private lazy var favoritesView: FavoritesViewController = {
         let viewController = FavoritesViewController()
         viewController.loadViewIfNeeded()
