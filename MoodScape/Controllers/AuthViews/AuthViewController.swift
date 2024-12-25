@@ -8,7 +8,6 @@ import UIKit
 import Gifu
 import FirebaseCore
 import FirebaseAuth
-import GoogleSignIn
 import FirebaseFirestore
 import AuthenticationServices
 
@@ -36,7 +35,7 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
         let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 21, weight: .semibold)
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.lineBreakMode = .byWordWrapping
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
@@ -44,30 +43,6 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
-    
-    private let googleButton: UIButton = {
-        var configuration = UIButton.Configuration.filled()
-        configuration.title = "Continue with Google"
-        configuration.image = UIImage(named: "google-icon")
-        configuration.baseForegroundColor = .white
-        configuration.baseBackgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        
-        configuration.imagePadding = 10
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: -20, bottom: 0, trailing: 0)
-        configuration.imagePlacement = .leading
-        configuration.cornerStyle = .capsule
-        configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-            return outgoing
-        }
-
-        let button = UIButton(configuration: configuration, primaryAction: nil)
-        button.alpha = 0
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(signInWithGoogle), for: .touchUpInside)
-        return button
     }()
     
     private let appleButton: UIButton = {
@@ -88,6 +63,7 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
         }
 
         let button = UIButton(configuration: configuration, primaryAction: nil)
+        button.addShadow()
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(handleAppleSignIn), for: .touchUpInside)
@@ -101,6 +77,7 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         button.layer.cornerRadius = 30
+        button.addShadow()
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -166,7 +143,6 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
         view.addSubview(introLabel)
         view.addSubview(instructions)
         
-        view.addSubview(googleButton)
         view.addSubview(appleButton)
         registerButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         view.addSubview(registerButton)
@@ -187,12 +163,7 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
             instructions.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             instructions.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
-            googleButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 435),
-            googleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            googleButton.widthAnchor.constraint(equalToConstant: 320),
-            googleButton.heightAnchor.constraint(equalToConstant: 60),
-            
-            appleButton.topAnchor.constraint(equalTo: googleButton.bottomAnchor, constant: 20),
+            appleButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 435),
             appleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             appleButton.widthAnchor.constraint(equalToConstant: 320),
             appleButton.heightAnchor.constraint(equalToConstant: 60),
@@ -214,6 +185,7 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
     }
     
     // MARK: - SignInWithGoogle
+    /*
     @objc private func signInWithGoogle() {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         
@@ -273,6 +245,7 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
             }
         }
     }
+     */
 
     // MARK: - HandleLogin
     @objc private func handleLogin() {
@@ -287,13 +260,12 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
                 self?.introLabel.alpha = 1
             }
             UIView.animate(withDuration: 2.5) {
-                self?.googleButton.alpha = 1
                 self?.appleButton.alpha = 1
                 self?.registerButton.alpha = 1
                 self?.loginLabel.alpha = 1
             }
             
-            self?.instructions.startTypingAnimation(label: self?.instructions ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.05) {}
+            self?.instructions.startTypingAnimation(label: self?.instructions ?? UILabel(), text: "Create an account to save your activity", typingSpeed: 0.03) {}
         }
     }
 
