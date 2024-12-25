@@ -7,8 +7,8 @@
 
 import UIKit
 import Gifu
-import FirebaseAuth
 import FirebaseFirestore
+import FirebaseAuth
 
 class MusicSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
