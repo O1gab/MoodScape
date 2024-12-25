@@ -39,7 +39,7 @@ class RegistrationViewController: StartBaseView {
         field.textColor = .white
         field.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
         field.layer.borderWidth = 2
-        field.layer.cornerRadius = 15
+        field.layer.cornerRadius = 20
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: field.frame.height))
         field.leftViewMode = .always
         field.autocapitalizationType = .none
@@ -51,10 +51,11 @@ class RegistrationViewController: StartBaseView {
     private let submitButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Submit", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 30
+        button.addShadow()
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -148,20 +149,20 @@ class RegistrationViewController: StartBaseView {
             fieldLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             fieldLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
-            textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 290),
-            textField.leadingAnchor.constraint(equalTo: fieldLabel.leadingAnchor),
+            textField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
+            textField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             textField.widthAnchor.constraint(equalToConstant: 300),
             textField.heightAnchor.constraint(equalToConstant: 60),
 
             submitButton.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 30),
-            submitButton.leadingAnchor.constraint(equalTo: textField.leadingAnchor, constant: 10),
+            submitButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             submitButton.widthAnchor.constraint(equalToConstant: 150),
             submitButton.heightAnchor.constraint(equalToConstant: 60),
             
-            notificationMessage.topAnchor.constraint(equalTo: submitButton.topAnchor),
-            notificationMessage.centerYAnchor.constraint(equalTo: submitButton.centerYAnchor),
-            notificationMessage.leadingAnchor.constraint(equalTo: submitButton.trailingAnchor, constant: 5),
-            notificationMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            notificationMessage.topAnchor.constraint(equalTo: submitButton.bottomAnchor, constant: 50),
+            notificationMessage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            notificationMessage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            notificationMessage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
             successMessage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 230),
             successMessage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
