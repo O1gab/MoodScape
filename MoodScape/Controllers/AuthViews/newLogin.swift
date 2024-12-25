@@ -45,7 +45,7 @@ class LoginViewController: StartBaseView {
         field.textColor = .white
         field.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
         field.layer.borderWidth = 2
-        field.layer.cornerRadius = 15
+        field.layer.cornerRadius = 20
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: field.frame.height))
         field.leftViewMode = .always
         field.autocapitalizationType = .none
@@ -60,7 +60,7 @@ class LoginViewController: StartBaseView {
         field.textColor = .white
         field.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
         field.layer.borderWidth = 2
-        field.layer.cornerRadius = 15
+        field.layer.cornerRadius = 20
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: field.frame.height))
         field.leftViewMode = .always
         field.autocapitalizationType = .none
@@ -84,10 +84,11 @@ class LoginViewController: StartBaseView {
     private let loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Submit", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 30
+        button.addShadow()
         button.alpha = 0
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -96,7 +97,7 @@ class LoginViewController: StartBaseView {
     private let notificationMessage: UILabel = {
         let notificationMessage = UILabel()
         notificationMessage.textColor = .red
-        notificationMessage.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        notificationMessage.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         notificationMessage.numberOfLines = 0
         notificationMessage.textAlignment = .center
         notificationMessage.isHidden = true
@@ -138,12 +139,12 @@ class LoginViewController: StartBaseView {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.usernameLabel.startTypingAnimation(label: self?.usernameLabel ?? UILabel(), text: "Enter your email here", typingSpeed: 0.04) {
+            self?.usernameLabel.startTypingAnimation(label: self?.usernameLabel ?? UILabel(), text: "Enter your email here", typingSpeed: 0.03) {
                 UIView.animate(withDuration: 2.0) {
                     self?.usernameField.alpha = 1.0
                 }
                 
-                self?.passwordLabel.startTypingAnimation(label: self?.passwordLabel ?? UILabel(), text: "Enter your password here", typingSpeed: 0.04) {
+                self?.passwordLabel.startTypingAnimation(label: self?.passwordLabel ?? UILabel(), text: "Enter your password here", typingSpeed: 0.03) {
                     UIView.animate(withDuration: 2.0) {
                         self?.passwordField.alpha = 1.0
                     }
