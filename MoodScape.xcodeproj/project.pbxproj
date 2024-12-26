@@ -15,6 +15,7 @@
 		760AC6D32D1DE2250063A9B0 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6D22D1DE21F0063A9B0 /* UserCell.swift */; };
 		760AC6D52D1DF0F10063A9B0 /* FriendRequestsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6D42D1DF0E80063A9B0 /* FriendRequestsController.swift */; };
 		760AC6D72D1E02BE0063A9B0 /* VisitorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6D62D1E02B80063A9B0 /* VisitorViewController.swift */; };
+		760AC6D92D1E0D9C0063A9B0 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6D82D1E0D950063A9B0 /* FriendsViewController.swift */; };
 		7616BD752C7E33800083D227 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD742C7E33800083D227 /* CustomTabBar.swift */; };
 		7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7616BD762C7E33AF0083D227 /* custom_tabbar.png */; };
 		7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD7C2C7E81B00083D227 /* SongViewCell.swift */; };
@@ -123,6 +124,7 @@
 		760AC6D22D1DE21F0063A9B0 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		760AC6D42D1DF0E80063A9B0 /* FriendRequestsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestsController.swift; sourceTree = "<group>"; };
 		760AC6D62D1E02B80063A9B0 /* VisitorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitorViewController.swift; sourceTree = "<group>"; };
+		760AC6D82D1E0D950063A9B0 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		7616BD742C7E33800083D227 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		7616BD762C7E33AF0083D227 /* custom_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom_tabbar.png; sourceTree = "<group>"; };
 		7616BD7C2C7E81B00083D227 /* SongViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongViewCell.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 		7616BD7A2C7E7B4C0083D227 /* SocialView */ = {
 			isa = PBXGroup;
 			children = (
+				760AC6D82D1E0D950063A9B0 /* FriendsViewController.swift */,
 				760AC6D42D1DF0E80063A9B0 /* FriendRequestsController.swift */,
 				7664855D2C6C46A700AA050A /* SocialViewController.swift */,
 			);
@@ -719,6 +722,7 @@
 				760AC6D32D1DE2250063A9B0 /* UserCell.swift in Sources */,
 				76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
+				760AC6D92D1E0D9C0063A9B0 /* FriendsViewController.swift in Sources */,
 				765E1EED2C98C92E0010D6B6 /* NewPlaylistView.swift in Sources */,
 				762226BF2D0729E500BE7AE2 /* AuthManager.swift in Sources */,
 				764FDE2F2C695EA60060A428 /* User.swift in Sources */,
