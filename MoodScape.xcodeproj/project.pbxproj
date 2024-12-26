@@ -13,6 +13,7 @@
 		760AC6CF2D1C9F970063A9B0 /* UITextFieldExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6CE2D1C9F920063A9B0 /* UITextFieldExtensions.swift */; };
 		760AC6D12D1C9FB40063A9B0 /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6D02D1C9FAD0063A9B0 /* UIButtonExtensions.swift */; };
 		760AC6D32D1DE2250063A9B0 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6D22D1DE21F0063A9B0 /* UserCell.swift */; };
+		760AC6D52D1DF0F10063A9B0 /* FriendRequestsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6D42D1DF0E80063A9B0 /* FriendRequestsController.swift */; };
 		7616BD752C7E33800083D227 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD742C7E33800083D227 /* CustomTabBar.swift */; };
 		7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7616BD762C7E33AF0083D227 /* custom_tabbar.png */; };
 		7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD7C2C7E81B00083D227 /* SongViewCell.swift */; };
@@ -119,6 +120,7 @@
 		760AC6CE2D1C9F920063A9B0 /* UITextFieldExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtensions.swift; sourceTree = "<group>"; };
 		760AC6D02D1C9FAD0063A9B0 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
 		760AC6D22D1DE21F0063A9B0 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		760AC6D42D1DF0E80063A9B0 /* FriendRequestsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestsController.swift; sourceTree = "<group>"; };
 		7616BD742C7E33800083D227 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		7616BD762C7E33AF0083D227 /* custom_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom_tabbar.png; sourceTree = "<group>"; };
 		7616BD7C2C7E81B00083D227 /* SongViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongViewCell.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 		7616BD7A2C7E7B4C0083D227 /* SocialView */ = {
 			isa = PBXGroup;
 			children = (
+				760AC6D42D1DF0E80063A9B0 /* FriendRequestsController.swift */,
 				7664855D2C6C46A700AA050A /* SocialViewController.swift */,
 			);
 			path = SocialView;
@@ -702,6 +705,7 @@
 				76B004C52C92048F00563DE7 /* AuthResponse.swift in Sources */,
 				7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */,
 				760AC6D12D1C9FB40063A9B0 /* UIButtonExtensions.swift in Sources */,
+				760AC6D52D1DF0F10063A9B0 /* FriendRequestsController.swift in Sources */,
 				766FD14F2C7F837700D9ACF6 /* WelcomeView.swift in Sources */,
 				760AC6CF2D1C9F970063A9B0 /* UITextFieldExtensions.swift in Sources */,
 				76AAD3292C72263500CBE3D8 /* ColorExtensions.swift in Sources */,
