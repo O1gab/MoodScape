@@ -227,11 +227,10 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         let button = UIButton(type: .system)
         button.setTitle("Edit profile", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        button.backgroundColor = .clear
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 25
-        button.layer.borderWidth = 3
-        button.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
+        button.addShadow()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -277,6 +276,17 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return viewController
     }()
     
+    private var fetchRetryCount = 0
+    private let maxRetries = 3
+    
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -294,6 +304,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     // MARK: - SetupView
     private func setupView() {
         view.addSubview(scrollView)
+        view.addSubview(loadingIndicator)
         view.addSubview(settingsButton)
         view.addSubview(backButton)
         
@@ -344,6 +355,9 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             settingsButton.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 10),
             settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
@@ -407,6 +421,16 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             
             shareButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
+    }
+    
+    override func startLoading() {
+        loadingIndicator.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+    
+    override func stopLoading() {
+        loadingIndicator.stopAnimating()
+        view.isUserInteractionEnabled = true
     }
     
     // MARK: - SetupLabels
@@ -536,61 +560,113 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     }
     
     // MARK: FetchArtists (Your preferences)
-    private func fetchArtists() {
+    private func fetchArtists(isRetry: Bool = false) {
+        // Start loading at the beginning
+        startLoading()
+        
+        // Reset retry count if this is not a retry attempt
+        if !isRetry {
+            fetchRetryCount = 0
+        }
+        
         // Step 1: Fetch selected artist names
-         fetchSelectedArtists { [weak self] artistNames in
-             guard let self = self, let artistNames = artistNames, !artistNames.isEmpty else {
-                 self?.showError("Failed to fetch artist names or no artists selected")
-                 return
-             }
-             
-             let dispatchGroup = DispatchGroup()
-             var artistIDs: [String] = []
-             var artistDetails: [Artist] = []
-             
-             // Step 2: Convert artist names to IDs
-             for artistName in artistNames {
-                 dispatchGroup.enter()
-                 
-                 SpotifyAPIManager.shared.fetchArtistID(for: artistName) { artistID in
-                     if let artistID = artistID {
-                         artistIDs.append(artistID)
-                     } else {
-                         print("Failed to fetch ID for artist: \(artistName)")
-                     }
-                     dispatchGroup.leave()
-                 }
-             }
-             
-             dispatchGroup.notify(queue: .main) {
-                 guard !artistIDs.isEmpty else {
-                     self.showError("Failed to fetch any artist IDs")
-                     return
-                 }
-                 
-                 // Step 3: Fetch artist details using IDs
-                 let detailGroup = DispatchGroup()
-                 
-                 for artistID in artistIDs {
-                     detailGroup.enter()
-                     
-                     SpotifyAPIManager.shared.fetchArtistDetails(for: artistID) { artist in
-                         if let artist = artist {
-                             artistDetails.append(artist)
-                         } else {
-                             print("Failed to fetch details for artist ID: \(artistID)")
-                         }
-                         detailGroup.leave()
-                     }
-                 }
-                 
-                 detailGroup.notify(queue: .main) {
-                     // Step 4: Update the collection view
-                     self.selectedArtists = artistDetails
-                     self.collectionView.reloadData()
-                 }
-             }
-         }
+        fetchSelectedArtists { [weak self] artistNames in
+            guard let self = self else { 
+                self?.stopLoading()
+                return 
+            }
+            
+            guard let artistNames = artistNames, !artistNames.isEmpty else {
+                if self.fetchRetryCount < self.maxRetries {
+                    self.fetchRetryCount += 1
+                    print("Retry attempt \(self.fetchRetryCount) for fetching artists")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        self.fetchArtists(isRetry: true)
+                    }
+                } else {
+                    self.stopLoading()
+                    self.showError("Failed to fetch artist names after \(self.maxRetries) attempts")
+                }
+                return
+            }
+            
+            let dispatchGroup = DispatchGroup()
+            var artistIDs: [String] = []
+            var artistDetails: [Artist] = []
+            var hasError = false
+            
+            // Step 2: Convert artist names to IDs
+            for artistName in artistNames {
+                dispatchGroup.enter()
+                
+                SpotifyAPIManager.shared.fetchArtistID(for: artistName) { artistID in
+                    if let artistID = artistID {
+                        artistIDs.append(artistID)
+                    } else {
+                        print("Failed to fetch ID for artist: \(artistName)")
+                        hasError = true
+                    }
+                    dispatchGroup.leave()
+                }
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                if artistIDs.isEmpty || hasError {
+                    if self.fetchRetryCount < self.maxRetries {
+                        self.fetchRetryCount += 1
+                        print("Retry attempt \(self.fetchRetryCount) for fetching artist IDs")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            self.fetchArtists(isRetry: true)
+                        }
+                        return
+                    } else {
+                        self.stopLoading()
+                        self.showError("Failed to fetch artist IDs after \(self.maxRetries) attempts")
+                        return
+                    }
+                }
+                
+                // Step 3: Fetch artist details using IDs
+                let detailGroup = DispatchGroup()
+                var detailsError = false
+                
+                for artistID in artistIDs {
+                    detailGroup.enter()
+                    
+                    SpotifyAPIManager.shared.fetchArtistDetails(for: artistID) { artist in
+                        if let artist = artist {
+                            artistDetails.append(artist)
+                        } else {
+                            print("Failed to fetch details for artist ID: \(artistID)")
+                            detailsError = true
+                        }
+                        detailGroup.leave()
+                    }
+                }
+                
+                detailGroup.notify(queue: .main) {
+                    if artistDetails.isEmpty || detailsError {
+                        if self.fetchRetryCount < self.maxRetries {
+                            self.fetchRetryCount += 1
+                            print("Retry attempt \(self.fetchRetryCount) for fetching artist details")
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                self.fetchArtists(isRetry: true)
+                            }
+                            return
+                        } else {
+                            self.stopLoading()
+                            self.showError("Failed to fetch artist details after \(self.maxRetries) attempts")
+                            return
+                        }
+                    }
+                    
+                    // Step 4: Update the collection view and stop loading
+                    self.selectedArtists = artistDetails
+                    self.collectionView.reloadData()
+                    self.stopLoading()
+                }
+            }
+        }
     }
     
     // MARK: - AttributedText
