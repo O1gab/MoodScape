@@ -40,6 +40,8 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
+
+    private var noFriends: Bool = true // :(
     
     private let noFriendsLabel: UILabel = {
         let label = UILabel()
@@ -96,8 +98,8 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             friendsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
                     
             searchBar.topAnchor.constraint(equalTo: friendsLabel.bottomAnchor, constant: 20),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15), ///?
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
                     
             tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -112,6 +114,15 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             addFriendsButton.widthAnchor.constraint(equalToConstant: 160),
             addFriendsButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+
+    private func updateUIForNoFriends() {
+        DispatchQueue.main.async {
+            self.noFriendsLabel.text = "No friends now. Add them by their username!"
+            self.noFriendsLabel.isHidden = false
+            self.addFriendsButton.isHidden = false
+            self.tableView.isHidden = true
+        }
     }
     
     // MARK: - FetchFriends
@@ -133,11 +144,14 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
                 DispatchQueue.main.async {
                     // THERES FRIENDS
                     if let friends = data?["friends_ids"] as? [String] {
+                        self.noFriends = false
                         self.noFriendsLabel.isHidden = true
                         self.addFriendsButton.isHidden = true
                         self.searchBar.isHidden = false
                     } else {
                         // NO FRIENDS :(
+                        self.noFriends = true
+                        self.updateUIForNoFriends()
                     }
                 }
             } else {
@@ -200,10 +214,16 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         if searchText.isEmpty {
             filteredUsers = []
             tableView.isHidden = true
+
+            if noFriends {
+                updateUIForNoFriends()
+            }
             return
         }
         
         // Show table view when searching
+        noFriendsLabel.isHidden = true
+        addFriendsButton.isHidden = true
         tableView.isHidden = false
         
         // Filter users based on search text
