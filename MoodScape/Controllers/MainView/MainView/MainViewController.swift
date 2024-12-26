@@ -47,6 +47,7 @@ class MainViewController: MainBaseView {
         let image = UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 50, weight: .medium))
         button.setImage(image, for: .normal)
         button.tintColor = .white
+        button.addShadow()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
