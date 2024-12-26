@@ -26,6 +26,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
+    indicator.color = .white
+    indicator.hidesWhenStopped = true
+    indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
     
@@ -159,12 +162,47 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadingIndicator.startAnimating()
+        
+        // Setup UI first but hide content
         setupView()
         setupConstraints()
-        fetchAlbums()
-        fetchRecommendedSongs()
-        loadingIndicator.stopAnimating()
+        
+        // Hide all content initially
+        contentView.alpha = 0
+        profileButton.alpha = 0
+        
+        // Show loading indicator immediately
+        view.bringSubviewToFront(loadingIndicator)
+        loadingIndicator.startAnimating()
+        
+        // Create a dispatch group to track all async operations
+        let loadingGroup = DispatchGroup()
+        
+        // Enter group for albums fetch
+        loadingGroup.enter()
+        fetchAlbums {
+            loadingGroup.leave()
+        }
+        
+        // Enter group for recommended songs fetch
+        loadingGroup.enter()
+        fetchRecommendedSongs {
+            loadingGroup.leave()
+        }
+        
+        // When all operations complete
+        loadingGroup.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+            
+            // Animate the transition
+            UIView.animate(withDuration: 1.0) {
+                self.contentView.alpha = 1
+                self.profileButton.alpha = 1
+                self.loadingIndicator.alpha = 0
+            } completion: { _ in
+                self.loadingIndicator.stopAnimating()
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -179,6 +217,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
         view.addSubview(profileButton)
+        view.addSubview(loadingIndicator) // Add loading indicator directly to main view
         
         contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -231,7 +270,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             recommendationsLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             
-            firstRecommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: -40),
+            firstRecommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: -35),
             firstRecommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             firstRecommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             firstRecommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 300),
@@ -256,7 +295,10 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             exploreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             exploreButton.widthAnchor.constraint(equalToConstant: 180),
             exploreButton.heightAnchor.constraint(equalToConstant: 50),
-            exploreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100)
+            exploreButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -100),
+            
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -315,35 +357,36 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     }
     
     // MARK: - FetchAlbums (recently published popular albums)
-    private func fetchAlbums() {
-        loadingIndicator.startAnimating()
+    private func fetchAlbums(completion: @escaping () -> Void) {
         SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
             guard success else {
                 DispatchQueue.main.async {
-                    self?.loadingIndicator.stopAnimating()
                     self?.showError("Authentication failed")
+                    completion()
                 }
                 return
             }
+            
             SpotifyAPIManager.shared.fetchRecentlyPublishedAlbums { albums in
                 DispatchQueue.main.async {
-                    self?.loadingIndicator.stopAnimating()
                     if let albums = albums {
                         self?.albums = albums
                         self?.albumCollectionView.reloadData()
                     } else {
                         self?.showError("Failed to fetch albums")
                     }
+                    completion()
                 }
             }
         }
     }
     
     // MARK: FetchRecommendedSongs (you may also like)
-    private func fetchRecommendedSongs() {
+    private func fetchRecommendedSongs(completion: @escaping () -> Void) {
         fetchSelectedArtists { [weak self] artistNames in
             guard let artistNames = artistNames, !artistNames.isEmpty else {
                 self?.showError("No artists selected")
+                completion()
                 return
             }
             
@@ -374,6 +417,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                 self?.secondRecommendedSongs = Array(shuffledSongs.dropFirst(15))
                 self?.firstRecommendedSongsCollectionView.reloadData()
                 self?.secondRecommendedSongsCollectionView.reloadData()
+                completion()
             }
         }
     }
