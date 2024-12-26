@@ -247,10 +247,10 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "userCell")
+        tableView.register(UserCell.self, forCellReuseIdentifier: UserCell.identifier)
         tableView.backgroundColor = .clear
-        tableView.separatorStyle = .singleLine
-        tableView.separatorColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.5)
+        tableView.separatorStyle = .none
+        tableView.estimatedRowHeight = UserCell.cellHeight
     }
     
     // MARK: UITableViewDataSource
@@ -259,23 +259,14 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.identifier, for: indexPath) as! UserCell
         let user = filteredUsers[indexPath.row]
         
         // Configure cell
-        cell.textLabel?.text = user.username
-        cell.textLabel?.textColor = .white
-        cell.backgroundColor = .clear
-        cell.selectionStyle = .none
+        cell.configure(with: user.username)
+        cell.addButton.tag = indexPath.row
+        cell.addButton.addTarget(self, action: #selector(addFriendButtonTapped(_:)), for: .touchUpInside)
         
-        // Add "Add Friend" button
-        let addButton = UIButton(type: .system)
-        addButton.setTitle("Add", for: .normal)
-        addButton.setTitleColor(UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0), for: .normal)
-        addButton.tag = indexPath.row
-        addButton.addTarget(self, action: #selector(addFriendButtonTapped(_:)), for: .touchUpInside)
-        
-        cell.accessoryView = addButton
         return cell
     }
     
