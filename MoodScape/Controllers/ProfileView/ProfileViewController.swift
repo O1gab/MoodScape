@@ -5,7 +5,6 @@
 //
 
 import UIKit
-import Gifu
 import Firebase
 import FirebaseAuth
 import FirebaseFirestore

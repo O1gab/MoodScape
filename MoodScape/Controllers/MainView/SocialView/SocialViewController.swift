@@ -74,6 +74,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 30
+        button.addShadow()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -175,7 +176,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
                         self.requestsButton.setTitle("Your Friend Requests: \(requestCount)", for: .normal)
                     }
                     // THERES FRIENDS
-                    if let friends = data?["friends_ids"] as? [String] {
+                    if let friends = data?["friends"] as? [String] {
                         self.noFriends = false
                         self.noFriendsLabel.isHidden = true
                         self.addFriendsButton.isHidden = true
@@ -281,6 +282,31 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let user = filteredUsers[indexPath.row]
+        
+        let db = Firestore.firestore()
+        db.collection("users")
+            .whereField("username", isEqualTo: user.username)
+            .getDocuments { [weak self] (querySnapshot, error) in
+                if let error = error {
+                    print("Error finding user: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let document = querySnapshot?.documents.first else {
+                    print("User not found")
+                    return
+                }
+                
+                let userId = document.documentID
+                let userProfile = VisitorViewController(userId: userId)
+                userProfile.modalPresentationStyle = .fullScreen
+                self?.present(userProfile, animated: true)
+            }
+    }
+    
     // MARK: - AddFriendButton
     @objc private func addFriendButtonTapped(_ sender: UIButton) {
         let user = filteredUsers[sender.tag]
@@ -340,15 +366,15 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
                             ]) { error in
                                 if let error = error {
                                     self?.showAlert(message: "Error updating sent requests: \(error.localizedDescription)")
-                                    return
-                                }
-                                
-                                self?.showAlert(message: "Friend request sent to \(user.username)")
+                                return
                             }
+                            
+                            self?.showAlert(message: "Friend request sent to \(user.username)")
                         }
                     }
                 }
             }
+        }
     }
     
     // MARK: RequestsButtonTapped
