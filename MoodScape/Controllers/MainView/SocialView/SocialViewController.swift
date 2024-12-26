@@ -24,6 +24,20 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         return label
     }()
     
+    private let requestsButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Your Friend Requests: 0", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        button.backgroundColor = .darkGray
+        button.contentHorizontalAlignment = .left
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        button.layer.cornerRadius = 20
+        button.addShadow()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search friends"
@@ -59,7 +73,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        button.layer.cornerRadius = 28
+        button.layer.cornerRadius = 30
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -88,7 +102,9 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         view.addSubview(tableView)
         view.addSubview(noFriendsLabel)
         view.addSubview(addFriendsButton)
+        view.addSubview(requestsButton)
         addFriendsButton.addTarget(self, action: #selector(addFriendsButtonTapped), for: .touchUpInside)
+        requestsButton.addTarget(self, action: #selector(friendRequestsButtonTapped), for: .touchUpInside)
     }
     
     // MARK: SetupConstraints
@@ -96,8 +112,13 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         NSLayoutConstraint.activate([
             friendsLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             friendsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            
+            requestsButton.topAnchor.constraint(equalTo: friendsLabel.bottomAnchor, constant: 10),
+            requestsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            requestsButton.heightAnchor.constraint(equalToConstant: 40),
+            requestsButton.widthAnchor.constraint(equalToConstant: 220),
                     
-            searchBar.topAnchor.constraint(equalTo: friendsLabel.bottomAnchor, constant: 20),
+            searchBar.topAnchor.constraint(equalTo: requestsButton.bottomAnchor, constant: 10),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
                     
@@ -142,6 +163,11 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             if let document = document, document.exists {
                 let data = document.data()
                 DispatchQueue.main.async {
+                    // Update request count
+                    if let receivedRequests = data?["received_requests"] as? [String] {
+                        let requestCount = receivedRequests.count
+                        self.requestsButton.setTitle("Your Friend Requests: \(requestCount)", for: .normal)
+                    }
                     // THERES FRIENDS
                     if let friends = data?["friends_ids"] as? [String] {
                         self.noFriends = false
@@ -320,5 +346,11 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alert, animated: true)
         }
+    }
+
+    // MARK: - FriendRequestsButtonTapped
+    @objc private func friendRequestsButtonTapped() {
+        // TODO: Navigate to friend requests screen
+        print("Friend requests tapped")
     }
 }
