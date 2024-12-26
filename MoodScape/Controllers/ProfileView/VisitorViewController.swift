@@ -168,7 +168,28 @@ class VisitorViewController: ProfileBaseView {
     
     // MARK: - FetchData
     private func fetchData() {
-        // TODO: FIX IT
-        // fetch the data from the uid of selected user
+        let db = Firestore.firestore()
+        db.collection("users").document(userId).getDocument { [weak self] (document, error) in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let document = document, document.exists,
+                  let data = document.data() else {
+                print("Document does not exist")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                if let name = data["name"] as? String {
+                    self?.nameLabel.text = name
+                }
+                
+                if let username = data["username"] as? String {
+                    self?.usernameLabel.text = "@" + username
+                }
+            }
+        }
     }
 }
