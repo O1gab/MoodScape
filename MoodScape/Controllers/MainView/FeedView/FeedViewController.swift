@@ -18,9 +18,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     private var albumCollectionView: UICollectionView!
     private var albums: [Album] = []
     
-    private var songCollectionView: UICollectionView!
-    private var topWeeklySongs: [Song] = []
-    
     private var firstRecommendedSongsCollectionView: UICollectionView!
     private var firstRecommendedSongs: [Song] = []
     
@@ -40,16 +37,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         topLabel.textAlignment = .left
         topLabel.translatesAutoresizingMaskIntoConstraints = false
         return topLabel
-    }()
-    
-    private let topSongsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Top songs this week"
-        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.textAlignment = .left
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
     }()
     
     private let recommendationsLabel: UILabel = {
@@ -176,7 +163,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         setupView()
         setupConstraints()
         fetchAlbums()
-        fetchTopSongs()
         fetchRecommendedSongs()
         loadingIndicator.stopAnimating()
     }
@@ -199,7 +185,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         scrollView.addSubview(contentView)
         contentView.addSubview(tabBar)
         contentView.addSubview(topLabel)
-        contentView.addSubview(topSongsLabel)
         contentView.addSubview(loadingIndicator)
         contentView.addSubview(recommendationsLabel)
         contentView.addSubview(infoButton)
@@ -209,7 +194,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .allTouchEvents)
         exploreButton.addTarget(self, action: #selector(handleExplore), for: .touchUpInside)
         setupAlbumCollectionView()
-        setupSongCollectionView()
         setupRecommendedSongsCollectionView()
         setupSecondRecommendedSongsCollectionView()
     }
@@ -242,21 +226,12 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             albumCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             albumCollectionView.heightAnchor.constraint(equalToConstant: 300),
             
-            // "Top songs this week"
-            topSongsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -25),
-            topSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            
-            songCollectionView.topAnchor.constraint(equalTo: topSongsLabel.bottomAnchor, constant: 5),
-            songCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            songCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            songCollectionView.heightAnchor.constraint(equalToConstant: 450),
-            
             // "You may also like"
-            recommendationsLabel.topAnchor.constraint(equalTo: songCollectionView.bottomAnchor, constant: 25),
+            recommendationsLabel.topAnchor.constraint(equalTo: albumCollectionView.bottomAnchor, constant: -25),
             recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             recommendationsLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             
-            firstRecommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: -45),
+            firstRecommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: -40),
             firstRecommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             firstRecommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             firstRecommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 300),
@@ -265,7 +240,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             secondRecommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             secondRecommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             secondRecommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 300),
-            
             
             infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 40),
             infoButton.centerYAnchor.constraint(equalTo: recommendationsLabel.centerYAnchor),
@@ -300,25 +274,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         albumCollectionView.dataSource = self
         albumCollectionView.delegate = self
         contentView.addSubview(albumCollectionView)
-    }
-    
-    // MARK: - SetupSongCollectionView (Top songs this week)
-    private func setupSongCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
-        songCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        songCollectionView.backgroundColor = .clear
-        songCollectionView.showsVerticalScrollIndicator = false
-        songCollectionView.scrollsToTop = false
-        songCollectionView.isScrollEnabled = false
-        songCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        songCollectionView.register(SongCardCollectionViewCell.self, forCellWithReuseIdentifier: "SongCardCell")
-        songCollectionView.dataSource = self
-        songCollectionView.delegate = self
-        contentView.addSubview(songCollectionView)
     }
     
     // MARK: - SetupRecommendedSongsCollectionView (You may also like)
@@ -378,34 +333,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                         self?.albumCollectionView.reloadData()
                     } else {
                         self?.showError("Failed to fetch albums")
-                    }
-                }
-            }
-        }
-    }
-    
-    // MARK: FetchTopSongs (5 best songs on this week)
-    private func fetchTopSongs() {
-        loadingIndicator.startAnimating()
-        SpotifyAuthenticationManager.shared.authenticate { [weak self] success in
-            guard success else {
-                DispatchQueue.main.async {
-                    self?.loadingIndicator.stopAnimating()
-                    self?.showError("Authentication failed")
-                }
-                return
-            }
-            
-            SpotifyAPIManager.shared.fetchWeeklyTopSongs { [weak self] songs in
-                DispatchQueue.main.async {
-                    
-                    self?.loadingIndicator.stopAnimating()
-                    if let songs = songs {
-                        self?.topWeeklySongs = Array(songs.prefix(5))
-                        print("Fetched \(songs.count) songs") // Debug print
-                        self?.songCollectionView.reloadData()
-                    } else {
-                        self?.showError("Failed to fetch top songs")
                     }
                 }
             }
@@ -519,8 +446,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == albumCollectionView {
             return albums.count
-        } else if collectionView == songCollectionView {
-            return topWeeklySongs.count
         } else if collectionView == firstRecommendedSongsCollectionView {
             return firstRecommendedSongs.count
         } else if collectionView == secondRecommendedSongsCollectionView {
@@ -544,12 +469,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                     }
                     task.resume()
                 }
-            return cell
-        // SONG COLLECTION VIEW
-        } else if collectionView == songCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SongCardCell", for: indexPath) as! SongCardCollectionViewCell
-            let song = topWeeklySongs[indexPath.item]
-            cell.configure(with: song)
             return cell
 
         // RECOMMENDED SONGS COLLECTIONS VIEW
@@ -590,12 +509,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             let detailView = AlbumDetailsViewController(album: selectedAlbum)
             present(detailView, animated: true, completion: nil)
             
-        } else if collectionView == songCollectionView {
-            let selectedSong = topWeeklySongs[indexPath.item]
-            if let url = URL(string: selectedSong.spotifyUrl) {
-                let safariView = SFSafariViewController(url: url)
-                present(safariView, animated: true, completion: nil)
-            }
         } else if collectionView == firstRecommendedSongsCollectionView {
             let selectedSong = firstRecommendedSongs[indexPath.item]
             let detailView = SongDetailsViewController(song: selectedSong)
