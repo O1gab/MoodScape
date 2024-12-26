@@ -17,8 +17,8 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         let topLabel = UILabel()
         topLabel.text = "Set up your profile"
         topLabel.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        topLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        topLabel.textAlignment = .center
+        topLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        topLabel.textAlignment = .left
         topLabel.translatesAutoresizingMaskIntoConstraints = false
         return topLabel
     }()
@@ -30,7 +30,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.isUserInteractionEnabled = true
-        imageView.layer.cornerRadius = 50
+        imageView.layer.cornerRadius = 75
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -102,7 +102,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
     
     private let preferencesButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Set up preferences", for: .normal)
+        button.setTitle("Set up Preferences", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.tintColor = .white
         button.layer.borderWidth = 3
@@ -118,7 +118,8 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
-        button.layer.cornerRadius = 28
+        button.layer.cornerRadius = 30
+        button.addShadow()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -127,7 +128,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         let button = UIButton(type: .system)
         button.setTitle("Skip", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -179,17 +180,17 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             topLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            topLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            topLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
             profileImage.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 20),
             profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            profileImage.widthAnchor.constraint(equalToConstant: 100),
-            profileImage.heightAnchor.constraint(equalToConstant: 100),
+            profileImage.widthAnchor.constraint(equalToConstant: 150),
+            profileImage.heightAnchor.constraint(equalToConstant: 150),
             
             imageButton.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 10),
             imageButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            nameLabel.topAnchor.constraint(equalTo: imageButton.bottomAnchor, constant: 30),
+            nameLabel.topAnchor.constraint(equalTo: imageButton.bottomAnchor, constant: 10),
             nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             
             name.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
@@ -202,7 +203,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
             
             bioField.topAnchor.constraint(equalTo: bioLabel.bottomAnchor, constant: 10),
             bioField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            bioField.heightAnchor.constraint(equalToConstant: 150),
+            bioField.heightAnchor.constraint(equalToConstant: 120),
             bioField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
             bioCharacterCountLabel.topAnchor.constraint(equalTo: bioField.bottomAnchor, constant: 5),

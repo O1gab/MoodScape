@@ -199,7 +199,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     private let preferencesLabel: UILabel = {
         let label = GradientLabel()
-        label.text = "Your music preferences"
+        label.text = "Your Music Preferences"
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
@@ -211,7 +211,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     private let shareButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Share your profile", for: .normal)
+        button.setTitle("Share Your Profile", for: .normal)
         button.backgroundColor  = .clear
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         button.tintColor = .white
@@ -224,7 +224,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     private let editButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Edit profile", for: .normal)
+        button.setTitle("Edit Profile", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
