@@ -12,6 +12,7 @@
 		760AC6CC2D19E3900063A9B0 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 760AC6CB2D19E3900063A9B0 /* FSCalendar */; };
 		760AC6CF2D1C9F970063A9B0 /* UITextFieldExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6CE2D1C9F920063A9B0 /* UITextFieldExtensions.swift */; };
 		760AC6D12D1C9FB40063A9B0 /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6D02D1C9FAD0063A9B0 /* UIButtonExtensions.swift */; };
+		760AC6D32D1DE2250063A9B0 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760AC6D22D1DE21F0063A9B0 /* UserCell.swift */; };
 		7616BD752C7E33800083D227 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD742C7E33800083D227 /* CustomTabBar.swift */; };
 		7616BD772C7E33AF0083D227 /* custom_tabbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7616BD762C7E33AF0083D227 /* custom_tabbar.png */; };
 		7616BD7D2C7E81B00083D227 /* SongViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7616BD7C2C7E81B00083D227 /* SongViewCell.swift */; };
@@ -117,6 +118,7 @@
 		749149670D07A241A325B15B /* Pods-MoodScape.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoodScape.debug.xcconfig"; path = "Target Support Files/Pods-MoodScape/Pods-MoodScape.debug.xcconfig"; sourceTree = "<group>"; };
 		760AC6CE2D1C9F920063A9B0 /* UITextFieldExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtensions.swift; sourceTree = "<group>"; };
 		760AC6D02D1C9FAD0063A9B0 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
+		760AC6D22D1DE21F0063A9B0 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		7616BD742C7E33800083D227 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		7616BD762C7E33AF0083D227 /* custom_tabbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = custom_tabbar.png; sourceTree = "<group>"; };
 		7616BD7C2C7E81B00083D227 /* SongViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongViewCell.swift; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 		76976C962C7401C300D44DD3 /* TableViewItems */ = {
 			isa = PBXGroup;
 			children = (
+				760AC6D22D1DE21F0063A9B0 /* UserCell.swift */,
 				76976C942C7401AE00D44DD3 /* SongCell.swift */,
 			);
 			path = TableViewItems;
@@ -706,6 +709,7 @@
 				7664857D2C6EF3C200AA050A /* MoodSelectionView.swift in Sources */,
 				7664857B2C6ED79D00AA050A /* SpotifyAPIManager.swift in Sources */,
 				76B004C12C91EDBF00563DE7 /* SpotifyAuthController.swift in Sources */,
+				760AC6D32D1DE2250063A9B0 /* UserCell.swift in Sources */,
 				76976C952C7401AE00D44DD3 /* SongCell.swift in Sources */,
 				7664855E2C6C46A700AA050A /* SocialViewController.swift in Sources */,
 				765E1EED2C98C92E0010D6B6 /* NewPlaylistView.swift in Sources */,
