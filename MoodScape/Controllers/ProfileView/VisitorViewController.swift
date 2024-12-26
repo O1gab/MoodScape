@@ -75,6 +75,69 @@ class VisitorViewController: ProfileBaseView {
         return view
     }()
     
+    private let inlineBarStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 0
+        stackView.layer.cornerRadius = 15
+        stackView.layer.masksToBounds = true
+        stackView.backgroundColor = .clear
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let favouritesStackView = UIStackView()
+        favouritesStackView.axis = .vertical
+        favouritesStackView.distribution = .fill
+        favouritesStackView.spacing = 4
+        favouritesStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        let favouritesCountLabel = UILabel()
+        favouritesCountLabel.text = "0"
+        favouritesCountLabel.textColor = .white
+        favouritesCountLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        favouritesCountLabel.textAlignment = .center
+        
+        let favouritesButton = UIButton(type: .system)
+        favouritesButton.setTitle("Favorites", for: .normal)
+        favouritesButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        favouritesButton.tag = 0
+        favouritesButton.setTitleColor(.white, for: .normal)
+        favouritesButton.backgroundColor = .clear
+        
+        favouritesStackView.addArrangedSubview(favouritesCountLabel)
+        favouritesStackView.addArrangedSubview(favouritesButton)
+        
+        let friendsStackView = UIStackView()
+        friendsStackView.axis = .vertical
+        friendsStackView.distribution = .fill
+        friendsStackView.spacing = 4
+        friendsStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        let friendsCountLabel = UILabel()
+        friendsCountLabel.text = "-"
+        friendsCountLabel.textColor = .white
+        friendsCountLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        friendsCountLabel.textAlignment = .center
+        
+        let friendsButton = UIButton(type: .system)
+        friendsButton.setTitle("Friends", for: .normal)
+        friendsButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        friendsButton.tag = 1
+        friendsButton.setTitleColor(.white, for: .normal)
+        friendsButton.backgroundColor = .clear
+        
+        friendsStackView.addArrangedSubview(friendsCountLabel)
+        friendsStackView.addArrangedSubview(friendsButton)
+        
+        favouritesStackView.spacing = 0
+        friendsStackView.spacing = 0
+        
+        stackView.addArrangedSubview(favouritesStackView)
+        stackView.addArrangedSubview(friendsStackView)
+        
+        return stackView
+    }()
+    
     private var fetchRetryCount = 0
     private let maxRetries = 3
     
@@ -102,6 +165,7 @@ class VisitorViewController: ProfileBaseView {
         startLoading()
         setupView()
         setupConstraints()
+        setupLabels()
         fetchData()
         //fetchArtists()
         
@@ -120,6 +184,7 @@ class VisitorViewController: ProfileBaseView {
         contentView.addSubview(nameLabel)
         contentView.addSubview(usernameLabel)
         contentView.addSubview(separatorLine)
+        contentView.addSubview(inlineBarStackView)
     }
     
     // MARK: SetupConstraints
@@ -162,8 +227,41 @@ class VisitorViewController: ProfileBaseView {
             separatorLine.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 10),
             separatorLine.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
             separatorLine.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-            separatorLine.heightAnchor.constraint(equalToConstant: 1)
+            separatorLine.heightAnchor.constraint(equalToConstant: 1),
+            
+            inlineBarStackView.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: 7),
+            inlineBarStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            inlineBarStackView.heightAnchor.constraint(equalToConstant: 70)
         ])
+    }
+    
+    private func setupLabels() {
+        // TODO: Setup Favorites count
+        if let friendsStackView = inlineBarStackView.arrangedSubviews[1] as? UIStackView,
+           let friendsCountLabel = friendsStackView.arrangedSubviews.first as? UILabel {
+            guard let userId = Auth.auth().currentUser?.uid else { return }
+            
+            let db = Firestore.firestore()
+            db.collection("users").document(userId).getDocument { [weak self] (document, error) in
+                if let document = document, document.exists {
+                    if let friends = document.data()?["friends"] as? [String] {
+                        DispatchQueue.main.async {
+                            friendsCountLabel.text = "\(friends.count)"
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            friendsCountLabel.text = "0"
+                        }
+                    }
+                } else {
+                    print("Error fetching friends: \(error?.localizedDescription ?? "Unknown error")")
+                    DispatchQueue.main.async {
+                        friendsCountLabel.text = "0"
+                    }
+                }
+            }
+        }
     }
     
     // MARK: - FetchData
