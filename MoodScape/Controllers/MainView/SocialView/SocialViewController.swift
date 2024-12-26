@@ -172,33 +172,6 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         }
     }
     
-    // - MARK: AddFriend
-    private func addFriend(user: User) {
-        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
-        let db = Firestore.firestore()
-        let userRef = db.collection("users").document(currentUserId)
-        let friendRef = db.collection("users").document(user.id)
-        
-        userRef.updateData([
-            "friends": FieldValue.arrayUnion([user.id])
-        ]) { error in
-            if let error = error {
-                print("Error adding friend: \(error.localizedDescription)")
-                return
-            }
-            
-            friendRef.updateData([
-                "friends": FieldValue.arrayUnion([currentUserId])
-            ]) { error in
-                if let error = error {
-                    print("Error updating friend list: \(error.localizedDescription)")
-                } else {
-                    self.dismiss(animated: true, completion: nil)
-                }
-            }
-        }
-    }
-    
     // MARK: - AddFriendsButtonTapped Method
     @objc private func addFriendsButtonTapped() {
         searchBar.becomeFirstResponder()
@@ -270,15 +243,82 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         return cell
     }
     
-    // MARK: UITableViewDelegate
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = filteredUsers[indexPath.row]
-        //addFriend(user: user) -> ERROR HERE
-    }
-    
-    // Add method to handle add friend button tap
+    // MARK: - AddFriendButton
     @objc private func addFriendButtonTapped(_ sender: UIButton) {
         let user = filteredUsers[sender.tag]
-        addFriend(user: user)
+        guard let currentUserId = Auth.auth().currentUser?.uid else {
+            print("User not logged in")
+            return
+        }
+        print(currentUserId)    // debug
+        let db = Firestore.firestore()
+        
+        // 1. Get the receiver's id
+        db.collection("users")
+            .whereField("username", isEqualTo: user.username)
+            .getDocuments { [weak self] (querySnapshot, error) in
+                if let error = error {
+                    self?.showAlert(message: "Error finding user: \(error.localizedDescription)")
+                    return
+                }
+                
+                guard let document = querySnapshot?.documents.first else {
+                    self?.showAlert(message: "User not found")
+                    return
+                }
+                
+                let receiverId = document.documentID
+                print("receiver: ", receiverId) // debug
+                
+                // 2. Check if request already sent or it's already a friend
+                db.collection("users").document(currentUserId).getDocument { [weak self] (document, error) in
+                    if let document = document, document.exists {
+                        let data = document.data()
+                        let sent_requests = (data?["sent_requests"] as? [String]) ?? []
+                        let friends = (data?["friends"] as? [String]) ?? []
+                        
+                        if sent_requests.contains(receiverId) {
+                            self?.showAlert(message: "Friend request already sent")
+                            return
+                        }
+                        
+                        if friends.contains(receiverId) {
+                            self?.showAlert(message: "You are already friends")
+                            return
+                        }
+                        
+                        // 3. Add to receiver's received_requests
+                        db.collection("users").document(receiverId).updateData([
+                            "received_requests": FieldValue.arrayUnion([currentUserId])
+                        ]) { error in
+                            if let error = error {
+                                self?.showAlert(message: "Error sending friend request: \(error.localizedDescription)")
+                                return
+                            }
+                            
+                            // 4. Add to sender's sent_requests
+                            db.collection("users").document(currentUserId).updateData([
+                                "sent_requests": FieldValue.arrayUnion([receiverId])
+                            ]) { error in
+                                if let error = error {
+                                    self?.showAlert(message: "Error updating sent requests: \(error.localizedDescription)")
+                                    return
+                                }
+                                
+                                self?.showAlert(message: "Friend request sent to \(user.username)")
+                            }
+                        }
+                    }
+                }
+            }
+    }
+
+    // MARK: - ShowAlert
+    private func showAlert(message: String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+        }
     }
 }
