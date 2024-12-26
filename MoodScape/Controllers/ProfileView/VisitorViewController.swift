@@ -27,6 +27,27 @@ class VisitorViewController: ProfileBaseView {
         return view
     }()
     
+    private let gradientCircleView: GradientCircleView = {
+        let view = GradientCircleView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let profileImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.tintColor = .white
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
+        imageView.isUserInteractionEnabled = true
+        imageView.layer.cornerRadius = 75
+        // Set default system person image with proper configuration
+        let config = UIImage.SymbolConfiguration(pointSize: 150, weight: .regular)
+        imageView.image = UIImage(systemName: "person.circle.fill", withConfiguration: config)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Name"
@@ -93,8 +114,8 @@ class VisitorViewController: ProfileBaseView {
         view.addSubview(backButton)
         
         scrollView.addSubview(contentView)
-        //contentView.addSubview(gradientCircleView)
-        //contentView.addSubview(profileImage)
+        contentView.addSubview(gradientCircleView)
+        contentView.addSubview(profileImage)
         contentView.addSubview(nameLabel)
         contentView.addSubview(usernameLabel)
         contentView.addSubview(separatorLine)
@@ -116,7 +137,6 @@ class VisitorViewController: ProfileBaseView {
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
-            /*
             profileImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 40),
             profileImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             profileImage.widthAnchor.constraint(equalToConstant: 150),
@@ -126,8 +146,8 @@ class VisitorViewController: ProfileBaseView {
             gradientCircleView.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
             gradientCircleView.widthAnchor.constraint(equalToConstant: 225),
             gradientCircleView.heightAnchor.constraint(equalTo: gradientCircleView.widthAnchor),
-            */
-            nameLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 40),
+            
+            nameLabel.topAnchor.constraint(equalTo: profileImage.safeAreaLayoutGuide.bottomAnchor, constant: 20),
             nameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
             nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
