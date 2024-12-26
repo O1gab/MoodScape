@@ -14,7 +14,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
     private var allUsers: [User] = []
     private var filteredUsers: [User] = []
     
-    let friendsLabel: UILabel = {
+    private let friendsLabel: UILabel = {
         let label = UILabel()
         label.text = "Friends"
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
@@ -78,6 +78,12 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         return button
     }()
     
+    private lazy var requestsView: FriendRequestsController = {
+        let viewController = FriendRequestsController()
+        viewController.loadViewIfNeeded()
+        return viewController
+    }()
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,7 +110,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         view.addSubview(addFriendsButton)
         view.addSubview(requestsButton)
         addFriendsButton.addTarget(self, action: #selector(addFriendsButtonTapped), for: .touchUpInside)
-        requestsButton.addTarget(self, action: #selector(friendRequestsButtonTapped), for: .touchUpInside)
+        requestsButton.addTarget(self, action: #selector(requestsButtonTapped), for: .touchUpInside)
     }
     
     // MARK: SetupConstraints
@@ -266,6 +272,12 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         cell.addButton.tag = indexPath.row
         cell.addButton.addTarget(self, action: #selector(addFriendButtonTapped(_:)), for: .touchUpInside)
         
+        // Cell shadow
+        cell.contentView.layer.shadowColor = UIColor.black.cgColor
+        cell.contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cell.contentView.layer.shadowRadius = 4
+        cell.contentView.layer.shadowOpacity = 0.2
+        cell.contentView.layer.masksToBounds = false
         return cell
     }
     
@@ -338,6 +350,13 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
                 }
             }
     }
+    
+    // MARK: RequestsButtonTapped
+    @objc private func requestsButtonTapped() {
+        // TODO: Navigate to friend requests screen
+        requestsView.modalPresentationStyle = .fullScreen
+        present(requestsView, animated: false)
+    }
 
     // MARK: - ShowAlert
     private func showAlert(message: String) {
@@ -346,11 +365,5 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alert, animated: true)
         }
-    }
-
-    // MARK: - FriendRequestsButtonTapped
-    @objc private func friendRequestsButtonTapped() {
-        // TODO: Navigate to friend requests screen
-        print("Friend requests tapped")
     }
 }
