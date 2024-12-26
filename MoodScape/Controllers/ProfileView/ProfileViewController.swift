@@ -122,7 +122,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         searchesStackView.translatesAutoresizingMaskIntoConstraints = false
 
         let searchesCountLabel = UILabel()
-        searchesCountLabel.text = "0" // Placeholder for actual number
+        searchesCountLabel.text = "0"
         searchesCountLabel.textColor = .white
         searchesCountLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         searchesCountLabel.textAlignment = .center
@@ -424,6 +424,31 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             let searchesCountLabel = searchesStackView.arrangedSubviews.first as? UILabel {
             let playlistsCount = PlaylistStorage().fetchPlaylists().count
             searchesCountLabel.text = "\(playlistsCount)"
+        }
+        
+        if let friendsStackView = inlineBarStackView.arrangedSubviews[2] as? UIStackView,
+           let friendsCountLabel = friendsStackView.arrangedSubviews.first as? UILabel {
+            guard let userId = Auth.auth().currentUser?.uid else { return }
+            
+            let db = Firestore.firestore()
+            db.collection("users").document(userId).getDocument { [weak self] (document, error) in
+                if let document = document, document.exists {
+                    if let friends = document.data()?["friends"] as? [String] {
+                        DispatchQueue.main.async {
+                            friendsCountLabel.text = "\(friends.count)"
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            friendsCountLabel.text = "0"
+                        }
+                    }
+                } else {
+                    print("Error fetching friends: \(error?.localizedDescription ?? "Unknown error")")
+                    DispatchQueue.main.async {
+                        friendsCountLabel.text = "0"
+                    }
+                }
+            }
         }
     }
     
