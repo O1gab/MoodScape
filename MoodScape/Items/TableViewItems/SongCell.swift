@@ -8,6 +8,7 @@ import UIKit
 
 class SongTableViewCell: UITableViewCell {
 
+    // MARK: - Properties
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -26,7 +27,7 @@ class SongTableViewCell: UITableViewCell {
         return label
     }()
     
-    // - MARK: Init
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
@@ -45,12 +46,12 @@ class SongTableViewCell: UITableViewCell {
         ])
     }
     
-    // - MARK: Init
+    // MARK: Init
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // - MARK: Configure
+    // MARK: - Configure
     func configure(with song: Song) {
         songLabel.text = "\(song.name) - \(song.duration)"
     }

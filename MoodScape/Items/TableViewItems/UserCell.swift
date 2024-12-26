@@ -6,6 +6,8 @@
 //
 
 class UserCell: UITableViewCell {
+    
+    // MARK: - Properties
     static let identifier = "UserCell"
     
     static let cellHeight: CGFloat = 75
@@ -35,19 +37,23 @@ class UserCell: UITableViewCell {
         return button
     }()
     
+    // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
     }
     
+    // MARK: Init
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - LayoutSizeFitting
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
         return CGSize(width: targetSize.width, height: UserCell.cellHeight)
     }
     
+    // MARK: - SetupCell
     private func setupCell() {
         backgroundColor = .clear
         selectionStyle = .none
@@ -72,6 +78,7 @@ class UserCell: UITableViewCell {
         ])
     }
     
+    // MARK: Configure
     func configure(with username: String) {
         usernameLabel.text = username
     }

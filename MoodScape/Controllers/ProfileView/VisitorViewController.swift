@@ -108,6 +108,7 @@ class VisitorViewController: ProfileBaseView {
         stopLoading()
     }
     
+    // MARK: - SetupView
     private func setupView() {
         view.addSubview(scrollView)
         view.addSubview(loadingIndicator)
@@ -121,6 +122,7 @@ class VisitorViewController: ProfileBaseView {
         contentView.addSubview(separatorLine)
     }
     
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -164,6 +166,7 @@ class VisitorViewController: ProfileBaseView {
         ])
     }
     
+    // MARK: - FetchData
     private func fetchData() {
         // TODO: FIX IT
         // fetch the data from the uid of selected user

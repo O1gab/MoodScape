@@ -422,11 +422,13 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         ])
     }
     
+    // MARK: - StartLoading
     override func startLoading() {
         loadingIndicator.startAnimating()
         view.isUserInteractionEnabled = false
     }
     
+    // MARK: StopLoading
     override func stopLoading() {
         loadingIndicator.stopAnimating()
         view.isUserInteractionEnabled = true
