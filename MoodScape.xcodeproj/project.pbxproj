@@ -26,6 +26,7 @@
 		7628AAC42C860D780021433F /* Spotify_Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7628AAC32C860D780021433F /* Spotify_Logo.png */; };
 		7628AAC62C860FAC0021433F /* Spotify_Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7628AAC52C860FAB0021433F /* Spotify_Icon.png */; };
 		7628AAC82C8642E80021433F /* PreferencesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7628AAC72C8642E80021433F /* PreferencesCell.swift */; };
+		76389B042D21957E00D21C5C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76389B032D21957A00D21C5C /* NetworkManager.swift */; };
 		76401AD52C76B4530035C7FA /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76401AD42C76B4530035C7FA /* ContactView.swift */; };
 		764E2A2E2C78229A00785104 /* StartSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A2D2C78229A00785104 /* StartSetupViewController.swift */; };
 		764E2A302C7846CB00785104 /* UserSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */; };
@@ -136,6 +137,7 @@
 		7628AAC32C860D780021433F /* Spotify_Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotify_Logo.png; sourceTree = "<group>"; };
 		7628AAC52C860FAB0021433F /* Spotify_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spotify_Icon.png; sourceTree = "<group>"; };
 		7628AAC72C8642E80021433F /* PreferencesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesCell.swift; sourceTree = "<group>"; };
+		76389B032D21957A00D21C5C /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		76401AD42C76B4530035C7FA /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
 		764E2A2D2C78229A00785104 /* StartSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartSetupViewController.swift; sourceTree = "<group>"; };
 		764E2A2F2C7846CB00785104 /* UserSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetupViewController.swift; sourceTree = "<group>"; };
@@ -275,6 +277,14 @@
 				766FD14E2C7F837700D9ACF6 /* WelcomeView.swift */,
 			);
 			path = LaunchView;
+			sourceTree = "<group>";
+		};
+		76389B022D21956B00D21C5C /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				76389B032D21957A00D21C5C /* NetworkManager.swift */,
+			);
+			path = NetworkManager;
 			sourceTree = "<group>";
 		};
 		764E2A2C2C78221700785104 /* SetupView */ = {
@@ -535,6 +545,7 @@
 		76EF46102C8B38CA00758AA6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				76389B022D21956B00D21C5C /* NetworkManager */,
 				762226BD2D0729CA00BE7AE2 /* Auth Manager */,
 				76EF46112C8B399B00758AA6 /* GroqAPI */,
 				766485772C6ED6C700AA050A /* SpotifyAPI */,
@@ -749,6 +760,7 @@
 				76F31B482C7B8C1400B65B72 /* EndSetupViewController.swift in Sources */,
 				76BF876F2C85422D00C50E28 /* SongDetailsViewController.swift in Sources */,
 				76B869BF2C67B93C002866B9 /* AuthViewController.swift in Sources */,
+				76389B042D21957E00D21C5C /* NetworkManager.swift in Sources */,
 				7678E1E82C9BAF08008A24D5 /* PlaylistsForDateViewController.swift in Sources */,
 				768536CB2C7A893000C35FF8 /* GenreCell.swift in Sources */,
 				76DAE5872C874A3A00F631F1 /* FavoritesCell.swift in Sources */,
