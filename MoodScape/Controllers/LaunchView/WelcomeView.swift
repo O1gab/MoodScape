@@ -49,6 +49,14 @@ class WelcomeView: StartBaseView {
         return viewController
     }()
 
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
+
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +76,7 @@ class WelcomeView: StartBaseView {
                 guard currentIndex < words.count else {
                     // Transition to the next view after the phrase is fully displayed
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                        self?.checkAuth()
+                        self?.checkConnectivity()
                     }
                     return
                 }
@@ -86,10 +94,31 @@ class WelcomeView: StartBaseView {
         }
     }
     
+    private func checkConnectivity() {
+        loadingIndicator.startAnimating()
+        
+        // Start monitoring first
+        NetworkManager.shared.startMonitoring()
+        
+        // Give time for the monitor to initialize and check connection
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            guard let self = self else { return }
+            
+            if NetworkManager.shared.isConnected {
+                NetworkManager.shared.stopMonitoring()
+                self.checkAuth()
+            } else {
+                self.loadingIndicator.stopAnimating()
+                self.showNoConnectionAlert()
+            }
+        }
+    }
+    
     // MARK: - SetupView
     private func setupView() {
         view.addSubview(welcomeGradient)
         view.addSubview(messageLabel)
+        view.addSubview(loadingIndicator)
     }
     
     // MARK: SetupConstraints
@@ -103,7 +132,10 @@ class WelcomeView: StartBaseView {
             messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             messageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            messageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            messageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.topAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 
@@ -143,5 +175,20 @@ class WelcomeView: StartBaseView {
         } else {
             transitionToNextView(nextViewController: authView)
         }
+    }
+    
+    // Add alert method
+    private func showNoConnectionAlert() {
+        let alert = UIAlertController(
+            title: "No Internet Connection",
+            message: "Please check your internet connection and try again.",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Retry", style: .default) { [weak self] _ in
+            self?.checkConnectivity()
+        })
+        
+        present(alert, animated: true)
     }
 }
