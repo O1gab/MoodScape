@@ -29,6 +29,7 @@ class VisitorViewController: ProfileBaseView {
     
     private let gradientCircleView: GradientCircleView = {
         let view = GradientCircleView()
+        view.alpha = 0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -41,9 +42,9 @@ class VisitorViewController: ProfileBaseView {
         imageView.layer.masksToBounds = true
         imageView.isUserInteractionEnabled = true
         imageView.layer.cornerRadius = 75
-        // Set default system person image with proper configuration
         let config = UIImage.SymbolConfiguration(pointSize: 150, weight: .regular)
         imageView.image = UIImage(systemName: "person.circle.fill", withConfiguration: config)
+        imageView.alpha = 0
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -54,6 +55,7 @@ class VisitorViewController: ProfileBaseView {
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
+        label.alpha = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -64,6 +66,7 @@ class VisitorViewController: ProfileBaseView {
         label.textColor = UIColor(red: 151/255, green: 151/255, blue: 151/255, alpha: 1.0)
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.alpha = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -71,6 +74,7 @@ class VisitorViewController: ProfileBaseView {
     private let separatorLine: UIView = {
         let view = UIView()
         view.backgroundColor = .white
+        view.alpha = 0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -135,7 +139,45 @@ class VisitorViewController: ProfileBaseView {
         stackView.addArrangedSubview(favouritesStackView)
         stackView.addArrangedSubview(friendsStackView)
         
+        stackView.alpha = 0
         return stackView
+    }()
+    
+    private let addFriendButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Add to Friends", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.layer.cornerRadius = 25
+        button.addShadow()
+        button.alpha = 0
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let settingsButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "gear", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), for: .normal)
+        
+        button.tintColor = .white
+        button.imageView?.contentMode = .scaleAspectFit
+        button.layer.cornerRadius = 25
+        button.addShadow()
+        button.alpha = 0
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let favArtistsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "User's Favorite Artists"
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.textAlignment = .left
+        label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.alpha = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private var fetchRetryCount = 0
@@ -172,6 +214,22 @@ class VisitorViewController: ProfileBaseView {
         stopLoading()
     }
     
+    // MARK: ViewDidAppear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIView.animate(withDuration: 2.0) {
+            self.gradientCircleView.alpha = 1
+            self.profileImage.alpha = 1
+            self.nameLabel.alpha = 1
+            self.usernameLabel.alpha = 1
+            self.separatorLine.alpha = 1
+            self.inlineBarStackView.alpha = 1
+            self.addFriendButton.alpha = 1
+            self.settingsButton.alpha = 1
+            self.favArtistsLabel.alpha = 1
+        }
+    }
+    
     // MARK: - SetupView
     private func setupView() {
         view.addSubview(scrollView)
@@ -185,6 +243,12 @@ class VisitorViewController: ProfileBaseView {
         contentView.addSubview(usernameLabel)
         contentView.addSubview(separatorLine)
         contentView.addSubview(inlineBarStackView)
+        contentView.addSubview(addFriendButton)
+        contentView.addSubview(settingsButton)
+        contentView.addSubview(favArtistsLabel)
+        
+        settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+        addFriendButton.addTarget(self, action: #selector(handleAddFriend), for: .touchUpInside)
     }
     
     // MARK: SetupConstraints
@@ -232,7 +296,21 @@ class VisitorViewController: ProfileBaseView {
             inlineBarStackView.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: 7),
             inlineBarStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            inlineBarStackView.heightAnchor.constraint(equalToConstant: 70)
+            inlineBarStackView.heightAnchor.constraint(equalToConstant: 70),
+            
+            addFriendButton.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
+            addFriendButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 70),
+            addFriendButton.heightAnchor.constraint(equalToConstant: 50),
+            addFriendButton.widthAnchor.constraint(equalToConstant: 180),
+            
+            settingsButton.centerYAnchor.constraint(equalTo: addFriendButton.centerYAnchor),
+            settingsButton.leadingAnchor.constraint(equalTo: addFriendButton.trailingAnchor, constant: 20),
+            
+            // "User's Favorite Artists"
+            favArtistsLabel.topAnchor.constraint(equalTo: addFriendButton.bottomAnchor, constant: 30),
+            favArtistsLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            favArtistsLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)
+            
         ])
     }
     
@@ -245,9 +323,26 @@ class VisitorViewController: ProfileBaseView {
             let db = Firestore.firestore()
             db.collection("users").document(userId).getDocument { [weak self] (document, error) in
                 if let document = document, document.exists {
+                    if let name = document.data()?["name"] as? [String] {
+                        DispatchQueue.main.async {
+                            self?.favArtistsLabel.text = "\(name)'s Favorite Artists"
+                        }
+                    }
                     if let friends = document.data()?["friends"] as? [String] {
                         DispatchQueue.main.async {
                             friendsCountLabel.text = "\(friends.count)"
+                            if friends.contains(userId) {       // TODO: DEBUG IT
+                                self?.addFriendButton.setTitle("Already Friends", for: .normal)
+                                self?.addFriendButton.isUserInteractionEnabled = false
+                                self?.addFriendButton.backgroundColor = .darkGray
+                            }
+                        }
+                    }
+                    if let requests = document.data()?["sent_requests"] as? [String] {
+                        DispatchQueue.main.async {
+                            self?.addFriendButton.setTitle("Request Already Sent", for: .normal)  // TODO: DEBUG IT FOR THE TEXT SIZE
+                            self?.addFriendButton.isUserInteractionEnabled = false
+                            self?.addFriendButton.backgroundColor = .darkGray
                         }
                     } else {
                         DispatchQueue.main.async {
@@ -264,7 +359,20 @@ class VisitorViewController: ProfileBaseView {
         }
     }
     
+    
+    // MARK: - HandleAddFriend
+    @objc private func handleAddFriend() {
+        // TODO: send a request through Firebase
+    }
+    
+    // MARK: - HandleSettings
+    @objc private func handleSettings() {
+        // TODO: open a window with selection: add to friends, block user, info???
+        
+    }
+    
     // MARK: - FetchData
+    // TODO: combine this func with setupLabels()
     private func fetchData() {
         let db = Firestore.firestore()
         db.collection("users").document(userId).getDocument { [weak self] (document, error) in
