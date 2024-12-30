@@ -319,6 +319,7 @@ class VisitorViewController: ProfileBaseView {
         if let friendsStackView = inlineBarStackView.arrangedSubviews[1] as? UIStackView,
            let friendsCountLabel = friendsStackView.arrangedSubviews.first as? UILabel {
             guard let userId = Auth.auth().currentUser?.uid else { return }
+            let receiverId = self.userId
             
             let db = Firestore.firestore()
             db.collection("users").document(userId).getDocument { [weak self] (document, error) in
@@ -339,10 +340,12 @@ class VisitorViewController: ProfileBaseView {
                         }
                     }
                     if let requests = document.data()?["sent_requests"] as? [String] {
-                        DispatchQueue.main.async {
-                            self?.addFriendButton.setTitle("Request Already Sent", for: .normal)  // TODO: DEBUG IT FOR THE TEXT SIZE
-                            self?.addFriendButton.isUserInteractionEnabled = false
-                            self?.addFriendButton.backgroundColor = .darkGray
+                        if requests.contains(receiverId) {
+                            DispatchQueue.main.async {
+                                self?.addFriendButton.setTitle("Request Already Sent", for: .normal)  // TODO: DEBUG IT FOR THE TEXT SIZE
+                                self?.addFriendButton.isUserInteractionEnabled = false
+                                self?.addFriendButton.backgroundColor = .darkGray
+                            }
                         }
                     } else {
                         DispatchQueue.main.async {
@@ -362,7 +365,37 @@ class VisitorViewController: ProfileBaseView {
     
     // MARK: - HandleAddFriend
     @objc private func handleAddFriend() {
-        // TODO: send a request through Firebase
+        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        let receiverId = self.userId
+        let db = Firestore.firestore()
+        
+        // Update sender's sent_requests
+        db.collection("users").document(currentUserId).updateData([
+            "sent_requests": FieldValue.arrayUnion([receiverId])
+        ]) { [weak self] error in
+            if let error = error {
+                print("Error updating sent requests: \(error.localizedDescription)")
+                return
+            }
+            
+            // Update receiver's received_requests
+            db.collection("users").document(receiverId).updateData([
+                "received_requests": FieldValue.arrayUnion([currentUserId])
+            ]) { error in
+                if let error = error {
+
+                    print("Error updating received requests: \(error.localizedDescription)")
+                    return
+                }
+                
+                // Update UI on main thread
+                DispatchQueue.main.async {
+                    self?.addFriendButton.setTitle("Request Already Sent", for: .normal)
+                    self?.addFriendButton.isUserInteractionEnabled = false
+                    self?.addFriendButton.backgroundColor = .darkGray
+                }
+            }
+        }
     }
     
     // MARK: - HandleSettings
