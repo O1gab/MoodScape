@@ -184,6 +184,10 @@ class AuthViewController: StartBaseView, ASAuthorizationControllerDelegate, ASAu
         present(registrationView, animated: false)
     }
     
+    
+    /*
+     todo: add google sign in functionality
+     */
     // MARK: - SignInWithGoogle
     /*
     @objc private func signInWithGoogle() {
