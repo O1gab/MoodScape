@@ -8,6 +8,7 @@
 import UIKit
 
 class GenreCell: UICollectionViewCell {
+    
     // MARK: - Properties
     static let identifier = "GenreCell"
     
@@ -20,7 +21,7 @@ class GenreCell: UICollectionViewCell {
         return label
     }()
     
-    // MARK: - Initializers
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(genreLabel)
@@ -35,6 +36,7 @@ class GenreCell: UICollectionViewCell {
         ])
     }
     
+    // MARK: Initializer
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }

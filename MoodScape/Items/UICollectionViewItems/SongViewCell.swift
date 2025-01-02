@@ -63,6 +63,7 @@ class SongViewCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
+    
     func configure(with song: Song) {
         imageView.image = nil
         if let url = URL(string: song.imageUrl ?? "") {

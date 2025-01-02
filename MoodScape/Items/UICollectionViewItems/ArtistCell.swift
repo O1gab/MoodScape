@@ -8,6 +8,7 @@
 import UIKit
 
 class ArtistCell: UICollectionViewCell {
+    
     // MARK: - Properties
     let artistImageView: UIImageView = {
         let imageView = UIImageView()
@@ -48,7 +49,7 @@ class ArtistCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 37.5
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             artistImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -63,7 +64,7 @@ class ArtistCell: UICollectionViewCell {
         ])
     }
 
-    // - MARK: Configure
+    // MARK: - Configure
     func configure(with artist: Artist, isSelected: Bool) {
         artistNameLabel.text = artist.name
         contentView.backgroundColor = isSelected ? UIColor(red: 0/255, green: 104/255, blue: 80/255, alpha: 1.0) : UIColor.clear
