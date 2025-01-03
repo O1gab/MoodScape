@@ -69,7 +69,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         view.translatesAutoresizingMaskIntoConstraints = false
         
         let label = UILabel()
-        label.text = "These recommendations are based on your preferences that you set up before."
+        label.text = "These recommendations are based on your favorite arists."
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.numberOfLines = 0
