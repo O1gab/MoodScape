@@ -1,0 +1,249 @@
+//
+//  NewPlaylistView.swift
+//  MoodScape
+//
+//  Created by Olga Batiunia on 16.09.24.
+//
+
+import UIKit
+
+class NewPlaylistView: UIViewController {
+    
+    // MARK: - Properties
+    var playlistURL: URL?
+    
+    var name: String?
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray.withAlphaComponent(0.9)
+        view.layer.cornerRadius = 25
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let colorView: UIImageView = {
+        let view = UIImageView()
+        view.backgroundColor = .darkGray
+        view.layer.cornerRadius = 25
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let playlistDate: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 22, weight: .heavy)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let confettiView: ConfettiView = {
+        let confettiView = ConfettiView()
+        confettiView.translatesAutoresizingMaskIntoConstraints = false
+        return confettiView
+    }()
+    
+    private let playlistName: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let openSpotifyButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Open on Spotify", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.layer.cornerRadius = 25
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private let spotifyLogo: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "Spotify_Icon"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private let closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), for: .normal)
+        button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    var onCloseButtonTapped: (() -> Void)?
+    
+    // MARK: - ViewDidLoad
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+    }
+    
+    // MARK: ViewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.animateShow()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.messageLabel.startTypingAnimation(label: self?.messageLabel ?? UILabel(), text: "Here's the playlist that reflects your current mood. Enjoy! :)", typingSpeed: 0.05) {
+                self?.confettiView.alpha = 0
+            }
+        }
+    }
+    
+    // MARK: - SetupView
+    private func setupView() {
+        playlistName.text = name
+        view.addSubview(contentView)
+        view.addSubview(confettiView)
+        contentView.addSubview(closeButton)
+        contentView.addSubview(messageLabel)
+        contentView.addSubview(colorView)
+        contentView.addSubview(playlistDate)
+        contentView.addSubview(playlistName)
+        contentView.addSubview(openSpotifyButton)
+        contentView.addSubview(spotifyLogo)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openSpotify))
+        colorView.isUserInteractionEnabled = true
+        colorView.addGestureRecognizer(tapGesture)
+        
+        NSLayoutConstraint.activate([
+            contentView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            contentView.widthAnchor.constraint(equalToConstant: 350),
+            contentView.heightAnchor.constraint(equalToConstant: 550),
+            
+            closeButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            closeButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            messageLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor, constant: 10),
+            messageLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 10),
+            messageLabel.widthAnchor.constraint(equalToConstant: 270),
+            
+            colorView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 90),
+            colorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            colorView.widthAnchor.constraint(equalToConstant: 250),
+            colorView.heightAnchor.constraint(equalToConstant: 250),
+            
+            playlistDate.topAnchor.constraint(equalTo: colorView.topAnchor, constant: 10),
+            playlistDate.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 10),
+            
+            playlistName.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 10),
+            playlistName.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playlistName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            playlistName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10),
+            playlistName.bottomAnchor.constraint(equalTo: openSpotifyButton.topAnchor, constant: -5),
+            
+            openSpotifyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            openSpotifyButton.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 100),
+            openSpotifyButton.widthAnchor.constraint(equalToConstant: 200),
+            openSpotifyButton.heightAnchor.constraint(equalToConstant: 55),
+            
+            spotifyLogo.bottomAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 10),
+            spotifyLogo.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: 0),
+            spotifyLogo.widthAnchor.constraint(equalToConstant: 50),
+            spotifyLogo.heightAnchor.constraint(equalToConstant: 50),
+            
+            confettiView.topAnchor.constraint(equalTo: view.topAnchor),
+            confettiView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            confettiView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            confettiView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            confettiView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+             
+        ])
+        closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
+        openSpotifyButton.addTarget(self, action: #selector(openSpotify), for: .touchUpInside)
+    }
+
+    // MARK: - Configure
+    func configure(with color: UIColor, date: String) {
+        colorView.backgroundColor = color
+        playlistDate.text = date
+        animateBackgroundGradient(from: color, to: color.complementaryColor())
+    }
+    
+    // MARK: - AnimateBackgroundGradient
+    private func animateBackgroundGradient(from dominantColor: UIColor, to complementaryColor: UIColor) {
+        var adjustedDominantColor = dominantColor
+        var adjustedComplementaryColor = complementaryColor
+        
+        if dominantColor.isTooSimilar(to: complementaryColor) {
+            adjustedDominantColor = dominantColor.darker(by: 20)
+            adjustedComplementaryColor = complementaryColor.lighter(by: 20)
+        }
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [adjustedDominantColor.cgColor, adjustedComplementaryColor.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.frame = self.contentView.bounds
+        gradientLayer.cornerRadius = self.contentView.layer.cornerRadius
+        gradientLayer.name = "backgroundGradient"
+        
+        if let oldGradientLayer = self.contentView.layer.sublayers?.first(where: { $0.name == "backgroundGradient" }) {
+            oldGradientLayer.removeFromSuperlayer()
+        }
+        
+        self.contentView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        let animation = CABasicAnimation(keyPath: "colors")
+        animation.fromValue = [adjustedDominantColor.cgColor, adjustedComplementaryColor.cgColor]
+        animation.toValue = [adjustedComplementaryColor.cgColor, adjustedDominantColor.cgColor]
+        animation.duration = 7.0
+        animation.autoreverses = true
+        animation.repeatCount = .infinity
+        gradientLayer.add(animation, forKey: nil)
+    }
+    
+    // MARK: - ClosePopUp
+    @objc private func closePopUp() {
+        animateHide()
+    }
+    
+    // MARK: - AnimateShow
+    private func animateShow() {
+        contentView.transform = CGAffineTransform(translationX: 0, y: view.bounds.height)
+        UIView.animate(withDuration: 0.7, animations: {
+            self.contentView.transform = .identity
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.confettiView.startConfettiAnimation()
+        }
+    }
+    
+    // MARK: AnimateHide
+    private func animateHide() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
+        }) { _ in
+            self.onCloseButtonTapped?()
+        }
+    }
+    
+    // MARK: - OpenSpotify
+    @objc private func openSpotify() {
+        // TODO: implement this
+        guard let url = playlistURL else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+}
