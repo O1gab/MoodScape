@@ -68,11 +68,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         view.layer.zPosition = CGFloat.greatestFiniteMagnitude
         view.translatesAutoresizingMaskIntoConstraints = false
         
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first {
-               window.addSubview(view)
-           }
-        
         let label = UILabel()
         label.text = "These recommendations are based on your preferences that you set up before."
         label.textColor = .white
@@ -217,7 +212,7 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
         view.addSubview(profileButton)
-        view.addSubview(loadingIndicator) // Add loading indicator directly to main view
+        view.addSubview(loadingIndicator)
         
         contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -286,10 +281,10 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             infoButton.heightAnchor.constraint(equalToConstant: 25),
             infoButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -20),
             
-            infoMessage.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 8),
+            infoMessage.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: 5),
             infoMessage.leadingAnchor.constraint(equalTo: recommendationsLabel.leadingAnchor),
             infoMessage.trailingAnchor.constraint(equalTo: infoButton.leadingAnchor, constant: -8),
-            infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 250),
+            infoMessage.widthAnchor.constraint(lessThanOrEqualToConstant: 275),
             
             exploreButton.topAnchor.constraint(equalTo: secondRecommendedSongsCollectionView.bottomAnchor, constant: 100),
             exploreButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
