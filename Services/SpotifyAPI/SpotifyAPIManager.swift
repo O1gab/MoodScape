@@ -564,6 +564,106 @@ class SpotifyAPIManager {
             completion(false)
         }
     }
+    // DOESNT WORK PROPERLY
+    func fetchSimilarSongs(for song: Song, completion: @escaping ([Song]?) -> Void) {
+        guard let accessToken = SpotifyAuthenticationManager.shared.accessToken else {
+            print("No access token available")
+            completion(nil)
+            return
+        }
+        
+        let seedTrackId = song.id
+        let market = "US" // 
+        let limit = 10
+        
+        let urlString = "https://api.spotify.com/v1/recommendations?seed_tracks=\(seedTrackId)&limit=10"
+        
+        guard let url = URL(string: urlString) else {
+            print("Error: Invalid URL for song \(song.name)")
+            completion(nil)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            // Print HTTP status code for debugging
+            if let httpResponse = response as? HTTPURLResponse {
+                print("HTTP Status Code: \(httpResponse.statusCode)")
+            }
+            
+            if let error = error {
+                print("Error fetching similar tracks for the song \(song.name): \(error)")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data else {
+                print("No data returned for the song \(song.name)")
+                completion(nil)
+                return
+            }
+            
+            // Print raw response data for debugging
+            if let rawResponse = String(data: data, encoding: .utf8) {
+                print("Raw Response: \(rawResponse)")
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    // Print JSON structure for debugging
+                    print("JSON Structure: \(json.keys)")
+                    
+                    guard let tracksData = json["tracks"] as? [[String: Any]] else {
+                        print("No tracks found in response")
+                        completion(nil)
+                        return
+                    }
+                    
+                    let tracks = tracksData.compactMap { item -> Song? in
+                        guard let name = item["name"] as? String,
+                              let artists = item["artists"] as? [[String: Any]],
+                              let artistName = artists.first?["name"] as? String,
+                              let id = item["id"] as? String,
+                              let album = item["album"] as? [String: Any],
+                              let images = album["images"] as? [[String: Any]],
+                              let imageURLString = images.first?["url"] as? String,
+                              let releaseDate = album["release_date"] as? String,
+                              let externalUrls = item["external_urls"] as? [String: String],
+                              let spotifyUrl = externalUrls["spotify"] else {
+                            print("Error parsing track item: \(item)")
+                            return nil
+                        }
+                        
+                        return Song(
+                            name: name,
+                            id: id,
+                            artist: artistName,
+                            duration: "",
+                            spotifyUrl: spotifyUrl,
+                            releaseDate: releaseDate,
+                            imageUrl: imageURLString
+                        )
+                    }
+                    
+                    if tracks.isEmpty {
+                        print("No valid tracks parsed from response")
+                    }
+                    
+                    completion(tracks)
+                } else {
+                    print("Error parsing JSON for the song \(song.name)")
+                    completion(nil)
+                }
+            } catch {
+                print("Error parsing JSON for song \(song.name): \(error)")
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
 
     func searchForTrack(artist: String, song: String, completion: @escaping (Song?) -> Void) {
         guard let accessToken = SpotifyAuth.shared.accessToken else {
