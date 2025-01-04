@@ -93,11 +93,25 @@ class SongDetailsViewController: UIViewController {
     private let similarSongsLabel: UILabel = {
         let label = UILabel()
         label.text = "Other similar Songs"
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    private let similarSongsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.register(PreferencesCell.self, forCellWithReuseIdentifier: "SimilarSongCell")
+        return collectionView
+    }()
+    
+    private var similarSongs: [Song] = []
     
     private let spotifyButton: UIButton = {
         let button = UIButton(type: .system)
@@ -176,6 +190,7 @@ class SongDetailsViewController: UIViewController {
         contentView.addSubview(songName)
         contentView.addSubview(releaseDateLabel)
         contentView.addSubview(similarSongsLabel)
+        contentView.addSubview(similarSongsCollectionView)
         contentView.addSubview(spotifyButton)
         contentView.addSubview(favoriteButton)
         contentView.addSubview(shareButton)
@@ -184,6 +199,7 @@ class SongDetailsViewController: UIViewController {
         
         releaseDateLabel.alpha = 0
         divider.opacity = 0
+        similarSongsLabel.alpha = 0
         
         closeButton.addTarget(self, action: #selector(closePopUp), for: .touchUpInside)
         spotifyButton.addTarget(self, action: #selector(openInSpotify), for: .touchUpInside)
@@ -193,6 +209,9 @@ class SongDetailsViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInSpotify))
         songImageView.addGestureRecognizer(tapGesture)
         songImageView.isUserInteractionEnabled = true
+        
+        similarSongsCollectionView.dataSource = self
+        similarSongsCollectionView.delegate = self
     }
     
     // - MARK: SetupConstraints
@@ -236,6 +255,11 @@ class SongDetailsViewController: UIViewController {
             
             similarSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 40),
             similarSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+
+            similarSongsCollectionView.topAnchor.constraint(equalTo: similarSongsLabel.bottomAnchor, constant: 20),
+            similarSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            similarSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            similarSongsCollectionView.heightAnchor.constraint(equalToConstant: 150),
             
             favoriteButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
             favoriteButton.trailingAnchor.constraint(equalTo: spotifyButton.leadingAnchor, constant: -20),
@@ -292,7 +316,11 @@ class SongDetailsViewController: UIViewController {
         }) { _ in
             UIView.animate(withDuration: 0.5, animations: {
                 self.divider.opacity = 1
-            })
+            }) { _ in
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.similarSongsLabel.alpha = 1
+                })
+            }
         }
     }
     
@@ -317,7 +345,6 @@ class SongDetailsViewController: UIViewController {
                         self.artistLabel.textColor = color.contrastingColor()
                         self.songName.textColor = color.contrastingComplementaryColor()
                         self.shareButton.tintColor = color.contrastingColor()
-                        self.similarSongsLabel.tintColor = color.contrastingColor()
                     }
                 }
             }
@@ -327,6 +354,13 @@ class SongDetailsViewController: UIViewController {
         songName.text = "\(song.name)"
         releaseDateLabel.text = "Released: \(song.releaseDate)"
         animateElements()
+        
+        SpotifyAPIManager.shared.fetchSimilarSongs(for: song) { [weak self] songs in
+            DispatchQueue.main.async {
+                self?.similarSongs = songs ?? []
+                self?.similarSongsCollectionView.reloadData()
+            }
+        }
     }
     
     // MARK: AnimateBackgroundGradient
@@ -386,5 +420,28 @@ class SongDetailsViewController: UIViewController {
     @objc private func shareAlbum() {
         let activityViewController = UIActivityViewController(activityItems: [song.spotifyUrl], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
+    }
+}
+
+extension SongDetailsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return similarSongs.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SimilarSongCell", for: indexPath) as! PreferencesCell
+        let song = similarSongs[indexPath.item]
+        cell.configure(with: Artist(name: song.name, id: song.id, imageURL: URL(string: song.imageUrl ?? "")!, imageURLString: ""))
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 100, height: 140)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedSong = similarSongs[indexPath.item]
+        let detailView = SongDetailsViewController(song: selectedSong)
+        present(detailView, animated: true)
     }
 }
