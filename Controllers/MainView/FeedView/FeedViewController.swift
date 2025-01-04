@@ -265,7 +265,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             recommendationsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             recommendationsLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
             
-            // Songs recommendations
             firstRecommendedSongsCollectionView.topAnchor.constraint(equalTo: recommendationsLabel.bottomAnchor, constant: -10),
             firstRecommendedSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             firstRecommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -276,7 +275,6 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             secondRecommendedSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             secondRecommendedSongsCollectionView.heightAnchor.constraint(equalToConstant: 300),
             
-            // Info buttons and labels
             infoButton.leadingAnchor.constraint(equalTo: recommendationsLabel.trailingAnchor, constant: 40),
             infoButton.centerYAnchor.constraint(equalTo: recommendationsLabel.centerYAnchor),
             infoButton.widthAnchor.constraint(equalToConstant: 25),
