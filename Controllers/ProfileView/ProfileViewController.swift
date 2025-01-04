@@ -169,21 +169,33 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return stackView
     }()
     
-    private let bioTextView: UITextView = {
-        let textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.font =  UIFont.systemFont(ofSize: 18, weight: .medium)
-        textView.textColor = .white
-        textView.isEditable = false
-        textView.backgroundColor = UIColor(white: 1, alpha: 0.05)
-        textView.layer.cornerRadius = 12
-        textView.layer.masksToBounds = true
-        textView.layer.borderWidth = 2
-        textView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
-        textView.textAlignment = .left
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textView.isScrollEnabled = true
-        return textView
+    private let favSongView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(red: 89, green: 89, blue: 89, alpha: 0.75)
+        view.layer.cornerRadius = 30
+        view.layer.masksToBounds = true
+        view.layer.borderWidth = 2
+        view.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let spotifyIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "spotify.logo")
+        imageView.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private let favSongLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Add a favorite song to your profile"
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private let registrationDate: UILabel = {
@@ -314,7 +326,9 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         contentView.addSubview(usernameLabel)
         contentView.addSubview(separatorLine)
         contentView.addSubview(inlineBarStackView)
-        contentView.addSubview(bioTextView)
+        contentView.addSubview(favSongView)
+        favSongView.addSubview(spotifyIcon)
+        favSongView.addSubview(favSongLabel)
         contentView.addSubview(preferencesLabel)
         contentView.addSubview(registrationDate)
         contentView.addSubview(shareButton)
@@ -391,12 +405,21 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             inlineBarStackView.heightAnchor.constraint(equalToConstant: 70),
             
-            bioTextView.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
-            bioTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
-            bioTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-            bioTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80),
+            favSongView.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
+            favSongView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
+            favSongView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
+            favSongView.heightAnchor.constraint(equalToConstant: 60),
             
-            registrationDate.topAnchor.constraint(equalTo: bioTextView.bottomAnchor, constant: 20),
+            spotifyIcon.leadingAnchor.constraint(equalTo: favSongView.leadingAnchor, constant: 15),
+            spotifyIcon.centerYAnchor.constraint(equalTo: favSongView.centerYAnchor),
+            spotifyIcon.widthAnchor.constraint(equalToConstant: 24),
+            spotifyIcon.heightAnchor.constraint(equalToConstant: 24),
+            
+            favSongLabel.leadingAnchor.constraint(equalTo: spotifyIcon.trailingAnchor, constant: 12),
+            favSongLabel.trailingAnchor.constraint(equalTo: favSongView.trailingAnchor, constant: -15),
+            favSongLabel.centerYAnchor.constraint(equalTo: favSongView.centerYAnchor),
+            
+            registrationDate.topAnchor.constraint(equalTo: favSongView.bottomAnchor, constant: 20),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
             registrationDate.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
@@ -530,10 +553,10 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
                         print("Registration date not available")
                     }
                     
-                    if let bio = data?["bio"] as? String {
-                        self.bioTextView.text = bio
+                    if let favSong = data?["fav_song"] as? String {
+                        // TODO: DISPLAY THE FAV SONG
                     } else {
-                        self.bioTextView.text = "Set up your bio."
+                        // TODO
                     }
                 }
             } else {
