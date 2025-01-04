@@ -90,6 +90,15 @@ class SongDetailsViewController: UIViewController {
         return divider
     }()
     
+    private let similarSongsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Other similar Songs"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private let spotifyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Open on Spotify", for: .normal)
@@ -166,6 +175,7 @@ class SongDetailsViewController: UIViewController {
         contentView.addSubview(artistLabel)
         contentView.addSubview(songName)
         contentView.addSubview(releaseDateLabel)
+        contentView.addSubview(similarSongsLabel)
         contentView.addSubview(spotifyButton)
         contentView.addSubview(favoriteButton)
         contentView.addSubview(shareButton)
@@ -223,6 +233,9 @@ class SongDetailsViewController: UIViewController {
             
             releaseDateLabel.topAnchor.constraint(equalTo: songName.bottomAnchor, constant: 10),
             releaseDateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            similarSongsLabel.topAnchor.constraint(equalTo: releaseDateLabel.bottomAnchor, constant: 40),
+            similarSongsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             favoriteButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
             favoriteButton.trailingAnchor.constraint(equalTo: spotifyButton.leadingAnchor, constant: -20),
@@ -304,6 +317,7 @@ class SongDetailsViewController: UIViewController {
                         self.artistLabel.textColor = color.contrastingColor()
                         self.songName.textColor = color.contrastingComplementaryColor()
                         self.shareButton.tintColor = color.contrastingColor()
+                        self.similarSongsLabel.tintColor = color.contrastingColor()
                     }
                 }
             }
