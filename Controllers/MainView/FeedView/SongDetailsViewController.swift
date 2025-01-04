@@ -13,6 +13,8 @@ class SongDetailsViewController: UIViewController {
     // MARK: - Properties
     private var song: Song
     
+    let groqClient = GroqAPIClient()
+    
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -157,6 +159,7 @@ class SongDetailsViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+            fetchSimilarSongsWithGroq()
     }
     
     // MARK: ViewWillAppear
@@ -210,8 +213,6 @@ class SongDetailsViewController: UIViewController {
         songImageView.addGestureRecognizer(tapGesture)
         songImageView.isUserInteractionEnabled = true
         
-        similarSongsCollectionView.dataSource = self
-        similarSongsCollectionView.delegate = self
     }
     
     // - MARK: SetupConstraints
@@ -259,7 +260,7 @@ class SongDetailsViewController: UIViewController {
             similarSongsCollectionView.topAnchor.constraint(equalTo: similarSongsLabel.bottomAnchor, constant: 20),
             similarSongsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             similarSongsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            similarSongsCollectionView.heightAnchor.constraint(equalToConstant: 150),
+            similarSongsCollectionView.heightAnchor.constraint(equalToConstant: 350),
             
             favoriteButton.centerYAnchor.constraint(equalTo: spotifyButton.centerYAnchor),
             favoriteButton.trailingAnchor.constraint(equalTo: spotifyButton.leadingAnchor, constant: -20),
@@ -355,12 +356,7 @@ class SongDetailsViewController: UIViewController {
         releaseDateLabel.text = "Released: \(song.releaseDate)"
         animateElements()
         
-        SpotifyAPIManager.shared.fetchSimilarSongs(for: song) { [weak self] songs in
-            DispatchQueue.main.async {
-                self?.similarSongs = songs ?? []
-                self?.similarSongsCollectionView.reloadData()
-            }
-        }
+        fetchSimilarSongsWithGroq()
     }
     
     // MARK: AnimateBackgroundGradient
@@ -421,27 +417,107 @@ class SongDetailsViewController: UIViewController {
         let activityViewController = UIActivityViewController(activityItems: [song.spotifyUrl], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
     }
+    
+    private func fetchSimilarSongsWithGroq() {
+        let prompt = """
+        Generate a JSON object representing a playlist based on the following criteria:
+
+        1. Selected song: \(song.name)
+        2. Artist of the selected song: \(song.artist)
+
+        Guidelines:
+        - Find similar songs to this one
+        - Give unique answers
+
+        The JSON object should follow this schema:
+        {
+          "song": [
+            {
+              "artist": "string",
+              "name": "string",
+              "id": "string",
+              "spotify_image": "string"
+            }
+          ]
+        }
+
+        Provide the complete JSON object with 10 songs, ensuring all artist and song fields including song id taken from Spotify and image are filled.
+        """
+        
+        groqClient.sendPrompt(prompt) { [weak self] result in
+            switch result {
+            case .success(let response):
+                if let jsonString = self?.extractJSON(from: response) {
+                    self?.processSimilarSongs(jsonString)
+                }
+            case .failure(let error):
+                print("Error getting similar songs: \(error)")
+            }
+        }
+    }
+
+    private func extractJSON(from response: String) -> String? {
+        guard let startIndex = response.range(of: "{")?.lowerBound,
+              let endIndex = response.range(of: "}", options: .backwards)?.upperBound else {
+            print("Error: Unable to locate JSON boundaries.")
+            return nil
+        }
+        
+        let jsonSubstring = response[startIndex..<endIndex]
+        return String(jsonSubstring)
+    }
+
+    private func processSimilarSongs(_ jsonString: String) {
+        guard let jsonData = jsonString.data(using: .utf8) else { return }
+        
+        do {
+            if let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
+               let songs = json["song"] as? [[String: Any]] {
+                
+                similarSongs = songs.compactMap { songData -> Song? in
+                    guard let artist = songData["artist"] as? String,
+                          let name = songData["name"] as? String,
+                          let id = songData["id"] as? String,
+                          let imageUrl = songData["spotify_image"] as? String else {
+                        return nil
+                    }
+                    
+                    return Song(
+                        name: name,
+                        id: id,
+                        artist: artist,
+                        duration: "",
+                        spotifyUrl: "https://open.spotify.com/track/\(id)",
+                        releaseDate: "",
+                        imageUrl: imageUrl
+                    )
+                }
+                
+                DispatchQueue.main.async { [weak self] in
+                    self?.similarSongsCollectionView.reloadData()
+                }
+            }
+        } catch {
+            print("Error parsing JSON: \(error)")
+        }
+    }
 }
 
-extension SongDetailsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return similarSongs.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SimilarSongCell", for: indexPath) as! PreferencesCell
-        let song = similarSongs[indexPath.item]
-        cell.configure(with: Artist(name: song.name, id: song.id, imageURL: URL(string: song.imageUrl ?? "")!, imageURLString: ""))
-        return cell
-    }
-    
+extension SongDetailsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 140)
+        let width = (collectionView.bounds.width - 30) / 2 // 2 items per row with spacing
+        return CGSize(width: width, height: width * 1.3)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedSong = similarSongs[indexPath.item]
-        let detailView = SongDetailsViewController(song: selectedSong)
-        present(detailView, animated: true)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
     }
 }
