@@ -58,6 +58,7 @@
 		766FD1512C81390100D9ACF6 /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD1502C81390100D9ACF6 /* UILabelExtensions.swift */; };
 		766FD1532C81554700D9ACF6 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD1522C81554700D9ACF6 /* RegistrationViewController.swift */; };
 		766FD1552C836EBE00D9ACF6 /* newLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FD1542C836EBE00D9ACF6 /* newLogin.swift */; };
+		767419122D29F74A0075EB94 /* SimilarSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767419112D29F74A0075EB94 /* SimilarSongCell.swift */; };
 		7678E1942C99F3C4008A24D5 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1932C99F3C4008A24D5 /* ConfettiView.swift */; };
 		7678E1962C9A2BF5008A24D5 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1952C9A2BF5008A24D5 /* Playlist.swift */; };
 		7678E1992C9A2CD0008A24D5 /* PlaylistStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678E1982C9A2CD0008A24D5 /* PlaylistStorage.swift */; };
@@ -170,6 +171,7 @@
 		766FD1502C81390100D9ACF6 /* UILabelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		766FD1522C81554700D9ACF6 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		766FD1542C836EBE00D9ACF6 /* newLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newLogin.swift; sourceTree = "<group>"; };
+		767419112D29F74A0075EB94 /* SimilarSongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarSongCell.swift; sourceTree = "<group>"; };
 		7678E1932C99F3C4008A24D5 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		7678E1952C9A2BF5008A24D5 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		7678E1982C9A2CD0008A24D5 /* PlaylistStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistStorage.swift; sourceTree = "<group>"; };
@@ -390,6 +392,7 @@
 		768536CE2C7A8B9000C35FF8 /* UICollectionViewItems */ = {
 			isa = PBXGroup;
 			children = (
+				767419112D29F74A0075EB94 /* SimilarSongCell.swift */,
 				768536CA2C7A893000C35FF8 /* GenreCell.swift */,
 				768536D12C7AA8AD00C35FF8 /* ArtistCell.swift */,
 				7616BD7C2C7E81B00083D227 /* SongViewCell.swift */,
@@ -747,6 +750,7 @@
 				7616BD752C7E33800083D227 /* CustomTabBar.swift in Sources */,
 				768536D42C7AA8DC00C35FF8 /* Artist.swift in Sources */,
 				76AAD3272C72241A00CBE3D8 /* ImageExtensions.swift in Sources */,
+				767419122D29F74A0075EB94 /* SimilarSongCell.swift in Sources */,
 				766485662C6C490400AA050A /* MainBaseView.swift in Sources */,
 				764E2A2E2C78229A00785104 /* StartSetupViewController.swift in Sources */,
 				7628AAC82C8642E80021433F /* PreferencesCell.swift in Sources */,
