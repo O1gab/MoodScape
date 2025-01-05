@@ -88,6 +88,7 @@ class UserSetupView: SetupBaseView {
                         UIView.animate(withDuration: 2.0) {
                             self?.textField.alpha = 1.0
                             self?.submitButton.alpha = 1.0
+                            self?.skipButton.alpha = 1.0
                     }
                 }
             }
@@ -191,9 +192,7 @@ class UserSetupView: SetupBaseView {
             
             if (self?.currentQuestionIndex == 1) {
                 DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
-                    UIView.animate(withDuration: 2.0) {
-                        self?.skipButton.alpha = 1.0
-                    }
+                        // TODO: fix it
                 }
             }
             
