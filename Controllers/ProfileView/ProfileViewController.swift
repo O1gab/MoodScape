@@ -708,6 +708,11 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     private func loadProfileImage() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
+        // Check cache first
+        if let cachedImage = ImageCache.shared.getImage(forKey: userId) {
+            profileImage.image = cachedImage
+            return
+        }
         let storageRef = Storage.storage().reference()
         let profileImageRef = storageRef.child("profile_images/\(userId)/profile.jpg")
         
@@ -723,6 +728,9 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             }
             
             if let imageData = data, let image = UIImage(data: imageData) {
+                // Cache the image
+                ImageCache.shared.setImage(image, forKey: userId)
+                
                 DispatchQueue.main.async {
                     self.profileImage.image = image
                 }
