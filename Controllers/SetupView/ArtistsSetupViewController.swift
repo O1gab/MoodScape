@@ -249,7 +249,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         let isSelected = selectedArtists.contains(where: { $0.name == artist.name})
         cell.configure(with: artist, isSelected: isSelected)
         
-        let cachedImage = ImageCache.shared.image(forKey: artist.imageURLString)
+        let cachedImage = ImageCache.shared.getImage(forKey: artist.imageURLString)
          
         // Prevent incorrect image assignment by resetting the image view initially
         cell.artistImageView.image = nil
