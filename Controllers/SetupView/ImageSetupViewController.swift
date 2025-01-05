@@ -196,6 +196,7 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
                 DispatchQueue.main.async {
                     self?.profileImageView.image = UIImage(systemName: "person.crop.circle")
                 }
+                
                 return
             }
             
