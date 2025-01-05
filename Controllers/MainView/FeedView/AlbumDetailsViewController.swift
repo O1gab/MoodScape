@@ -69,10 +69,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         label.textColor = .systemGreen
         label.textAlignment = .center
-        label.numberOfLines = 0
-        label.minimumScaleFactor = 0.5
-        label.lineBreakMode = .byWordWrapping
-        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -249,6 +247,8 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             
             albumName.topAnchor.constraint(equalTo: artistLabel.bottomAnchor, constant: 10),
             albumName.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            albumName.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 10),
+            albumName.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -10),
             
             releaseDateLabel.topAnchor.constraint(equalTo: albumName.bottomAnchor, constant: 10),
             releaseDateLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
