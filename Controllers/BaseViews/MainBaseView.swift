@@ -7,6 +7,7 @@
 import UIKit
 import Gifu
 import FirebaseAuth
+import FirebaseStorage
 
 class MainBaseView: UIViewController {
     
@@ -81,12 +82,38 @@ class MainBaseView: UIViewController {
     
     // MARK: - SetupProfileButton
     private func setupProfileButton() {
-        if let imageData = UserDefaults.standard.data(forKey: "profileImage"),
-           let image = UIImage(data: imageData) {
-            profileButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-        } else {
-            profileButton.setImage(UIImage(systemName: "person.circle.fill"), for: .normal)
-            profileButton.tintColor = .white
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        // Check cache first
+        if let cachedImage = ImageCache.shared.getImage(forKey: userId) {
+            profileButton.setImage(cachedImage.withRenderingMode(.alwaysOriginal), for: .normal)
+            return
+        }
+        
+        // If not in cache, load from Firebase Storage
+        let storageRef = Storage.storage().reference()
+        let profileImageRef = storageRef.child("profile_images/\(userId)/profile.jpg")
+        
+        // Set default image while loading
+        profileButton.setImage(UIImage(systemName: "person.circle.fill"), for: .normal)
+        profileButton.tintColor = .white
+        
+        profileImageRef.getData(maxSize: 5 * 1024 * 1024) { [weak self] data, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Error downloading profile image: \(error)")
+                return
+            }
+            
+            if let imageData = data, let image = UIImage(data: imageData) {
+                // Cache the image
+                ImageCache.shared.setImage(image, forKey: userId)
+                
+                DispatchQueue.main.async {
+                    self.profileButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+                }
+            }
         }
     }
     
