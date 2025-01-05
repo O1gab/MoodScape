@@ -8,6 +8,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseStorage
 
 class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -705,10 +706,27 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     // MARK: LoadProfileImage
     private func loadProfileImage() {
-        if let imageData = UserDefaults.standard.data(forKey: "profileImage") {
-            profileImage.image = UIImage(data: imageData)
-        } else {
-            profileImage.image = UIImage(systemName: "person.crop.circle")
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let storageRef = Storage.storage().reference()
+        let profileImageRef = storageRef.child("profile_images/\(userId)/profile.jpg")
+        
+        profileImageRef.getData(maxSize: 5 * 1024 * 1024) { [weak self] data, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Error downloading profile image: \(error)")
+                DispatchQueue.main.async {
+                    self.profileImage.image = UIImage(systemName: "person.crop.circle")
+                }
+                return
+            }
+            
+            if let imageData = data, let image = UIImage(data: imageData) {
+                DispatchQueue.main.async {
+                    self.profileImage.image = image
+                }
+            }
         }
     }
     
