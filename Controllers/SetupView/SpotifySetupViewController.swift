@@ -45,6 +45,7 @@ class SpotifySetupView: SetupBaseView, SFSafariViewControllerDelegate {
         button.backgroundColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
         button.layer.cornerRadius = 30
         button.alpha = 0
+        button.addShadow()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

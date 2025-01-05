@@ -42,7 +42,7 @@ class UserSetupView: SetupBaseView {
         field.textColor = .white
         field.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 0.75).cgColor
         field.layer.borderWidth = 2
-        field.layer.cornerRadius = 15
+        field.layer.cornerRadius = 20
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: field.frame.height))
         field.leftViewMode = .always
         field.alpha = 0
