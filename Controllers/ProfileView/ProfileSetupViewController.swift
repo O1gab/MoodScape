@@ -9,6 +9,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseStorage
 
 class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
 
@@ -341,26 +342,98 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
     
     // MARK: - ImagePickerController
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+        
         if let selectedImage = info[.originalImage] as? UIImage {
-            profileImage.image = selectedImage
             saveProfileImage(image: selectedImage)
         }
-        dismiss(animated: true, completion: nil)
     }
     
     // MARK: SaveProfileImage
     private func saveProfileImage(image: UIImage) {
-        if let imageData = image.jpegData(compressionQuality: 0.8) {
-            UserDefaults.standard.set(imageData, forKey: "profileImage")
+        guard let userId = Auth.auth().currentUser?.uid,
+              let imageData = image.jpegData(compressionQuality: 0.75) else { return }
+        
+        // Update cache immediately
+        ImageCache.shared.setImage(image, forKey: userId)
+        
+        let storageRef = Storage.storage().reference()
+        let profileImageRef = storageRef.child("profile_images/\(userId)/profile.jpg")
+        
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        
+        // Show loading indicator
+        let loadingAlert = UIAlertController(title: nil, message: "Uploading...", preferredStyle: .alert)
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.style = .medium
+        loadingIndicator.startAnimating()
+        loadingAlert.view.addSubview(loadingIndicator)
+        present(loadingAlert, animated: true)
+        
+        profileImageRef.putData(imageData, metadata: metadata) { [weak self] metadata, error in
+            // Dismiss loading indicator
+            DispatchQueue.main.async {
+                self?.dismiss(animated: true)
+            }
+            
+            if let error = error {
+                print("Error uploading profile image: \(error)")
+                DispatchQueue.main.async {
+                    self?.showError("Failed to upload image")
+                }
+                return
+            }
+            
+            // Update UI after successful upload
+            DispatchQueue.main.async {
+                self?.profileImage.image = image
+            }
         }
     }
     
     // MARK: LoadProfileImage
     private func loadProfileImage() {
-        if let imageData = UserDefaults.standard.data(forKey: "profileImage") {
-            profileImage.image = UIImage(data: imageData)
-        } else {
-            profileImage.image = UIImage(systemName: "person.circle")
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        // Check cache first
+        if let cachedImage = ImageCache.shared.getImage(forKey: userId) {
+            profileImage.image = cachedImage
+            return
         }
+        
+        // If not in cache, load from Firebase Storage
+        let storageRef = Storage.storage().reference()
+        let profileImageRef = storageRef.child("profile_images/\(userId)/profile.jpg")
+        
+        // Set default image while loading
+        profileImage.image = UIImage(systemName: "person.circle")
+        profileImage.tintColor = .white
+        
+        profileImageRef.getData(maxSize: 5 * 1024 * 1024) { [weak self] data, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Error downloading profile image: \(error)")
+                return
+            }
+            
+            if let imageData = data, let image = UIImage(data: imageData) {
+                // Cache the image
+                ImageCache.shared.setImage(image, forKey: userId)
+                
+                DispatchQueue.main.async {
+                    self.profileImage.image = image
+                }
+            }
+        }
+    }
+    
+    // Add helper function for error alerts
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }
