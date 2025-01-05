@@ -171,11 +171,12 @@ class VisitorViewController: ProfileBaseView {
     }()
     
     private let favArtistsLabel: UILabel = {
-        let label = UILabel()
+        let label = GradientLabel()
         label.text = "User's Favorite Artists"
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .left
         label.textColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        label.gradientColors = [UIColor(red: 0/255.0, green: 104/255.0, blue: 80/255.0, alpha: 1.0), UIColor.darkGray, UIColor.black]
         label.alpha = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -406,7 +407,6 @@ class VisitorViewController: ProfileBaseView {
     }
     
     private func loadImage(userId: String) {
-        
         let storageRef = Storage.storage().reference()
         let profileImageRef = storageRef.child("profile_images/\(userId)/profile.jpg")
         
