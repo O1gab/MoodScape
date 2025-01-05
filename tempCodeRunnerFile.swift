@@ -1,1 +1,0 @@
-make the album AlbumDetailsViewController be scrollable. make the table with top 3 songs of the album til the bottom lower than the screen
