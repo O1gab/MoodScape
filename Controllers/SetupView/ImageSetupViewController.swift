@@ -7,6 +7,8 @@
 
 import UIKit
 import Gifu
+import FirebaseAuth
+import FirebaseStorage
 
 class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -154,17 +156,53 @@ class ImageSetupView: SetupBaseView, UIImagePickerControllerDelegate, UINavigati
     
     // - MARK: SaveProfileImage
     private func saveProfileImage(image: UIImage) {
-        if let imageData = image.jpegData(compressionQuality: 0.8) {
-            UserDefaults.standard.set(imageData, forKey: "profileImage")
+        guard let imageData = image.jpegData(compressionQuality: 0.75),
+              let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let storageRef = Storage.storage().reference()
+        print("storage ref: \(storageRef)")
+        let profileImageRef = storageRef.child("profile_images/\(userId).jpg")
+        
+        // Upload the image
+        profileImageRef.putData(imageData, metadata: nil) { [weak self] metadata, error in
+            if let error = error {
+                print("Error uploading image: \(error)")
+                return
+            }
+            
+            // Get download URL
+            profileImageRef.downloadURL { url, error in
+                if let downloadURL = url {
+                    print("Image uploaded successfully: \(downloadURL)")
+                    DispatchQueue.main.async {
+                        self?.profileImageView.image = image
+                    }
+                }
+            }
         }
     }
     
     // - MARK: LoadProfileImage
     private func loadProfileImage() {
-        if let imageData = UserDefaults.standard.data(forKey: "profileImage") {
-            profileImageView.image = UIImage(data: imageData)
-        } else {
-            profileImageView.image = UIImage(systemName: "person.crop.circle")
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let storageRef = Storage.storage().reference()
+        let profileImageRef = storageRef.child("profile_images/\(userId).jpg")
+        
+        profileImageRef.getData(maxSize: 5 * 1024 * 1024) { [weak self] data, error in
+            if let error = error {
+                print("Error downloading image: \(error)")
+                DispatchQueue.main.async {
+                    self?.profileImageView.image = UIImage(systemName: "person.crop.circle")
+                }
+                return
+            }
+            
+            if let imageData = data, let image = UIImage(data: imageData) {
+                DispatchQueue.main.async {
+                    self?.profileImageView.image = image
+                }
+            }
         }
     }
     
