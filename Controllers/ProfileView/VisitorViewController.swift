@@ -371,30 +371,62 @@ class VisitorViewController: ProfileBaseView {
         let receiverId = self.userId
         let db = Firestore.firestore()
         
-        // Update sender's sent_requests
-        db.collection("users").document(currentUserId).updateData([
-            "sent_requests": FieldValue.arrayUnion([receiverId])
-        ]) { [weak self] error in
+        // First check if they're already friends or if request is pending
+        db.collection("users").document(currentUserId).getDocument { [weak self] (document, error) in
+            guard let self = self else { return }
+            
             if let error = error {
-                print("Error updating sent requests: \(error.localizedDescription)")
+                print("Error checking friend status: \(error.localizedDescription)")
                 return
             }
             
-            // Update receiver's received_requests
-            db.collection("users").document(receiverId).updateData([
-                "received_requests": FieldValue.arrayUnion([currentUserId])
-            ]) { error in
-                if let error = error {
-                    
-                    print("Error updating received requests: \(error.localizedDescription)")
+            if let document = document, document.exists {
+                let data = document.data()
+                let friends = data?["friends"] as? [String] ?? []
+                let sentRequests = data?["sent_requests"] as? [String] ?? []
+                
+                if friends.contains(self.userId) {
+                    DispatchQueue.main.async {
+                        self.addFriendButton.setTitle("Already Friends", for: .normal)
+                        self.addFriendButton.isEnabled = false
+                        self.addFriendButton.backgroundColor = .darkGray
+                    }
                     return
                 }
                 
-                // Update UI on main thread
-                DispatchQueue.main.async {
-                    self?.addFriendButton.setTitle("Request Already Sent", for: .normal)
-                    self?.addFriendButton.isUserInteractionEnabled = false
-                    self?.addFriendButton.backgroundColor = .darkGray
+                if sentRequests.contains(self.userId) {
+                    DispatchQueue.main.async {
+                        self.addFriendButton.setTitle("Request Sent", for: .normal)
+                        self.addFriendButton.isEnabled = false
+                        self.addFriendButton.backgroundColor = .darkGray
+                    }
+                    return
+                }
+                
+                // If not friends and no pending request, send friend request
+                db.collection("users").document(currentUserId).updateData([
+                    "sent_requests": FieldValue.arrayUnion([self.userId])
+                ]) { error in
+                    if let error = error {
+                        print("Error updating sent requests: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    // Update receiver's received_requests
+                    db.collection("users").document(self.userId).updateData([
+                        "received_requests": FieldValue.arrayUnion([currentUserId])
+                    ]) { error in
+                        if let error = error {
+                            print("Error updating received requests: \(error.localizedDescription)")
+                            return
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.addFriendButton.setTitle("Request Sent", for: .normal)
+                            self.addFriendButton.isEnabled = false
+                            self.addFriendButton.backgroundColor = .darkGray
+                        }
+                    }
                 }
             }
         }
@@ -421,7 +453,6 @@ class VisitorViewController: ProfileBaseView {
                 DispatchQueue.main.async {
                     self.profileImage.image = UIImage(systemName: "person.crop.circle")
                 }
-                return
             }
             
             if let imageData = data, let image = UIImage(data: imageData) {
