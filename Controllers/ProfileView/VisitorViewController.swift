@@ -9,6 +9,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseStorage
 
 class VisitorViewController: ProfileBaseView {
     
@@ -94,7 +95,7 @@ class VisitorViewController: ProfileBaseView {
         favouritesStackView.distribution = .fill
         favouritesStackView.spacing = 4
         favouritesStackView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         let favouritesCountLabel = UILabel()
         favouritesCountLabel.text = "0"
         favouritesCountLabel.textColor = .white
@@ -116,7 +117,7 @@ class VisitorViewController: ProfileBaseView {
         friendsStackView.distribution = .fill
         friendsStackView.spacing = 4
         friendsStackView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         let friendsCountLabel = UILabel()
         friendsCountLabel.text = "-"
         friendsCountLabel.textColor = .white
@@ -383,7 +384,7 @@ class VisitorViewController: ProfileBaseView {
                 "received_requests": FieldValue.arrayUnion([currentUserId])
             ]) { error in
                 if let error = error {
-
+                    
                     print("Error updating received requests: \(error.localizedDescription)")
                     return
                 }
@@ -404,6 +405,33 @@ class VisitorViewController: ProfileBaseView {
         
     }
     
+    private func loadImage(userId: String) {
+        
+        let storageRef = Storage.storage().reference()
+        let profileImageRef = storageRef.child("profile_images/\(userId)/profile.jpg")
+        
+        // Show loading state
+        profileImage.image = UIImage(systemName: "person.crop.circle")
+        
+        profileImageRef.getData(maxSize: 5 * 1024 * 1024) { [weak self] data, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Error downloading visitor profile image: \(error)")
+                DispatchQueue.main.async {
+                    self.profileImage.image = UIImage(systemName: "person.crop.circle")
+                }
+                return
+            }
+            
+            if let imageData = data, let image = UIImage(data: imageData) {
+                DispatchQueue.main.async {
+                    self.profileImage.image = image
+                }
+            }
+        }
+    }
+    
     // MARK: - FetchData
     // TODO: combine this func with setupLabels()
     private func fetchData() {
@@ -414,19 +442,19 @@ class VisitorViewController: ProfileBaseView {
                 return
             }
             
-            guard let document = document, document.exists,
-                  let data = document.data() else {
-                print("Document does not exist")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                if let name = data["name"] as? String {
-                    self?.nameLabel.text = name
-                }
-                
-                if let username = data["username"] as? String {
-                    self?.usernameLabel.text = "@" + username
+            if let document = document, document.exists {
+                let data = document.data()
+                DispatchQueue.main.async {
+                    
+                    if let name = data?["name"] as? String {
+                        self?.nameLabel.text = name
+                    }
+                    if let username = data?["username"] as? String {
+                        self?.usernameLabel.text = "@" + username
+                    }
+                    
+                    // Load profile image
+                    self?.loadImage(userId: self?.userId ?? "")
                 }
             }
         }
