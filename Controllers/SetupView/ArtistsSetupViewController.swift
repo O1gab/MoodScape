@@ -12,6 +12,7 @@ import FirebaseFirestore
 
 class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    // MARK: - Properties
     private var currentIndex: Int = 0
     private var endIndex: Int = 0
     private var genres: [String] = []
@@ -66,14 +67,14 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         return button
     }()
     
-    // - MARK: ViewDidLoad
+    // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
     }
     
-    // - MARK: ViewWillAppear
+    // MARK: ViewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchSelectedGenres { [weak self] genres in
@@ -85,7 +86,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
     }
     
-    // - MARK: ViewDidAppear
+    // MARK: ViewDidAppear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
             
@@ -96,7 +97,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
     }
     
-    // - MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         appLabel.alpha = 0
         view.addSubview(gifGradient)
@@ -114,7 +115,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         submitButton.addTarget(self, action: #selector(handleSubmit), for: .touchUpInside)
     }
     
-    // - MARK: SetupConstraints
+    // MARK: SetupConstraints
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             gifGradient.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -138,7 +139,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         ])
     }
     
-    // - MARK: DisplayNextGenre
+    // MARK: - DisplayNextGenre
     private func displayNextGenre() {
         let genre = genres[currentIndex]
         selectedGenre = genre
@@ -157,7 +158,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
     }
     
-    // - MARK: FetchSelectedGenres
+    // MARK: - FetchSelectedGenres
     func fetchSelectedGenres(completion: @escaping ([String]?) -> Void) {
         let db = Firestore.firestore()
         let userId = Auth.auth().currentUser?.uid
@@ -179,7 +180,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
     }
     
-    // - MARK: FormatGenres
+    // MARK: - FormatGenres
     func formatGenres(_ genres: [String]) -> String {
         var formattedString = ""
         for (index, genre) in genres.enumerated() {
@@ -195,7 +196,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         return formattedString
     }
     
-    // - MARK: HandleSubmit
+    // MARK: - HandleSubmit
     @objc private func handleSubmit() {
         self.currentIndex += 1
         guard currentIndex <= endIndex else {
@@ -209,7 +210,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
     }
     
-    // - MARK: SaveSelectedArtists
+    // MARK: - SaveSelectedArtists
     private func saveSelectedArtists() {
         let db = Firestore.firestore()
         guard let userId = Auth.auth().currentUser?.uid else { return }
@@ -227,7 +228,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
     }
     
-    // - MARK: RevealCollectionView
+    // MARK: - RevealCollectionView
     private func revealCollectionView() {
         collectionView.isHidden = false
         
@@ -236,7 +237,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         }
     }
     
-    // MARK: - UICollectionViewDataSource
+    // MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return artists.count
     }
@@ -275,7 +276,7 @@ class ArtistsSetupView: SetupBaseView, UICollectionViewDelegate, UICollectionVie
         return cell
     }
     
-    // MARK: - UICollectionViewDelegate
+    // MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let artist = artists[indexPath.item]
         
