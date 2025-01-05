@@ -414,7 +414,7 @@ class AlbumDetailsViewController: UIViewController, UITableViewDataSource, UITab
             self.favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
         }
         
-        let feedback = FavoritesManager.shared.isFavoriteAlbum(album) ? "Added to favorites" : "Removed from favorites"
+        let feedback = FavoritesManager.shared.isFavoriteAlbum(album) ? "Added to Favorites" : "Removed from Favorites"
         let alert = UIAlertController(title: nil, message: feedback, preferredStyle: .alert)
         self.present(alert, animated: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
