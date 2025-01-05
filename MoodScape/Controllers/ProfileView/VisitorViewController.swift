@@ -338,6 +338,10 @@ class VisitorViewController: ProfileBaseView {
                                 self?.addFriendButton.backgroundColor = .darkGray
                             }
                         }
+                    } else {
+                        DispatchQueue.main.async {
+                            friendsCountLabel.text = "0"
+                        }
                     }
                     if let requests = document.data()?["sent_requests"] as? [String] {
                         if requests.contains(receiverId) {
@@ -346,10 +350,6 @@ class VisitorViewController: ProfileBaseView {
                                 self?.addFriendButton.isUserInteractionEnabled = false
                                 self?.addFriendButton.backgroundColor = .darkGray
                             }
-                        }
-                    } else {
-                        DispatchQueue.main.async {
-                            friendsCountLabel.text = "0"
                         }
                     }
                 } else {
