@@ -154,6 +154,9 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         return viewController
     }()
     
+    private var recommendedSongsRetryCount = 0
+    private let maxRetries = 3
+    
     // MARK: - ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -200,13 +203,14 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
         }
     }
     
+    // MARK: ViewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         infoButton.layoutIfNeeded()
         infoMessage.layoutIfNeeded()
     }
     
-    // MARK: SetupView
+    // MARK: - SetupView
     private func setupView() {
         scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -378,21 +382,37 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
     
     // MARK: FetchRecommendedSongs (you may also like)
     private func fetchRecommendedSongs(completion: @escaping () -> Void) {
+        guard recommendedSongsRetryCount < maxRetries else {
+            print("Max retries reached for recommended songs")
+            showError("Failed to load recommendations after \(maxRetries) attempts")
+            completion()
+            return
+        }
+        
         fetchSelectedArtists { [weak self] artistNames in
+            guard let self = self else { return }
+            
             guard let artistNames = artistNames, !artistNames.isEmpty else {
-                self?.showError("No artists selected")
-                completion()
+                self.recommendedSongsRetryCount += 1
+                print("Retry \(self.recommendedSongsRetryCount): No artists found")
+                
+                // Retry after a delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    self.fetchRecommendedSongs(completion: completion)
+                }
                 return
             }
             
             let group = DispatchGroup()
             var allSongs: [Song] = []
+            var failedArtists = 0
             
             for artistName in artistNames {
                 group.enter()
                 
                 SpotifyAPIManager.shared.fetchArtistID(for: artistName) { artistID in
                     guard let artistID = artistID else {
+                        failedArtists += 1
                         group.leave()
                         return
                     }
@@ -400,6 +420,8 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
                     SpotifyAPIManager.shared.fetchTopTracks(for: artistID) { songs in
                         if let songs = songs {
                             allSongs.append(contentsOf: songs)
+                        } else {
+                            failedArtists += 1
                         }
                         group.leave()
                     }
@@ -407,11 +429,29 @@ class FeedViewController: MainBaseView, UICollectionViewDataSource, UICollection
             }
             
             group.notify(queue: .main) {
+                if allSongs.isEmpty || (failedArtists == artistNames.count) {
+                    // All artists failed, retry
+                    self.recommendedSongsRetryCount += 1
+                    print("Retry \(self.recommendedSongsRetryCount): Failed to fetch songs")
+                    
+                    if self.recommendedSongsRetryCount < self.maxRetries {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            self.fetchRecommendedSongs(completion: completion)
+                        }
+                    } else {
+                        self.showError("Failed to load recommendations")
+                        completion()
+                    }
+                    return
+                }
+                
+                // Success - reset retry count and update collections
+                self.recommendedSongsRetryCount = 0
                 let shuffledSongs = Array(allSongs.shuffled().prefix(30))
-                self?.firstRecommendedSongs = Array(shuffledSongs.prefix(15))
-                self?.secondRecommendedSongs = Array(shuffledSongs.dropFirst(15))
-                self?.firstRecommendedSongsCollectionView.reloadData()
-                self?.secondRecommendedSongsCollectionView.reloadData()
+                self.firstRecommendedSongs = Array(shuffledSongs.prefix(15))
+                self.secondRecommendedSongs = Array(shuffledSongs.dropFirst(15))
+                self.firstRecommendedSongsCollectionView.reloadData()
+                self.secondRecommendedSongsCollectionView.reloadData()
                 completion()
             }
         }
