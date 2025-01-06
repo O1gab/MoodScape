@@ -170,21 +170,18 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         return stackView
     }()
     
-    private let bioTextView: UITextView = {
-        let textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.font =  UIFont.systemFont(ofSize: 18, weight: .medium)
-        textView.textColor = .white
-        textView.isEditable = false
-        textView.backgroundColor = UIColor(white: 1, alpha: 0.05)
-        textView.layer.cornerRadius = 12
-        textView.layer.masksToBounds = true
-        textView.layer.borderWidth = 2
-        textView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
-        textView.textAlignment = .left
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textView.isScrollEnabled = true
-        return textView
+    private let spotifySong: SpotifyLinkView = {
+        let view = SpotifyLinkView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let editSongButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "pencil.circle.fill"), for: .normal)
+        button.tintColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     private let registrationDate: UILabel = {
@@ -315,7 +312,8 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         contentView.addSubview(usernameLabel)
         contentView.addSubview(separatorLine)
         contentView.addSubview(inlineBarStackView)
-        contentView.addSubview(bioTextView)
+        contentView.addSubview(spotifySong)
+        contentView.addSubview(editSongButton)
         contentView.addSubview(preferencesLabel)
         contentView.addSubview(registrationDate)
         contentView.addSubview(shareButton)
@@ -340,6 +338,8 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         }
         
         setupCollectionView()
+        
+        editSongButton.addTarget(self, action: #selector(handleEditSong), for: .touchUpInside)
     }
     
     // - MARK: SetupConstraints
@@ -392,12 +392,17 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             inlineBarStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             inlineBarStackView.heightAnchor.constraint(equalToConstant: 70),
             
-            bioTextView.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
-            bioTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
-            bioTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -35),
-            bioTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80),
+            spotifySong.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
+            spotifySong.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 35),
+            spotifySong.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -35),
+            spotifySong.heightAnchor.constraint(equalToConstant: 44),
             
-            registrationDate.topAnchor.constraint(equalTo: bioTextView.bottomAnchor, constant: 20),
+            editSongButton.centerYAnchor.constraint(equalTo: spotifySong.centerYAnchor),
+            editSongButton.trailingAnchor.constraint(equalTo: spotifySong.trailingAnchor, constant: -10),
+            editSongButton.widthAnchor.constraint(equalToConstant: 24),
+            editSongButton.heightAnchor.constraint(equalToConstant: 24),
+            
+            registrationDate.topAnchor.constraint(equalTo: spotifySong.bottomAnchor, constant: 20),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
             registrationDate.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
@@ -532,9 +537,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
                     }
                     
                     if let bio = data?["bio"] as? String {
-                        self.bioTextView.text = bio
-                    } else {
-                        self.bioTextView.text = "Set up your bio."
+                        // TODO: FETCH THE SPOTIFY SONG
                     }
                 }
             } else {
@@ -793,5 +796,67 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     // - MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedArtist = selectedArtists[indexPath.item]
+    }
+    
+    // MARK: HandleEditSong
+    @objc private func handleEditSong() {
+        let alert = UIAlertController(title: "Add Spotify Song", message: "Enter Spotify song link", preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Spotify song URL"
+        }
+        
+        let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
+            guard let songUrl = alert.textFields?.first?.text else { return }
+            self?.saveSongToProfile(songUrl)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        alert.addAction(addAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
+    }
+    
+    // MARK: SaveSongToProfile
+    private func saveSongToProfile(_ songUrl: String) {
+        // Here you'll need to:
+        // 1. Parse the Spotify URL to get track ID
+        // 2. Use Spotify API to get track details
+        // 3. Save to Firebase
+        // 4. Update the UI
+        
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        // Example of saving to Firebase
+        let db = Firestore.firestore()
+        db.collection("users").document(userId).updateData([
+            "spotifySong": songUrl
+        ]) { [weak self] error in
+            if let error = error {
+                print("Error saving song: \(error)")
+                return
+            }
+            
+            // Update UI with song info
+            self?.spotifySong.configure(with: "Artist - Song Name")
+        }
+    }
+    
+    // MARK: LoadSongInfo
+    private func loadSongInfo() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let db = Firestore.firestore()
+        db.collection("users").document(userId).getDocument { [weak self] document, error in
+            if let document = document, let songUrl = document.data()?["spotifySong"] as? String {
+                // TODO: 
+                // 1. Parse the saved URL
+                // 2. Get song details from Spotify API
+                // 3. Update the UI
+                self?.spotifySong.configure(with: "Artist - Song Name")
+            }
+        }
     }
 }

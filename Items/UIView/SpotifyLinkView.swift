@@ -1,3 +1,11 @@
+//
+//  SpotifyLinkView.swift
+//  MoodScape
+//
+//  Created by Olga Batiunia on 06.01.25.
+//
+
+
 import UIKit
 
 class SpotifyLinkView: UIView {
