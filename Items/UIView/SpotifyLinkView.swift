@@ -9,6 +9,8 @@
 import UIKit
 
 class SpotifyLinkView: UIView {
+    
+    // MARK: - Properties
     private let spotifyIcon: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Spotify_Icon")
@@ -26,15 +28,18 @@ class SpotifyLinkView: UIView {
         return label
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
     
+    // MARK: Initializer
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - SetupView
     private func setupView() {
         backgroundColor = UIColor.darkGray
         layer.cornerRadius = 32
@@ -60,6 +65,7 @@ class SpotifyLinkView: UIView {
         ])
     }
     
+    // MARK: - Configure
     func configure(with songInfo: String) {
         songLabel.text = songInfo
     }

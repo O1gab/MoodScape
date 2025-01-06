@@ -68,12 +68,12 @@ class PreferencesCell: UICollectionViewCell {
     func configure(with artist: Artist) {
         nameLabel.text = artist.name
         URLSession.shared.dataTask(with: artist.imageURL) { [weak self] data, _, _ in
-              guard let self = self else { return }
-              if let data = data, let image = UIImage(data: data) {
-                  DispatchQueue.main.async {
-                      self.imageView.image = image
-                  }
-              }
-          }.resume()
+            guard let self = self else { return }
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.imageView.image = image
+                }
+            }
+        }.resume()
     }
 }

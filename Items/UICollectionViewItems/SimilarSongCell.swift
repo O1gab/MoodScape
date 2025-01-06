@@ -7,6 +7,8 @@
 
 
 class SimilarSongCell: UICollectionViewCell {
+    
+    // MARK: - Properties
     private let songLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -16,15 +18,18 @@ class SimilarSongCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
     
+    // MARK: Initializer
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - SetupView
     private func setupView() {
         contentView.addSubview(songLabel)
         
@@ -35,6 +40,7 @@ class SimilarSongCell: UICollectionViewCell {
         ])
     }
     
+    // MARK: - Configure
     func configure(with song: Song) {
         songLabel.text = "\"\(song.name)\" by \(song.artist)"
     }
