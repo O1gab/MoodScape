@@ -84,13 +84,25 @@ class MainBaseView: UIViewController {
     private func setupProfileButton() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        // Check cache first
-        if let cachedImage = ImageCache.shared.getImage(forKey: userId) {
-            profileButton.setImage(cachedImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        // 1. Check UserDefaults first
+        if let imageData = UserDefaults.standard.data(forKey: "profileImage_\(userId)"),
+        let image = UIImage(data: imageData) {
+            profileButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+            ImageCache.shared.setImage(image, forKey: userId)
             return
         }
-        
-        // If not in cache, load from Firebase Storage
+    
+        // 2. Check Memory Cache
+        if let cachedImage = ImageCache.shared.getImage(forKey: userId) {
+            profileButton.setImage(cachedImage.withRenderingMode(.alwaysOriginal), for: .normal)
+            // Also update UserDefaults
+            if let imageData = cachedImage.jpegData(compressionQuality: 0.75) {
+                UserDefaults.standard.set(imageData, forKey: "profileImage_\(userId)")
+            }
+            return
+        }
+    
+        // 3. If not in local storage, load from Firebase
         let storageRef = Storage.storage().reference()
         let profileImageRef = storageRef.child("profile_images/\(userId)/profile.jpg")
         
@@ -122,5 +134,11 @@ class MainBaseView: UIViewController {
         profileView.modalTransitionStyle = .flipHorizontal
         profileView.modalPresentationStyle = .fullScreen
         self.present(profileView, animated: true, completion: nil)
+    }
+
+    func clearImageCache() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        UserDefaults.standard.removeObject(forKey: "profileImage_\(userId)")
+        ImageCache.shared.clearCache()
     }
 }
