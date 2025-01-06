@@ -629,6 +629,49 @@ class SpotifyAPIManager {
         task.resume()
     }
     
+    // Add this method to SpotifyAPIManager class
+    func fetchTrackDetails(for trackId: String, completion: @escaping (Result<Song, Error>) -> Void) {
+        guard let accessToken = SpotifyAuth.shared.accessToken else {
+            print("No access token available")
+            return
+        }
+        
+        let urlString = "https://api.spotify.com/v1/tracks/\(trackId)"
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                return
+            }
+            
+            guard let data = data else {
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let name = json["name"] as? String,
+                   let artists = json["artists"] as? [[String: Any]],
+                   let firstArtist = artists.first,
+                   let artistName = firstArtist["name"] as? String {
+                    
+                    completion(.success((Song(name: name, id: trackId, artist: artistName, duration: "", spotifyUrl: urlString, releaseDate: "", imageUrl: ""))))
+                }
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(error))
+            }
+        }
+        
+        task.resume()
+    }
+    
     // - MARK: FormatDuration
     private func formatDuration(durationMs: Int) -> String {
         let minutes = durationMs / 60000
