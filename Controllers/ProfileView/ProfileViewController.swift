@@ -395,12 +395,12 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             spotifySong.topAnchor.constraint(equalTo: inlineBarStackView.bottomAnchor, constant: 20),
             spotifySong.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 35),
             spotifySong.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -35),
-            spotifySong.heightAnchor.constraint(equalToConstant: 44),
+            spotifySong.heightAnchor.constraint(equalToConstant: 65),
             
             editSongButton.centerYAnchor.constraint(equalTo: spotifySong.centerYAnchor),
             editSongButton.trailingAnchor.constraint(equalTo: spotifySong.trailingAnchor, constant: -10),
-            editSongButton.widthAnchor.constraint(equalToConstant: 24),
-            editSongButton.heightAnchor.constraint(equalToConstant: 24),
+            editSongButton.widthAnchor.constraint(equalToConstant: 30),
+            editSongButton.heightAnchor.constraint(equalToConstant: 30),
             
             registrationDate.topAnchor.constraint(equalTo: spotifySong.bottomAnchor, constant: 20),
             registrationDate.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 35),
@@ -821,26 +821,65 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     
     // MARK: SaveSongToProfile
     private func saveSongToProfile(_ songUrl: String) {
-        // Here you'll need to:
-        // 1. Parse the Spotify URL to get track ID
-        // 2. Use Spotify API to get track details
-        // 3. Save to Firebase
-        // 4. Update the UI
-        
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        // Example of saving to Firebase
-        let db = Firestore.firestore()
-        db.collection("users").document(userId).updateData([
-            "spotifySong": songUrl
-        ]) { [weak self] error in
-            if let error = error {
-                print("Error saving song: \(error)")
-                return
-            }
+        // Validate Spotify URL format
+        guard songUrl.contains("spotify.com/") && songUrl.contains("/track/") else {
+            showError("Please enter a valid Spotify song link")
+            return
+        }
+        
+        // Extract track ID - it's always between /track/ and ? or end of string
+        guard let trackId = songUrl.components(separatedBy: "/track/")
+            .last?
+            .components(separatedBy: "?")
+            .first?
+            .trimmingCharacters(in: .whitespacesAndNewlines) else {
+            showError("Invalid Spotify URL format")
+            return
+        }
+        
+        // Example trackId from your URL: "5WUSD3xrn6lDBkYKNoC5V4"
+        print("Extracted track ID: \(trackId)")
+        
+        // Show loading state
+        startLoading()
+        
+        // Fetch song details from Spotify API
+        SpotifyAPIManager.shared.fetchTrackDetails(for: trackId) { [weak self] result in
+            guard let self = self else { return }
             
-            // Update UI with song info
-            self?.spotifySong.configure(with: "Artist - Song Name")
+            DispatchQueue.main.async {
+                self.stopLoading()
+                
+                switch result {
+                case .success(let track):
+                    // Format artist - song name
+                    let artistName = track.artist
+                    let songName = track.name
+                    let displayText = "\(artistName) - \(songName)"
+                    
+                    // Save to Firebase
+                    let db = Firestore.firestore()
+                    db.collection("users").document(userId).updateData([
+                        "spotifySong": songUrl,
+                        "spotifySongDisplay": displayText
+                    ]) { error in
+                        if let error = error {
+                            print("Error saving song: \(error)")
+                            self.showError("Failed to save song")
+                            return
+                        }
+                        
+                        // Update UI
+                        self.spotifySong.configure(with: displayText)
+                    }
+                    
+                case .failure(let error):
+                    print("Error fetching track details: \(error)")
+                    self.showError("Failed to fetch song details")
+                }
+            }
         }
     }
     
@@ -850,12 +889,13 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
         
         let db = Firestore.firestore()
         db.collection("users").document(userId).getDocument { [weak self] document, error in
-            if let document = document, let songUrl = document.data()?["spotifySong"] as? String {
-                // TODO: 
-                // 1. Parse the saved URL
-                // 2. Get song details from Spotify API
-                // 3. Update the UI
-                self?.spotifySong.configure(with: "Artist - Song Name")
+            if let document = document,
+               let songUrl = document.data()?["spotifySong"] as? String,
+               let displayText = document.data()?["spotifySongDisplay"] as? String {
+                
+                DispatchQueue.main.async {
+                    self?.spotifySong.configure(with: displayText)
+                }
             }
         }
     }
