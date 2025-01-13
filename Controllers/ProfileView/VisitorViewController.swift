@@ -367,9 +367,16 @@ class VisitorViewController: ProfileBaseView {
     
     // MARK: - HandleAddFriend
     @objc private func handleAddFriend() {
-        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        print("button tapped")
+        guard let currentUserId = Auth.auth().currentUser?.uid else { 
+            print("No current user found")
+            return 
+        }
         let receiverId = self.userId
         let db = Firestore.firestore()
+
+        print("Current user: \(currentUserId)")
+        print("Visitor ID: \(userId)")
         
         // First check if they're already friends or if request is pending
         db.collection("users").document(currentUserId).getDocument { [weak self] (document, error) in
@@ -385,6 +392,7 @@ class VisitorViewController: ProfileBaseView {
                 let friends = data?["friends"] as? [String] ?? []
                 let sentRequests = data?["sent_requests"] as? [String] ?? []
                 
+                print("Friends: \(friends)")
                 if friends.contains(self.userId) {
                     DispatchQueue.main.async {
                         self.addFriendButton.setTitle("Already Friends", for: .normal)
@@ -428,6 +436,8 @@ class VisitorViewController: ProfileBaseView {
                         }
                     }
                 }
+            } else {
+                print("Error fetching user data: \(error?.localizedDescription ?? "Unknown error")")
             }
         }
     }
