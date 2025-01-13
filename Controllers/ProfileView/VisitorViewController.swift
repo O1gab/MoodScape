@@ -375,8 +375,6 @@ class VisitorViewController: ProfileBaseView {
         let receiverId = self.userId
         let db = Firestore.firestore()
 
-        print("Current user: \(currentUserId)")
-        print("Visitor ID: \(userId)")
         
         // First check if they're already friends or if request is pending
         db.collection("users").document(currentUserId).getDocument { [weak self] (document, error) in

@@ -144,6 +144,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         ])
     }
 
+    // MARK: - UpdateUIForNoFriends
     private func updateUIForNoFriends() {
         DispatchQueue.main.async {
             self.noFriendsLabel.text = "No friends now. Add them by their username!"
