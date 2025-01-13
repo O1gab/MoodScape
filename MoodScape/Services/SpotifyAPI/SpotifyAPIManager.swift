@@ -344,8 +344,7 @@ class SpotifyAPIManager {
         }
         task.resume()
     }
-    
-    
+
     func fetchTopTracks(for artistID: String, completion: @escaping ([Song]?) -> Void) {
         guard let authToken = SpotifyAuthenticationManager.shared.accessToken else {
             completion(nil)
