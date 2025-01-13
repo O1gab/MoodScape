@@ -9,7 +9,7 @@ import UIKit
 
 extension UILabel {
     
-    // - MARK: StartTypingAnimation
+    // MARK: - StartTypingAnimation
     func startTypingAnimation(label: UILabel, text: String, typingSpeed: TimeInterval, completion: @escaping () -> Void) {
         var timer: Timer?
         let fullText = text
@@ -30,7 +30,7 @@ extension UILabel {
         }
     }
     
-    // - MARK: StartErasingAnimation
+    // MARK: - StartErasingAnimation
     func startErasingAnimation(label: UILabel, typingSpeed: TimeInterval, completion: @escaping () -> Void) {
         var timer: Timer?
         guard let text = label.text, !text.isEmpty else {
@@ -80,15 +80,12 @@ class GradientLabel: UILabel {
             textLayer.contentsScale = UIScreen.main.scale
             textLayer.isWrapped = true
             textLayer.truncationMode = .end
-               
-            // Set the text layer as the mask for the gradient layer
+            
             gradientLayer.mask = textLayer
-               
-            // Add the gradient layer to the label's layer
+            
             layer.addSublayer(gradientLayer)
         }
-           
-        // Animate the gradient
+        
         animateGradient()
     }
     
