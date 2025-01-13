@@ -142,9 +142,6 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             addFriendsButton.widthAnchor.constraint(equalToConstant: 160),
             addFriendsButton.heightAnchor.constraint(equalToConstant: 60)
         ])
-
-
-        
     }
 
     // MARK: - UpdateUIForNoFriends
