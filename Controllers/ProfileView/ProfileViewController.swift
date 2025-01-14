@@ -474,7 +474,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
                         }
                     }
                 } else {
-                    print("Error fetching friends: \(error?.localizedDescription ?? "Unknown error")")
+                    self?.showError("Error fetching friends: \(error?.localizedDescription ?? "Unknown error")")
                     DispatchQueue.main.async {
                         friendsCountLabel.text = "0"
                     }
@@ -503,7 +503,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
     // MARK: - FetchData
     private func fetchData() {
         guard let userId = Auth.auth().currentUser?.uid else {
-            print("User not logged in")
+            self.showError("Error getting user")
             return
         }
         let db = Firestore.firestore()
@@ -511,7 +511,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
 
         userRef.getDocument { (document, error) in
             if let error = error {
-                print("Error fetching user data: \(error.localizedDescription)")
+                self.showError("Error fetching user data: \(error.localizedDescription)")
                 return
             }
             if let document = document, document.exists {
@@ -533,7 +533,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
                                 self.registrationDate.text = "On MoodScape since \(dateString)"
                             }
                     } else {
-                        print("Registration date not available")
+                        self.showError("Registration date not available")
                     }
                     
                     if let bio = data?["bio"] as? String {
@@ -541,7 +541,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
                     }
                 }
             } else {
-                print("Document does not exist")
+                self.showError("Error fetching data")
             }
         }
     }
@@ -723,7 +723,7 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             guard let self = self else { return }
             
             if let error = error {
-                print("Error downloading profile image: \(error)")
+                showError("Error downloading profile image: \(error)")
                 DispatchQueue.main.async {
                     self.profileImage.image = UIImage(systemName: "person.crop.circle")
                 }
@@ -838,9 +838,6 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
             showError("Invalid Spotify URL format")
             return
         }
-        
-        // Example trackId from your URL: "5WUSD3xrn6lDBkYKNoC5V4"
-        print("Extracted track ID: \(trackId)")
         
         // Show loading state
         startLoading()
