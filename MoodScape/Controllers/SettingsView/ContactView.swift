@@ -149,7 +149,6 @@ class ContactViewController: ProfileBaseView, MFMailComposeViewControllerDelegat
             
             present(mailComposeVC, animated: true, completion: nil)
         } else {
-            // Show alert if mail services are not available
             let alert = UIAlertController(title: "Mail Services Unavailable", message: "Please set up an email account to send mail.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)

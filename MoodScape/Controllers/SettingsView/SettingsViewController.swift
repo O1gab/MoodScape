@@ -9,6 +9,7 @@ import FirebaseAuth
 
 class SettingsViewController: ProfileBaseView, UITableViewDelegate, UITableViewDataSource {
     
+    // MARK: - Properties
     private let settingsLabel: UILabel = {
         let settingsLabel = UILabel()
         settingsLabel.text = "Settings"

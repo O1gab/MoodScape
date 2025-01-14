@@ -4,14 +4,6 @@
 //
 //  Created by Olga Batiunia on 05.12.24.
 //
-
-
-//
-//  StartViewController.swift
-//  MoodScape
-//
-//
-
 import UIKit
 import Gifu
 
