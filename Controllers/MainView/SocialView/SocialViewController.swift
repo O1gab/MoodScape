@@ -128,6 +128,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             searchBar.topAnchor.constraint(equalTo: requestsButton.bottomAnchor, constant: 10),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            searchBar.heightAnchor.constraint(equalToConstant: 40),
                     
             tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -171,7 +172,6 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             if let document = document, document.exists {
                 let data = document.data()
                 DispatchQueue.main.async {
-                    // Update request count
                     if let receivedRequests = data?["received_requests"] as? [String] {
                         let requestCount = receivedRequests.count
                         self.requestsButton.setTitle("Your Friend Requests: \(requestCount)", for: .normal)
@@ -189,7 +189,7 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
                     }
                 }
             } else {
-                print("Document does not exist")
+                self.showAlert(message: "Error fetching your data")
             }
         }
     }
@@ -228,20 +228,16 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             return
         }
         
-        // Show table view when searching
         noFriendsLabel.isHidden = true
         addFriendsButton.isHidden = true
         tableView.isHidden = false
         
-        // Filter users based on search text
         filteredUsers = allUsers.filter { user in
             user.username.lowercased().contains(searchText.lowercased())
         }
         
-        // Update UI
         tableView.reloadData()
         
-        // Show/hide no results message
         if filteredUsers.isEmpty {
             noFriendsLabel.text = "No users found"
             noFriendsLabel.isHidden = false
@@ -269,12 +265,10 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.identifier, for: indexPath) as! UserCell
         let user = filteredUsers[indexPath.row]
         
-        // Configure cell
         cell.configure(with: user.username)
         cell.addButton.tag = indexPath.row
         cell.addButton.addTarget(self, action: #selector(addFriendButtonTapped(_:)), for: .touchUpInside)
         
-        // Cell shadow
         cell.contentView.layer.shadowColor = UIColor.black.cgColor
         cell.contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
         cell.contentView.layer.shadowRadius = 4
@@ -292,12 +286,12 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             .whereField("username", isEqualTo: user.username)
             .getDocuments { [weak self] (querySnapshot, error) in
                 if let error = error {
-                    print("Error finding user: \(error.localizedDescription)")
+                    self?.showAlert(message: "Error finding user: \(error.localizedDescription)")
                     return
                 }
                 
                 guard let document = querySnapshot?.documents.first else {
-                    print("User not found")
+                    self?.showAlert(message: "User not found")
                     return
                 }
                 
@@ -312,10 +306,10 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
     @objc private func addFriendButtonTapped(_ sender: UIButton) {
         let user = filteredUsers[sender.tag]
         guard let currentUserId = Auth.auth().currentUser?.uid else {
-            print("User not logged in")
+            self.showAlert(message: "Error getting user")
             return
         }
-        print(currentUserId)    // debug
+        
         let db = Firestore.firestore()
         
         // 1. Get the receiver's id
@@ -333,7 +327,6 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
                 }
                 
                 let receiverId = document.documentID
-                print("receiver: ", receiverId) // debug
                 
                 // 2. Check if request already sent or it's already a friend
                 db.collection("users").document(currentUserId).getDocument { [weak self] (document, error) in
