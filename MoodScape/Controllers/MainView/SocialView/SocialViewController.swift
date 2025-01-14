@@ -228,20 +228,16 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
             return
         }
         
-        // Show table view when searching
         noFriendsLabel.isHidden = true
         addFriendsButton.isHidden = true
         tableView.isHidden = false
         
-        // Filter users based on search text
         filteredUsers = allUsers.filter { user in
             user.username.lowercased().contains(searchText.lowercased())
         }
         
-        // Update UI
         tableView.reloadData()
         
-        // Show/hide no results message
         if filteredUsers.isEmpty {
             noFriendsLabel.text = "No users found"
             noFriendsLabel.isHidden = false
@@ -269,12 +265,10 @@ class SocialViewController: MainBaseView, UITableViewDelegate, UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.identifier, for: indexPath) as! UserCell
         let user = filteredUsers[indexPath.row]
         
-        // Configure cell
         cell.configure(with: user.username)
         cell.addButton.tag = indexPath.row
         cell.addButton.addTarget(self, action: #selector(addFriendButtonTapped(_:)), for: .touchUpInside)
         
-        // Cell shadow
         cell.contentView.layer.shadowColor = UIColor.black.cgColor
         cell.contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
         cell.contentView.layer.shadowRadius = 4

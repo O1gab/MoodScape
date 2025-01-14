@@ -138,7 +138,6 @@ class MainViewController: MainBaseView {
     // - MARK: DetermineGreeting
     private func determineGreeting() {
         guard let userId = Auth.auth().currentUser?.uid else {
-            // TODO: ERROR HANDLING
             return
         }
         let db = Firestore.firestore()

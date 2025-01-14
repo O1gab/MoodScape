@@ -138,7 +138,6 @@ class MainViewController: MainBaseView {
     // - MARK: DetermineGreeting
     private func determineGreeting() {
         guard let userId = Auth.auth().currentUser?.uid else {
-            // TODO: ERROR HANDLING
             return
         }
         let db = Firestore.firestore()
@@ -190,7 +189,6 @@ class MainViewController: MainBaseView {
         let velocity = gesture.velocity(in: view)
         let translation = gesture.translation(in: view)
         
-        // Detect if the user has swiped down hard enough
         if gesture.state == .ended {
             if velocity.y < -gestureThreshold && translation.y < -100 {
                 moodJournalView.modalPresentationStyle = .overFullScreen
