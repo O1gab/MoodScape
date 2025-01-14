@@ -868,7 +868,6 @@ class ProfileViewController: ProfileBaseView, UICollectionViewDataSource, UIColl
                             return
                         }
                         
-                        // Update UI
                         self.spotifySong.configure(with: displayText)
                     }
                     

@@ -251,7 +251,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         guard let userId = Auth.auth().currentUser?.uid,
               let imageData = image.jpegData(compressionQuality: 0.75) else { return }
         
-        // Update cache immediately
         ImageCache.shared.setImage(image, forKey: userId)
         
         let storageRef = Storage.storage().reference()
@@ -260,7 +259,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
         
-        // Show loading indicator
         let loadingAlert = UIAlertController(title: nil, message: "Uploading...", preferredStyle: .alert)
         let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
         loadingIndicator.hidesWhenStopped = true
@@ -270,7 +268,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         present(loadingAlert, animated: true)
         
         profileImageRef.putData(imageData, metadata: metadata) { [weak self] metadata, error in
-            // Dismiss loading indicator
             DispatchQueue.main.async {
                 self?.dismiss(animated: true)
             }
@@ -283,7 +280,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
                 return
             }
             
-            // Update UI after successful upload
             DispatchQueue.main.async {
                 self?.profileImage.image = image
             }
