@@ -68,39 +68,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         return name
     }()
     
-    private let bioLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Your bio:"
-        label.textColor = .white
-        label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let bioField: UITextView = {
-        let textView = UITextView()
-        textView.backgroundColor = .none
-        textView.textColor = .white
-        textView.layer.borderColor = UIColor(red: 30/255, green: 215/255, blue: 96/255, alpha: 1.0).cgColor
-        textView.layer.borderWidth = 2
-        textView.layer.cornerRadius = 18
-        textView.font = UIFont.systemFont(ofSize: 16)
-        textView.isScrollEnabled = true
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        return textView
-    }()
-    
-    private let bioCharacterCountLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .gray
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.text = "0/200"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     private let preferencesButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Set up Preferences", for: .normal)
@@ -157,24 +124,14 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         view.addSubview(imageButton)
         view.addSubview(nameLabel)
         view.addSubview(name)
-        view.addSubview(bioLabel)
-        view.addSubview(bioField)
-        view.addSubview(bioCharacterCountLabel)
         view.addSubview(preferencesButton)
         view.addSubview(submitButton)
         view.addSubview(skipButton)
-        
-        setPlaceholder(textField: name, placeholder: "Enter your first name", color: .gray)
-        bioField.text = "Set up your description (max. 200 chars)"
-        bioField.textColor = .gray
-        
         
         preferencesButton.addTarget(self, action: #selector(editPreferences), for: .touchUpInside)
         submitButton.addTarget(self, action: #selector(handleSave), for: .touchUpInside)
         skipButton.addTarget(self, action: #selector(handleSkip), for: .touchUpInside)
         imageButton.addTarget(self, action: #selector(changeProfileImageTapped), for: .touchUpInside)
-        
-        bioField.delegate = self
     }
     
     // MARK: SetupConstraints
@@ -199,18 +156,7 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
             name.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             name.heightAnchor.constraint(equalToConstant: 55),
             
-            bioLabel.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 30),
-            bioLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            
-            bioField.topAnchor.constraint(equalTo: bioLabel.bottomAnchor, constant: 10),
-            bioField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            bioField.heightAnchor.constraint(equalToConstant: 120),
-            bioField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            
-            bioCharacterCountLabel.topAnchor.constraint(equalTo: bioField.bottomAnchor, constant: 5),
-            bioCharacterCountLabel.leadingAnchor.constraint(equalTo: bioField.leadingAnchor),
-            
-            preferencesButton.topAnchor.constraint(equalTo: bioCharacterCountLabel.bottomAnchor, constant: 15),
+            preferencesButton.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 20),
             preferencesButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             preferencesButton.widthAnchor.constraint(equalToConstant: 200),
             preferencesButton.heightAnchor.constraint(equalToConstant: 50),
@@ -236,7 +182,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
             if let document = document, document.exists {
                 let data = document.data()
                 self.name.text = data?["name"] as? String ?? ""
-                self.bioField.text = data?["bio"] as? String ?? ""
             } else {
                 print("Document does not exist or error occurred: \(String(describing: error))")
             }
@@ -252,13 +197,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
     
     // MARK: HandleSave
     @objc private func handleSave() {
-        // BIO CHECK
-        let bioText = bioField.text ?? ""
-        if bioText.count > 200 {
-            print("Bio exceeds maximum character limit.")
-            return
-        }
-        
         guard let user = Auth.auth().currentUser else { return }
         
         let db = Firestore.firestore()
@@ -266,7 +204,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         
         documentRef.updateData([
             "name": name.text ?? "",
-            "bio": bioField.text ?? ""
         ]) { err in
             if let err = err {
                 print("Error updating document: \(err)")
@@ -285,46 +222,6 @@ class ProfileSetupViewController: ProfileBaseView, UIImagePickerControllerDelega
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true, completion: nil)
-    }
-
-    // MARK: - UITextViewDelegate
-    func textViewDidChange(_ textView: UITextView) {
-        let maxLength = 200
-        let currentText = textView.text ?? ""
-        
-        let charCount = currentText.count
-        bioCharacterCountLabel.text = "\(charCount)/200"
-        
-        if charCount > maxLength {
-            bioCharacterCountLabel.textColor = .red
-        } else {
-            bioCharacterCountLabel.textColor = .gray
-        }
-    }
-    
-    // MARK: TextView
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        let currentText = textView.text ?? ""
-        guard let stringRange = Range(range, in: currentText) else { return false }
-        
-        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
-        return updatedText.count <= 200
-    }
-    
-    // MARK: TextViewDidBeginEditing
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .gray {
-            textView.text = nil
-            textView.textColor = .white
-        }
-    }
-    
-    // MARK: TextViewDidEndEditing
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = "Set up your description (max. 200 chars)"
-            textView.textColor = .gray
-        }
     }
     
     // MARK: - HandleSkip
